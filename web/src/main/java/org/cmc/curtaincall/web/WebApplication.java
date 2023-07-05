@@ -1,13 +1,13 @@
-package org.cmc.curtaincallserver;
+package org.cmc.curtaincall.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CurtainCallServerApplication {
+public class WebApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CurtainCallServerApplication.class, args);
+        SpringApplication.run(WebApplication.class, args);
     }
 
 }

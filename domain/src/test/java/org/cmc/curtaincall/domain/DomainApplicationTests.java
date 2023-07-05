@@ -1,10 +1,12 @@
-package org.cmc.curtaincallserver;
+package org.cmc.curtaincall.domain;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CurtainCallServerApplicationTests {
+@SpringBootApplication
+class DomainApplicationTests {
 
     @Test
     void contextLoads() {
