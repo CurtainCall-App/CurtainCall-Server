@@ -22,7 +22,8 @@ public class SecurityConfig {
                 .httpBasic(config -> config.disable())
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.GET,
-                                "/shows"
+                                "/shows",
+                                "/shows/{showId}"
                         ).permitAll()
                 )
                 .build();

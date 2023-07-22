@@ -1,6 +1,8 @@
 package org.cmc.curtaincall.web.service.kopis;
 
 import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
+import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
+import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponseWrapper;
 import org.cmc.curtaincall.web.service.kopis.response.ShowListResponse;
 import org.cmc.curtaincall.web.service.kopis.response.ShowResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +68,19 @@ public class KopisService {
         boolean hasNext = performances.size() == pageable.getPageSize();
 
         return new SliceImpl<>(performances, pageable, hasNext);
+    }
+
+    public ShowDetailResponse getShowDetail(String showId) {
+        return webClient.get()
+                .uri(builder -> builder
+                        .path("/openApi/restful/pblprfr/{showId}")
+                        .queryParam("service", serviceKey)
+                        .build(showId)
+                )
+                .retrieve()
+                .bodyToMono(ShowDetailResponseWrapper.class)
+                .map(ShowDetailResponseWrapper::getValue)
+                .block();
     }
 
 }
