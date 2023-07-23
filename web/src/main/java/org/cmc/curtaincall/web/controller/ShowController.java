@@ -2,7 +2,9 @@ package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.service.kopis.KopisService;
+import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
+import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
 import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.kopis.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +29,10 @@ public class ShowController {
     @GetMapping("/shows/{showId}")
     public ShowDetailResponse getShowDetail(@PathVariable String showId) {
         return kopisService.getShowDetail(showId);
+    }
+
+    @GetMapping("/boxOffice")
+    public ShowBoxOfficeResponseList getBoxOffice(@ModelAttribute @Validated ShowBoxOfficeRequest request) {
+        return kopisService.getBoxOffice(request);
     }
 }

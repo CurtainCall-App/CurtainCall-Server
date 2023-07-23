@@ -23,7 +23,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.GET,
                                 "/shows",
-                                "/shows/{showId}"
+                                "/shows/{showId}",
+                                "/boxOffice"
                         ).permitAll()
                 )
                 .build();

@@ -1,10 +1,8 @@
 package org.cmc.curtaincall.web.service.kopis;
 
+import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
-import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
-import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponseWrapper;
-import org.cmc.curtaincall.web.service.kopis.response.ShowListResponse;
-import org.cmc.curtaincall.web.service.kopis.response.ShowResponse;
+import org.cmc.curtaincall.web.service.kopis.response.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -80,6 +78,22 @@ public class KopisService {
                 .retrieve()
                 .bodyToMono(ShowDetailResponseWrapper.class)
                 .map(ShowDetailResponseWrapper::getValue)
+                .block();
+    }
+
+    public ShowBoxOfficeResponseList getBoxOffice(ShowBoxOfficeRequest request) {
+        return webClient.get()
+                .uri(builder -> builder
+                        .path("/openApi/restful/boxoffice")
+                        .queryParam("service", serviceKey)
+                        .queryParam("systype", request.getType().name().toLowerCase())
+                        .queryParam("date", request.getBaseDate().format(requestFormatter))
+                        .queryParamIfPresent("catecode",
+                                Optional.ofNullable(request.getGenre()).map(ShowGenre::getCode))
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(ShowBoxOfficeResponseList.class)
                 .block();
     }
 
