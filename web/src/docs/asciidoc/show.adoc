@@ -17,3 +17,10 @@ operation::show-get-shows[snippets='http-request,query-parameters,http-response,
 == 공연 상세 조회
 
 operation::show-get-show-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[show-get-boxOffice]]
+== 예매상황판
+
+총 50위까지의 예매상황판(순위)
+
+operation::show-get-boxOffice[snippets='http-request,query-parameters,http-response,response-fields-content']
