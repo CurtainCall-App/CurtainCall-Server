@@ -96,19 +96,19 @@ logging:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
 
   datasource:
-    url: jdbc:mysql://${DATABASE_URL_DEV}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DATABASE_USERNAME_DEV}
-    password: ${DATABASE_PASSWORD_DEV}
+    url: ${DATABASE_URL_PROD}
+    username: ${DATABASE_USERNAME_PROD}
+    password: ${DATABASE_PASSWORD_PROD}
 
   security:
     oauth2:
       client:
         registration:
           kakao:
-            redirect-uri: ~
+            redirect-uri: http://curtaincall.ap-northeast-2.elasticbeanstalk.com/login/oauth2/code/kakao
 
 logging:
   level:
