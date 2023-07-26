@@ -4,6 +4,12 @@ spring:
     problemdetails:
       enabled: true
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/comeeatme?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   data:
     web:
       pageable:
@@ -11,6 +17,7 @@ spring:
         max-page-size: 100
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create-drop
     properties:
@@ -20,24 +27,24 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          kakao:
-#            client-id: OAUTH2_KAKAO_CLIENT_ID
-#            client-secret: OAUTH2_KAKAO_CLIENT_SECRET
-#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
-#            authorization-grant-type: authorization_code
-#            client-authentication-method: POST
-#            client-name: Kakao
-#            scope: ~
-#        provider:
-#          kakao:
-#            authorization-uri: https://kauth.kakao.com/oauth/authorize
-#            token-uri: https://kauth.kakao.com/oauth/token
-#            user-info-uri: https://kapi.kakao.com/v2/user/me
-#            user-name-attribute: id
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: OAUTH2_KAKAO_CLIENT_ID
+            client-secret: OAUTH2_KAKAO_CLIENT_SECRET
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope: ~
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 logging:
   level:
@@ -45,3 +52,7 @@ logging:
     org.hibernate:
       SQL: debug
       type: trace
+
+app:
+  kopis:
+    service-key: KOPIS_SERVICE_KEY_TEST
