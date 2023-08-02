@@ -72,7 +72,7 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://localhost:3306/comeeatme?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/curtaincall?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
