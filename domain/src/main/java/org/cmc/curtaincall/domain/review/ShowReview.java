@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
+import org.cmc.curtaincall.domain.show.Show;
 
 @Entity
 @Table(name = "show_review",
         indexes = {
-            @Index(name = "IX_show_review__mt20id", columnList = "mt20id")
+            @Index(name = "IX_show_review__show", columnList = "show_id")
         }
 )
 @Getter
@@ -22,8 +23,9 @@ public class ShowReview extends BaseTimeEntity {
     @Column(name = "show_review_id")
     private Long id;
 
-    @Column(name = "mt20id", length = 25, nullable = false)
-    private String showId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Show show;
 
     @Column(name = "grade", nullable = false)
     private Integer grade;
@@ -32,8 +34,8 @@ public class ShowReview extends BaseTimeEntity {
     private String content;
 
     @Builder
-    public ShowReview(String showId, Integer grade, String content) {
-        this.showId = showId;
+    public ShowReview(Show show, Integer grade, String content) {
+        this.show = show;
         this.grade = grade;
         this.content = content;
     }

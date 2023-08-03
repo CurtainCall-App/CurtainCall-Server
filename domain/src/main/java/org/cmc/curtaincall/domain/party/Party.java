@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
 
@@ -24,11 +25,9 @@ public class Party extends BaseEntity {
     @Column(name = "party_id")
     private Long id;
 
-    @Column(name = "mt20id", length = 25, nullable = false)
-    private String showId;
-
-    @Column(name = "show_name", nullable = false)
-    private String showName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Show show;
 
     @Column(name = "show_at", nullable = false)
     private LocalDateTime showAt;
@@ -48,16 +47,18 @@ public class Party extends BaseEntity {
     @Column(name = "closed", nullable = false)
     private Boolean closed = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", length = 25, nullable = false)
+    private PartyCategory category;
+
     public Party(
-            String showId,
-            String showName,
+            Show show,
             LocalDateTime showAt,
             String title,
             String content,
             Integer curMemberNum,
             Integer maxMemberNum) {
-        this.showId = showId;
-        this.showName = showName;
+        this.show = show;
         this.showAt = showAt;
         this.title = title;
         this.content = content;
