@@ -1,0 +1,13 @@
+= Facility(공연시설)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[facility-get-facility-detail]]
+== 공연 시설 상세 조회
+
+operation::facility-get-facility-detail[snippets='http-request,path-parameters,http-response,response-fields']
