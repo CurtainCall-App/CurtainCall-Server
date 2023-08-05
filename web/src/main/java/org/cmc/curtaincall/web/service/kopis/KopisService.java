@@ -3,8 +3,6 @@ package org.cmc.curtaincall.web.service.kopis;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
-import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
-import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponseWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -36,19 +34,6 @@ public class KopisService {
                 }).build())
                 .baseUrl("http://www.kopis.or.kr")
                 .build();
-    }
-
-    public ShowDetailResponse getShowDetail(String showId) {
-        return webClient.get()
-                .uri(builder -> builder
-                        .path("/openApi/restful/pblprfr/{showId}")
-                        .queryParam("service", serviceKey)
-                        .build(showId)
-                )
-                .retrieve()
-                .bodyToMono(ShowDetailResponseWrapper.class)
-                .map(ShowDetailResponseWrapper::getValue)
-                .block();
     }
 
     public ShowBoxOfficeResponseList getBoxOffice(ShowBoxOfficeRequest request) {
