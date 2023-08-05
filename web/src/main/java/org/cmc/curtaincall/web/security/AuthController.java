@@ -39,6 +39,7 @@ public class AuthController {
 
     private final AccountService accountService;
 
+    // Drn_ADLMUGaD99LVyOab4ozicxy-S6xrvoUl7ZwaCj11mwAAAYnEMFr_
     @PostMapping("/login/oauth2/token/{registrationId}")
     public ResponseEntity<LoginResponse> loginOauthToken(
             @PathVariable String registrationId, @Valid @RequestBody OAuth2Login oauthLogin)

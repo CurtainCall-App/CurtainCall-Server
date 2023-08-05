@@ -46,9 +46,9 @@ public class SecurityConfig {
                         ).permitAll()
                 )
                 .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling(config -> config
-//                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                )
+                .exceptionHandling(config -> config
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
                 .logout(logout -> logout
                         .addLogoutHandler(jwtLogoutHandler)
                         .logoutSuccessHandler(jwtLogoutSuccessHandler)
