@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.service.kopis;
 
+import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.kopis.response.*;
@@ -39,33 +40,6 @@ public class KopisService {
                 }).build())
                 .baseUrl("http://www.kopis.or.kr")
                 .build();
-    }
-
-    public Slice<ShowResponse> getShows(ShowListRequest request, Pageable pageable) {
-        ShowListResponse response = webClient.get()
-                .uri(builder -> builder
-                        .path("/openApi/restful/pblprfr")
-                        .queryParam("service", serviceKey)
-                        .queryParamIfPresent("name", Optional.ofNullable(request.getName()))
-                        .queryParam("stdate", request.getStartDate().format(requestFormatter))
-                        .queryParam("eddate", request.getEndDate().format(requestFormatter))
-                        .queryParam("shcate", request.getGenre().getCode())
-                        .queryParam("cpage", pageable.getPageNumber())
-                        .queryParam("rows", pageable.getPageSize())
-                        .build()
-                )
-                .retrieve()
-                .bodyToMono(ShowListResponse.class)
-                .block();
-
-        if (response == null || response.getShows() == null) {
-            return new SliceImpl<>(Collections.emptyList());
-        }
-
-        List<ShowResponse> performances = response.getShows();
-        boolean hasNext = performances.size() == pageable.getPageSize();
-
-        return new SliceImpl<>(performances, pageable, hasNext);
     }
 
     public ShowDetailResponse getShowDetail(String showId) {
