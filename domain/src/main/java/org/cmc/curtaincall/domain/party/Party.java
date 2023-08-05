@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "party",
         indexes = {
-                @Index(name = "IX_party__mt20id", columnList = "mt20id"),
+                @Index(name = "IX_party__show", columnList = "show_id"),
                 @Index(name = "IX_party__created_by", columnList = "created_by")
         }
 )
@@ -26,7 +26,7 @@ public class Party extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Show show;
 
     @Column(name = "show_at", nullable = false)
@@ -57,13 +57,15 @@ public class Party extends BaseEntity {
             String title,
             String content,
             Integer curMemberNum,
-            Integer maxMemberNum) {
+            Integer maxMemberNum,
+            PartyCategory category) {
         this.show = show;
         this.showAt = showAt;
         this.title = title;
         this.content = content;
         this.curMemberNum = curMemberNum;
         this.maxMemberNum = maxMemberNum;
+        this.category = category;
     }
 
     public PartyEditor.PartyEditorBuilder toEditor() {

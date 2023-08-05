@@ -1,0 +1,55 @@
+= Authentication
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Example request
+:operation-http-response-title: Example response
+
+
+[[auth-LoginResponse]]
+== 인증 및 토큰 재발급 성공 시 응답
+
+operation::auth-LoginResponse[snippets='response-body,response-fields']
+
+[[auth-login-oauthtoken]]
+== OAuth AccessToken 을 통한 로그인
+
+- method: POST
+- path: /login/oauth2/token/+{registrationId}+
+- registrationId: kakao
+- ex) http://localhost:8080/login/oauth2/token/kakao
+
+Request Body
+
+[source]
+----
+{
+    "accessToken": {OAUTH_ACCESS_TOKEN}
+}
+----
+
+[[auth-reissue]]
+== 토큰 재발급
+
+- method: POST
+- path: /login/reissue
+- Authorization: Bearer +{REFRESH_TOKEN}+
+
+
+[[logout]]
+== 로그아웃
+
+- method: POST
+- path: /logout
+- Authorization: Bearer +{ACCESS_TOKEN}+
+
+Response
+[source]
+----
+{
+    "success": true
+}
+----

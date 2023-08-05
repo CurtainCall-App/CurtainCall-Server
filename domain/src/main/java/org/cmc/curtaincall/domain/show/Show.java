@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "show",
+@Table(name = "shows",
         indexes = {
                 @Index(name = "IX_show__facility", columnList = "facility_id")
         }
