@@ -2,17 +2,18 @@ package org.cmc.curtaincall.domain.member;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.cmc.curtaincall.domain.image.Image;
 
 @Getter
 public class MemberEditor {
 
     private String nickname;
 
-    private String introduction;
+    private Image image;
 
     @Builder
-    private MemberEditor(String nickname, String introduction) {
+    private MemberEditor(String nickname, Image image) {
         this.nickname = nickname;
-        this.introduction = introduction;
+        this.image = image;
     }
 }
