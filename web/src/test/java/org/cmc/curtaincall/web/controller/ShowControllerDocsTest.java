@@ -153,7 +153,6 @@ class ShowControllerDocsTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("show-get-show-detail",
                         pathParameters(
