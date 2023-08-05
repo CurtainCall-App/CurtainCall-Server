@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.service.kopis;
 
+import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.kopis.response.*;

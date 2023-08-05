@@ -13,7 +13,11 @@ import java.util.List;
 @Entity
 @Table(name = "shows",
         indexes = {
-                @Index(name = "IX_show__facility", columnList = "facility_id")
+                @Index(name = "IX_show__facility", columnList = "facility_id"),
+                @Index(name = "IX_show__name", columnList = "name"),
+                @Index(name = "IX_show__start_date", columnList = "start_date"),
+                @Index(name = "IX_show__end_date", columnList = "end_date"),
+                @Index(name = "IX_show__genre", columnList = "genre"),
         }
 )
 @Getter
@@ -46,6 +50,9 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "runtime", nullable = false)
     private String runtime;
 
+    @Column(name = "age", nullable = false)
+    private String age;
+
     @Column(name = "enterprise", nullable = false)
     private String enterprise;
 
@@ -75,9 +82,12 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     private Long reviewGradeSum;
 
     @ElementCollection
-    @CollectionTable(name = "show_time", joinColumns = @JoinColumn(
-            name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)))
+    @CollectionTable(name = "show_time", joinColumns = @JoinColumn(name = "show_id"))
     private List<ShowTime> showTimes;
+
+    @ElementCollection
+    @CollectionTable(name = "shows_introduction_images", joinColumns = @JoinColumn(name = "show_id"))
+    private List<String> introductionImages;
 
     public Show(
             String id,
@@ -88,6 +98,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             String crew,
             String cast,
             String runtime,
+            String age,
             String enterprise,
             String ticketPrice,
             String poster,
@@ -95,7 +106,8 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             ShowGenre genre,
             String state,
             String openRun,
-            List<ShowTime> showTimes) {
+            List<ShowTime> showTimes,
+            List<String> introductionImages) {
         this.id = id;
         this.facility = facility;
         this.name = name;
@@ -104,6 +116,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         this.crew = crew;
         this.cast = cast;
         this.runtime = runtime;
+        this.age = age;
         this.enterprise = enterprise;
         this.ticketPrice = ticketPrice;
         this.poster = poster;
@@ -112,6 +125,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         this.state = state;
         this.openRun = openRun;
         this.showTimes = showTimes;
+        this.introductionImages = introductionImages;
         this.reviewCount = 0;
         this.reviewGradeSum = 0L;
     }
