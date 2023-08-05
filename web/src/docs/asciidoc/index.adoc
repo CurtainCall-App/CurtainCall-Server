@@ -9,6 +9,7 @@
 :operation-http-response-title: Example response
 
 == API Domain
+- xref:authenticate.adoc[Authentication(인증)]
 - xref:show.adoc[Show(공연)]
 
 == HTTP Method
