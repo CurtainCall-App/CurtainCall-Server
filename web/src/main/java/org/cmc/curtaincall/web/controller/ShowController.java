@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.service.kopis.KopisService;
 import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
 import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
-import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
+import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,7 +31,7 @@ public class ShowController {
 
     @GetMapping("/shows/{showId}")
     public ShowDetailResponse getShowDetail(@PathVariable String showId) {
-        return kopisService.getShowDetail(showId);
+        return showService.getDetail(showId);
     }
 
     @GetMapping("/boxOffice")

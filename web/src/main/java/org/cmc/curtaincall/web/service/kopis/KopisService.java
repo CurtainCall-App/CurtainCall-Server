@@ -2,12 +2,10 @@ package org.cmc.curtaincall.web.service.kopis;
 
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
-import org.cmc.curtaincall.web.service.kopis.request.ShowListRequest;
-import org.cmc.curtaincall.web.service.kopis.response.*;
+import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
+import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponse;
+import org.cmc.curtaincall.web.service.kopis.response.ShowDetailResponseWrapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
@@ -17,8 +15,6 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
