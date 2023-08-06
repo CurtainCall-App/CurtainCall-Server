@@ -8,6 +8,9 @@ import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +29,21 @@ public class ShowReviewService {
                 .content(showReviewCreate.getContent())
                 .build());
         return new IdResult<>(showReview.getId());
+    }
+
+    public Slice<ShowReviewResponse> getList(Pageable pageable, String showId) {
+        Show show = showRepository.getReferenceById(showId);
+        return showReviewRepository.findSliceByShowAndUseYnIsTrue(pageable, show)
+                .map(showReview -> ShowReviewResponse.builder()
+                        .id(showReview.getId())
+                        .showId(showReview.getShow().getId())
+                        .grade(showReview.getGrade())
+                        .content(showReview.getContent())
+                        .creatorId(showReview.getCreatedBy().getId())
+                        .creatorNickname(showReview.getCreatedBy().getNickname())
+                        .creatorImageUrl(showReview.getCreatedBy().getImage().getUrl())
+                        .build()
+                );
     }
 
     private Show getShowById(String id) {

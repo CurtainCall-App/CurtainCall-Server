@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +20,10 @@ public class ShowReviewController {
     public IdResult<Long> createShowReview(
             @PathVariable String showId, @Validated @RequestBody ShowReviewCreate showReviewCreate) {
         return showReviewService.create(showId, showReviewCreate);
+    }
+
+    @GetMapping("/shows/{showId}/reviews")
+    public Slice<ShowReviewResponse> getList(Pageable pageable, @PathVariable String showId) {
+        return showReviewService.getList(pageable, showId);
     }
 }

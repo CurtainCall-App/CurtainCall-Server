@@ -11,3 +11,9 @@
 == 공연 리뷰 생성
 
 operation::show-review-create-show-review[snippets='http-request,path-parameters,http-response,response-fields']
+
+
+[[show-review-get-list]]
+== 공연 리뷰 리스트 조회
+
+operation::show-review-get-list[snippets='http-request,path-parameters,http-response,response-fields-content']

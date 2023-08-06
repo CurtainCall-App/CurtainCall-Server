@@ -10,7 +10,7 @@ import lombok.*;
 public class ShowReviewCreate {
 
     @PositiveOrZero
-    @Max(10L)
+    @Max(5L)
     @NotNull
     private Integer grade;
 
