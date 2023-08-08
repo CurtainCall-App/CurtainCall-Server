@@ -12,6 +12,9 @@ import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +49,26 @@ public class ShowReviewService {
                 );
     }
 
+    @Transactional
+    public void delete(Long id) {
+        ShowReview showReview = getShowReviewById(id);
+        showReview.delete();
+    }
+
+    public boolean isOwnedByMember(Long reviewId, Long memberId) {
+        ShowReview showReview = getShowReviewById(reviewId);
+        return Objects.equals(showReview.getCreatedBy().getId(), memberId);
+    }
+
     private Show getShowById(String id) {
         return showRepository.findById(id)
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
+    }
+
+    private ShowReview getShowReviewById(Long id) {
+        return showReviewRepository.findById(id)
+                .filter(ShowReview::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
     }
 }

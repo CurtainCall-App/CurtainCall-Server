@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
+import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
@@ -23,8 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -43,6 +43,9 @@ class ShowReviewControllerDocsTest {
 
     @MockBean
     ShowReviewService showReviewService;
+
+    @MockBean
+    AccountService accountService;
 
     @Test
     @WithMockUser
@@ -121,6 +124,29 @@ class ShowReviewControllerDocsTest {
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void deleteReview_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(showReviewService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(delete("/reviews/{reviewId}", "10")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("show-review-delete-review",
+                        pathParameters(
+                                parameterWithName("reviewId").description("리뷰 ID")
                         )
                 ));
     }
