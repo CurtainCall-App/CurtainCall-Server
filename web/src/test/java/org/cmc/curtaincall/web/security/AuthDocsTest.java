@@ -1,12 +1,12 @@
 package org.cmc.curtaincall.web.security;
 
 import org.cmc.curtaincall.web.common.RestDocsConfig;
+import org.cmc.curtaincall.web.service.account.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,13 +17,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 
 @Import({RestDocsConfig.class})
-@WebMvcTest(controllers = AuthDocsController.class, excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class) })
+@WebMvcTest(AuthDocsController.class)
 @AutoConfigureRestDocs
 class AuthDocsTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    AccountService accountService;
 
     @Test
     @WithMockUser
