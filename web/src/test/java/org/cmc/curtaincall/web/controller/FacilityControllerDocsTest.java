@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
+import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.facility.FacilityService;
 import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -36,6 +36,9 @@ class FacilityControllerDocsTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    AccountService accountService;
 
     @MockBean
     FacilityService facilityService;

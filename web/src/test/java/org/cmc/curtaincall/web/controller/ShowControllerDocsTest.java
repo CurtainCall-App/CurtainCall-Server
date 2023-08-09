@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
+import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.kopis.KopisService;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
@@ -43,6 +44,9 @@ class ShowControllerDocsTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    AccountService accountService;
 
     @MockBean
     KopisService kopisService;
