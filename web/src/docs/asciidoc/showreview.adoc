@@ -18,7 +18,14 @@ operation::show-review-create-show-review[snippets='http-request,path-parameters
 
 operation::show-review-get-list[snippets='http-request,path-parameters,http-response,response-fields-content']
 
+
 [[show-review-delete-review]]
 == 공연 리뷰 삭제
 
 operation::show-review-delete-review[snippets='http-request,path-parameters,http-response']
+
+
+[[show-review-edit-review]]
+== 공연 리뷰 수정
+
+operation::show-review-edit-review[snippets='http-request,path-parameters,request-fields,http-response']

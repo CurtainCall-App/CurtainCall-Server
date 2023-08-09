@@ -6,6 +6,7 @@ import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,39 @@ class ShowReviewControllerDocsTest {
                 .andDo(document("show-review-delete-review",
                         pathParameters(
                                 parameterWithName("reviewId").description("리뷰 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void editShowReview_Docs() throws Exception {
+        // given
+        ShowReviewEdit showReviewEdit = ShowReviewEdit.builder()
+                .content("수정된 내용")
+                .grade(4)
+                .build();
+
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(showReviewService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(patch("/reviews/{reviewId}", "10")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(showReviewEdit))
+                )
+                .andDo(print())
+                .andDo(document("show-review-edit-review",
+                        pathParameters(
+                                parameterWithName("reviewId").description("리뷰 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("grade").description("평점")
                         )
                 ));
     }

@@ -6,6 +6,7 @@ import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -35,5 +36,15 @@ public class ShowReviewController {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
         showReviewService.delete(reviewId);
+    }
+
+    @PatchMapping("/reviews/{reviewId}")
+    public void editReview(
+            @PathVariable Long reviewId, @LoginMemberId Long memberId,
+            @RequestBody @Validated ShowReviewEdit showReviewEdit) {
+        if (!showReviewService.isOwnedByMember(reviewId, memberId)) {
+            throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
+        }
+        showReviewService.edit(showReviewEdit, reviewId);
     }
 }

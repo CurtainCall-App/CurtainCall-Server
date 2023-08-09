@@ -2,12 +2,14 @@ package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.review.ShowReview;
+import org.cmc.curtaincall.domain.review.ShowReviewEditor;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -53,6 +55,18 @@ public class ShowReviewService {
     public void delete(Long id) {
         ShowReview showReview = getShowReviewById(id);
         showReview.delete();
+    }
+
+    @Transactional
+    public void edit(ShowReviewEdit showReviewEdit, Long id) {
+        ShowReview showReview = getShowReviewById(id);
+
+        ShowReviewEditor editor = showReview.toEditor()
+                .grade(showReviewEdit.getGrade())
+                .content(showReview.getContent())
+                .build();
+
+        showReview.edit(editor);
     }
 
     public boolean isOwnedByMember(Long reviewId, Long memberId) {
