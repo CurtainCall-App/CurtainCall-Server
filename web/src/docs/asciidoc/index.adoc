@@ -10,7 +10,9 @@
 
 == API Domain
 - xref:authenticate.adoc[Authentication(인증)]
+- xref:member.adoc[Member(회원)]
 - xref:show.adoc[Show(공연)]
+- xref:showreview.adoc[ShowReview(공연 리뷰)]
 
 == HTTP Method
 

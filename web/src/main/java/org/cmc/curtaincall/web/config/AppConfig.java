@@ -1,9 +1,13 @@
 package org.cmc.curtaincall.web.config;
 
 import jakarta.annotation.PostConstruct;
+import org.cmc.curtaincall.domain.account.repository.AccountRepository;
+import org.cmc.curtaincall.domain.member.Member;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.TimeZone;
@@ -17,5 +21,10 @@ public class AppConfig {
     @PostConstruct
     void postConstruct() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+    }
+
+    @Bean
+    public AuditorAware<Member> auditorProvider(AccountRepository accountRepository) {
+        return new LoginMemberAuditorAware(accountRepository);
     }
 }
