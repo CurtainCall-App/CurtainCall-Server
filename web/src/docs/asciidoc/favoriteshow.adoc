@@ -1,0 +1,13 @@
+= FavoriteShow(즐겨찾기 공연)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[favorite-show-favorite-show]]
+== 공연 즐겨찾기
+
+operation::favorite-show-favorite-show[snippets='http-request,path-parameters,http-response']
