@@ -1,0 +1,15 @@
+= Image(이미지)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[image-save-image]]
+== 이미지 저장
+
+반환해주는 ID 값을 이미지 ID 를 사용해야 되는 곳에 사용
+
+operation::image-save-image[snippets='http-request,request-parts,http-response,response-fields']

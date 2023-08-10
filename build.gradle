@@ -30,6 +30,12 @@ subprojects {
         mavenCentral()
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom 'io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3'
+        }
+    }
+
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'

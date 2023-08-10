@@ -7,8 +7,8 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 100MB
+      max-file-size: 5MB
+      max-request-size: 10MB
 
   mvc:
     problemdetails:
@@ -113,6 +113,18 @@ spring:
         registration:
           kakao:
             redirect-uri: http://curtaincall.ap-northeast-2.elasticbeanstalk.com:8080/login/oauth2/code/kakao
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    stack:
+      auto: false
 
 logging:
   level:
