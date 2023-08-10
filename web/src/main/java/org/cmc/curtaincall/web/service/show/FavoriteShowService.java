@@ -9,7 +9,12 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.FavoriteShowRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +41,20 @@ public class FavoriteShowService {
         Member member = memberRepository.getReferenceById(memberId);
         favoriteShowRepository.findByMemberAndShow(member, show)
                 .ifPresent(favoriteShowRepository::delete);
+    }
+
+    public List<ShowFavoriteResponse> areFavorite(Long memberId, List<String> showIds) {
+        Member member = memberRepository.getReferenceById(memberId);
+        List<Show> shows = showIds.stream()
+                .map(showRepository::getReferenceById)
+                .toList();
+        List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllByMemberAndShowIn(member, shows);
+        Set<String> favoriteShowIds = favoriteShows.stream()
+                .map(favoriteShow -> favoriteShow.getShow().getId())
+                .collect(Collectors.toSet());
+        return showIds.stream()
+                .map(showId -> new ShowFavoriteResponse(showId, favoriteShowIds.contains(showId)))
+                .toList();
     }
 
     private Show getShowById(String id) {

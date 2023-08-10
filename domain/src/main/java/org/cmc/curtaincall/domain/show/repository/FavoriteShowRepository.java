@@ -5,6 +5,8 @@ import org.cmc.curtaincall.domain.show.FavoriteShow;
 import org.cmc.curtaincall.domain.show.Show;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteShowRepository extends JpaRepository<FavoriteShow, Long> {
@@ -12,4 +14,6 @@ public interface FavoriteShowRepository extends JpaRepository<FavoriteShow, Long
     boolean existsByMemberAndShow(Member member, Show show);
 
     Optional<FavoriteShow> findByMemberAndShow(Member member, Show show);
+
+    List<FavoriteShow> findAllByMemberAndShowIn(Member member, Collection<Show> shows);
 }
