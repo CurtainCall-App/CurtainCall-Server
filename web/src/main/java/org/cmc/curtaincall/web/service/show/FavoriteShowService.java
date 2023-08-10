@@ -31,6 +31,13 @@ public class FavoriteShowService {
         favoriteShowRepository.save(new FavoriteShow(show, member));
     }
 
+    public void cancelFavorite(Long memberId, String showId) {
+        Show show = getShowById(showId);
+        Member member = memberRepository.getReferenceById(memberId);
+        favoriteShowRepository.findByMemberAndShow(member, show)
+                .ifPresent(favoriteShowRepository::delete);
+    }
+
     private Show getShowById(String id) {
         return showRepository.findById(id)
                 .filter(Show::getUseYn)

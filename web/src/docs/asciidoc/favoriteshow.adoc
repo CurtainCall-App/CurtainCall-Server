@@ -11,3 +11,8 @@
 == 공연 즐겨찾기
 
 operation::favorite-show-favorite-show[snippets='http-request,path-parameters,http-response']
+
+[[favorite-show-cancel-favorite]]
+== 공연 즐겨찾기 취소
+
+operation::favorite-show-cancel-favorite[snippets='http-request,path-parameters,http-response']
