@@ -22,3 +22,9 @@ operation::favorite-show-cancel-favorite[snippets='http-request,path-parameters,
 == 공연 즐겨찾기 여부 조회
 
 operation::favorite-get-favorite[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
+[[favorite-get-favorite-list]]
+== 즐겨찾기된 공연 조회
+
+operation::favorite-get-favorite-list[snippets='http-request,path-parameters,http-response,response-fields-content']

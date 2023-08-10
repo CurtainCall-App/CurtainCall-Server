@@ -9,7 +9,11 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.FavoriteShowRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,6 +59,24 @@ public class FavoriteShowService {
         return showIds.stream()
                 .map(showId -> new ShowFavoriteResponse(showId, favoriteShowIds.contains(showId)))
                 .toList();
+    }
+
+    public Slice<FavoriteShowResponse> getFavoriteShowList(Pageable pageable, Long memberId) {
+        Member member = memberRepository.getReferenceById(memberId);
+        Slice<FavoriteShow> favoriteShows = favoriteShowRepository.findSliceWithShowByMember(pageable, member);
+        List<FavoriteShowResponse> shows = favoriteShows.stream()
+                .map(FavoriteShow::getShow)
+                .filter(Show::getUseYn)
+                .map(show -> FavoriteShowResponse.builder()
+                        .id(show.getId())
+                        .name(show.getName())
+                        .poster(show.getPoster())
+                        .story(show.getStory())
+                        .reviewCount(show.getReviewCount())
+                        .reviewGradeSum(show.getReviewGradeSum())
+                        .build()
+                ).toList();
+        return new SliceImpl<>(shows, pageable, favoriteShows.hasNext());
     }
 
     private Show getShowById(String id) {

@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
+import org.cmc.curtaincall.domain.review.ShowReview;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
@@ -133,5 +134,15 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Override
     public boolean isNew() {
         return getCreatedAt() == null;
+    }
+
+    public void applyReview(ShowReview review) {
+        reviewCount += 1;
+        reviewGradeSum += review.getGrade();
+    }
+
+    public void cancelReview(ShowReview review) {
+        reviewCount -= 1;
+        reviewGradeSum -= review.getGrade();
     }
 }

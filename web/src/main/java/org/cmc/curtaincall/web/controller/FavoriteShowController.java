@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
+import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.validation.annotation.Validated;
@@ -33,5 +35,11 @@ public class FavoriteShowController {
             @RequestParam @Validated @Size(max = 100) List<String> showIds, @LoginMemberId Long memberId) {
         List<ShowFavoriteResponse> showFavoriteResponses = favoriteShowService.areFavorite(memberId, showIds);
         return new SliceImpl<>(showFavoriteResponses);
+    }
+
+    @GetMapping("/members/{memberId}/favorite")
+    public Slice<FavoriteShowResponse> getFavoriteShowList(
+            @PathVariable Long memberId, Pageable pageable) {
+        return favoriteShowService.getFavoriteShowList(pageable, memberId);
     }
 }
