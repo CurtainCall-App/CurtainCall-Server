@@ -8,8 +8,13 @@ import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewLikedResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +44,19 @@ public class ShowReviewLikeService {
         showReviewLikeRepository.findByMemberAndShowReview(member, showReview)
                 .ifPresent(showReviewLikeRepository::delete);
         showReview.minusLikeCount();
+    }
+
+    public List<ShowReviewLikedResponse> areLiked(Long memberId, List<Long> reviewIds) {
+        Member member = memberRepository.getReferenceById(memberId);
+        List<ShowReview> reviews = reviewIds.stream()
+                .map(showReviewRepository::getReferenceById)
+                .toList();
+        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberAndShowReviewIn(member, reviews).stream()
+                .map(showReviewLike -> showReviewLike.getShowReview().getId())
+                .collect(Collectors.toSet());
+        return reviewIds.stream()
+                .map(reviewId -> new ShowReviewLikedResponse(reviewId, likedReviewIds.contains(reviewId)))
+                .toList();
     }
 
     private ShowReview getShowReviewById(Long id) {
