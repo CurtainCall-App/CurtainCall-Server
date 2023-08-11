@@ -2,23 +2,22 @@ package org.cmc.curtaincall.domain.review;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cmc.curtaincall.domain.core.BaseCreatedByEntity;
+import org.cmc.curtaincall.domain.member.Member;
 
 @Entity
 @Table(name = "show_review_like",
         uniqueConstraints = {
             @UniqueConstraint(
-                    name = "UK_show_review_like__created_by_show_review",
-                    columnNames = {"created_by", "show_review_id"}
+                    name = "UK_show_review_like__member_show_review",
+                    columnNames = {"member_id", "show_review_id"}
             )
         }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ShowReviewLike extends BaseCreatedByEntity {
+public class ShowReviewLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +28,12 @@ public class ShowReviewLike extends BaseCreatedByEntity {
     @JoinColumn(name = "show_review_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private ShowReview showReview;
 
-    @Builder
-    public ShowReviewLike(ShowReview showReview) {
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member member;
+
+    public ShowReviewLike(ShowReview showReview, Member member) {
         this.showReview = showReview;
+        this.member = member;
     }
 }

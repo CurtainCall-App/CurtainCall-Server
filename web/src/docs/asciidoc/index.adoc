@@ -8,12 +8,15 @@
 :operation-http-request-title: Example request
 :operation-http-response-title: Example response
 
+문서에 GET 이외의 메서드에는 HTTP Request 에 csrf 값이 있을 수 있는데 이는 신경쓰지 않으셔도 됩니다.
+
 == API Domain
 - xref:authenticate.adoc[Authentication(인증)]
 - xref:member.adoc[Member(회원)]
 - xref:show.adoc[Show(공연)]
 - xref:showreview.adoc[ShowReview(공연 리뷰)]
 - xref:favoriteshow.adoc[FavoriteShow(즐겨찾기 공연)]
+- xref:showreviewlike.adoc[ShowReviewLike(공연 리뷰 좋아요)]
 
 == HTTP Method
 

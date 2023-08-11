@@ -56,4 +56,12 @@ public class ShowReview extends BaseEntity {
         grade = editor.getGrade();
         content = editor.getContent();
     }
+
+    public void plusLikeCount() {
+        this.likeCount += 1;
+    }
+
+    public void minusLikeCount() {
+        this.likeCount -= 1;
+    }
 }

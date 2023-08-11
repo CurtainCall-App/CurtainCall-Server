@@ -1,0 +1,14 @@
+= ShowReviewLike(공연 리뷰 좋아요)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[show-review-like-review-like]]
+== 공연 즐겨찾기
+
+operation::show-review-like-review-like[snippets='http-request,path-parameters,http-response']
+
