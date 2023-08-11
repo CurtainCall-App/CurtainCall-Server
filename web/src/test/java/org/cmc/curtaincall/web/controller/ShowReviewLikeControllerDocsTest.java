@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(RestDocsConfig.class)
 @AutoConfigureRestDocs
 @WebMvcTest(ShowReviewLikeController.class)
-class ShowReviewLikeControllerTest {
+class ShowReviewLikeControllerDocsTest {
 
     @Autowired
     MockMvc mockMvc;
