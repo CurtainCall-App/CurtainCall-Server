@@ -19,6 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -56,6 +57,28 @@ class ShowReviewLikeControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-review-like",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        pathParameters(
+                                parameterWithName("reviewId").description("공연 리뷰 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void cancelLike_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(anyString())).willReturn(2L);
+
+        // expected
+        mockMvc.perform(delete("/reviews/{reviewId}/like", "10")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("show-review-like-cancel-like",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),

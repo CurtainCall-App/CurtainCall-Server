@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,7 @@ public class FavoriteShowService {
 
     private final ShowRepository showRepository;
 
+    @Transactional
     public void favorite(Long memberId, String showId) {
         Show show = getShowById(showId);
         Member member = memberRepository.getReferenceById(memberId);
@@ -40,6 +42,7 @@ public class FavoriteShowService {
         favoriteShowRepository.save(new FavoriteShow(show, member));
     }
 
+    @Transactional
     public void cancelFavorite(Long memberId, String showId) {
         Show show = getShowById(showId);
         Member member = memberRepository.getReferenceById(memberId);

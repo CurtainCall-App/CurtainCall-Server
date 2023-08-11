@@ -32,6 +32,15 @@ public class ShowReviewLikeService {
         showReview.plusLikeCount();
     }
 
+    @Transactional
+    public void cancelLike(Long memberId, Long reviewId) {
+        ShowReview showReview = getShowReviewById(reviewId);
+        Member member = memberRepository.getReferenceById(memberId);
+        showReviewLikeRepository.findByMemberAndShowReview(member, showReview)
+                .ifPresent(showReviewLikeRepository::delete);
+        showReview.minusLikeCount();
+    }
+
     private ShowReview getShowReviewById(Long id) {
         return showReviewRepository.findById(id)
                 .filter(ShowReview::getUseYn)

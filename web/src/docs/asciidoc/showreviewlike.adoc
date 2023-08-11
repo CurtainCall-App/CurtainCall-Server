@@ -8,7 +8,12 @@
 
 
 [[show-review-like-review-like]]
-== 공연 즐겨찾기
+== 공연 리뷰 좋아요
 
 operation::show-review-like-review-like[snippets='http-request,path-parameters,http-response']
 
+
+[[show-review-like-cancel-like]]
+== 공연 리뷰 좋아요 취소
+
+operation::show-review-like-cancel-like[snippets='http-request,path-parameters,http-response']
