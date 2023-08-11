@@ -26,6 +26,7 @@ public class ShowReviewService {
 
     private final ShowReviewRepository showReviewRepository;
 
+    @Transactional
     public IdResult<Long> create(String showId, ShowReviewCreate showReviewCreate) {
         Show show = getShowById(showId);
         ShowReview showReview = showReviewRepository.save(ShowReview.builder()
@@ -33,6 +34,7 @@ public class ShowReviewService {
                 .grade(showReviewCreate.getGrade())
                 .content(showReviewCreate.getContent())
                 .build());
+        show.applyReview(showReview);
         return new IdResult<>(showReview.getId());
     }
 
@@ -54,6 +56,8 @@ public class ShowReviewService {
     @Transactional
     public void delete(Long id) {
         ShowReview showReview = getShowReviewById(id);
+        Show show = showReview.getShow();
+        show.cancelReview(showReview);
         showReview.delete();
     }
 
