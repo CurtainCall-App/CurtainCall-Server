@@ -13,6 +13,7 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
+import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,26 @@ public class PartyService {
     private final ShowRepository showRepository;
 
     private final MemberRepository memberRepository;
+
+    public PartyDetailResponse getDetail(Long id) {
+        Party party = getPartyById(id);
+        return PartyDetailResponse.builder()
+                .id(party.getId())
+                .title(party.getTitle())
+                .content(party.getContent())
+                .curMemberNum(party.getCurMemberNum())
+                .maxMemberNum(party.getMaxMemberNum())
+                .showAt(party.getShowAt())
+                .createdAt(party.getCreatedAt())
+                .creatorId(party.getCreatedBy().getId())
+                .creatorNickname(party.getCreatedBy().getNickname())
+                .creatorImageUrl(party.getCreatedBy().getImage().getUrl())
+                .showId(party.getShow().getId())
+                .showName(party.getShow().getName())
+                .facilityId(party.getShow().getFacility().getId())
+                .facilityName(party.getShow().getFacility().getName())
+                .build();
+    }
 
     public IdResult<Long> create(PartyCreate partyCreate) {
         Show show = getShowById(partyCreate.getShowId());

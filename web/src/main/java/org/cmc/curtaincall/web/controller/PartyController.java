@@ -7,6 +7,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
+import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class PartyController {
 
     private final PartyService partyService;
+
+    @GetMapping("/parties/{partyId}")
+    public PartyDetailResponse getPartyDetail(Long partyId) {
+        return partyService.getDetail(partyId);
+    }
 
     @PostMapping("/parties")
     public IdResult<Long> createParty(@RequestBody @Validated PartyCreate partyCreate) {

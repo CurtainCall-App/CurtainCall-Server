@@ -7,6 +7,12 @@
 :sectlinks:
 
 
+[[party-get-party-detail]]
+== 파티 상세 조회
+
+operation::party-get-party-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+
 [[party-create-party]]
 == 파티 생성
 
