@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
@@ -17,6 +18,14 @@ public class PartyController {
     @PostMapping("/parties")
     public IdResult<Long> createParty(@RequestBody @Validated PartyCreate partyCreate) {
         return partyService.create(partyCreate);
+    }
+
+    @DeleteMapping("/parties/{partyId}")
+    public void deleteParty(@PathVariable Long partyId, @LoginMemberId Long memberId) {
+        if (!partyService.isOwnedByMember(partyId, memberId)) {
+            throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
+        }
+        partyService.delete(partyId);
     }
 
     @PutMapping("/member/parties/{partyId}")

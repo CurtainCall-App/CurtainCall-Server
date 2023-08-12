@@ -23,8 +23,7 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -87,6 +86,28 @@ class PartyControllerDocsTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("파티 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void deleteParty_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(delete("/parties/{partyId}", 10)
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-delete-party",
+                        pathParameters(
+                                parameterWithName("partyId").description("파티 ID")
                         )
                 ));
     }

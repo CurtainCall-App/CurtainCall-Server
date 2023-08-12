@@ -13,6 +13,12 @@
 operation::party-create-party[snippets='http-request,request-fields,http-response,response-fields']
 
 
+[[party-delete-party]]
+== 파티 삭제
+
+operation::party-delete-party[snippets='http-request,path-parameters,http-response']
+
+
 [[party-participate-party]]
 == 파티 참여
 

@@ -56,10 +56,22 @@ public class PartyService {
         party.participate(member);
     }
 
-    private static boolean isParticipated(Long memberId, Party party) {
+    private boolean isParticipated(Long memberId, Party party) {
         return party.getPartyMembers().stream()
                 .anyMatch(partyMember -> Objects.equals(partyMember.getMember().getId(), memberId))
                 || Objects.equals(party.getCreatedBy().getId(), memberId);
+    }
+
+    public boolean isOwnedByMember(Long partyId, Long memberId) {
+        Party party = getPartyById(partyId);
+        return Objects.equals(party.getCreatedBy().getId(), memberId);
+    }
+
+    @Transactional
+    public void delete(Long partyId) {
+        Party party = getPartyById(partyId);
+        party.getPartyMembers().clear();
+        party.delete();
     }
 
     private Show getShowById(String id) {
