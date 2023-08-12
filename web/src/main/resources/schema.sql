@@ -157,6 +157,9 @@ create table party
     primary key (party_id)
 ) engine=InnoDB;
 
+create index IX_party__created_at
+    on party (created_at);
+
 create index IX_party__category_created_at
     on party (category, created_at);
 

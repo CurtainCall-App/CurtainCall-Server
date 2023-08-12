@@ -7,6 +7,12 @@
 :sectlinks:
 
 
+[[party-get-party-list]]
+== 파티 리스트 조회
+
+operation::party-get-party-list[snippets='http-request,query-parameters,http-response,response-fields']
+
+
 [[party-get-party-detail]]
 == 파티 상세 조회
 

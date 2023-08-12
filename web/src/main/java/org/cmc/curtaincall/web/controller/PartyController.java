@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
@@ -8,6 +9,9 @@ import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +21,13 @@ public class PartyController {
 
     private final PartyService partyService;
 
+    @GetMapping("/parties")
+    public Slice<PartyResponse> getPartyList(Pageable pageable, @RequestParam PartyCategory category) {
+        return partyService.getList(pageable, category);
+    }
+
     @GetMapping("/parties/{partyId}")
-    public PartyDetailResponse getPartyDetail(Long partyId) {
+    public PartyDetailResponse getPartyDetail(@PathVariable Long partyId) {
         return partyService.getDetail(partyId);
     }
 

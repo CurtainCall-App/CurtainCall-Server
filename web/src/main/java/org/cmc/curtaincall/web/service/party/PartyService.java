@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
+import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.show.Show;
@@ -14,6 +15,9 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +51,28 @@ public class PartyService {
                 .facilityId(party.getShow().getFacility().getId())
                 .facilityName(party.getShow().getFacility().getName())
                 .build();
+    }
+
+    public Slice<PartyResponse> getList(Pageable pageable, PartyCategory category) {
+        return partyRepository.findSliceWithByCategoryAndUseYnIsTrueOrderByCreatedAtDesc(pageable, category)
+                .map(party -> PartyResponse.builder()
+                        .id(party.getId())
+                        .title(party.getTitle())
+                        .curMemberNum(party.getCurMemberNum())
+                        .maxMemberNum(party.getMaxMemberNum())
+                        .showAt(party.getShowAt())
+                        .createdAt(party.getCreatedAt())
+                        .category(party.getCategory())
+                        .creatorId(party.getCreatedBy().getId())
+                        .creatorNickname(party.getCreatedBy().getNickname())
+                        .creatorImageUrl(party.getCreatedBy().getImage().getUrl())
+                        .showId(party.getShow().getId())
+                        .showName(party.getShow().getName())
+                        .showPoster(party.getShow().getPoster())
+                        .facilityId(party.getShow().getFacility().getId())
+                        .facilityName(party.getShow().getFacility().getName())
+                        .build()
+                );
     }
 
     public IdResult<Long> create(PartyCreate partyCreate) {

@@ -10,15 +10,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class PartyDetailResponse {
+public class PartyResponse {
 
     private Long id;
 
     private String title;
-
-    private String content;
-
-    private PartyCategory category;
 
     private Integer curMemberNum;
 
@@ -26,9 +22,11 @@ public class PartyDetailResponse {
 
     private LocalDateTime showAt;
 
-    private Long creatorId;
-
     private LocalDateTime createdAt;
+
+    private PartyCategory category;
+
+    private Long creatorId;
 
     private String creatorNickname;
 
@@ -37,6 +35,8 @@ public class PartyDetailResponse {
     private String showId;
 
     private String showName;
+
+    private String showPoster;
 
     private String facilityId;
 
