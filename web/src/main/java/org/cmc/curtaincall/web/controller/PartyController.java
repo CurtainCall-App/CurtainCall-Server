@@ -6,6 +6,7 @@ import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
+import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,16 @@ public class PartyController {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
         partyService.delete(partyId);
+    }
+
+    @PatchMapping("/parties/{partyId}")
+    public void editParty(
+            @PathVariable Long partyId, @RequestBody @Validated PartyEdit partyEdit,
+            @LoginMemberId Long memberId) {
+        if (!partyService.isOwnedByMember(partyId, memberId)) {
+            throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
+        }
+        partyService.edit(partyId, partyEdit);
     }
 
     @PutMapping("/member/parties/{partyId}")

@@ -7,6 +7,7 @@ import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
+import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -108,6 +109,40 @@ class PartyControllerDocsTest {
                 .andDo(document("party-delete-party",
                         pathParameters(
                                 parameterWithName("partyId").description("파티 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void editParty_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
+
+        PartyEdit partyEdit = PartyEdit.builder()
+                .title("수정 제목")
+                .content("수정 내용")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/parties/{partyId}", 10)
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(partyEdit))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-edit-party",
+                        pathParameters(
+                                parameterWithName("partyId").description("파티 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용")
                         )
                 ));
     }

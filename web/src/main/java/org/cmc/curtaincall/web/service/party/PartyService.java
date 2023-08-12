@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
+import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
@@ -11,6 +12,7 @@ import org.cmc.curtaincall.web.exception.AlreadyClosedPartyException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
+import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +56,18 @@ public class PartyService {
 
         Member member = getMemberById(memberId);
         party.participate(member);
+    }
+
+    @Transactional
+    public void edit(Long id, PartyEdit partyEdit) {
+        Party party = getPartyById(id);
+
+        PartyEditor editor = party.toEditor()
+                .title(partyEdit.getTitle())
+                .content(partyEdit.getContent())
+                .build();
+
+        party.edit(editor);
     }
 
     private boolean isParticipated(Long memberId, Party party) {
