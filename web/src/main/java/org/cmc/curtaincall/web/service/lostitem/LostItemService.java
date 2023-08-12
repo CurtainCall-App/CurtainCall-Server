@@ -12,6 +12,7 @@ import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -58,6 +59,22 @@ public class LostItemService {
                 );
     }
 
+    public LostItemDetailResponse getDetail(Long id) {
+        LostItem lostItem = getLostItemById(id);
+        return LostItemDetailResponse.builder()
+                .id(lostItem.getId())
+                .facilityId(lostItem.getFacility().getId())
+                .facilityName(lostItem.getFacility().getName())
+                .facilityPhone(lostItem.getFacility().getPhone())
+                .title(lostItem.getTitle())
+                .type(lostItem.getType())
+                .foundPlaceDetail(lostItem.getFoundPlaceDetail())
+                .foundAt(lostItem.getFoundAt())
+                .particulars(lostItem.getParticulars())
+                .imageUrl(lostItem.getImage().getUrl())
+                .build();
+    }
+
     private Facility getFacilityById(String id) {
         return facilityRepository.findById(id)
                 .filter(Facility::getUseYn)
@@ -68,5 +85,11 @@ public class LostItemService {
         return imageRepository.findById(id)
                 .filter(Image::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Image id=" + id));
+    }
+
+    private LostItem getLostItemById(Long id) {
+        return lostItemRepository.findById(id)
+                .filter(LostItem::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("LostItem id=" + id));
     }
 }

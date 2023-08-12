@@ -8,6 +8,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -35,5 +36,10 @@ public class LostItemController {
     public Slice<LostItemResponse> search(
             Pageable pageable, @ModelAttribute LostItemQueryParam queryParam) {
         return lostItemService.search(pageable, queryParam);
+    }
+
+    @GetMapping("/lostitems/{lostItemId}")
+    public LostItemDetailResponse getDetail(@PathVariable Long lostItemId) {
+        return lostItemService.getDetail(lostItemId);
     }
 }
