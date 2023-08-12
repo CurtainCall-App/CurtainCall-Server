@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "party",
@@ -53,6 +56,9 @@ public class Party extends BaseEntity {
     @Column(name = "category", length = 25, nullable = false)
     private PartyCategory category;
 
+    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<PartyMember> partyMembers = new ArrayList<>();
+
     @Builder
     public Party(
             Show show,
@@ -84,8 +90,10 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
-    public void plusCurMemberNum() {
+    public void participate(Member member) {
+        partyMembers.add(new PartyMember(this, member));
         curMemberNum += 1;
+
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {
             close();
         }

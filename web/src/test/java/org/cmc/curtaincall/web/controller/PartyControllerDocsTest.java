@@ -24,7 +24,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -84,6 +87,28 @@ class PartyControllerDocsTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("파티 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void participateParty_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(1L);
+
+        // expected
+        mockMvc.perform(put("/member/parties/{partyId}", 10)
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-participate-party",
+                        pathParameters(
+                                parameterWithName("partyId").description("파티 ID")
                         )
                 ));
     }

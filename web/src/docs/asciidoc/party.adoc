@@ -8,6 +8,12 @@
 
 
 [[party-create-party]]
-== 공연 리뷰 생성
+== 파티 생성
 
 operation::party-create-party[snippets='http-request,request-fields,http-response,response-fields']
+
+
+[[party-participate-party]]
+== 파티 참여
+
+operation::party-participate-party[snippets='http-request,path-parameters,http-response']
