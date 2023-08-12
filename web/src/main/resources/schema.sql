@@ -157,12 +157,17 @@ create table party
     primary key (party_id)
 ) engine=InnoDB;
 
-create index IX_party__show
-    on party (show_id);
+create index IX_party__created_at
+    on party (created_at);
 
-create index IX_party__created_by
-    on party (created_by);
+create index IX_party__category_created_at
+    on party (category, created_at);
 
+create index IX_party__show_category_created_at
+    on party (show_id, category, created_at);
+
+create index IX_party__created_by_category_created_at
+    on party (created_by, category, created_at);
 
 create table party_member
 (
@@ -173,8 +178,10 @@ create table party_member
 ) engine=InnoDB;
 
 alter table party_member
-    add constraint UK_party_member__party_id_member_id unique (member_id, party_id);
+    add constraint UK_party_member__party_member unique (party_id, member_id);
 
+create index IX_party_member__member
+    on party_member (member_id);
 
 create table show_review
 (

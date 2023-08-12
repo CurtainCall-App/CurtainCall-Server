@@ -2,18 +2,23 @@ package org.cmc.curtaincall.domain.party;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "party",
         indexes = {
-                @Index(name = "IX_party__show", columnList = "show_id"),
-                @Index(name = "IX_party__created_by", columnList = "created_by")
+                @Index(name = "IX_party__category_created_at", columnList = "category,created_at"),
+                @Index(name = "IX_party__show_category_created_at", columnList = "show_id,category,created_at"),
+                @Index(name = "IX_party__created_by_category_created_at", columnList = "created_by,category,created_at")
         }
 )
 @Getter
@@ -39,7 +44,7 @@ public class Party extends BaseEntity {
     private String content;
 
     @Column(name = "cur_member_num", nullable = false)
-    private Integer curMemberNum;
+    private Integer curMemberNum = 1;
 
     @Column(name = "max_member_num", nullable = false)
     private Integer maxMemberNum;
@@ -51,19 +56,21 @@ public class Party extends BaseEntity {
     @Column(name = "category", length = 25, nullable = false)
     private PartyCategory category;
 
+    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<PartyMember> partyMembers = new ArrayList<>();
+
+    @Builder
     public Party(
             Show show,
             LocalDateTime showAt,
             String title,
             String content,
-            Integer curMemberNum,
             Integer maxMemberNum,
             PartyCategory category) {
         this.show = show;
         this.showAt = showAt;
         this.title = title;
         this.content = content;
-        this.curMemberNum = curMemberNum;
         this.maxMemberNum = maxMemberNum;
         this.category = category;
     }
@@ -78,4 +85,18 @@ public class Party extends BaseEntity {
         title = editor.getTitle();
         content = editor.getContent();
     }
+
+    public void close() {
+        closed = true;
+    }
+
+    public void participate(Member member) {
+        partyMembers.add(new PartyMember(this, member));
+        curMemberNum += 1;
+
+        if (curMemberNum.intValue() == maxMemberNum.intValue()) {
+            close();
+        }
+    }
+
 }

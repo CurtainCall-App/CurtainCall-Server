@@ -6,15 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.member.Member;
-import org.cmc.curtaincall.domain.review.ShowReview;
 
 @Entity
 @Table(name = "party_member",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "UK_party_member__party_id_member_id",
+                        name = "UK_party_member__party_member",
                         columnNames = {"party_id", "member_id"}
                 )
+        },
+        indexes = {
+                @Index(name = "IX_party_member__member", columnList = "member_id")
         }
 )
 @Getter
