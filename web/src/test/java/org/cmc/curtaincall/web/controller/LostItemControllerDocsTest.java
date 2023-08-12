@@ -8,26 +8,33 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -95,6 +102,54 @@ class LostItemControllerDocsTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("분실물 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getShows_Docs() throws Exception {
+        // given
+        LostItemResponse lostItemResponse = LostItemResponse.builder()
+                .id(10L)
+                .facilityId("FC001298")
+                .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
+                .title("아이패드 핑크")
+                .foundAt(LocalDateTime.of(2023, 3, 4, 11, 23))
+                .imageUrl("image-url")
+                .build();
+        given(lostItemService.search(any(), any())).willReturn(new SliceImpl<>(List.of(lostItemResponse)));
+
+        // expected
+        mockMvc.perform(get("/lostitems")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("page", "0")
+                                .param("size", "20")
+                                .param("facilityId", "FC001298")
+                                .param("type", LostItemType.ELECTRONIC_EQUIPMENT.name())
+                                .param("foundDate", LocalDate.of(2023, 3, 4).toString())
+                                .param("title", "아이패드")
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("lostitem-search",
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("facilityId").description("공연시설 ID").optional(),
+                                parameterWithName("type").description("분류").optional(),
+                                parameterWithName("foundDate").description("습득일자").optional(),
+                                parameterWithName("title").description("제목").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("facilityId").description("공연시설 ID"),
+                                fieldWithPath("facilityName").description("공연시설 이름"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("foundAt").description("습득일시"),
+                                fieldWithPath("imageUrl").description("이미지")
                         )
                 ));
     }

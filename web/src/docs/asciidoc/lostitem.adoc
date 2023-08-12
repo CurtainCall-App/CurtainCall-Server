@@ -23,3 +23,9 @@ operation::lostitem-create-lostitem[snippets='http-request,http-response,respons
 - BOOK = 책
 - CLOTHING = 의류
 - ETC = 기타
+
+
+[[lostitem-search]]
+== 분실물 리스트 조회(검색)
+
+operation::lostitem-search[snippets='http-request,query-parameters,http-response,response-fields-content']
