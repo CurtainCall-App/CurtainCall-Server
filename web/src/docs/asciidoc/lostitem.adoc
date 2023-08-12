@@ -1,0 +1,43 @@
+= LostItem(분실물)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[lostitem-create-lostitem]]
+== 분실물 생성
+
+operation::lostitem-create-lostitem[snippets='http-request,http-response,response-fields']
+
+분실물 분류
+
+- BAG = 가방
+- WALLET = 지갑
+- CASH = 현금
+- CARD = 카드
+- JEWELRY = 귀금속
+- ELECTRONIC_EQUIPMENT = 전자기기
+- BOOK = 책
+- CLOTHING = 의류
+- ETC = 기타
+
+
+[[lostitem-search]]
+== 분실물 리스트 조회(검색)
+
+operation::lostitem-search[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
+[[lostitem-get-detail]]
+== 분실물 상세 조회
+
+operation::lostitem-get-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+
+[[lostitem-delete-lostitem]]
+== 분실물 삭제
+
+operation::lostitem-delete-lostitem[snippets='http-request,path-parameters,http-response']

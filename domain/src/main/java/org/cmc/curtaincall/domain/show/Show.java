@@ -83,11 +83,17 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     private Long reviewGradeSum;
 
     @ElementCollection
-    @CollectionTable(name = "show_time", joinColumns = @JoinColumn(name = "show_id"))
+    @CollectionTable(
+            name = "show_time",
+            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(name = "FK_show_time"))
+    )
     private List<ShowTime> showTimes;
 
     @ElementCollection
-    @CollectionTable(name = "shows_introduction_images", joinColumns = @JoinColumn(name = "show_id"))
+    @CollectionTable(
+            name = "shows_introduction_images",
+            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(name = "FK_shows_introduction_images"))
+    )
     private List<String> introductionImages;
 
     public Show(
