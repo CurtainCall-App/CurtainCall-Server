@@ -23,7 +23,7 @@ public class LostItemController {
 
     private final ImageService imageService;
 
-    @PostMapping("/lostitems")
+    @PostMapping("/lostItems")
     public IdResult<Long> createLostItem(@RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId Long memberId) {
         if (!imageService.isOwnedByMember(memberId, lostItemCreate.getImageId())) {
             throw new EntityAccessDeniedException(
@@ -32,14 +32,22 @@ public class LostItemController {
         return lostItemService.create(lostItemCreate);
     }
 
-    @GetMapping("/lostitems")
+    @GetMapping("/lostItems")
     public Slice<LostItemResponse> search(
             Pageable pageable, @ModelAttribute LostItemQueryParam queryParam) {
         return lostItemService.search(pageable, queryParam);
     }
 
-    @GetMapping("/lostitems/{lostItemId}")
+    @GetMapping("/lostItems/{lostItemId}")
     public LostItemDetailResponse getDetail(@PathVariable Long lostItemId) {
         return lostItemService.getDetail(lostItemId);
+    }
+
+    @DeleteMapping("/lostitems/{lostItemId}")
+    public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId Long memberId) {
+        if (!lostItemService.isOwnedByMember(lostItemId, memberId)) {
+            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
+        }
+        lostItemService.delete(lostItemId);
     }
 }

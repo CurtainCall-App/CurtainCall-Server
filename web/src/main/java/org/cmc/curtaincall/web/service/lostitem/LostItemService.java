@@ -17,6 +17,9 @@ import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +76,18 @@ public class LostItemService {
                 .particulars(lostItem.getParticulars())
                 .imageUrl(lostItem.getImage().getUrl())
                 .build();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        LostItem lostItem = getLostItemById(id);
+        lostItem.delete();
+        lostItem.getImage().delete();
+    }
+
+    public boolean isOwnedByMember(Long lostItemId, Long memberId) {
+        LostItem lostItem = getLostItemById(lostItemId);
+        return Objects.equals(lostItem.getCreatedBy().getId(), memberId);
     }
 
     private Facility getFacilityById(String id) {

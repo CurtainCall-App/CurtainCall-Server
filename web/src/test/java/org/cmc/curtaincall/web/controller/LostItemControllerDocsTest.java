@@ -29,8 +29,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -116,7 +115,7 @@ class LostItemControllerDocsTest {
         given(lostItemService.search(any(), any())).willReturn(new SliceImpl<>(List.of(lostItemResponse)));
 
         // expected
-        mockMvc.perform(get("/lostitems")
+        mockMvc.perform(get("/lostItems")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -169,7 +168,7 @@ class LostItemControllerDocsTest {
         given(lostItemService.getDetail(any())).willReturn(lostItemDetailResponse);
 
         // expected
-        mockMvc.perform(get("/lostitems/{lostItemId}", "10")
+        mockMvc.perform(get("/lostItems/{lostItemId}", "10")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -192,6 +191,29 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("foundAt").description("습득일시"),
                                 fieldWithPath("particulars").description("특이사항"),
                                 fieldWithPath("imageUrl").description("이미지")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void deleteReview_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(delete("/lostItems/{lostItemId}", "10")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("lostitem-delete-lostitem",
+                        pathParameters(
+                                parameterWithName("lostItemId").description("분실물 ID")
                         )
                 ));
     }
