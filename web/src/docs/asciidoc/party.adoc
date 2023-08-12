@@ -1,0 +1,13 @@
+= Party(파티)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[party-create-party]]
+== 공연 리뷰 생성
+
+operation::party-create-party[snippets='http-request,request-fields,http-response,response-fields']
