@@ -75,7 +75,7 @@ class LostItemControllerDocsTest {
         given(lostItemService.create(any())).willReturn(new IdResult<>(10L));
 
         // expected
-        mockMvc.perform(post("/lostitems")
+        mockMvc.perform(post("/lostItems")
                         .with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .contentType(MediaType.APPLICATION_JSON)
