@@ -8,7 +8,7 @@ import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 
 @Entity
 @Table(name = "notice",
-        indexes = @Index(name = "IX_notice__created_at", columnList = "created_at")
+        indexes = @Index(name = "IX_notice__created_at", columnList = "created_at desc")
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
