@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -30,7 +31,10 @@ public class LostItemCreate {
     private String foundPlaceDetail;
 
     @NotNull
-    private LocalDateTime foundAt;
+    private LocalDate foundDate;
+
+    @NotNull
+    private LocalTime foundTime;
 
     @NotBlank
     @Size(max = 200)

@@ -9,16 +9,15 @@ import org.cmc.curtaincall.domain.core.BaseEntity;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.show.Facility;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "lost_item",
         indexes = {
-                @Index(name = "IX_lost_item__found_at", columnList = "found_at"),
-                @Index(name = "IX_lost_item__title_found_at", columnList = "title,found_at"),
-                @Index(name = "IX_lost_item__title_facility_found_at", columnList = "title,facility_id,found_at"),
-                @Index(name = "IX_lost_item__facility_found_at", columnList = "facility_id,found_at"),
-                @Index(name = "IX_lost_item__facility_type_found_at", columnList = "facility_id,type,found_at"),
+                @Index(name = "IX_lost_item__found_date_found_time_title", columnList = "found_date, found_time desc, title"),
+                @Index(name = "IX_lost_item__facility_found_date_found_time_title", columnList = "facility_id, found_date, found_time desc, title"),
+                @Index(name = "IX_lost_item__facility_type_found_date_found_time_title", columnList = "facility_id, type, found_date, found_time desc, title"),
         }
 )
 @Getter
@@ -48,8 +47,11 @@ public class LostItem extends BaseEntity {
     @Column(name = "found_place_detail", nullable = false)
     private String foundPlaceDetail;
 
-    @Column(name = "found_at", nullable = false)
-    private LocalDateTime foundAt;
+    @Column(name = "found_date", nullable = false)
+    private LocalDate foundDate;
+
+    @Column(name = "found_time", nullable = false)
+    private LocalTime foundTime;
 
     @Column(name = "particulars", nullable = false)
     private String particulars;
@@ -61,14 +63,16 @@ public class LostItem extends BaseEntity {
             String title,
             LostItemType type,
             String foundPlaceDetail,
-            LocalDateTime foundAt,
+            LocalDate foundDate,
+            LocalTime foundTime,
             String particulars) {
         this.facility = facility;
         this.image = image;
         this.title = title;
         this.type = type;
         this.foundPlaceDetail = foundPlaceDetail;
-        this.foundAt = foundAt;
+        this.foundDate = foundDate;
+        this.foundTime = foundTime;
         this.particulars = particulars;
     }
 }

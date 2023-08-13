@@ -42,7 +42,8 @@ public class LostItemService {
                 .title(lostItemCreate.getTitle())
                 .type(lostItemCreate.getType())
                 .foundPlaceDetail(lostItemCreate.getFoundPlaceDetail())
-                .foundAt(lostItemCreate.getFoundAt())
+                .foundDate(lostItemCreate.getFoundDate())
+                .foundTime(lostItemCreate.getFoundTime())
                 .particulars(lostItemCreate.getParticulars())
                 .build()
         );
@@ -56,7 +57,8 @@ public class LostItemService {
                         .facilityId(lostItem.getFacility().getId())
                         .facilityName(lostItem.getFacility().getName())
                         .title(lostItem.getTitle())
-                        .foundAt(lostItem.getFoundAt())
+                        .foundDate(lostItem.getFoundDate())
+                        .foundTime(lostItem.getFoundTime())
                         .imageUrl(lostItem.getImage().getUrl())
                         .build()
                 );
@@ -72,7 +74,8 @@ public class LostItemService {
                 .title(lostItem.getTitle())
                 .type(lostItem.getType())
                 .foundPlaceDetail(lostItem.getFoundPlaceDetail())
-                .foundAt(lostItem.getFoundAt())
+                .foundDate(lostItem.getFoundDate())
+                .foundTime(lostItem.getFoundTime())
                 .particulars(lostItem.getParticulars())
                 .imageUrl(lostItem.getImage().getUrl())
                 .build();

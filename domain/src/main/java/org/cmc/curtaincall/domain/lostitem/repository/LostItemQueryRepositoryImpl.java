@@ -11,9 +11,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,9 +32,8 @@ public class LostItemQueryRepositoryImpl implements LostItemQueryRepository {
                         titleStartsWith(queryParam.getTitle()),
                         facilityIdEq(queryParam.getFacilityId()),
                         typeEq(queryParam.getType()),
-                        foundAtBetween(queryParam.getFoundDate()),
                         lostItem.useYn.isTrue()
-                ).orderBy(lostItem.foundAt.desc())
+                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1L)
                 .fetch();
@@ -69,12 +65,4 @@ public class LostItemQueryRepositoryImpl implements LostItemQueryRepository {
                 .orElse(null);
     }
 
-    private BooleanExpression foundAtBetween(LocalDate foundDate) {
-        return Optional.ofNullable(foundDate)
-                .map(date -> lostItem.foundAt.between(
-                        LocalDateTime.of(foundDate, LocalTime.MIN),
-                        LocalDateTime.of(foundDate, LocalTime.MAX)
-                ))
-                .orElse(null);
-    }
 }

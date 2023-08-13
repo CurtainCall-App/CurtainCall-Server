@@ -2,7 +2,8 @@ package org.cmc.curtaincall.web.service.lostitem.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -18,7 +19,9 @@ public class LostItemResponse {
 
     private String title;
 
-    private LocalDateTime foundAt;
+    private LocalDate foundDate;
+
+    private LocalTime foundTime;
 
     private String imageUrl;
 }
