@@ -1,7 +1,6 @@
 package org.cmc.curtaincall.web.config;
 
 import jakarta.annotation.PostConstruct;
-import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,7 @@ public class AppConfig {
     }
 
     @Bean
-    public AuditorAware<Member> auditorProvider(AccountRepository accountRepository) {
-        return new LoginMemberAuditorAware(accountRepository);
+    public AuditorAware<Member> auditorProvider() {
+        return new LoginMemberAuditorAware();
     }
 }

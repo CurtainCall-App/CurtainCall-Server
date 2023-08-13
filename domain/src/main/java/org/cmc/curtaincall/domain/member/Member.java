@@ -37,6 +37,10 @@ public class Member extends BaseTimeEntity {
         this.image = image;
     }
 
+    public Member(Long id) {
+        this.id = id;
+    }
+
     public MemberEditor.MemberEditorBuilder toEditor() {
         return MemberEditor.builder()
                 .image(image)
