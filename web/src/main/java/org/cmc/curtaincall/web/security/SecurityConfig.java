@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 "/login/oauth2/token/{registrationId}",
                                 "/login/reissue"
                         ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(config -> config
