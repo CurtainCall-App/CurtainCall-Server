@@ -161,13 +161,13 @@ create index IX_party__created_at
     on party (created_at);
 
 create index IX_party__category_created_at
-    on party (category, created_at);
+    on party (category, created_at desc);
 
 create index IX_party__show_category_created_at
-    on party (show_id, category, created_at);
+    on party (show_id, category, created_at desc);
 
 create index IX_party__created_by_category_created_at
-    on party (created_by, category, created_at);
+    on party (created_by, category, created_at desc);
 
 create table party_member
 (
@@ -281,3 +281,32 @@ alter table shows_introduction_images
     add constraint FK_shows_introduction_images
         foreign key (show_id)
             references shows (show_id);
+
+
+create table notice
+(
+    use_yn           bit           not null,
+    created_at       datetime(6)   not null,
+    last_modified_at datetime(6)   not null,
+    notice_id        bigint        not null auto_increment,
+    content          varchar(4000) not null,
+    title            varchar(255)  not null,
+    primary key (notice_id)
+) engine = InnoDB;
+
+create index IX_notice__created_at
+    on notice (created_at desc);
+
+
+create table report
+(
+    use_yn           bit                                                                                                               not null,
+    created_at       datetime(6)                                                                                                       not null,
+    created_by       bigint                                                                                                            not null,
+    last_modified_at datetime(6)                                                                                                       not null,
+    party_id         bigint                                                                                                            not null,
+    report_id        bigint                                                                                                            not null auto_increment,
+    reason           enum ('BAD_MANNERS','ETC','HARMFUL_TO_TEENAGER','HATE_SPEECH','ILLEGAL','PERSONAL_INFORMATION_DISCLOSURE','SPAM') not null,
+    content          varchar(1000)                                                                                                     not null,
+    primary key (report_id)
+) engine = InnoDB;
