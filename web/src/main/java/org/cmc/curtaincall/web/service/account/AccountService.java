@@ -23,7 +23,9 @@ public class AccountService {
 
     public Long getMemberId(String username) {
         Account account = getAccountByUsername(username);
-        return account.getMember().getId();
+        return Optional.ofNullable(account.getMember())
+                .map(Member::getId)
+                .orElse(null);
     }
 
     @Transactional
