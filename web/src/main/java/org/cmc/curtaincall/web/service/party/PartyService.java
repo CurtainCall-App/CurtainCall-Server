@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.party;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +47,7 @@ public class PartyService {
                 .createdAt(party.getCreatedAt())
                 .creatorId(party.getCreatedBy().getId())
                 .creatorNickname(party.getCreatedBy().getNickname())
-                .creatorImageUrl(party.getCreatedBy().getImage().getUrl())
+                .creatorImageUrl(getImageUrlOf(party.getCreatedBy()))
                 .showId(party.getShow().getId())
                 .showName(party.getShow().getName())
                 .facilityId(party.getShow().getFacility().getId())
@@ -65,7 +67,7 @@ public class PartyService {
                         .category(party.getCategory())
                         .creatorId(party.getCreatedBy().getId())
                         .creatorNickname(party.getCreatedBy().getNickname())
-                        .creatorImageUrl(party.getCreatedBy().getImage().getUrl())
+                        .creatorImageUrl(getImageUrlOf(party.getCreatedBy()))
                         .showId(party.getShow().getId())
                         .showName(party.getShow().getName())
                         .showPoster(party.getShow().getPoster())
@@ -151,5 +153,12 @@ public class PartyService {
         return memberRepository.findById(id)
                 .filter(Member::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Member id=" + id));
+    }
+
+    private String getImageUrlOf(Member member) {
+        return Optional.ofNullable(member.getImage())
+                .filter(Image::getUseYn)
+                .map(Image::getUrl)
+                .orElse(null);
     }
 }

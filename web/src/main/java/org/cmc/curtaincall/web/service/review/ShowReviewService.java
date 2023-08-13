@@ -1,6 +1,8 @@
 package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.image.Image;
+import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewEditor;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +51,7 @@ public class ShowReviewService {
                         .content(showReview.getContent())
                         .creatorId(showReview.getCreatedBy().getId())
                         .creatorNickname(showReview.getCreatedBy().getNickname())
-                        .creatorImageUrl(showReview.getCreatedBy().getImage().getUrl())
+                        .creatorImageUrl(getImageUrlOf(showReview.getCreatedBy()))
                         .build()
                 );
     }
@@ -88,5 +91,12 @@ public class ShowReviewService {
         return showReviewRepository.findById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+    }
+
+    private String getImageUrlOf(Member member) {
+        return Optional.ofNullable(member.getImage())
+                .filter(Image::getUseYn)
+                .map(Image::getUrl)
+                .orElse(null);
     }
 }
