@@ -124,7 +124,7 @@ class ShowReviewControllerDocsTest {
                                 fieldWithPath("content").description("리뷰 내용"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
-                                fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지")
+                                fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지").optional()
                         )
                 ));
     }
