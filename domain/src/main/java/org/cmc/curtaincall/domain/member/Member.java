@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "nickname", length = 25, nullable = false)
     private String nickname;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Image image;
 

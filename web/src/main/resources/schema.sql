@@ -128,7 +128,7 @@ create table member
 (
     use_yn           bit         not null,
     created_at       datetime(6) not null,
-    image_id         bigint      not null,
+    image_id         bigint,
     last_modified_at datetime(6) not null,
     member_id        bigint      not null auto_increment,
     nickname         varchar(25) not null,
