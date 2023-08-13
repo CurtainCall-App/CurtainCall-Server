@@ -23,6 +23,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LostItemService {
 
     private final LostItemRepository lostItemRepository;
@@ -33,6 +34,7 @@ public class LostItemService {
 
     private final ImageRepository imageRepository;
 
+    @Transactional
     public IdResult<Long> create(LostItemCreate lostItemCreate) {
         Facility facility = getFacilityById(lostItemCreate.getFacilityId());
         Image image = getImageById(lostItemCreate.getImageId());

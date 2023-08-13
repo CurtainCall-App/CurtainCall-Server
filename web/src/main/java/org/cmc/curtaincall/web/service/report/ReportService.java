@@ -9,15 +9,18 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.report.request.ReportCreate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReportService {
 
     private final ReportRepository reportRepository;
 
     private final PartyRepository partyRepository;
 
+    @Transactional
     public IdResult<Long> create(ReportCreate reportCreate) {
         Party party = getPartyById(reportCreate.getPartyId());
         Report report = reportRepository.save(Report.builder()
