@@ -61,7 +61,7 @@ public class AccountService {
     @Transactional
     public void signupMember(String username, Long memberId) {
         Account account = getAccountByUsername(username);
-        if (account.getMember() == null) {
+        if (account.getMember() != null) {
             throw new AlreadySignupAccountException("username=" + username);
         }
         Member member = getMemberById(memberId);
