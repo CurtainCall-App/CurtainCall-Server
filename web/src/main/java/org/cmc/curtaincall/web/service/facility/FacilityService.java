@@ -6,9 +6,11 @@ import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class FacilityService {
 
     private final FacilityRepository facilityRepository;

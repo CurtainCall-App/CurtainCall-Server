@@ -3,7 +3,8 @@ package org.cmc.curtaincall.web.service.lostitem.response;
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -25,7 +26,9 @@ public class LostItemDetailResponse {
 
     private String foundPlaceDetail;
 
-    private LocalDateTime foundAt;
+    private LocalDate foundDate;
+
+    private LocalTime foundTime;
 
     private String particulars;
 

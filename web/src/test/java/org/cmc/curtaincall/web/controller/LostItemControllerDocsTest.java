@@ -23,7 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -67,7 +67,8 @@ class LostItemControllerDocsTest {
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .facilityId("FC001298")
                 .foundPlaceDetail("2열 8석")
-                .foundAt(LocalDateTime.of(2023, 4, 14, 20, 11))
+                .foundDate(LocalDate.of(2023, 3, 4))
+                .foundTime(LocalTime.of(11, 23))
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
@@ -90,7 +91,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("type").description("분류"),
                                 fieldWithPath("facilityId").description("습득장소(공연장) ID"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수"),
-                                fieldWithPath("foundAt").description("습득일시"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간"),
                                 fieldWithPath("particulars").description("특이사항"),
                                 fieldWithPath("imageId").description("이미지 ID")
                         ),
@@ -109,7 +111,8 @@ class LostItemControllerDocsTest {
                 .facilityId("FC001298")
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
                 .title("아이패드 핑크")
-                .foundAt(LocalDateTime.of(2023, 3, 4, 11, 23))
+                .foundDate(LocalDate.of(2023, 3, 4))
+                .foundTime(LocalTime.of(11, 23))
                 .imageUrl("image-url")
                 .build();
         given(lostItemService.search(any(), any())).willReturn(new SliceImpl<>(List.of(lostItemResponse)));
@@ -143,7 +146,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("facilityId").description("공연시설 ID"),
                                 fieldWithPath("facilityName").description("공연시설 이름"),
                                 fieldWithPath("title").description("제목"),
-                                fieldWithPath("foundAt").description("습득일시"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간"),
                                 fieldWithPath("imageUrl").description("이미지")
                         )
                 ));
@@ -161,7 +165,8 @@ class LostItemControllerDocsTest {
                 .title("아이패드 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .foundPlaceDetail("2열")
-                .foundAt(LocalDateTime.of(2023, 3, 4, 11, 23))
+                .foundDate(LocalDate.of(2023, 3, 4))
+                .foundTime(LocalTime.of(11, 23))
                 .particulars("기스있음")
                 .imageUrl("image-url")
                 .build();
@@ -188,7 +193,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("type").description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장소"),
-                                fieldWithPath("foundAt").description("습득일시"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간"),
                                 fieldWithPath("particulars").description("특이사항"),
                                 fieldWithPath("imageUrl").description("이미지")
                         )
