@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
-    Slice<Party> findSliceWithByCategoryAndUseYnIsTrueOrderByCreatedAtDesc(Pageable pageable, PartyCategory category);
+    Slice<Party> findSliceWithByCategoryAndUseYnIsTrue(Pageable pageable, PartyCategory category);
 
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
     Slice<Party> findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(

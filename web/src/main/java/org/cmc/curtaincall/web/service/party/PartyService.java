@@ -57,7 +57,7 @@ public class PartyService {
     }
 
     public Slice<PartyResponse> getList(Pageable pageable, PartyCategory category) {
-        return partyRepository.findSliceWithByCategoryAndUseYnIsTrueOrderByCreatedAtDesc(pageable, category)
+        return partyRepository.findSliceWithByCategoryAndUseYnIsTrue(pageable, category)
                 .map(PartyResponse::of);
     }
 
