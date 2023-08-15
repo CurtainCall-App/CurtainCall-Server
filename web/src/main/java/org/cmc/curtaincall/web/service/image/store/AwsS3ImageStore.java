@@ -1,6 +1,9 @@
 package org.cmc.curtaincall.web.service.image.store;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -26,9 +29,14 @@ public class AwsS3ImageStore implements ImageStore {
 
     private final AmazonS3 s3Client;
 
-    public AwsS3ImageStore(@Value("${cloud.aws.s3.bucket}") String bucketName, AmazonS3 s3Client) {
+    public AwsS3ImageStore(
+            @Value("${cloud.aws.s3.bucket}") String bucketName) {
         this.bucketName = bucketName;
-        this.s3Client = s3Client;
+        InstanceProfileCredentialsProvider credentialsProvider = InstanceProfileCredentialsProvider.getInstance();
+        this.s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.AP_NORTHEAST_1)
+                .withCredentials(credentialsProvider)
+                .build();
     }
 
     public String store(Resource image, String storedName) {

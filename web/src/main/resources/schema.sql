@@ -19,6 +19,8 @@ drop table if exists show_review_like;
 drop table if exists show_time;
 drop table if exists shows;
 drop table if exists shows_introduction_images;
+drop table if exists notice;
+drop table if exists report;
 
 
 create table account

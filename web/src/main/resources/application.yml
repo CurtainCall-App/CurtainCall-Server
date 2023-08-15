@@ -57,14 +57,6 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type: trace
-      apache.coyote.http11: debug
-
 app:
   kopis:
     service-key: ${KOPIS_SERVICE_KEY}
@@ -127,13 +119,6 @@ cloud:
     credentials:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
+      instance-profile: true
     stack:
       auto: false
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type: trace
-    root: debug
