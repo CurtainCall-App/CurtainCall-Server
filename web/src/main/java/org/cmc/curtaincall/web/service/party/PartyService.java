@@ -7,7 +7,9 @@ import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyEditor;
+import org.cmc.curtaincall.domain.party.repository.PartyQueryRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
+import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.AlreadyClosedPartyException;
@@ -36,6 +38,8 @@ public class PartyService {
 
     private final MemberRepository memberRepository;
 
+    private final PartyQueryRepository partyQueryRepository;
+
     public PartyDetailResponse getDetail(Long id) {
         Party party = getPartyById(id);
         return PartyDetailResponse.builder()
@@ -58,6 +62,11 @@ public class PartyService {
 
     public Slice<PartyResponse> getList(Pageable pageable, PartyCategory category) {
         return partyRepository.findSliceWithByCategoryAndUseYnIsTrue(pageable, category)
+                .map(PartyResponse::of);
+    }
+
+    public Slice<PartyResponse> search(Pageable pageable, PartySearchParam searchParam) {
+        return partyQueryRepository.search(pageable, searchParam)
                 .map(PartyResponse::of);
     }
 

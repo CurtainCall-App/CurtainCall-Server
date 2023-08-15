@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
@@ -28,6 +29,12 @@ public class PartyController {
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam PartyCategory category) {
         return partyService.getList(pageable, category);
+    }
+
+    @GetMapping("/search/party")
+    public Slice<PartyResponse> searchParty(
+            Pageable pageable, @ModelAttribute @Validated PartySearchParam partySearchParam) {
+        return partyService.search(pageable, partySearchParam);
     }
 
     @GetMapping("/parties/{partyId}")

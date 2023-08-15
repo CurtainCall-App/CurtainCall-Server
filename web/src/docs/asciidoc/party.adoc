@@ -10,7 +10,13 @@
 [[party-get-party-list]]
 == 파티 리스트 조회
 
-operation::party-get-party-list[snippets='http-request,query-parameters,http-response,response-fields']
+operation::party-get-party-list[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
+[[party-search]]
+== 파티 검색
+
+operation::party-search[snippets='http-request,query-parameters,http-response,response-fields-content']
 
 
 [[party-get-party-detail]]
