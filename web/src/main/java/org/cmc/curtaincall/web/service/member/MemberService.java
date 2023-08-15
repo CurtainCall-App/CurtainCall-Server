@@ -1,8 +1,11 @@
 package org.cmc.curtaincall.web.service.member;
 
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.image.Image;
+import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.MemberEditor;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
@@ -11,10 +14,12 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
+import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,6 +32,8 @@ public class MemberService {
     private final PartyRepository partyRepository;
 
     private final PartyMemberRepository partyMemberRepository;
+
+    private final ImageRepository imageRepository;
 
     public BooleanResult checkNicknameDuplicate(String nickname) {
         return new BooleanResult(memberRepository.existsByNickname(nickname));
@@ -57,10 +64,40 @@ public class MemberService {
                 .build();
     }
 
+    @Transactional
+    public void edit(Long memberId, MemberEdit memberEdit) {
+        Member member = getMemberById(memberId);
+        MemberEditor.MemberEditorBuilder editorBuilder = member.toEditor()
+                .nickname(memberEdit.getNickname());
+        if (!isImageIdEqual(member.getImage(), memberEdit.getImageId())) {
+            Optional.ofNullable(member.getImage())
+                    .ifPresent(Image::delete);
+            Image imageToEdit = Optional.ofNullable(memberEdit.getImageId())
+                    .map(this::getImageById)
+                    .orElse(null);
+            editorBuilder.image(imageToEdit);
+        }
+
+        member.edit(editorBuilder.build());
+    }
+
+    private boolean isImageIdEqual(@Nullable Image image, @Nullable Long imageId) {
+        Long id = Optional.ofNullable(image)
+                .map(Image::getId)
+                .orElse(null);
+        return Objects.equals(id, imageId);
+    }
+
     private Member getMemberById(Long id) {
         return memberRepository.findById(id)
                 .filter(Member::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Member id=" + id));
+    }
+
+    private Image getImageById(Long id) {
+        return imageRepository.findById(id)
+                .filter(Image::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("Image id=" + id));
     }
 
     private String getImageUrlOf(Member member) {
