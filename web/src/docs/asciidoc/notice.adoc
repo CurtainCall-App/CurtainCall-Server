@@ -10,7 +10,7 @@
 [[notice-get-notice-list]]
 == 공지사항 목록 조회
 
-operation::notice-get-notice-list[snippets='http-request,query-parameters,http-response,response-fields']
+operation::notice-get-notice-list[snippets='http-request,query-parameters,http-response,response-fields-content']
 
 
 [[notice-get-notice-detail]]

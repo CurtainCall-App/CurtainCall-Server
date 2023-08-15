@@ -186,8 +186,8 @@ create table party_member
 alter table party_member
     add constraint UK_party_member__party_member unique (party_id, member_id);
 
-create index IX_party_member__member
-    on party_member (member_id);
+create index IX_party_member__member_party
+    on party_member (member_id, party_id desc);
 
 create table show_review
 (

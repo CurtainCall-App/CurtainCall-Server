@@ -71,4 +71,10 @@ public class MemberController {
             @RequestParam PartyCategory category, @PathVariable Long memberId) {
         return memberService.getRecruitmentList(pageable, memberId, category);
     }
+
+    @GetMapping("/members/{memberId}/participations")
+    public Slice<PartyResponse> getParticipationList(
+            Pageable pageable, @RequestParam PartyCategory category, @PathVariable Long memberId) {
+        return memberService.getParticipationList(pageable, memberId, category);
+    }
 }

@@ -72,7 +72,7 @@ class NoticeControllerDocsTest {
                                 parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
-                                beneathPath("content[]"),
+                                beneathPath("content[]").withSubsectionId("`content`"),
                                 fieldWithPath("id").description("공지사항 ID"),
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("createdAt").description("생성 일시")

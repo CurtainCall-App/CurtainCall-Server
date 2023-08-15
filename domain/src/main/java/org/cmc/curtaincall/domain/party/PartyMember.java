@@ -16,7 +16,7 @@ import org.cmc.curtaincall.domain.member.Member;
                 )
         },
         indexes = {
-                @Index(name = "IX_party_member__member", columnList = "member_id")
+                @Index(name = "IX_party_member__member_party", columnList = "member_id, party_id desc")
         }
 )
 @Getter
