@@ -9,6 +9,7 @@ import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,10 @@ public class MemberController {
         IdResult<Long> memberCreateResult = memberService.create(memberCreate);
         accountService.signupMember(username, memberCreateResult.getId());
         return memberCreateResult;
+    }
+
+    @GetMapping("/members/{memberId}")
+    public MemberDetailResponse getMemberDetail(@PathVariable Long memberId) {
+        return memberService.getDetail(memberId);
     }
 }

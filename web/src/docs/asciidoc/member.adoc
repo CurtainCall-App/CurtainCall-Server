@@ -16,3 +16,9 @@ operation::member-get-nickname-duplicate[snippets='http-request,request-headers,
 == 회원 생성
 
 operation::member-signup[snippets='http-request,request-headers,request-fields,http-response,response-fields']
+
+
+[[member-get-member-detail]]
+== 회원 상세 조회
+
+operation::member-get-member-detail[snippets='http-request,path-parameters,http-response,response-fields']]

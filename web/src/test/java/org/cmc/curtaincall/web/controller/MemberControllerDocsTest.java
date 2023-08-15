@@ -7,6 +7,7 @@ import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
+import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -27,10 +28,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Import(RestDocsConfig.class)
@@ -109,5 +110,41 @@ class MemberControllerDocsTest {
                 ))
         ;
         then(accountService).should().signupMember(anyString(), eq(1L));
+    }
+
+    @Test
+    @WithMockUser
+    void getMemberDetail_Docs() throws Exception {
+        // given
+        MemberDetailResponse response = MemberDetailResponse.builder()
+                .id(10L)
+                .nickname("고라파덕")
+                .imageUrl(null)
+                .recruitingNum(5L)
+                .participationNum(10L)
+                .build();
+        given(memberService.getDetail(any())).willReturn(response);
+
+        // expected
+        mockMvc.perform(get("/members/{memberId}", 10L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("member-get-member-detail",
+                        pathParameters(
+                                parameterWithName("memberId").description("회원 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID"),
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("imageUrl").description("회원 이미지, 없을 경우 NULL"),
+                                fieldWithPath("recruitingNum").description("My 모집"),
+                                fieldWithPath("participationNum").description("My 참여")
+                        )
+                ))
+        ;
+
     }
 }
