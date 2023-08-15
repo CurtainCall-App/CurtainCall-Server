@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.domain.party.repository;
 
+import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,6 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
     Slice<Party> findSliceWithByCategoryAndUseYnIsTrueOrderByCreatedAtDesc(Pageable pageable, PartyCategory category);
+
+    long countByCreatedByAndUseYnIsTrue(Member createdBy);
 }

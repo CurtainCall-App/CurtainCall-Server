@@ -8,9 +8,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberCreate {
+public class MemberEdit {
 
     @NotEmpty
     @Size(max = 20)
     private String nickname;
+
+    private Long imageId;
 }

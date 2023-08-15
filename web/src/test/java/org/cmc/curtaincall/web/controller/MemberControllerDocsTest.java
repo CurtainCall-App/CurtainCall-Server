@@ -5,8 +5,11 @@ import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
+import org.cmc.curtaincall.web.service.member.request.MemberEdit;
+import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -24,13 +27,12 @@ import static org.mockito.BDDMockito.then;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Import(RestDocsConfig.class)
@@ -49,6 +51,9 @@ class MemberControllerDocsTest {
 
     @MockBean
     AccountService accountService;
+
+    @MockBean
+    ImageService imageService;
 
     @Test
     @WithMockUser
@@ -109,5 +114,71 @@ class MemberControllerDocsTest {
                 ))
         ;
         then(accountService).should().signupMember(anyString(), eq(1L));
+    }
+
+    @Test
+    @WithMockUser
+    void getMemberDetail_Docs() throws Exception {
+        // given
+        MemberDetailResponse response = MemberDetailResponse.builder()
+                .id(10L)
+                .nickname("고라파덕")
+                .imageUrl(null)
+                .recruitingNum(5L)
+                .participationNum(10L)
+                .build();
+        given(memberService.getDetail(any())).willReturn(response);
+
+        // expected
+        mockMvc.perform(get("/members/{memberId}", 10L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("member-get-member-detail",
+                        pathParameters(
+                                parameterWithName("memberId").description("회원 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID"),
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("imageUrl").description("회원 이미지, 없을 경우 NULL"),
+                                fieldWithPath("recruitingNum").description("My 모집"),
+                                fieldWithPath("participationNum").description("My 참여")
+                        )
+                ))
+        ;
+
+    }
+
+    @Test
+    @WithMockUser
+    void editMember_Docs() throws Exception {
+        // given
+        MemberEdit memberEdit = MemberEdit.builder()
+                .nickname("수정이 닉네임")
+                .imageId(null)
+                .build();
+
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(patch("/member")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberEdit))
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("member-edit-member",
+                        requestFields(
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("imageId").description("이미지 ID")
+                        )
+                ));
     }
 }
