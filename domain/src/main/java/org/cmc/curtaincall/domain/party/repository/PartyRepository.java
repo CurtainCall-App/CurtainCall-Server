@@ -13,5 +13,9 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
     Slice<Party> findSliceWithByCategoryAndUseYnIsTrueOrderByCreatedAtDesc(Pageable pageable, PartyCategory category);
 
+    @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
+    Slice<Party> findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(
+            Pageable pageable, Member createdBy, PartyCategory category);
+
     long countByCreatedByAndUseYnIsTrue(Member createdBy);
 }

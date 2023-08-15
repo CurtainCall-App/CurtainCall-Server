@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.account.AccountService;
@@ -14,6 +15,11 @@ import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
@@ -57,5 +63,12 @@ public class MemberController {
                     "Member ID=" + memberId + ", Image ID=" + memberEdit.getImageId());
         }
         memberService.edit(memberId, memberEdit);
+    }
+
+    @GetMapping("/members/{memberId}/recruitments")
+    public Slice<PartyResponse> getRecruitmentList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam PartyCategory category, @PathVariable Long memberId) {
+        return memberService.getRecruitmentList(pageable, memberId, category);
     }
 }
