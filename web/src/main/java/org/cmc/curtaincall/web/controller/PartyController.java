@@ -12,6 +12,8 @@ import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,9 @@ public class PartyController {
     private final PartyService partyService;
 
     @GetMapping("/parties")
-    public Slice<PartyResponse> getPartyList(Pageable pageable, @RequestParam PartyCategory category) {
+    public Slice<PartyResponse> getPartyList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam PartyCategory category) {
         return partyService.getList(pageable, category);
     }
 
