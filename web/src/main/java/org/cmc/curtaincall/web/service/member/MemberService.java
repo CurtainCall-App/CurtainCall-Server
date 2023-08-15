@@ -88,24 +88,7 @@ public class MemberService {
     public Slice<PartyResponse> getRecruitmentList(Pageable pageable, Long memberId, PartyCategory category) {
         Member member = memberRepository.getReferenceById(memberId);
         return partyRepository.findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(pageable, member, category)
-                .map(party -> PartyResponse.builder()
-                        .id(party.getId())
-                        .title(party.getTitle())
-                        .curMemberNum(party.getCurMemberNum())
-                        .maxMemberNum(party.getMaxMemberNum())
-                        .showAt(party.getShowAt())
-                        .createdAt(party.getCreatedAt())
-                        .category(party.getCategory())
-                        .creatorId(party.getCreatedBy().getId())
-                        .creatorNickname(party.getCreatedBy().getNickname())
-                        .creatorImageUrl(getImageUrlOf(party.getCreatedBy()))
-                        .showId(party.getShow().getId())
-                        .showName(party.getShow().getName())
-                        .showPoster(party.getShow().getPoster())
-                        .facilityId(party.getShow().getFacility().getId())
-                        .facilityName(party.getShow().getFacility().getName())
-                        .build()
-                );
+                .map(PartyResponse::of);
     }
 
     private boolean isImageIdEqual(@Nullable Image image, @Nullable Long imageId) {
