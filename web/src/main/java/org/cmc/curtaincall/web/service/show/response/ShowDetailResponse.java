@@ -1,10 +1,12 @@
 package org.cmc.curtaincall.web.service.show.response;
 
 import lombok.*;
+import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -50,4 +52,28 @@ public class ShowDetailResponse {
     private Integer reviewCount;
 
     private Long reviewGradeSum;
+
+    public static ShowDetailResponse of(Show show) {
+        return ShowDetailResponse.builder()
+                .id(show.getId())
+                .name(show.getName())
+                .startDate(show.getStartDate())
+                .endDate(show.getEndDate())
+                .facilityId(show.getFacility().getId())
+                .facilityName(show.getFacility().getName())
+                .crew(show.getCrew())
+                .cast(show.getCast())
+                .runtime(show.getRuntime())
+                .age(show.getAge())
+                .enterprise(show.getEnterprise())
+                .ticketPrice(show.getTicketPrice())
+                .poster(show.getPoster())
+                .story(show.getStory())
+                .genre(show.getGenre())
+                .introductionImages(new ArrayList<>(show.getIntroductionImages()))
+                .showTimes(new ArrayList<>(show.getShowTimes()))
+                .reviewCount(show.getReviewCount())
+                .reviewGradeSum(show.getReviewGradeSum())
+                .build();
+    }
 }

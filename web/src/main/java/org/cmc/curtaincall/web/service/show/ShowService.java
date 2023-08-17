@@ -12,8 +12,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,42 +21,12 @@ public class ShowService {
 
     public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
         return showRepository.findSliceWithFacilityByGenreAndUseYnIsTrue(pageable, request.getGenre())
-                .map(show -> ShowResponse.builder()
-                        .id(show.getId())
-                        .name(show.getName())
-                        .startDate(show.getStartDate())
-                        .endDate(show.getEndDate())
-                        .facilityName(show.getFacility().getName())
-                        .poster(show.getPoster())
-                        .genre(show.getGenre())
-                        .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .build()
-                );
+                .map(ShowResponse::of);
     }
 
     public ShowDetailResponse getDetail(String id) {
         Show show = getShowById(id);
-        return ShowDetailResponse.builder()
-                .id(show.getId())
-                .name(show.getName())
-                .startDate(show.getStartDate())
-                .endDate(show.getEndDate())
-                .facilityId(show.getFacility().getId())
-                .facilityName(show.getFacility().getName())
-                .crew(show.getCrew())
-                .cast(show.getCast())
-                .runtime(show.getRuntime())
-                .age(show.getAge())
-                .enterprise(show.getEnterprise())
-                .ticketPrice(show.getTicketPrice())
-                .poster(show.getPoster())
-                .story(show.getStory())
-                .genre(show.getGenre())
-                .introductionImages(new ArrayList<>(show.getIntroductionImages()))
-                .showTimes(new ArrayList<>(show.getShowTimes()))
-                .reviewCount(show.getReviewCount())
-                .reviewGradeSum(show.getReviewGradeSum())
-                .build();
+        return ShowDetailResponse.of(show);
     }
 
     private Show getShowById(String id) {

@@ -1,10 +1,12 @@
 package org.cmc.curtaincall.web.service.show.response;
 
 import lombok.*;
+import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,4 +30,17 @@ public class ShowResponse {
     private ShowGenre genre;               // 공연 장르명
 
     private List<ShowTime> showTimes;
+
+    public static ShowResponse of(Show show) {
+        return ShowResponse.builder()
+                .id(show.getId())
+                .name(show.getName())
+                .startDate(show.getStartDate())
+                .endDate(show.getEndDate())
+                .facilityName(show.getFacility().getName())
+                .poster(show.getPoster())
+                .genre(show.getGenre())
+                .showTimes(new ArrayList<>(show.getShowTimes()))
+                .build();
+    }
 }
