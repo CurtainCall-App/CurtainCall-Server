@@ -13,6 +13,12 @@
 operation::show-get-shows[snippets='http-request,query-parameters,http-response,response-fields-content']
 
 
+[[show-search-shows]]
+== 공연 검색
+
+operation::show-search-shows[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
 [[show-get-show-detail]]
 == 공연 상세 조회
 

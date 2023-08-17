@@ -11,4 +11,7 @@ public interface ShowRepository extends JpaRepository<Show, String>, ShowReposit
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithFacilityByGenreAndUseYnIsTrue(Pageable pageable, ShowGenre genre);
+
+    @EntityGraph(attributePaths = {"facility"})
+    Slice<Show> findSliceWithByNameStartsWithAndUseYnIsTrue(Pageable pageable, String name);
 }

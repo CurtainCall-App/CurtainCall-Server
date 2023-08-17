@@ -24,6 +24,11 @@ public class ShowService {
                 .map(ShowResponse::of);
     }
 
+    public Slice<ShowResponse> search(Pageable pageable, String keyword) {
+        return showRepository.findSliceWithByNameStartsWithAndUseYnIsTrue(pageable, keyword)
+                .map(ShowResponse::of);
+    }
+
     public ShowDetailResponse getDetail(String id) {
         Show show = getShowById(id);
         return ShowDetailResponse.of(show);
