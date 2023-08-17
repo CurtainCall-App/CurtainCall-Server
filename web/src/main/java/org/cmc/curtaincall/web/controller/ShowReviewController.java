@@ -10,6 +10,8 @@ import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,9 @@ public class ShowReviewController {
     }
 
     @GetMapping("/shows/{showId}/reviews")
-    public Slice<ShowReviewResponse> getList(Pageable pageable, @PathVariable String showId) {
+    public Slice<ShowReviewResponse> getList(
+            @SortDefault(sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable String showId) {
         return showReviewService.getList(pageable, showId);
     }
 

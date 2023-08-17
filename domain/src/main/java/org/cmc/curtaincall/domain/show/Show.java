@@ -17,8 +17,9 @@ import java.util.List;
                 @Index(name = "IX_show__facility", columnList = "facility_id"),
                 @Index(name = "IX_show__name", columnList = "name"),
                 @Index(name = "IX_show__start_date", columnList = "start_date"),
-                @Index(name = "IX_show__end_date", columnList = "end_date"),
-                @Index(name = "IX_show__genre", columnList = "genre"),
+                @Index(name = "IX_show__genre_end_date", columnList = "genre, end_date"),
+                @Index(name = "IX_show__genre_name", columnList = "genre, name"),
+                @Index(name = "IX_show__genre_review_grade_sum", columnList = "genre, review_grade_sum desc"),
         }
 )
 @Getter

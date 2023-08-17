@@ -7,6 +7,9 @@ import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberEditor;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
+import org.cmc.curtaincall.domain.party.Party;
+import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyMember;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.web.exception.AlreadyNicknameExistsException;
@@ -16,9 +19,15 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -79,6 +88,27 @@ public class MemberService {
         }
 
         member.edit(editorBuilder.build());
+    }
+
+    public Slice<PartyResponse> getRecruitmentList(Pageable pageable, Long memberId, PartyCategory category) {
+        Member member = memberRepository.getReferenceById(memberId);
+        return partyRepository.findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(pageable, member, category)
+                .map(PartyResponse::of);
+    }
+
+    public Slice<PartyResponse> getParticipationList(Pageable pageable, Long memberId, PartyCategory category) {
+        Member member = memberRepository.getReferenceById(memberId);
+        Slice<PartyMember> partyMemberSlice = partyMemberRepository.findSliceByMemberOrderByPartyDesc(
+                pageable, member);
+        List<Long> partyIds = partyMemberSlice.stream()
+                .map(PartyMember::getParty)
+                .map(Party::getId)
+                .toList();
+        List<Party> parties = partyRepository.findAllWithByIdInAndCategoryAndUseYnIsTrue(
+                partyIds, category);
+        parties.sort(Comparator.comparingLong(Party::getId).reversed());
+        return new SliceImpl<>(parties, partyMemberSlice.getPageable(), partyMemberSlice.hasNext())
+                .map(PartyResponse::of);
     }
 
     private boolean isImageIdEqual(@Nullable Image image, @Nullable Long imageId) {

@@ -186,8 +186,8 @@ create table party_member
 alter table party_member
     add constraint UK_party_member__party_member unique (party_id, member_id);
 
-create index IX_party_member__member
-    on party_member (member_id);
+create index IX_party_member__member_party
+    on party_member (member_id, party_id desc);
 
 create table show_review
 (
@@ -203,11 +203,11 @@ create table show_review
     primary key (show_review_id)
 ) engine=InnoDB;
 
-create index IX_show_review__created_by
-    on show_review (created_by);
+create index IX_show_review__show_created_by
+    on show_review (show_id, created_by desc);
 
 create index IX_show_review__show_like_count
-    on show_review (show_id, like_count);
+    on show_review (show_id, like_count desc);
 
 
 create table show_review_like
@@ -257,11 +257,14 @@ create index IX_show__name
 create index IX_show__start_date
     on shows (start_date);
 
-create index IX_show__end_date
-    on shows (end_date);
+create index IX_show__genre_end_date
+    on shows (genre, end_date);
 
-create index IX_show__genre
-    on shows (genre);
+create index IX_show__genre_name
+    on shows (genre, name);
+
+create index IX_show__genre_review_grade_sum
+    on shows (genre, review_grade_sum desc);
 
 
 create table show_time

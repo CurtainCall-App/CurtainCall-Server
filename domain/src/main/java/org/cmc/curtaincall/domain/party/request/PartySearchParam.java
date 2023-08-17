@@ -10,7 +10,7 @@ import org.cmc.curtaincall.domain.party.PartyCategory;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PartyQueryParam {
+public class PartySearchParam {
 
     @NotNull
     private PartyCategory category;

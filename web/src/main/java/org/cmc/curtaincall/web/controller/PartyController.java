@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
@@ -12,6 +13,8 @@ import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +25,16 @@ public class PartyController {
     private final PartyService partyService;
 
     @GetMapping("/parties")
-    public Slice<PartyResponse> getPartyList(Pageable pageable, @RequestParam PartyCategory category) {
+    public Slice<PartyResponse> getPartyList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam PartyCategory category) {
         return partyService.getList(pageable, category);
+    }
+
+    @GetMapping("/search/party")
+    public Slice<PartyResponse> searchParty(
+            Pageable pageable, @ModelAttribute @Validated PartySearchParam partySearchParam) {
+        return partyService.search(pageable, partySearchParam);
     }
 
     @GetMapping("/parties/{partyId}")

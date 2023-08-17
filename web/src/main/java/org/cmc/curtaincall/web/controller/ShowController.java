@@ -1,26 +1,24 @@
 package org.cmc.curtaincall.web.controller;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.service.kopis.KopisService;
-import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
-import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
 public class ShowController {
-
-    private final KopisService kopisService;
 
     private final ShowService showService;
 
@@ -34,8 +32,17 @@ public class ShowController {
         return showService.getDetail(showId);
     }
 
-    @GetMapping("/boxOffice")
-    public ShowBoxOfficeResponseList getBoxOffice(@ModelAttribute @Validated ShowBoxOfficeRequest request) {
-        return kopisService.getBoxOffice(request);
+    @GetMapping("/shows-to-open")
+    public Slice<ShowResponse> getShowListToOpen(
+            Pageable pageable,
+            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate startDate) {
+        return showService.getListToOpen(pageable, startDate);
     }
+
+    @GetMapping("/search/shows")
+    public Slice<ShowResponse> searchShows(
+            Pageable pageable, @RequestParam @Validated @Size(max = 100) @NotBlank String keyword) {
+        return showService.search(pageable, keyword);
+    }
+
 }
