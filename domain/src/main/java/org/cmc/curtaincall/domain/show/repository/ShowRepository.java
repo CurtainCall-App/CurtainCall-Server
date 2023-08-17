@@ -7,6 +7,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
+
 public interface ShowRepository extends JpaRepository<Show, String>, ShowRepositoryCustom {
 
     @EntityGraph(attributePaths = {"facility"})
@@ -14,4 +16,7 @@ public interface ShowRepository extends JpaRepository<Show, String>, ShowReposit
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithByNameStartsWithAndUseYnIsTrue(Pageable pageable, String name);
+
+    @EntityGraph(attributePaths = {"facility"})
+    Slice<Show> findSliceWithByStartDateGreaterThanEqualAndUseYnIsTrue(Pageable pageable, LocalDate startDate);
 }

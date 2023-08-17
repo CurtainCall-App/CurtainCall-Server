@@ -1,20 +1,17 @@
 package org.cmc.curtaincall.web.service.show.request;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
 public class ShowListRequest {
-
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate startDate;
-//
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate endDate;
 
     @NotNull
     private ShowGenre genre;
 
-//    private String name;
 }

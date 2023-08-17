@@ -12,6 +12,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,6 +28,11 @@ public class ShowService {
 
     public Slice<ShowResponse> search(Pageable pageable, String keyword) {
         return showRepository.findSliceWithByNameStartsWithAndUseYnIsTrue(pageable, keyword)
+                .map(ShowResponse::of);
+    }
+
+    public Slice<ShowResponse> getListToOpen(Pageable pageable, LocalDate startDate) {
+        return showRepository.findSliceWithByStartDateGreaterThanEqualAndUseYnIsTrue(pageable, startDate)
                 .map(ShowResponse::of);
     }
 
