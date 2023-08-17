@@ -257,11 +257,14 @@ create index IX_show__name
 create index IX_show__start_date
     on shows (start_date);
 
-create index IX_show__end_date
-    on shows (end_date);
+create index IX_show__genre_end_date
+    on shows (genre, end_date);
 
-create index IX_show__genre
-    on shows (genre);
+create index IX_show__genre_name
+    on shows (genre, name);
+
+create index IX_show__genre_review_grade_sum
+    on shows (genre, review_grade_sum desc);
 
 
 create table show_time
