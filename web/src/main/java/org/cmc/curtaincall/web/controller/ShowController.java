@@ -1,9 +1,6 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.service.kopis.KopisService;
-import org.cmc.curtaincall.web.service.kopis.request.ShowBoxOfficeRequest;
-import org.cmc.curtaincall.web.service.kopis.response.ShowBoxOfficeResponseList;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ShowController {
 
-    private final KopisService kopisService;
-
     private final ShowService showService;
 
     @GetMapping("/shows")
@@ -34,8 +29,4 @@ public class ShowController {
         return showService.getDetail(showId);
     }
 
-    @GetMapping("/boxOffice")
-    public ShowBoxOfficeResponseList getBoxOffice(@ModelAttribute @Validated ShowBoxOfficeRequest request) {
-        return kopisService.getBoxOffice(request);
-    }
 }
