@@ -9,7 +9,9 @@ import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.springframework.data.domain.Persistable;
 
 @Entity
-@Table(name = "facility")
+@Table(name = "facility",
+        indexes = @Index(name = "IX_facility__name", columnList = "name")
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Facility extends BaseTimeEntity implements Persistable<String> {

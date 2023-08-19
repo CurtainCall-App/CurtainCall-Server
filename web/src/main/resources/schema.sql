@@ -65,6 +65,9 @@ create table facility
     primary key (facility_id)
 ) engine = InnoDB;
 
+create index IX_facility__name
+    on facility (name);
+
 
 create table favorite_show
 (
