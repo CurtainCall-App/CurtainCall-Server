@@ -49,19 +49,21 @@ create table facility
     hall_num         integer      not null,
     latitude         float(53)    not null,
     longitude        float(53)    not null,
-    opening_year     integer      not null,
+    opening_year     integer,
     seat_num         integer      not null,
     use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
+    created_at       datetime(6)  not null,
+    last_modified_at datetime(6)  not null,
     facility_id      varchar(25)  not null,
     address          varchar(255) not null,
+    sido             varchar(25)  not null,
+    gugun            varchar(25)  not null,
     characteristics  varchar(255) not null,
     homepage         varchar(255) not null,
-    name             varchar(255) not null,
-    phone            varchar(255) not null,
+    name             varchar(105) not null,
+    phone            varchar(45)  not null,
     primary key (facility_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 
 create table favorite_show
