@@ -2,3 +2,5 @@ rootProject.name = 'CurtainCall-Server'
 
 include 'web'
 include 'domain'
+include 'batch'
+
