@@ -21,7 +21,7 @@ public class ClientLogConfig {
         Object result = joinPoint.proceed();
 
         long time = System.currentTimeMillis() - start;
-        log.info("호출 완료 {} ({}) >> {}", joinPoint.getSignature(), time, result);
+        log.info("호출 완료 {} ({}ms) >> {}", joinPoint.getSignature(), time, result);
 
         return result;
     }
