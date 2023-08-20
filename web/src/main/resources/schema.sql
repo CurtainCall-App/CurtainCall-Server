@@ -241,7 +241,7 @@ create table shows
     openrun          varchar(25)   not null,
     show_id          varchar(25)   not null,
     state            varchar(25)   not null,
-    story            varchar(1000) not null,
+    story            varchar(4000) not null,
     age              varchar(255)  not null,
     cast             varchar(255)  not null,
     crew             varchar(255)  not null,
