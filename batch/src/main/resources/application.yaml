@@ -1,0 +1,26 @@
+spring:
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  batch:
+    job:
+      enabled: true
+      name: ${job.name:NONE}
+    jdbc:
+      initialize-schema: never
+      isolation-level-for-create: default
+
+app:
+  kopis:
+    base-url: "http://www.kopis.or.kr"
+    service-key: ${KOPIS_SERVICE_KEY}

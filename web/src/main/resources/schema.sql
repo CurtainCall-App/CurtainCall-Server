@@ -21,6 +21,7 @@ drop table if exists shows;
 drop table if exists shows_introduction_images;
 drop table if exists notice;
 drop table if exists report;
+drop table if exists box_office;
 
 
 create table account
@@ -49,19 +50,24 @@ create table facility
     hall_num         integer      not null,
     latitude         float(53)    not null,
     longitude        float(53)    not null,
-    opening_year     integer      not null,
+    opening_year     integer,
     seat_num         integer      not null,
     use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
+    created_at       datetime(6)  not null,
+    last_modified_at datetime(6)  not null,
     facility_id      varchar(25)  not null,
     address          varchar(255) not null,
+    sido             varchar(25)  not null,
+    gugun            varchar(25)  not null,
     characteristics  varchar(255) not null,
     homepage         varchar(255) not null,
-    name             varchar(255) not null,
-    phone            varchar(255) not null,
+    name             varchar(105) not null,
+    phone            varchar(45)  not null,
     primary key (facility_id)
-) engine=InnoDB;
+) engine = InnoDB;
+
+create index IX_facility__name
+    on facility (name);
 
 
 create table favorite_show
@@ -236,7 +242,7 @@ create table shows
     openrun          varchar(25)   not null,
     show_id          varchar(25)   not null,
     state            varchar(25)   not null,
-    story            varchar(1000) not null,
+    story            varchar(4000) not null,
     age              varchar(255)  not null,
     cast             varchar(255)  not null,
     crew             varchar(255)  not null,
@@ -270,7 +276,7 @@ create index IX_show__genre_review_grade_sum
 create table show_time
 (
     time        time(6)     not null,
-    day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY') not null,
+    day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY', 'HOL') not null,
     show_id     varchar(25) not null
 ) engine=InnoDB;
 
@@ -319,3 +325,21 @@ create table report
     content          varchar(1000)                                                                                                     not null,
     primary key (report_id)
 ) engine = InnoDB;
+
+
+create table box_office
+(
+    box_office_id    bigint                          not null auto_increment,
+    show_id          varchar(25)                     not null,
+    base_date        date                            not null,
+    type             enum ('DAY', 'WEEK', 'MONTH')   not null,
+    genre            enum ('ALL', 'PLAY', 'MUSICAL') not null,
+    rank_num         integer                         not null,
+    use_yn           bit                             not null,
+    created_at       datetime(6)                     not null,
+    last_modified_at datetime(6)                     not null,
+    primary key (box_office_id)
+) engine = InnoDB;
+
+create index IX_box_office__base_date_type_genre_rank_num
+    on box_office (base_date, type, genre, rank_num);

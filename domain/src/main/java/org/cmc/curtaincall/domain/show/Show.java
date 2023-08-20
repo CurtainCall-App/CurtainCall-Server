@@ -2,6 +2,7 @@ package org.cmc.curtaincall.domain.show;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
@@ -64,7 +65,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "poster", nullable = false)
     private String poster;
 
-    @Column(name = "story", length = 1000, nullable = false)
+    @Column(name = "story", length = 4000, nullable = false)
     private String story;
 
     @Enumerated(EnumType.STRING)
@@ -97,7 +98,8 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     )
     private List<String> introductionImages;
 
-    public Show(
+    @Builder
+    private Show(
             String id,
             Facility facility,
             String name,

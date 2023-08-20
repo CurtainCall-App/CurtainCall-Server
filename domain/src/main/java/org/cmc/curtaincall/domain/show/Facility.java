@@ -9,7 +9,9 @@ import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.springframework.data.domain.Persistable;
 
 @Entity
-@Table(name = "facility")
+@Table(name = "facility",
+        indexes = @Index(name = "IX_facility__name", columnList = "name")
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Facility extends BaseTimeEntity implements Persistable<String> {
@@ -18,7 +20,7 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "facility_id", length = 25)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 105, nullable = false)
     private String name;
 
     @Column(name = "hall_num", nullable = false)
@@ -27,13 +29,13 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "characteristics", nullable = false)
     private String characteristics;
 
-    @Column(name = "opening_year", nullable = false)
+    @Column(name = "opening_year")
     private Integer openingYear;
 
     @Column(name = "seat_num", nullable = false)
     private Integer seatNum;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", length = 45, nullable = false)
     private String phone;
 
     @Column(name = "homepage", nullable = false)
@@ -42,14 +44,24 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Column(name = "sido", length = 25, nullable = false)
+    private String sido;
+
+    @Column(name = "gugun", length = 25, nullable = false)
+    private String gugun;
+
     @Column(name = "latitude", nullable = false)
     private Double latitude;
 
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
+    public Facility(String id) {
+        this.id = id;
+    }
+
     @Builder
-    public Facility(
+    private Facility(
             String id,
             String name,
             Integer hallNum,
@@ -59,6 +71,8 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
             String phone,
             String homepage,
             String address,
+            String sido,
+            String gugun,
             Double latitude,
             Double longitude) {
         this.id = id;
@@ -70,6 +84,8 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
         this.phone = phone;
         this.homepage = homepage;
         this.address = address;
+        this.sido = sido;
+        this.gugun = gugun;
         this.latitude = latitude;
         this.longitude = longitude;
     }
