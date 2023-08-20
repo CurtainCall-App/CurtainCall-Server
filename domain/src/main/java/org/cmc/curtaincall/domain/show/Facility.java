@@ -56,8 +56,12 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
+    public Facility(String id) {
+        this.id = id;
+    }
+
     @Builder
-    public Facility(
+    private Facility(
             String id,
             String name,
             Integer hallNum,

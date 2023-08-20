@@ -1,11 +1,11 @@
-package org.cmc.curtaincall.batch.job.facility;
+package org.cmc.curtaincall.batch.job.show;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
-import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
-import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
+import org.cmc.curtaincall.domain.show.Show;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -16,18 +16,22 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-public class FacilityJobConfig {
+public class ShowUpdateJobConfig {
 
-    private static final String JOB_NAME = "FacilityJob";
+    private static final String JOB_NAME = "ShowUpdateJob";
 
-    private static final String STEP_NAME = "FacilityStep";
+    private static final String STEP_NAME = "ShowUpdateStep";
 
     private static final int CHUNK_SIZE = 100;
 
@@ -40,44 +44,47 @@ public class FacilityJobConfig {
     private final PlatformTransactionManager txManager;
 
     @Bean
-    public Job facilityJob() {
+    public Job showUpdateJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
         return jobBuilder
-                .start(facilityStep())
+                .start(showUpdateStep())
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step facilityStep() {
+    public Step showUpdateStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
-                .<FacilityResponse, Facility>chunk(CHUNK_SIZE, txManager)
-                .reader(facilityPagingItemReader())
-                .processor(facilityItemProcessor())
-                .writer(facilityJpaItemWriter())
+                .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
+                .reader(showPagingItemReader(null))
+                .processor(showItemProcessor())
+                .writer(showItemWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public FacilityPagingItemReader facilityPagingItemReader() {
-        FacilityPagingItemReader itemReader = new FacilityPagingItemReader(kopisService);
+    public ShowPagingItemReader showPagingItemReader(@Value("#{jobParameters[date]}") String date) {
+
+        ShowPagingItemReader itemReader = new ShowPagingItemReader(
+                kopisService,
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")));
         itemReader.setPageSize(CHUNK_SIZE);
         return itemReader;
     }
 
     @Bean
     @StepScope
-    public FacilityItemProcessor facilityItemProcessor() {
-        return new FacilityItemProcessor(kopisService);
+    public ShowItemProcessor showItemProcessor() {
+        return new ShowItemProcessor(kopisService);
     }
 
     @Bean
     @StepScope
-    public JpaItemWriter<Facility> facilityJpaItemWriter() {
-        return new JpaItemWriterBuilder<Facility>()
+    public JpaItemWriter<Show> showItemWriter() {
+        return new JpaItemWriterBuilder<Show>()
                 .entityManagerFactory(emf)
                 .build();
     }

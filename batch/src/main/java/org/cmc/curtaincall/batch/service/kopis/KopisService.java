@@ -3,8 +3,11 @@ package org.cmc.curtaincall.batch.service.kopis;
 import org.cmc.curtaincall.batch.config.ClientLog;
 import org.cmc.curtaincall.batch.exception.RequestErrorException;
 import org.cmc.curtaincall.batch.service.kopis.request.FacilityListRequest;
+import org.cmc.curtaincall.batch.service.kopis.request.ShowListRequest;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -119,6 +122,97 @@ public class KopisService {
         }
     }
 
+
+    public List<ShowResponse> getShowList(ShowListRequest request) {
+        URI uri = URI.create(
+                baseUrl + "/openApi/restful/pblprfr"
+                        + "?" + "service=" + serviceKey
+                        + "&" + "cpage=" + request.page()
+                        + "&" + "rows=" + request.size()
+                        + "&" + "stdate=" + request.startDate().format(requestFormatter)
+                        + "&" + "eddate=" + request.endDate().format(requestFormatter)
+        );
+        HttpRequest httpRequest = HttpRequest.newBuilder(uri)
+                .GET()
+                .build();
+
+        List<ShowResponse> result = new ArrayList<>();
+        try {
+            String response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+            InputSource is = new InputSource(new StringReader(response));
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+            NodeList nodes = document.getElementsByTagName("db");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                Map<String, String> tagToValue = convertXmlNodeToMap(node);
+                ShowResponse showResponse = ShowResponse.builder()
+                        .id(tagToValue.get("mt20id").trim())
+                        .name(tagToValue.get("prfnm").trim())
+                        .genreName(tagToValue.get("genrenm").trim())
+                        .state(tagToValue.get("prfstate").trim())
+                        .state(tagToValue.get("prfstate").trim())
+                        .startDate(tagToValue.get("prfpdfrom").trim())
+                        .endDate(tagToValue.get("prfpdto").trim())
+                        .poster(tagToValue.get("poster").trim())
+                        .facilityName(tagToValue.get("fcltynm").trim())
+                        .openRun(tagToValue.get("openrun").trim())
+                        .build();
+                result.add(showResponse);
+            }
+
+        } catch (Exception e) {
+            throw new RequestErrorException(e);
+        }
+        return result;
+    }
+
+
+    public ShowDetailResponse getShowDetail(String id) {
+        URI uri = URI.create(
+                baseUrl + "/openApi/restful/pblprfr/" + id
+                        + "?" + "service=" + serviceKey
+        );
+        HttpRequest httpRequest = HttpRequest.newBuilder(uri)
+                .GET()
+                .build();
+
+        try {
+            String response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+            InputSource is = new InputSource(new StringReader(response));
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+            Node node = document.getElementsByTagName("db").item(0);
+            Map<String, String> tagToValue = convertXmlNodeToMap(node);
+            List<String> introductionImages = Optional.ofNullable(tagToValue.get("styurls"))
+                    .map(styurls -> Arrays.stream(styurls.trim()
+                                    .split("\n *"))
+                            .filter(StringUtils::hasText)
+                            .toList())
+                    .orElse(Collections.emptyList());
+            return ShowDetailResponse.builder()
+                    .id(tagToValue.get("mt20id").trim())
+                    .name(tagToValue.get("prfnm").trim())
+                    .startDate(tagToValue.get("prfpdfrom").trim())
+                    .endDate(tagToValue.get("prfpdto").trim())
+                    .facilityName(tagToValue.get("fcltynm").trim())
+                    .facilityId(tagToValue.get("mt10id").trim())
+                    .cast(tagToValue.getOrDefault("prfcast", "").trim())
+                    .crew(tagToValue.getOrDefault("prfcrew", "").trim())
+                    .runtime(tagToValue.get("prfruntime").trim())
+                    .age(tagToValue.getOrDefault("prfage", "").trim())
+                    .enterprise(tagToValue.getOrDefault("entrpsnm", "").trim())
+                    .price(tagToValue.getOrDefault("pcseguidance", "").trim())
+                    .poster(tagToValue.getOrDefault("poster", "").trim())
+                    .story(tagToValue.getOrDefault("sty", "").trim())
+                    .state(tagToValue.get("prfstate").trim())
+                    .genreName(tagToValue.get("genrenm").trim())
+                    .openRun(tagToValue.get("openrun").trim())
+                    .showTimes(tagToValue.get("dtguidance").trim())
+                    .introductionImages(introductionImages)
+                    .build();
+        } catch (Exception e) {
+            throw new RequestErrorException(e);
+        }
+    }
 
 
     private Map<String, String> convertXmlNodeToMap(Node node) {
