@@ -21,6 +21,7 @@ drop table if exists shows;
 drop table if exists shows_introduction_images;
 drop table if exists notice;
 drop table if exists report;
+drop table if exists box_office;
 
 
 create table account
@@ -324,3 +325,21 @@ create table report
     content          varchar(1000)                                                                                                     not null,
     primary key (report_id)
 ) engine = InnoDB;
+
+
+create table box_office
+(
+    box_office_id    bigint                          not null auto_increment,
+    show_id          varchar(25)                     not null,
+    base_date        date                            not null,
+    type             enum ('DAY', 'WEEK', 'MONTH')   not null,
+    genre            enum ('ALL', 'PLAY', 'MUSICAL') not null,
+    rank_num         integer                         not null,
+    use_yn           bit                             not null,
+    created_at       datetime(6)                     not null,
+    last_modified_at datetime(6)                     not null,
+    primary key (box_office_id)
+) engine = InnoDB;
+
+create index IX_box_office__base_date_type_genre_rank_num
+    on box_office (base_date, type, genre, rank_num);
