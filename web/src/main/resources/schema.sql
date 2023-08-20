@@ -275,7 +275,7 @@ create index IX_show__genre_review_grade_sum
 create table show_time
 (
     time        time(6)     not null,
-    day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY') not null,
+    day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY', 'HOL') not null,
     show_id     varchar(25) not null
 ) engine=InnoDB;
 

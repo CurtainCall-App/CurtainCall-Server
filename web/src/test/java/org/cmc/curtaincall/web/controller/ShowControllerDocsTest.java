@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
@@ -20,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -68,12 +68,12 @@ class ShowControllerDocsTest {
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
                         .genre(ShowGenre.PLAY)
                         .showTimes(List.of(
-                                new ShowTime(DayOfWeek.WEDNESDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.THURSDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(19, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(19, 30))
+                                new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
                         .build()
         );
@@ -125,12 +125,12 @@ class ShowControllerDocsTest {
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
                         .genre(ShowGenre.PLAY)
                         .showTimes(List.of(
-                                new ShowTime(DayOfWeek.WEDNESDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.THURSDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(19, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(19, 30))
+                                new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
                         .build()
         );
@@ -182,12 +182,12 @@ class ShowControllerDocsTest {
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
                         .genre(ShowGenre.PLAY)
                         .showTimes(List.of(
-                                new ShowTime(DayOfWeek.WEDNESDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.THURSDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(19, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(13, 30)),
-                                new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(19, 30))
+                                new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
                         .build()
         );
@@ -247,13 +247,13 @@ class ShowControllerDocsTest {
                 .genre(ShowGenre.PLAY)
                 .introductionImages(List.of("http://www.kopis.or.kr/upload/pfmIntroImage/PF_PF220846_230704_0447300.jpg"))
                 .showTimes(List.of(
-                        new ShowTime(DayOfWeek.MONDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.TUESDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.WEDNESDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.THURSDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.FRIDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.SATURDAY, LocalTime.of(19, 30)),
-                        new ShowTime(DayOfWeek.SUNDAY, LocalTime.of(16, 0))
+                        new ShowTime(ShowDay.MONDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.TUESDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.THURSDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.FRIDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.SUNDAY, LocalTime.of(16, 0))
                 ))
                 .reviewCount(0)
                 .reviewGradeSum(0L)

@@ -6,7 +6,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Embeddable
@@ -18,7 +17,7 @@ public class ShowTime {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week", length = 25, nullable = false)
-    private DayOfWeek dayOfWeek;
+    private ShowDay dayOfWeek;
 
     @Column(name = "time", nullable = false)
     private LocalTime time;
