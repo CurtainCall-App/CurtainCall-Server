@@ -2,12 +2,10 @@ package org.cmc.curtaincall.batch.service.kopis;
 
 import org.cmc.curtaincall.batch.config.ClientLog;
 import org.cmc.curtaincall.batch.exception.RequestErrorException;
+import org.cmc.curtaincall.batch.service.kopis.request.BoxOfficeRequest;
 import org.cmc.curtaincall.batch.service.kopis.request.FacilityListRequest;
 import org.cmc.curtaincall.batch.service.kopis.request.ShowListRequest;
-import org.cmc.curtaincall.batch.service.kopis.response.FacilityDetailResponse;
-import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
-import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
-import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -212,6 +210,51 @@ public class KopisService {
         } catch (Exception e) {
             throw new RequestErrorException(e);
         }
+    }
+
+
+    public List<BoxOfficeResponse> getBoxOfficeList(BoxOfficeRequest request) {
+        URI uri = URI.create(
+                baseUrl + "/openApi/restful/boxoffice"
+                        + "?" + "service=" + serviceKey
+                        + "&" + "date=" + request.baseDate().format(requestFormatter)
+                        + "&" + "ststype=" + request.type().name().toLowerCase()
+                        + Optional.ofNullable(request.genre().getCode())
+                        .map(genreCode -> "&" + "catecode=" + genreCode)
+                        .orElse("")
+        );
+        HttpRequest httpRequest = HttpRequest.newBuilder(uri)
+                .GET()
+                .build();
+
+        List<BoxOfficeResponse> result = new ArrayList<>();
+        try {
+            String response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+            InputSource is = new InputSource(new StringReader(response));
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+            NodeList nodes = document.getElementsByTagName("boxof");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                Map<String, String> tagToValue = convertXmlNodeToMap(node);
+                BoxOfficeResponse boxOfficeResponse = BoxOfficeResponse.builder()
+                        .showId(tagToValue.get("mt20id").trim())
+                        .showName(tagToValue.get("prfnm").trim())
+                        .facilityName(tagToValue.get("prfplcnm").trim())
+                        .rank(Integer.parseInt(tagToValue.get("rnum").trim()))
+                        .seatNum(Integer.parseInt(tagToValue.get("seatcnt").trim()))
+                        .showPeriod(tagToValue.get("prfpd").trim())
+                        .poster(tagToValue.get("poster").trim())
+                        .genreName(tagToValue.get("cate").trim())
+                        .showCount(Integer.parseInt(tagToValue.get("prfdtcnt").trim()))
+                        .area(tagToValue.getOrDefault("area", "").trim())
+                        .build();
+                result.add(boxOfficeResponse);
+            }
+
+        } catch (Exception e) {
+            throw new RequestErrorException(e);
+        }
+        return result;
     }
 
 
