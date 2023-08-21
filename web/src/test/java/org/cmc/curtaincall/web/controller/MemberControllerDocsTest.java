@@ -94,7 +94,7 @@ class MemberControllerDocsTest {
     void signup_Docs() throws Exception {
         // given
         MemberCreate memberCreate = MemberCreate.builder()
-                .nickname("연뮤더쿠")
+                .nickname("연뮤더쿠znzn")
                 .build();
 
         given(memberService.create(any())).willReturn(new IdResult<>(1L));
