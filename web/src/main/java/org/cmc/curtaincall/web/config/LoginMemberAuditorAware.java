@@ -18,7 +18,7 @@ public class LoginMemberAuditorAware implements AuditorAware<Member> {
     public Optional<Member> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .filter(Authentication::isAuthenticated)
-                .map(Authentication::getDetails)
+                .map(Authentication::getPrincipal)
                 .filter(UserWithMemberId.class::isInstance)
                 .map(details -> ((UserWithMemberId) details).getMemberId())
                 .map(Member::new);
