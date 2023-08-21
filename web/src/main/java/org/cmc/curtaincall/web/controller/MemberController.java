@@ -13,6 +13,7 @@ import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
@@ -76,5 +77,10 @@ public class MemberController {
     public Slice<PartyResponse> getParticipationList(
             Pageable pageable, @RequestParam PartyCategory category, @PathVariable Long memberId) {
         return memberService.getParticipationList(pageable, memberId, category);
+    }
+
+    @DeleteMapping("/member")
+    public void delete(@LoginMemberId Long memberId, @RequestBody @Validated MemberDelete memberDelete) {
+        memberService.delete(memberId, memberDelete);
     }
 }

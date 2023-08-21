@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
@@ -9,6 +10,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
+import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
@@ -313,6 +315,35 @@ class MemberControllerDocsTest {
                                 fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void deleteMember_Docs() throws Exception {
+        // given
+        var memberDelete = MemberDelete.builder()
+                .reason(MemberDeleteReason.RECORD_DELETION)
+                .content("")
+                .build();
+
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        // expected
+        mockMvc.perform(delete("/member")
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDelete))
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("member-delete-member",
+                        requestFields(
+                                fieldWithPath("reason").type(MemberDeleteReason.class.getSimpleName())
+                                        .description("회원탈퇴 사유"),
+                                fieldWithPath("content").description("내용")
                         )
                 ));
     }

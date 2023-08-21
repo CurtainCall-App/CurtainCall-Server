@@ -17,6 +17,7 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
+import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
@@ -110,6 +111,11 @@ public class MemberService {
         parties.sort(Comparator.comparingLong(Party::getId).reversed());
         return new SliceImpl<>(parties, partyMemberSlice.getPageable(), partyMemberSlice.hasNext())
                 .map(PartyResponse::of);
+    }
+
+    @Transactional
+    public void delete(Long memberId, MemberDelete memberDelete) {
+        getMemberById(memberId).delete();
     }
 
     private boolean isImageIdEqual(@Nullable Image image, @Nullable Long imageId) {
