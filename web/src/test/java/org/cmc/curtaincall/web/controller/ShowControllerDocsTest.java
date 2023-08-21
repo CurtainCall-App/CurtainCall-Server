@@ -73,6 +73,7 @@ class ShowControllerDocsTest {
                         ))
                         .reviewCount(10)
                         .reviewGradeSum(48L)
+                        .runtime("1시간 40분")
                         .build()
         );
 
@@ -108,7 +109,8 @@ class ShowControllerDocsTest {
                                 fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
                                         .description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
-                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
     }
@@ -136,6 +138,7 @@ class ShowControllerDocsTest {
                         ))
                         .reviewCount(10)
                         .reviewGradeSum(48L)
+                        .runtime("1시간 40분")
                         .build()
         );
 
@@ -171,7 +174,8 @@ class ShowControllerDocsTest {
                                 fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
                                         .description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
-                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
     }
@@ -199,6 +203,7 @@ class ShowControllerDocsTest {
                         ))
                         .reviewCount(10)
                         .reviewGradeSum(48L)
+                        .runtime("1시간 40분")
                         .build()
         );
 
@@ -234,7 +239,8 @@ class ShowControllerDocsTest {
                                 fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
                                         .description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
-                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
     }
