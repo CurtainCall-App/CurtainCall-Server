@@ -71,6 +71,8 @@ class ShowControllerDocsTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
+                        .reviewCount(10)
+                        .reviewGradeSum(48L)
                         .build()
         );
 
@@ -102,7 +104,9 @@ class ShowControllerDocsTest {
                                 fieldWithPath("poster").description("공연 포스터 경로"),
                                 fieldWithPath("genre").description("공연 장르명"),
                                 fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").description("공연 시간")
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
                         )
                 ));
     }
@@ -128,6 +132,8 @@ class ShowControllerDocsTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
+                        .reviewCount(10)
+                        .reviewGradeSum(48L)
                         .build()
         );
 
@@ -159,7 +165,9 @@ class ShowControllerDocsTest {
                                 fieldWithPath("poster").description("공연 포스터 경로"),
                                 fieldWithPath("genre").description("공연 장르명"),
                                 fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").description("공연 시간")
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
                         )
                 ));
     }
@@ -185,6 +193,8 @@ class ShowControllerDocsTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
+                        .reviewCount(10)
+                        .reviewGradeSum(48L)
                         .build()
         );
 
@@ -216,7 +226,9 @@ class ShowControllerDocsTest {
                                 fieldWithPath("poster").description("공연 포스터 경로"),
                                 fieldWithPath("genre").description("공연 장르명"),
                                 fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").description("공연 시간")
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
                         )
                 ));
     }
@@ -251,8 +263,8 @@ class ShowControllerDocsTest {
                         new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
                         new ShowTime(ShowDay.SUNDAY, LocalTime.of(16, 0))
                 ))
-                .reviewCount(0)
-                .reviewGradeSum(0L)
+                .reviewCount(10)
+                .reviewGradeSum(48L)
                 .build();
         given(showService.getDetail(any())).willReturn(response);
 

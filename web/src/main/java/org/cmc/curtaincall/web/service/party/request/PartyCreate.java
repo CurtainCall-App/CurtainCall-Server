@@ -23,7 +23,7 @@ public class PartyCreate {
     private String title;
 
     @NotBlank
-    @Size(max = 1000)
+    @Size(max = 400)
     private String content;
 
     @Positive

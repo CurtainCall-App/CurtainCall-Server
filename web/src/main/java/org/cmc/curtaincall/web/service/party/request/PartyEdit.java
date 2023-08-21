@@ -15,6 +15,6 @@ public class PartyEdit {
     private String title;
 
     @NotBlank
-    @Size(max = 1000)
+    @Size(max = 400)
     private String content;
 }

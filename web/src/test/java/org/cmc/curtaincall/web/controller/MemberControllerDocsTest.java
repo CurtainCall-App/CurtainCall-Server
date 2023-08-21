@@ -94,7 +94,7 @@ class MemberControllerDocsTest {
     void signup_Docs() throws Exception {
         // given
         MemberCreate memberCreate = MemberCreate.builder()
-                .nickname("연뮤더쿠")
+                .nickname("연뮤더쿠znzn")
                 .build();
 
         given(memberService.create(any())).willReturn(new IdResult<>(1L));
@@ -163,7 +163,7 @@ class MemberControllerDocsTest {
     void editMember_Docs() throws Exception {
         // given
         MemberEdit memberEdit = MemberEdit.builder()
-                .nickname("수정이 닉네임")
+                .nickname("수정이닉네임")
                 .imageId(null)
                 .build();
 
