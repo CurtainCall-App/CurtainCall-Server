@@ -30,6 +30,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(RestDocsConfig.class)
 @AutoConfigureRestDocs
@@ -67,6 +68,7 @@ class ShowReviewControllerDocsTest {
                         .content(objectMapper.writeValueAsString(showReviewCreate))
                 )
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("show-review-create-show-review",
                         pathParameters(
                                 parameterWithName("showId").description("공연 아이디")
@@ -108,6 +110,7 @@ class ShowReviewControllerDocsTest {
                         .param("size", "20")
                 )
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("show-review-get-list",
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
@@ -124,7 +127,8 @@ class ShowReviewControllerDocsTest {
                                 fieldWithPath("content").description("리뷰 내용"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
-                                fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지").optional()
+                                fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지").optional(),
+                                fieldWithPath("createdAt").description("생성일시")
                         )
                 ));
     }
@@ -145,6 +149,7 @@ class ShowReviewControllerDocsTest {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("show-review-delete-review",
                         pathParameters(
                                 parameterWithName("reviewId").description("리뷰 ID")
@@ -174,6 +179,7 @@ class ShowReviewControllerDocsTest {
                         .content(objectMapper.writeValueAsString(showReviewEdit))
                 )
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("show-review-edit-review",
                         pathParameters(
                                 parameterWithName("reviewId").description("리뷰 ID")
