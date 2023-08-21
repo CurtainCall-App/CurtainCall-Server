@@ -16,7 +16,7 @@ import java.time.LocalTime;
 public class LostItemCreate {
 
     @NotBlank
-    @Size(max = 200)
+    @Size(max = 20)
     private String title;
 
     @NotNull
@@ -27,7 +27,7 @@ public class LostItemCreate {
     private String facilityId;
 
     @NotBlank
-    @Size(max = 200)
+    @Size(max = 30)
     private String foundPlaceDetail;
 
     @NotNull
@@ -37,7 +37,7 @@ public class LostItemCreate {
     private LocalTime foundTime;
 
     @NotBlank
-    @Size(max = 200)
+    @Size(max = 100)
     private String particulars;
 
     @NotNull
