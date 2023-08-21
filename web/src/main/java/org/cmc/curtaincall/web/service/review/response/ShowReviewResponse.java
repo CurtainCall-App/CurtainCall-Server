@@ -2,6 +2,8 @@ package org.cmc.curtaincall.web.service.review.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,4 +23,6 @@ public class ShowReviewResponse {
     private String creatorNickname;
 
     private String creatorImageUrl;
+
+    private LocalDateTime createdAt;
 }

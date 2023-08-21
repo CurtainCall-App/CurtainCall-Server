@@ -53,6 +53,7 @@ public class ShowReviewService {
                         .creatorId(showReview.getCreatedBy().getId())
                         .creatorNickname(showReview.getCreatedBy().getNickname())
                         .creatorImageUrl(getImageUrlOf(showReview.getCreatedBy()))
+                        .createdAt(showReview.getCreatedAt())
                         .build()
                 );
     }

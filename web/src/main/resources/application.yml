@@ -89,7 +89,7 @@ logging:
     org:
       hibernate:
         SQL: debug
-        type: trace
+        orm.jdbc.bind: trace
       apache.coyote.http11: debug
 
 ---

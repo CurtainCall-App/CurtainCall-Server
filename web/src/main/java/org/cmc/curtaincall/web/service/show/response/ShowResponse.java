@@ -35,6 +35,8 @@ public class ShowResponse {
 
     private Long reviewGradeSum;
 
+    private String runtime;
+
     public static ShowResponse of(Show show) {
         return ShowResponse.builder()
                 .id(show.getId())
@@ -47,6 +49,7 @@ public class ShowResponse {
                 .showTimes(new ArrayList<>(show.getShowTimes()))
                 .reviewCount(show.getReviewCount())
                 .reviewGradeSum(show.getReviewGradeSum())
+                .runtime(show.getRuntime())
                 .build();
     }
 }
