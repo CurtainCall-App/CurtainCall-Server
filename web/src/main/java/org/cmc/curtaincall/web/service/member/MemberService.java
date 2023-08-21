@@ -67,7 +67,8 @@ public class MemberService {
         return MemberDetailResponse.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
-                .imageUrl(getImageUrlOf(member))
+                .imageId(getImageId(member.getImage()))
+                .imageUrl(getImageUrl(member.getImage()))
                 .recruitingNum(recruitingNum)
                 .participationNum(participationNum)
                 .build();
@@ -130,8 +131,15 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Image id=" + id));
     }
 
-    private String getImageUrlOf(Member member) {
-        return Optional.ofNullable(member.getImage())
+    private Long getImageId(Image image) {
+        return Optional.ofNullable(image)
+                .filter(Image::getUseYn)
+                .map(Image::getId)
+                .orElse(null);
+    }
+
+    private String getImageUrl(Image image) {
+        return Optional.ofNullable(image)
                 .filter(Image::getUseYn)
                 .map(Image::getUrl)
                 .orElse(null);

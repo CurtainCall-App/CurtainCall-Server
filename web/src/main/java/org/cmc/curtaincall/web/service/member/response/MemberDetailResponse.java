@@ -12,6 +12,8 @@ public class MemberDetailResponse {
 
     private String nickname;
 
+    private Long imageId;
+
     private String imageUrl;
 
     private Long recruitingNum;
