@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.code;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.EnumMapperType;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
+import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
@@ -98,6 +99,7 @@ class CodeControllerDocsTest {
                 .andExpect(jsonPath("$.BoxOfficeType").isNotEmpty())
                 .andExpect(jsonPath("$.ShowDay").isNotEmpty())
                 .andExpect(jsonPath("$.ShowGenre").isNotEmpty())
+                .andExpect(jsonPath("$.MemberDeleteReason").isNotEmpty())
                 .andDo(document("code-api-get-all",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -116,7 +118,9 @@ class CodeControllerDocsTest {
                                 subsectionWithPath("ShowDay").description("공연 요일: "
                                         + Arrays.toString(ShowDay.values())),
                                 subsectionWithPath("ShowGenre").description("공연 장르: "
-                                        + Arrays.toString(ShowGenre.values()))
+                                        + Arrays.toString(ShowGenre.values())),
+                                subsectionWithPath("MemberDeleteReason").description("회원 탈퇴 사유: "
+                                        + Arrays.toString(MemberDeleteReason.values()))
                         )
                 ));
     }
