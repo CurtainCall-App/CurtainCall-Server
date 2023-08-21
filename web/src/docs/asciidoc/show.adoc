@@ -29,3 +29,9 @@ operation::get-show-list-to-open[snippets='http-request,query-parameters,http-re
 == 공연 상세 조회
 
 operation::show-get-show-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+
+[[box-office-get-box-office]]
+== 인기 순위
+
+operation::box-office-get-box-office[snippets='http-request,query-parameters,http-response,response-fields-content']
