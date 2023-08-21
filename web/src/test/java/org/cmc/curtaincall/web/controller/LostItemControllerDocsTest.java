@@ -8,6 +8,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.junit.jupiter.api.Test;
@@ -104,7 +105,7 @@ class LostItemControllerDocsTest {
 
     @Test
     @WithMockUser
-    void getShows_Docs() throws Exception {
+    void getLostItemList_Docs() throws Exception {
         // given
         LostItemResponse lostItemResponse = LostItemResponse.builder()
                 .id(10L)
@@ -220,6 +221,50 @@ class LostItemControllerDocsTest {
                 .andDo(document("lostitem-delete-lostitem",
                         pathParameters(
                                 parameterWithName("lostItemId").description("분실물 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void editLostItem_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(5L);
+
+        var lostItemEdit = LostItemEdit.builder()
+                .title("아이폰 핑크")
+                .type(LostItemType.ELECTRONIC_EQUIPMENT)
+                .foundPlaceDetail("2열 8석")
+                .foundDate(LocalDate.of(2023, 3, 4))
+                .foundTime(LocalTime.of(11, 23))
+                .particulars("기스 많음")
+                .imageId(1L)
+                .build();
+        given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
+        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
+
+        // expected
+        mockMvc.perform(patch("/lostItems/{lostItemId}", 10L)
+                        .with(csrf())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(lostItemEdit))
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("lostitem-edit-lostitem",
+                        pathParameters(
+                                parameterWithName("lostItemId").description("분실물 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
+                                fieldWithPath("foundPlaceDetail").description("세부장수"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간"),
+                                fieldWithPath("particulars").description("특이사항"),
+                                fieldWithPath("imageId").description("이미지 ID")
                         )
                 ));
     }

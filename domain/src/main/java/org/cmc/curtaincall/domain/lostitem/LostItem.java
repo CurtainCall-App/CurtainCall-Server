@@ -11,6 +11,7 @@ import org.cmc.curtaincall.domain.show.Facility;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "lost_item",
@@ -77,5 +78,30 @@ public class LostItem extends BaseEntity {
         this.foundDate = foundDate;
         this.foundTime = foundTime;
         this.particulars = particulars;
+    }
+
+    public LostItemEditor.LostItemEditorBuilder toEditor() {
+        return LostItemEditor.builder()
+                .image(image)
+                .title(title)
+                .type(type)
+                .foundPlaceDetail(foundPlaceDetail)
+                .foundDate(foundDate)
+                .foundTime(foundTime)
+                .particulars(particulars);
+    }
+
+    public void edit(LostItemEditor editor) {
+        if (!Objects.equals(image.getId(), editor.image().getId())) {
+            image.delete();
+        }
+
+        image = editor.image();
+        title = editor.title();
+        type = editor.type();
+        foundPlaceDetail = editor.foundPlaceDetail();
+        foundDate = editor.foundDate();
+        foundTime = editor.foundTime();
+        particulars = editor.particulars();
     }
 }
