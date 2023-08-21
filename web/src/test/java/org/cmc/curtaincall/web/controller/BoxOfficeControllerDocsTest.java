@@ -91,7 +91,7 @@ class BoxOfficeControllerDocsTest {
                                 fieldWithPath("startDate").description("공연 시작일"),
                                 fieldWithPath("endDate").description("공연 종료일"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
-                                fieldWithPath("genre").description("공연 장르명"),
+                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName()).description("공연 장르명"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("rank").description("순위")

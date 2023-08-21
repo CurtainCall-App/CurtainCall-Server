@@ -88,7 +88,7 @@ class LostItemControllerDocsTest {
                 .andDo(document("lostitem-create-lostitem",
                         requestFields(
                                 fieldWithPath("title").description("제목"),
-                                fieldWithPath("type").description("분류"),
+                                fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("facilityId").description("습득장소(공연장) ID"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수"),
                                 fieldWithPath("foundDate").description("습득일자"),
@@ -191,7 +191,7 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("facilityName").description("공연시설 이름"),
                                 fieldWithPath("facilityPhone").description("공연시설 전화번호"),
                                 fieldWithPath("title").description("제목"),
-                                fieldWithPath("type").description("분류"),
+                                fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장소"),
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간"),

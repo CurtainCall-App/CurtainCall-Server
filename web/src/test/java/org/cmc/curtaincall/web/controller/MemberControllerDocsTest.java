@@ -238,7 +238,8 @@ class MemberControllerDocsTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").description("카테고리"),
+                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
+                                        .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
@@ -301,7 +302,8 @@ class MemberControllerDocsTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").description("카테고리"),
+                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
+                                        .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),

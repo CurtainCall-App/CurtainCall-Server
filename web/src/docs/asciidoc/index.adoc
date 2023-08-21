@@ -11,6 +11,7 @@
 문서에 GET 이외의 메서드에는 HTTP Request 에 csrf 값이 있을 수 있는데 이는 신경쓰지 않으셔도 됩니다.
 
 == API Domain
+- xref:code.adoc[Code]
 - xref:authenticate.adoc[Authentication(인증)]
 - xref:image.adoc[Image(이미지)]
 - xref:member.adoc[Member(회원)]
