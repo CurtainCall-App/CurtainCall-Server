@@ -41,3 +41,9 @@ operation::lostitem-get-detail[snippets='http-request,path-parameters,http-respo
 == 분실물 삭제
 
 operation::lostitem-delete-lostitem[snippets='http-request,path-parameters,http-response']
+
+
+[[lostitem-edit-lostitem]]
+== 분실물 수정
+
+operation::lostitem-edit-lostitem[snippets='http-request,path-parameters,request-fields,http-response']

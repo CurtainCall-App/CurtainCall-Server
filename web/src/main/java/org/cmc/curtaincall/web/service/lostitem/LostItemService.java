@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
+import org.cmc.curtaincall.domain.lostitem.LostItemEditor;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemQueryRepository;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
@@ -12,6 +13,7 @@ import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
@@ -79,6 +81,7 @@ public class LostItemService {
                 .foundDate(lostItem.getFoundDate())
                 .foundTime(lostItem.getFoundTime())
                 .particulars(lostItem.getParticulars())
+                .imageId(lostItem.getImage().getId())
                 .imageUrl(lostItem.getImage().getUrl())
                 .build();
     }
@@ -88,6 +91,23 @@ public class LostItemService {
         LostItem lostItem = getLostItemById(id);
         lostItem.delete();
         lostItem.getImage().delete();
+    }
+
+    @Transactional
+    public void edit(Long id, LostItemEdit lostItemEdit) {
+        LostItem lostItem = getLostItemById(id);
+
+        LostItemEditor editor = lostItem.toEditor()
+                .image(getImageById(lostItemEdit.getImageId()))
+                .title(lostItemEdit.getTitle())
+                .type(lostItemEdit.getType())
+                .foundPlaceDetail(lostItemEdit.getFoundPlaceDetail())
+                .foundDate(lostItemEdit.getFoundDate())
+                .foundTime(lostItemEdit.getFoundTime())
+                .particulars(lostItem.getParticulars())
+                .build();
+
+        lostItem.edit(editor);
     }
 
     public boolean isOwnedByMember(Long lostItemId, Long memberId) {

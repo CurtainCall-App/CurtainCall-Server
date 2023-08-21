@@ -149,6 +149,7 @@ class MemberControllerDocsTest {
                         responseFields(
                                 fieldWithPath("id").description("회원 ID"),
                                 fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("imageId").description("회원 이미지 ID, 없을 경우 NULL"),
                                 fieldWithPath("imageUrl").description("회원 이미지, 없을 경우 NULL"),
                                 fieldWithPath("recruitingNum").description("My 모집"),
                                 fieldWithPath("participationNum").description("My 참여")

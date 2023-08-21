@@ -8,6 +8,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
@@ -43,11 +44,25 @@ public class LostItemController {
         return lostItemService.getDetail(lostItemId);
     }
 
-    @DeleteMapping("/lostitems/{lostItemId}")
+    @DeleteMapping("/lostItems/{lostItemId}")
     public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId Long memberId) {
         if (!lostItemService.isOwnedByMember(lostItemId, memberId)) {
             throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
         }
         lostItemService.delete(lostItemId);
+    }
+
+    @PatchMapping("/lostItems/{lostItemId}")
+    public void editLostItem(
+            @PathVariable Long lostItemId, @LoginMemberId Long memberId,
+            @RequestBody @Validated LostItemEdit lostItemEdit) {
+        if (!lostItemService.isOwnedByMember(lostItemId, memberId)) {
+            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
+        }
+        if (!imageService.isOwnedByMember(memberId, lostItemEdit.getImageId())) {
+            throw new EntityAccessDeniedException(
+                    "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());
+        }
+        lostItemService.edit(lostItemId, lostItemEdit);
     }
 }
