@@ -1,4 +1,4 @@
-= ComeEatMe Backend API Docs
+= CurtainCall Backend API Docs
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
