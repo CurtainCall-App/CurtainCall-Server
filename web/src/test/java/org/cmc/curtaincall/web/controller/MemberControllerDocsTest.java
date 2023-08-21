@@ -163,7 +163,7 @@ class MemberControllerDocsTest {
     void editMember_Docs() throws Exception {
         // given
         MemberEdit memberEdit = MemberEdit.builder()
-                .nickname("수정이 닉네임")
+                .nickname("수정이닉네임")
                 .imageId(null)
                 .build();
 
