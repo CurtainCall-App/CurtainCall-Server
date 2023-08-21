@@ -81,6 +81,7 @@ public class LostItemService {
                 .foundDate(lostItem.getFoundDate())
                 .foundTime(lostItem.getFoundTime())
                 .particulars(lostItem.getParticulars())
+                .imageId(lostItem.getImage().getId())
                 .imageUrl(lostItem.getImage().getUrl())
                 .build();
     }

@@ -169,6 +169,7 @@ class LostItemControllerDocsTest {
                 .foundDate(LocalDate.of(2023, 3, 4))
                 .foundTime(LocalTime.of(11, 23))
                 .particulars("기스있음")
+                .imageId(12L)
                 .imageUrl("image-url")
                 .build();
         given(lostItemService.getDetail(any())).willReturn(lostItemDetailResponse);
@@ -197,6 +198,7 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간"),
                                 fieldWithPath("particulars").description("특이사항"),
+                                fieldWithPath("imageId").description("이미지 ID"),
                                 fieldWithPath("imageUrl").description("이미지")
                         )
                 ));

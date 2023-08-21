@@ -32,5 +32,7 @@ public class LostItemDetailResponse {
 
     private String particulars;
 
+    private Long imageId;
+
     private String imageUrl;
 }
