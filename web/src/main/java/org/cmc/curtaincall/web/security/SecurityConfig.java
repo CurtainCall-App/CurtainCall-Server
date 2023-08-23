@@ -96,7 +96,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtLogoutSuccessHandler jwtLogoutSuccessHandler(ObjectMapper objectMapper) {
+    public JwtLogoutSuccessHandler jwtLogoutSuccessHandler() {
         return new JwtLogoutSuccessHandler();
     }
 

@@ -11,8 +11,10 @@ import org.cmc.curtaincall.domain.show.Show;
 @Entity
 @Table(name = "show_review",
         indexes = {
-                @Index(name = "IX_show_review__show_created_by", columnList = "show_id, created_by desc"),
-                @Index(name = "IX_show_review__show_like_count", columnList = "show_id, like_count desc")
+                @Index(name = "IX_show_review__show_created_by",
+                        columnList = "show_id, created_by, created_at desc"),
+                @Index(name = "IX_show_review__show_like_count",
+                        columnList = "show_id, like_count desc, created_at desc")
         }
 )
 @Getter
