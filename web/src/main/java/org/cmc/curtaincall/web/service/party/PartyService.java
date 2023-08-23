@@ -70,6 +70,7 @@ public class PartyService {
                 .map(PartyResponse::of);
     }
 
+    @Transactional
     public IdResult<Long> create(PartyCreate partyCreate) {
         Show show = getShowById(partyCreate.getShowId());
         Party party = partyRepository.save(Party.builder()
