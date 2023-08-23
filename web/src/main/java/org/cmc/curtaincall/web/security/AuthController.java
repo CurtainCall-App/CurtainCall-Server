@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.Account;
-import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.cmc.curtaincall.web.security.oauth2.OAuth2UserInfo;
 import org.cmc.curtaincall.web.security.request.OAuth2Login;
 import org.cmc.curtaincall.web.security.response.LoginResponse;
 import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.service.account.response.AccountDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -27,7 +26,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,16 +52,14 @@ public class AuthController {
         LocalDateTime refreshTokenExpiresAt = LocalDateTime.ofInstant(
                 jwtTokenProvider.getExpiration(refreshToken).toInstant(), ZoneId.systemDefault());
 
-        Account account = accountService.login(username, refreshToken, refreshTokenExpiresAt);
+        AccountDto account = accountService.login(username, refreshToken, refreshTokenExpiresAt);
 
         LoginResponse loginResponse = LoginResponse.builder()
                 .accessToken(accessToken)
                 .accessTokenExpiresAt(accessTokenExpiresAt)
-                .refreshToken(refreshToken)
-                .refreshTokenExpiresAt(refreshTokenExpiresAt)
-                .memberId(Optional.ofNullable(account.getMember())
-                        .map(Member::getId)
-                        .orElse(null))
+                .refreshToken(account.refreshToken())
+                .refreshTokenExpiresAt(account.refreshTokenExpiresAt())
+                .memberId(account.memberId())
                 .build();
         return ResponseEntity.ok(loginResponse);
     }
@@ -95,34 +91,30 @@ public class AuthController {
         }
 
         String username = jwtTokenProvider.getSubject(token);
-        Account account = accountService.get(username);
-        if (!token.equals(account.getRefreshToken())) {
+        AccountDto account = accountService.get(username);
+        if (!token.equals(account.refreshToken())) {
             return unauthorizedResponse();
         }
 
         String accessToken = jwtTokenProvider.createAccessToken(username);
         LocalDateTime accessTokenExpiresAt = LocalDateTime.ofInstant(
                 jwtTokenProvider.getExpiration(accessToken).toInstant(), ZoneId.systemDefault());
-        String refreshToken = account.getRefreshToken();
-        LocalDateTime refreshTokenExpiresAt = account.getRefreshTokenExpiresAt();
         long refreshTokenValidityInDay = jwtTokenProvider.getRefreshTokenValidityInDay();
         long loginDayTerm = Duration.between(
-                LocalDateTime.now().plusDays(refreshTokenValidityInDay), refreshTokenExpiresAt).toDays();
+                LocalDateTime.now().plusDays(refreshTokenValidityInDay), account.refreshTokenExpiresAt()).toDays();
         if (loginDayTerm > 0) {
-            refreshToken = jwtTokenProvider.createRefreshToken(username);
-            refreshTokenExpiresAt = LocalDateTime.ofInstant(
+            String refreshToken = jwtTokenProvider.createRefreshToken(username);
+            LocalDateTime refreshTokenExpiresAt = LocalDateTime.ofInstant(
                     jwtTokenProvider.getExpiration(refreshToken).toInstant(), ZoneId.systemDefault());
-            accountService.login(username, refreshToken, refreshTokenExpiresAt);
+            account = accountService.login(username, refreshToken, refreshTokenExpiresAt);
         }
 
         LoginResponse loginResponse = LoginResponse.builder()
                 .accessToken(accessToken)
                 .accessTokenExpiresAt(accessTokenExpiresAt)
-                .refreshToken(refreshToken)
-                .refreshTokenExpiresAt(refreshTokenExpiresAt)
-                .memberId(Optional.ofNullable(account.getMember())
-                        .map(Member::getId)
-                        .orElse(null))
+                .refreshToken(account.refreshToken())
+                .refreshTokenExpiresAt(account.refreshTokenExpiresAt())
+                .memberId(account.memberId())
                 .build();
         return ResponseEntity.ok(loginResponse);
     }
