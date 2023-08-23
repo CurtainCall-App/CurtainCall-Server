@@ -77,6 +77,12 @@ public class AccountService {
         account.delete();
     }
 
+    @Transactional
+    public void withdraw(Long memberId) {
+        accountRepository.findByMember(memberRepository.getReferenceById(memberId))
+                .ifPresent(account -> account.setMember(null));
+    }
+
     private Account getAccountByUsername(String username) {
         return accountRepository.findByUsernameAndUseYnIsTrue(username)
                 .orElseThrow(() -> new EntityNotFoundException("Account.username=" + username));
