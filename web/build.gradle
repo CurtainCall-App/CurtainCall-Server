@@ -33,7 +33,7 @@ dependencies {
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
 
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
