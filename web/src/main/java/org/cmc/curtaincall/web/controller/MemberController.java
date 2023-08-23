@@ -81,6 +81,6 @@ public class MemberController {
 
     @DeleteMapping("/member")
     public void delete(@LoginMemberId Long memberId, @RequestBody @Validated MemberDelete memberDelete) {
-        memberService.delete(memberId, memberDelete);
+        accountService.withdraw(memberId);
     }
 }
