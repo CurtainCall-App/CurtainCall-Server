@@ -45,17 +45,7 @@ public class ShowReviewService {
     public Slice<ShowReviewResponse> getList(Pageable pageable, String showId) {
         Show show = showRepository.getReferenceById(showId);
         return showReviewRepository.findSliceByShowAndUseYnIsTrue(pageable, show)
-                .map(showReview -> ShowReviewResponse.builder()
-                        .id(showReview.getId())
-                        .showId(showReview.getShow().getId())
-                        .grade(showReview.getGrade())
-                        .content(showReview.getContent())
-                        .creatorId(showReview.getCreatedBy().getId())
-                        .creatorNickname(showReview.getCreatedBy().getNickname())
-                        .creatorImageUrl(getImageUrlOf(showReview.getCreatedBy()))
-                        .createdAt(showReview.getCreatedAt())
-                        .build()
-                );
+                .map(ShowReviewResponse::of);
     }
 
     @Transactional

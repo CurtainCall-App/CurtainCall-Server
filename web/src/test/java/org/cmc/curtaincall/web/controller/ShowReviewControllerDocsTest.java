@@ -128,7 +128,8 @@ class ShowReviewControllerDocsTest {
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지").optional(),
-                                fieldWithPath("createdAt").description("생성일시")
+                                fieldWithPath("createdAt").description("생성일시"),
+                                fieldWithPath("likeCount").description("좋아요 개수")
                         )
                 ));
     }
