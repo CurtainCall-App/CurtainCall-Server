@@ -15,9 +15,7 @@ public interface OAuth2UserInfo {
     static OAuth2UserInfo of(OAuth2UserRequest userRequest, Map<String, Object> attributes) {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         if ("kakao".equals(registrationId)) {
-            return KakaoUserInfo.builder()
-                    .providerId(attributes.get("id").toString())
-                    .build();
+            return new KakaoUserInfo(attributes.get("id").toString());
         } else {
             throw new IllegalArgumentException("지원하지 않는 OAuth2 Provider 입니다. provider = " + registrationId);
         }
@@ -25,9 +23,9 @@ public interface OAuth2UserInfo {
 
     static OAuth2UserInfo of(String registrationId, String providerId) {
         if ("kakao".equals(registrationId)) {
-            return KakaoUserInfo.builder()
-                    .providerId(providerId)
-                    .build();
+            return new KakaoUserInfo(providerId);
+        } else if ("apple".equals(registrationId)) {
+            return new AppleUserInfo(providerId);
         } else {
             throw new IllegalArgumentException("지원하지 않는 OAuth2 Provider 입니다. provider = " + registrationId);
         }

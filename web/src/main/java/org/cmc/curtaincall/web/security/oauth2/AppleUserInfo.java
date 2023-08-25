@@ -1,12 +1,12 @@
 package org.cmc.curtaincall.web.security.oauth2;
 
-public class KakaoUserInfo implements OAuth2UserInfo {
+public class AppleUserInfo implements OAuth2UserInfo {
 
-    private static final OAuth2Provider provider = OAuth2Provider.KAKAO;
+    private static final OAuth2Provider provider = OAuth2Provider.APPLE;
 
     private final String providerId;
 
-    public KakaoUserInfo(String providerId) {
+    public AppleUserInfo(String providerId) {
         this.providerId = providerId;
     }
 
