@@ -8,6 +8,7 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.web.exception.AlreadySignupAccountException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.account.response.AccountDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,10 +31,10 @@ public class AccountService {
     }
 
     @Transactional
-    public Account login(String username, String refreshToken, LocalDateTime refreshTokenExpiresAt) {
+    public AccountDto login(String username, String refreshToken, LocalDateTime refreshTokenExpiresAt) {
         Account account = getOrCreate(username);
         account.renewRefreshToken(refreshToken, refreshTokenExpiresAt);
-        return account;
+        return AccountDto.of(account);
     }
 
     @Transactional
@@ -57,8 +58,9 @@ public class AccountService {
         return account;
     }
 
-    public Account get(String username) {
-        return getAccountByUsername(username);
+    public AccountDto get(String username) {
+        Account account = getAccountByUsername(username);
+        return AccountDto.of(account);
     }
 
     @Transactional

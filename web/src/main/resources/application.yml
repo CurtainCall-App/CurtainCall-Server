@@ -47,7 +47,7 @@ spring:
             client-id: ${OAUTH2_KAKAO_CLIENT_ID}
             client-secret: ${OAUTH2_KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
-            client-authentication-method: POST
+            client-authentication-method: client_secret_post
             client-name: Kakao
             scope: ~
         provider:
@@ -57,7 +57,17 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+
 app:
+  s3:
+    bucket-name: ${AWS_S3_BUCKET}
   kopis:
     service-key: ${KOPIS_SERVICE_KEY}
   jwt:
@@ -110,14 +120,3 @@ spring:
           kakao:
             redirect-uri: http://curtaincall.ap-northeast-2.elasticbeanstalk.com:8080/login/oauth2/code/kakao
 
-  cloud:
-    aws:
-      region:
-        static: ap-northeast-2
-      credentials:
-        access-key: ${AWS_ACCESS_KEY}
-        secret-key: ${AWS_SECRET_KEY}
-
-app:
-  s3:
-    bucket-name: ${AWS_S3_BUCKET}

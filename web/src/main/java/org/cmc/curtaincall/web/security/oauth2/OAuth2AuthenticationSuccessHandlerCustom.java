@@ -5,11 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.Account;
-import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.cmc.curtaincall.web.security.response.LoginResponse;
 import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.service.account.response.AccountDto;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -47,16 +45,14 @@ public class OAuth2AuthenticationSuccessHandlerCustom implements AuthenticationS
         LocalDateTime refreshTokenExpiresAt = LocalDateTime.ofInstant(
                 jwtTokenProvider.getExpiration(refreshToken).toInstant(), ZoneId.systemDefault());
 
-        Account account = accountService.login(username, refreshToken, refreshTokenExpiresAt);
+        AccountDto account = accountService.login(username, refreshToken, refreshTokenExpiresAt);
 
         LoginResponse loginResponse = LoginResponse.builder()
                 .accessToken(accessToken)
                 .accessTokenExpiresAt(accessTokenExpiresAt)
-                .refreshToken(refreshToken)
-                .refreshTokenExpiresAt(refreshTokenExpiresAt)
-                .memberId(Optional.ofNullable(account.getMember())
-                        .map(Member::getId)
-                        .orElse(null))
+                .refreshToken(account.refreshToken())
+                .refreshTokenExpiresAt(account.refreshTokenExpiresAt())
+                .memberId(account.memberId())
                 .build();
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
