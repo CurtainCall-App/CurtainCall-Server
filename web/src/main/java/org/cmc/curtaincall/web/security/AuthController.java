@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.web.exception.AuthenticationException;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
+import org.cmc.curtaincall.web.security.oauth2.AppleService;
 import org.cmc.curtaincall.web.security.oauth2.OAuth2UserInfo;
 import org.cmc.curtaincall.web.security.request.OAuth2Login;
 import org.cmc.curtaincall.web.security.response.LoginResponse;
@@ -37,6 +39,8 @@ public class AuthController {
 
     private final AccountService accountService;
 
+    private final AppleService appleService;
+
     @PostMapping("/login/oauth2/token/{registrationId}")
     public ResponseEntity<LoginResponse> loginOauthToken(
             @PathVariable String registrationId, @Valid @RequestBody OAuth2Login oauthLogin)
@@ -65,22 +69,28 @@ public class AuthController {
     }
 
     private String getProviderId(String registrationId, String accessToken) throws JsonProcessingException {
-        WebClient webClient = WebClient.builder()
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .build();
-        String tokenInfoJson = webClient.get()
-                .uri(getTokenInfoUrl(registrationId))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        return objectMapper.readValue(tokenInfoJson, Map.class).get("id").toString();
+        if ("kakao".equals(registrationId)) {
+            WebClient webClient = WebClient.builder()
+                    .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .build();
+            String tokenInfoJson = webClient.get()
+                    .uri(getTokenInfoUrl(registrationId))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return objectMapper.readValue(tokenInfoJson, Map.class).get("id").toString();
+        } else if ("apple".equals(registrationId)) {
+            return appleService.userIdFromApple(accessToken);
+        } else {
+            throw new AuthenticationException("registrationId=" + registrationId + ", accessToken=" + accessToken);
+        }
     }
 
     private String getTokenInfoUrl(String registrationId) {
         if ("kakao".equals(registrationId)) {
             return "https://kapi.kakao.com/v1/user/access_token_info";
         }
-        throw new IllegalArgumentException("지원하지 않는 OAuth2 Provider 입니다. provider = " + registrationId);
+        throw new AuthenticationException("지원하지 않는 OAuth2 Provider 입니다. provider = " + registrationId);
     }
 
     @PostMapping("/login/reissue")

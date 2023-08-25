@@ -19,7 +19,7 @@ operation::auth-LoginResponse[snippets='response-body,response-fields']
 
 - method: POST
 - path: /login/oauth2/token/+{registrationId}+
-- registrationId: kakao
+- registrationId: kakao, apple
 - ex) http://localhost:8080/login/oauth2/token/kakao
 
 Request Body
