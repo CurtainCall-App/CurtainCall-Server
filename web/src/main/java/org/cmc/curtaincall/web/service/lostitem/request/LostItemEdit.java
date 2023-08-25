@@ -22,14 +22,13 @@ public class LostItemEdit {
     @NotNull
     private LostItemType type;
 
-    @NotBlank
+    @NotNull
     @Size(max = 30)
     private String foundPlaceDetail;
 
     @NotNull
     private LocalDate foundDate;
 
-    @NotNull
     private LocalTime foundTime;
 
     @NotBlank

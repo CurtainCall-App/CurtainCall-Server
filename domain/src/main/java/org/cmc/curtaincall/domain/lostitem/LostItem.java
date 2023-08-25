@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.domain.lostitem;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,7 +55,7 @@ public class LostItem extends BaseEntity {
     @Column(name = "found_date", nullable = false)
     private LocalDate foundDate;
 
-    @Column(name = "found_time", nullable = false)
+    @Column(name = "found_time")
     private LocalTime foundTime;
 
     @Column(name = "particulars", nullable = false)
@@ -68,7 +69,7 @@ public class LostItem extends BaseEntity {
             LostItemType type,
             String foundPlaceDetail,
             LocalDate foundDate,
-            LocalTime foundTime,
+            @Nullable LocalTime foundTime,
             String particulars) {
         this.facility = facility;
         this.image = image;

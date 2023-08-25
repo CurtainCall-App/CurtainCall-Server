@@ -26,14 +26,13 @@ public class LostItemCreate {
     @Size(max = 25)
     private String facilityId;
 
-    @NotBlank
+    @NotNull
     @Size(max = 30)
     private String foundPlaceDetail;
 
     @NotNull
     private LocalDate foundDate;
 
-    @NotNull
     private LocalTime foundTime;
 
     @NotBlank

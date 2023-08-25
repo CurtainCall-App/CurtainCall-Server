@@ -105,7 +105,7 @@ create table lost_item
     created_at         datetime(6)                                                                                  not null,
     created_by         bigint                                                                                       not null,
     found_date         date                                                                                         not null,
-    found_time         time(6)                                                                                      not null,
+    found_time         time(6),
     image_id           bigint                                                                                       not null,
     last_modified_at   datetime(6)                                                                                  not null,
     lost_item_id       bigint                                                                                       not null auto_increment,
