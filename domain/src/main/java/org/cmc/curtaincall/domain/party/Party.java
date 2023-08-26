@@ -45,7 +45,7 @@ public class Party extends BaseEntity {
     private String content;
 
     @Column(name = "cur_member_num", nullable = false)
-    private Integer curMemberNum = 1;
+    private Integer curMemberNum = 0;
 
     @Column(name = "max_member_num", nullable = false)
     private Integer maxMemberNum;
