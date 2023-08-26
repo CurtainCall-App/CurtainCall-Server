@@ -295,7 +295,7 @@ class MemberControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리")
+                                parameterWithName("category").description("카테고리").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

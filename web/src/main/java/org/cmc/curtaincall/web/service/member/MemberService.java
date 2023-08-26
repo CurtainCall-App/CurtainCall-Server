@@ -102,7 +102,9 @@ public class MemberService {
                 .map(PartyResponse::of);
     }
 
-    public Slice<PartyResponse> getParticipationList(Pageable pageable, Long memberId, PartyCategory category) {
+    public Slice<PartyResponse> getParticipationList(
+            Pageable pageable, Long memberId, @Nullable PartyCategory category
+    ) {
         Member member = memberRepository.getReferenceById(memberId);
         Slice<PartyMember> partyMemberSlice = partyMemberRepository.findSliceByMemberOrderByPartyDesc(
                 pageable, member);
@@ -110,8 +112,9 @@ public class MemberService {
                 .map(PartyMember::getParty)
                 .map(Party::getId)
                 .toList();
-        List<Party> parties = partyRepository.findAllWithByIdInAndCategoryAndUseYnIsTrue(
-                partyIds, category);
+        List<Party> parties = Optional.ofNullable(category)
+                .map(cat -> partyRepository.findAllWithByIdInAndCategoryAndUseYnIsTrue(partyIds, cat))
+                .orElseGet(() -> partyRepository.findAllWithByIdInAndUseYnIsTrue(partyIds));
         parties.sort(Comparator.comparingLong(Party::getId).reversed());
         return new SliceImpl<>(parties, partyMemberSlice.getPageable(), partyMemberSlice.hasNext())
                 .map(PartyResponse::of);

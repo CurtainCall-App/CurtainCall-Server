@@ -25,5 +25,8 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
     List<Party> findAllWithByIdInAndCategoryAndUseYnIsTrue(List<Long> ids, PartyCategory category);
 
+    @EntityGraph(attributePaths = {"createdBy", "createdBy.image", "show", "show.facility"})
+    List<Party> findAllWithByIdInAndUseYnIsTrue(List<Long> ids);
+
     long countByCreatedByAndUseYnIsTrue(Member createdBy);
 }
