@@ -85,7 +85,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "review_grade_sum", nullable = false)
     private Long reviewGradeSum = 0L;
 
-    @Column(name = "review_grade_sum", nullable = false)
+    @Column(name = "review_grade_avg", nullable = false)
     private Double reviewGradeAvg = 0D;
 
     @ElementCollection
