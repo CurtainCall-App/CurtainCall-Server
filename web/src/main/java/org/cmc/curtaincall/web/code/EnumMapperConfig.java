@@ -4,10 +4,7 @@ import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
-import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
-import org.cmc.curtaincall.domain.show.BoxOfficeType;
-import org.cmc.curtaincall.domain.show.ShowDay;
-import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,6 +26,7 @@ public class EnumMapperConfig {
         enumMapperFactory.put(ShowDay.class.getSimpleName(), ShowDay.class);
         enumMapperFactory.put(ShowGenre.class.getSimpleName(), ShowGenre.class);
         enumMapperFactory.put(MemberDeleteReason.class.getSimpleName(), MemberDeleteReason.class);
+        enumMapperFactory.put(ShowState.class.getSimpleName(), ShowState.class);
         return enumMapperFactory;
     }
 }

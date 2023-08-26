@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Table(name = "box_office",
         indexes = {
                 @Index(name = "IX_box_office__base_date_type_genre_rank_num",
-                        columnList = "base_date, type, genre, rank_num")
+                        columnList = "base_date desc, type, genre, rank_num")
         }
 )
 @Getter

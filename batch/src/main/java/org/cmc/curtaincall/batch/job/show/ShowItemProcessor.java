@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
-import org.cmc.curtaincall.domain.show.Facility;
-import org.cmc.curtaincall.domain.show.Show;
-import org.cmc.curtaincall.domain.show.ShowGenre;
-import org.cmc.curtaincall.domain.show.ShowTime;
+import org.cmc.curtaincall.domain.show.*;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.time.LocalDate;
@@ -35,6 +32,9 @@ public class ShowItemProcessor implements ItemProcessor<ShowResponse, Show> {
 
     private final ShowTimeParser showTimeParser = new ShowTimeParser();
 
+    private final Map<String, ShowState> stateMapper = Arrays.stream(ShowState.values())
+            .collect(Collectors.toMap(ShowState::getTitle, Function.identity()));
+
     @Override
     public Show process(ShowResponse item) throws Exception {
         if (!allowedGenreNames.contains(item.genreName())) {
@@ -60,7 +60,7 @@ public class ShowItemProcessor implements ItemProcessor<ShowResponse, Show> {
                 .poster(showDetail.poster())
                 .story(showDetail.story())
                 .genre(showGenre)
-                .state(showDetail.state())
+                .state(stateMapper.get(showDetail.state()))
                 .openRun(showDetail.openRun())
                 .showTimes(showTimes)
                 .introductionImages(showDetail.introductionImages())

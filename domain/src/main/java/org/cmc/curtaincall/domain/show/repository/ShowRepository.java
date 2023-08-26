@@ -19,4 +19,11 @@ public interface ShowRepository extends JpaRepository<Show, String>, ShowReposit
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithByStartDateGreaterThanEqualAndUseYnIsTrue(Pageable pageable, LocalDate startDate);
+
+    @EntityGraph(attributePaths = {"facility"})
+    Slice<Show> findSliceWithByEndDateGreaterThanEqualAndUseYnIsTrue(Pageable pageable, LocalDate endDate);
+
+    @EntityGraph(attributePaths = {"facility"})
+    Slice<Show> findSliceWithByGenreAndEndDateGreaterThanEqualAndUseYnIsTrue(
+            Pageable pageable, ShowGenre genre, LocalDate endDate);
 }

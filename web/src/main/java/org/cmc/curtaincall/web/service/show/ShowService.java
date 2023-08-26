@@ -1,7 +1,9 @@
 package org.cmc.curtaincall.web.service.show;
 
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,17 @@ public class ShowService {
 
     public Slice<ShowResponse> getListToOpen(Pageable pageable, LocalDate startDate) {
         return showRepository.findSliceWithByStartDateGreaterThanEqualAndUseYnIsTrue(pageable, startDate)
+                .map(ShowResponse::of);
+    }
+
+    public Slice<ShowResponse> getListToEnd(Pageable pageable, LocalDate endDate, @Nullable ShowGenre genre) {
+        return Optional.ofNullable(genre)
+                .map(g -> showRepository.findSliceWithByGenreAndEndDateGreaterThanEqualAndUseYnIsTrue(
+                        pageable, g, endDate
+                ))
+                .orElseGet(() -> showRepository.findSliceWithByEndDateGreaterThanEqualAndUseYnIsTrue(
+                        pageable, endDate
+                ))
                 .map(ShowResponse::of);
     }
 

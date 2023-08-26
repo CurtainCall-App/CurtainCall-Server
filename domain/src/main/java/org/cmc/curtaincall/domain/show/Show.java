@@ -18,9 +18,10 @@ import java.util.List;
                 @Index(name = "IX_show__facility", columnList = "facility_id"),
                 @Index(name = "IX_show__name", columnList = "name"),
                 @Index(name = "IX_show__start_date", columnList = "start_date"),
+                @Index(name = "IX_show__end_date", columnList = "end_date"),
                 @Index(name = "IX_show__genre_end_date", columnList = "genre, end_date"),
                 @Index(name = "IX_show__genre_name", columnList = "genre, name"),
-                @Index(name = "IX_show__genre_review_grade_sum", columnList = "genre, review_grade_sum desc"),
+                @Index(name = "IX_show__genre_review_grade_avg", columnList = "genre, review_grade_avg desc"),
         }
 )
 @Getter
@@ -72,17 +73,21 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "genre", length = 25, nullable = false)
     private ShowGenre genre;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "state", length = 25, nullable = false)
-    private String state;
+    private ShowState state;
 
     @Column(name = "openrun", length = 25, nullable = false)
     private String openRun;
 
     @Column(name = "review_count", nullable = false)
-    private Integer reviewCount;
+    private Integer reviewCount = 0;
 
     @Column(name = "review_grade_sum", nullable = false)
-    private Long reviewGradeSum;
+    private Long reviewGradeSum = 0L;
+
+    @Column(name = "review_grade_avg", nullable = false)
+    private Double reviewGradeAvg = 0D;
 
     @ElementCollection
     @CollectionTable(
@@ -114,7 +119,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             String poster,
             String story,
             ShowGenre genre,
-            String state,
+            ShowState state,
             String openRun,
             List<ShowTime> showTimes,
             List<String> introductionImages) {
@@ -136,8 +141,6 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         this.openRun = openRun;
         this.showTimes = showTimes;
         this.introductionImages = introductionImages;
-        this.reviewCount = 0;
-        this.reviewGradeSum = 0L;
     }
 
     @Override
@@ -148,10 +151,16 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     public void applyReview(ShowReview review) {
         reviewCount += 1;
         reviewGradeSum += review.getGrade();
+        calculateReviewGradeAvg();
     }
 
     public void cancelReview(ShowReview review) {
         reviewCount -= 1;
         reviewGradeSum -= review.getGrade();
+        calculateReviewGradeAvg();
+    }
+
+    private void calculateReviewGradeAvg() {
+        reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
     }
 }

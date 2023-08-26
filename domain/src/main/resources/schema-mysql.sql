@@ -232,16 +232,14 @@ create table shows
 (
     end_date         date          not null,
     review_count     integer       not null,
-    start_date       date          not null,
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
     review_grade_sum bigint        not null,
+    review_grade_avg double        not null,
+    start_date       date          not null,
     facility_id      varchar(25)   not null,
     genre            enum ('MUSICAL','PLAY') not null,
     openrun          varchar(25)   not null,
     show_id          varchar(25)   not null,
-    state            varchar(25)   not null,
+    state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
     story            varchar(4000) not null,
     age              varchar(255)  not null,
     cast             varchar(255)  not null,
@@ -251,6 +249,9 @@ create table shows
     poster           varchar(255)  not null,
     runtime          varchar(255)  not null,
     ticket_price     varchar(255)  not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (show_id)
 ) engine=InnoDB;
 
@@ -263,6 +264,9 @@ create index IX_show__name
 create index IX_show__start_date
     on shows (start_date);
 
+create index IX_show__end_date
+    on shows (end_date);
+
 create index IX_show__genre_end_date
     on shows (genre, end_date);
 
@@ -271,6 +275,9 @@ create index IX_show__genre_name
 
 create index IX_show__genre_review_grade_sum
     on shows (genre, review_grade_sum desc);
+
+create index IX_show__genre_review_grade_avg
+    on shows (genre, review_grade_avg desc);
 
 
 create table show_time
@@ -342,4 +349,4 @@ create table box_office
 ) engine = InnoDB;
 
 create index IX_box_office__base_date_type_genre_rank_num
-    on box_office (base_date, type, genre, rank_num);
+    on box_office (base_date desc, type, genre, rank_num);
