@@ -9,6 +9,7 @@ import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -348,6 +349,40 @@ class PartyControllerDocsTest {
                 .andDo(document("party-participate-party",
                         pathParameters(
                                 parameterWithName("partyId").description("파티 ID")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getParticipated_Docs() throws Exception {
+        // given
+        given(accountService.getMemberId(any())).willReturn(2L);
+
+        given(partyService.areParticipated(any(), any())).willReturn(
+                List.of(
+                        new PartyParticipatedResponse(4L, true),
+                        new PartyParticipatedResponse(12L, false)
+                )
+        );
+
+        // expected
+        mockMvc.perform(get("/member/participated")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("partyIds", "4", "12")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-get-participated",
+                        queryParameters(
+                                parameterWithName("partyIds").description("파티 ID 리스트")
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("partyId").description("파티 ID"),
+                                fieldWithPath("participated").description("참여 여부")
                         )
                 ));
     }

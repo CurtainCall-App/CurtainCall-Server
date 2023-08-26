@@ -6,6 +6,8 @@ import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyEditor;
+import org.cmc.curtaincall.domain.party.PartyMember;
+import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyQueryRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
@@ -17,13 +19,17 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +43,8 @@ public class PartyService {
     private final MemberRepository memberRepository;
 
     private final PartyQueryRepository partyQueryRepository;
+
+    private final PartyMemberRepository partyMemberRepository;
 
     public PartyDetailResponse getDetail(Long id) {
         Party party = getPartyById(id);
@@ -82,6 +90,20 @@ public class PartyService {
 
         Member member = getMemberById(memberId);
         party.participate(member);
+    }
+
+    public List<PartyParticipatedResponse> areParticipated(Long memberId, List<Long> partyIds) {
+        Member member = memberRepository.getReferenceById(memberId);
+        List<Party> parties = partyIds.stream()
+                .map(partyRepository::getReferenceById)
+                .toList();
+        Set<Long> participatedPartyIds = partyMemberRepository.findAllByMemberAndPartyIn(member, parties).stream()
+                .map(PartyMember::getParty)
+                .map(Party::getId)
+                .collect(Collectors.toSet());
+        return partyIds.stream()
+                .map(partyId -> new PartyParticipatedResponse(partyId, participatedPartyIds.contains(partyId)))
+                .toList();
     }
 
     @Transactional

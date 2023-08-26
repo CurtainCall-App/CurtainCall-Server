@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.controller;
 
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
@@ -10,13 +11,17 @@ import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
 import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,5 +73,13 @@ public class PartyController {
     @PutMapping("/member/parties/{partyId}")
     public void participateParty(@PathVariable Long partyId, @LoginMemberId Long memberId) {
         partyService.participate(partyId, memberId);
+    }
+
+    @GetMapping("/member/participated")
+    public Slice<PartyParticipatedResponse> getParticipated(
+            @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId Long memberId
+    ) {
+        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId, partyIds);
+        return new SliceImpl<>(partyParticipatedResponses);
     }
 }
