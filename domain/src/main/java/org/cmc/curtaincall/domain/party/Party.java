@@ -18,6 +18,7 @@ import java.util.List;
         indexes = {
                 @Index(name = "IX_party__category_created_at", columnList = "category, created_at desc"),
                 @Index(name = "IX_party__show_category_created_at", columnList = "show_id, category, created_at desc"),
+                @Index(name = "IX_party__created_by_created_at", columnList = "created_by, created_at desc"),
                 @Index(name = "IX_party__created_by_category_created_at",
                         columnList = "created_by, category, created_at desc")
         }
