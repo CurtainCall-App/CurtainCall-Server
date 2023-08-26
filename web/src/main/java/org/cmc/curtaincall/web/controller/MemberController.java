@@ -69,7 +69,8 @@ public class MemberController {
     @GetMapping("/members/{memberId}/recruitments")
     public Slice<PartyResponse> getRecruitmentList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam PartyCategory category, @PathVariable Long memberId) {
+            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
+    ) {
         return memberService.getRecruitmentList(pageable, memberId, category);
     }
 

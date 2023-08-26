@@ -92,9 +92,13 @@ public class MemberService {
         member.edit(editorBuilder.build());
     }
 
-    public Slice<PartyResponse> getRecruitmentList(Pageable pageable, Long memberId, PartyCategory category) {
+    public Slice<PartyResponse> getRecruitmentList(
+            Pageable pageable, Long memberId, @Nullable PartyCategory category
+    ) {
         Member member = memberRepository.getReferenceById(memberId);
-        return partyRepository.findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(pageable, member, category)
+        return Optional.ofNullable(category)
+                .map(cat -> partyRepository.findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(pageable, member, cat))
+                .orElseGet(() -> partyRepository.findSliceWithByCreatedByAndUseYnIsTrue(pageable, member))
                 .map(PartyResponse::of);
     }
 
