@@ -239,7 +239,7 @@ create table shows
     genre            enum ('MUSICAL','PLAY') not null,
     openrun          varchar(25)   not null,
     show_id          varchar(25)   not null,
-    state            varchar(25)   not null,
+    state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
     story            varchar(4000) not null,
     age              varchar(255)  not null,
     cast             varchar(255)  not null,

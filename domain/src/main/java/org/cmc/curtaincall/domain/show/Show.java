@@ -73,8 +73,9 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "genre", length = 25, nullable = false)
     private ShowGenre genre;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "state", length = 25, nullable = false)
-    private String state;
+    private ShowState state;
 
     @Column(name = "openrun", length = 25, nullable = false)
     private String openRun;
@@ -118,7 +119,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             String poster,
             String story,
             ShowGenre genre,
-            String state,
+            ShowState state,
             String openRun,
             List<ShowTime> showTimes,
             List<String> introductionImages) {
