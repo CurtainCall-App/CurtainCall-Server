@@ -5,6 +5,7 @@ import lombok.*;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -41,11 +42,14 @@ public class PartyDetailResponse {
 
     private String showName;
 
+    private String showPoster;
+
     private String facilityId;
 
     private String facilityName;
 
     public static PartyDetailResponse of(Party party) {
+        Optional<Show> showOptional = Optional.ofNullable(party.getShow());
         return PartyDetailResponse.builder()
                 .id(party.getId())
                 .title(party.getTitle())
@@ -61,10 +65,11 @@ public class PartyDetailResponse {
                         .filter(Image::getUseYn)
                         .map(Image::getUrl)
                         .orElse(null))
-                .showId(party.getShow().getId())
-                .showName(party.getShow().getName())
-                .facilityId(party.getShow().getFacility().getId())
-                .facilityName(party.getShow().getFacility().getName())
+                .showId(showOptional.map(Show::getId).orElse(null))
+                .showName(showOptional.map(Show::getName).orElse(null))
+                .showPoster(showOptional.map(Show::getPoster).orElse(null))
+                .facilityId(showOptional.map(show -> show.getFacility().getId()).orElse(null))
+                .facilityName(showOptional.map(show -> show.getFacility().getName()).orElse(null))
                 .build();
     }
 }
