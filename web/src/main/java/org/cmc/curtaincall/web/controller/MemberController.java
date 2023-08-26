@@ -76,7 +76,7 @@ public class MemberController {
 
     @GetMapping("/members/{memberId}/participations")
     public Slice<PartyResponse> getParticipationList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            Pageable pageable,
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
         return memberService.getParticipationList(pageable, memberId, category);
