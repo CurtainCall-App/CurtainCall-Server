@@ -264,6 +264,9 @@ create index IX_show__name
 create index IX_show__start_date
     on shows (start_date);
 
+create index IX_show__end_date
+    on shows (end_date);
+
 create index IX_show__genre_end_date
     on shows (genre, end_date);
 
