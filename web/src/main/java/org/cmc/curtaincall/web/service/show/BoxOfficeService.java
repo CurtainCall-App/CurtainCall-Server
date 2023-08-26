@@ -7,7 +7,9 @@ import org.cmc.curtaincall.web.service.show.response.BoxOfficeResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -17,20 +19,21 @@ public class BoxOfficeService {
     private final BoxOfficeRepository boxOfficeRepository;
 
     public List<BoxOfficeResponse> getBoxOffice(BoxOfficeRequest request) {
-        return boxOfficeRepository.findAllWithShowByBaseDateAndTypeAndGenreOrderByRank(
+        return Optional.of(boxOfficeRepository.findAllWithShowByBaseDateAndTypeAndGenreOrderByRank(
                         request.baseDate(), request.type(), request.genre()
-                ).stream()
-                .map(boxOffice -> BoxOfficeResponse.builder()
-                        .id(boxOffice.getShow().getId())
-                        .name(boxOffice.getShow().getName())
-                        .startDate(boxOffice.getShow().getStartDate())
-                        .endDate(boxOffice.getShow().getEndDate())
-                        .poster(boxOffice.getShow().getPoster())
-                        .genre(boxOffice.getShow().getGenre())
-                        .reviewGradeSum(boxOffice.getShow().getReviewGradeSum())
-                        .reviewCount(boxOffice.getShow().getReviewCount())
-                        .rank(boxOffice.getRank())
-                        .build())
+                ))
+                .filter(list -> !list.isEmpty())
+                .orElseGet(() ->
+                        Optional.ofNullable(boxOfficeRepository.findTopBaseDate(
+                                        request.baseDate(), request.type(), request.genre()))
+                                .map(topBaseDate -> boxOfficeRepository
+                                        .findAllWithShowByBaseDateAndTypeAndGenreOrderByRank(
+                                                topBaseDate, request.type(), request.genre()))
+                                .orElse(Collections.emptyList())
+                )
+                .stream()
+                .map(BoxOfficeResponse::of)
                 .toList();
     }
+
 }
