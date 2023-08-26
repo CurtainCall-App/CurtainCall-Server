@@ -25,6 +25,12 @@ operation::show-search-shows[snippets='http-request,query-parameters,http-respon
 operation::get-show-list-to-open[snippets='http-request,query-parameters,http-response,response-fields-content']
 
 
+[[get-show-list-to-end]]
+== 공연 마감 임박
+
+operation::get-show-list-to-end[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
 [[show-get-show-detail]]
 == 공연 상세 조회
 

@@ -4,12 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.SortDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,15 @@ public class ShowController {
             Pageable pageable,
             @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate startDate) {
         return showService.getListToOpen(pageable, startDate);
+    }
+
+    @GetMapping("/shows-to-end")
+    public Slice<ShowResponse> getShowListToEnd(
+            @SortDefault(sort = "endDate") Pageable pageable,
+            @RequestParam LocalDate endDate,
+            @RequestParam(required = false) ShowGenre genre
+    ) {
+        return showService.getListToEnd(pageable, endDate, genre);
     }
 
     @GetMapping("/search/shows")

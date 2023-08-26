@@ -252,6 +252,73 @@ class ShowControllerDocsTest {
 
     @Test
     @WithMockUser
+    void getShowListToEnd_Docs() throws Exception {
+        // given
+        List<ShowResponse> showResponses = List.of(
+                ShowResponse.builder()
+                        .id("PF220846")
+                        .name("잘자요, 엄마 [청주]")
+                        .startDate(LocalDate.of(2023, 4, 28))
+                        .endDate(LocalDate.of(2023, 5, 12))
+                        .facilityName("예술나눔 터")
+                        .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
+                        .genre(ShowGenre.PLAY)
+                        .showTimes(List.of(
+                                new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
+                        ))
+                        .reviewCount(10)
+                        .reviewGradeSum(48L)
+                        .runtime("1시간 40분")
+                        .build()
+        );
+
+        given(showService.getListToEnd(any(), any(), any())).willReturn(new SliceImpl<>(showResponses));
+
+        // expected
+        mockMvc.perform(get("/shows-to-end")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("endDate", "2023-04-12")
+                        .param("genre", ShowGenre.PLAY.name())
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-show-list-to-end",
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("endDate").description("기준일"),
+                                parameterWithName("genre").description("장르").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("name").description("공연명"),
+                                fieldWithPath("startDate").description("공연 시작일"),
+                                fieldWithPath("endDate").description("공연 종료일"),
+                                fieldWithPath("facilityName").description("공연 시설명"),
+                                fieldWithPath("poster").description("공연 포스터 경로"),
+                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
+                                        .description("공연 장르명"),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
+                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
+                                        .description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("runtime").description("공연 런타임")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
     void getShowDetail_Docs() throws Exception {
         // given
         ShowDetailResponse response = ShowDetailResponse.builder()
