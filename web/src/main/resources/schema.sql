@@ -232,11 +232,9 @@ create table shows
 (
     end_date         date          not null,
     review_count     integer       not null,
-    start_date       date          not null,
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
     review_grade_sum bigint        not null,
+    review_grade_avg double        not null,
+    start_date       date          not null,
     facility_id      varchar(25)   not null,
     genre            enum ('MUSICAL','PLAY') not null,
     openrun          varchar(25)   not null,
@@ -251,6 +249,9 @@ create table shows
     poster           varchar(255)  not null,
     runtime          varchar(255)  not null,
     ticket_price     varchar(255)  not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (show_id)
 ) engine=InnoDB;
 
@@ -271,6 +272,9 @@ create index IX_show__genre_name
 
 create index IX_show__genre_review_grade_sum
     on shows (genre, review_grade_sum desc);
+
+create index IX_show__genre_review_grade_avg
+    on shows (genre, review_grade_avg desc);
 
 
 create table show_time
