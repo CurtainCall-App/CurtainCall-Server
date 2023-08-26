@@ -1,7 +1,6 @@
 package org.cmc.curtaincall.web.controller;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.ShowGenre;
@@ -12,7 +11,6 @@ import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.SortDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +34,8 @@ public class ShowController {
 
     @GetMapping("/shows-to-open")
     public Slice<ShowResponse> getShowListToOpen(
-            Pageable pageable,
-            @RequestParam @Validated @DateTimeFormat(pattern = "yyyy-MM-dd") @NotNull LocalDate startDate) {
+            @SortDefault(sort = "startDate") Pageable pageable,
+            @RequestParam LocalDate startDate) {
         return showService.getListToOpen(pageable, startDate);
     }
 
