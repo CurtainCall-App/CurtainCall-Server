@@ -86,6 +86,7 @@ class ShowControllerDocsTest {
                         .param("page", "0")
                         .param("size", "20")
                         .param("genre", ShowGenre.PLAY.name())
+                        .param("sort", "reviewGradeAvg,desc")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -93,7 +94,11 @@ class ShowControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("genre").description("공연 장르")
+                                parameterWithName("genre").description("공연 장르"),
+                                parameterWithName("sort").optional().description(
+                                        "reviewGradeAvg,desc: 공연 리뷰 평점 평균 내림차순 정렬," +
+                                        "name: 가나다순"
+                                )
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
