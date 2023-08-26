@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,9 +64,11 @@ public class PartyService {
 
     @Transactional
     public IdResult<Long> create(PartyCreate partyCreate) {
-        Show show = getShowById(partyCreate.getShowId());
         Party party = partyRepository.save(Party.builder()
-                .show(show)
+                .show(Optional.ofNullable(partyCreate.getShowId())
+                        .flatMap(showRepository::findById)
+                        .filter(Show::getUseYn)
+                        .orElse(null))
                 .showAt(partyCreate.getShowAt())
                 .title(partyCreate.getTitle())
                 .content(partyCreate.getContent())

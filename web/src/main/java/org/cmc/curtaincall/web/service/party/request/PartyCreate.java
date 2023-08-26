@@ -12,10 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PartyCreate {
 
-    @NotBlank
     private String showId;
 
-    @NotNull
     private LocalDateTime showAt;
 
     @NotBlank

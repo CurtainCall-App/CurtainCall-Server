@@ -31,11 +31,11 @@ public class Party extends BaseEntity {
     @Column(name = "party_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Show show;
 
-    @Column(name = "show_at", nullable = false)
+    @Column(name = "show_at")
     private LocalDateTime showAt;
 
     @Column(name = "title", nullable = false)
@@ -45,7 +45,7 @@ public class Party extends BaseEntity {
     private String content;
 
     @Column(name = "cur_member_num", nullable = false)
-    private Integer curMemberNum = 1;
+    private Integer curMemberNum = 0;
 
     @Column(name = "max_member_num", nullable = false)
     private Integer maxMemberNum;

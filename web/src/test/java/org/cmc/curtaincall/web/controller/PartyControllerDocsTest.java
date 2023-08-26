@@ -227,6 +227,7 @@ class PartyControllerDocsTest {
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
                                 fieldWithPath("showId").description("공연 ID"),
                                 fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
                         )

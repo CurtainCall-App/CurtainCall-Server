@@ -161,9 +161,9 @@ create table party
     created_by       bigint        not null,
     last_modified_at datetime(6) not null,
     party_id         bigint        not null auto_increment,
-    show_at          datetime(6) not null,
+    show_at          datetime(6),
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
-    show_id          varchar(25)   not null,
+    show_id          varchar(25),
     content          varchar(2000) not null,
     title            varchar(255)  not null,
     primary key (party_id)
