@@ -349,4 +349,4 @@ create table box_office
 ) engine = InnoDB;
 
 create index IX_box_office__base_date_type_genre_rank_num
-    on box_office (base_date, type, genre, rank_num);
+    on box_office (base_date desc, type, genre, rank_num);
