@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -94,11 +95,14 @@ class ShowControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("genre").description("공연 장르"),
-                                parameterWithName("sort").optional().description(
-                                        "reviewGradeAvg,desc: 공연 리뷰 평점 평균 내림차순 정렬," +
-                                        "name: 가나다순"
-                                )
+                                parameterWithName("genre").description("공연 장르")
+                                        .attributes(type(ShowGenre.class.getSimpleName()))
+                                        .optional(),
+                                parameterWithName("sort").description(
+                                        "reviewGradeAvg,desc: 공연 리뷰 평점 평균 내림차순 정렬, " +
+                                        "name: 가나다순, " +
+                                        "endDate: 마감일순"
+                                ).optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -108,11 +112,11 @@ class ShowControllerDocsTest {
                                 fieldWithPath("endDate").description("공연 종료일"),
                                 fieldWithPath("facilityName").description("공연 시설명"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
-                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
-                                        .description("공연 장르명"),
-                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
-                                        .description("공연 시간"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("runtime").description("공연 런타임")
@@ -173,11 +177,11 @@ class ShowControllerDocsTest {
                                 fieldWithPath("endDate").description("공연 종료일"),
                                 fieldWithPath("facilityName").description("공연 시설명"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
-                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
-                                        .description("공연 장르명"),
-                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
-                                        .description("공연 시간"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("runtime").description("공연 런타임")
@@ -238,11 +242,11 @@ class ShowControllerDocsTest {
                                 fieldWithPath("endDate").description("공연 종료일"),
                                 fieldWithPath("facilityName").description("공연 시설명"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
-                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
-                                        .description("공연 장르명"),
-                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
-                                        .description("공연 시간"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("runtime").description("공연 런타임")
@@ -295,7 +299,9 @@ class ShowControllerDocsTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("endDate").description("기준일"),
-                                parameterWithName("genre").description("장르").optional()
+                                parameterWithName("genre").description("장르")
+                                        .attributes(type(ShowGenre.class.getSimpleName()))
+                                        .optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -305,11 +311,11 @@ class ShowControllerDocsTest {
                                 fieldWithPath("endDate").description("공연 종료일"),
                                 fieldWithPath("facilityName").description("공연 시설명"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
-                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
-                                        .description("공연 장르명"),
-                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
-                                        .description("공연 시간"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("runtime").description("공연 런타임")
@@ -378,12 +384,12 @@ class ShowControllerDocsTest {
                                 fieldWithPath("ticketPrice").description("티켓 가격"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
                                 fieldWithPath("story").description("줄거리"),
-                                fieldWithPath("genre").type(ShowGenre.class.getSimpleName())
-                                        .description("공연 장르명"),
                                 fieldWithPath("introductionImages").description("소개 이미지"),
-                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일"),
-                                fieldWithPath("showTimes[].time").type(ShowDay.class.getSimpleName())
-                                        .description("공연 시간"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
                         )
