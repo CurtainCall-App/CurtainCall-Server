@@ -1,10 +1,12 @@
 |===
-|Parameter|Description|Optional
+|Parameter|Description|Optional|Default|Type
 
 {{#parameters}}
 |{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
 |{{#tableCellContent}}{{description}}{{/tableCellContent}}
 |{{#tableCellContent}}_{{optional}}_{{/tableCellContent}}
+|{{#tableCellContent}}{{#defaultValue}}{{defaultValue}}{{/defaultValue}}{{/tableCellContent}}
+|{{#tableCellContent}}{{#type}}{{type}}{{/type}}{{/tableCellContent}}
 
 {{/parameters}}
 |===
