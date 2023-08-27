@@ -29,6 +29,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,8 +81,10 @@ class BoxOfficeControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(document("box-office-get-box-office",
                         queryParameters(
-                                parameterWithName("type").description("일, 주, 월"),
-                                parameterWithName("genre").description("조회하려는 요일"),
+                                parameterWithName("type").description("일, 주, 월")
+                                        .attributes(key("type").value(BoxOfficeType.class.getSimpleName())),
+                                parameterWithName("genre").description("장르")
+                                        .attributes(key("type").value(BoxOfficeGenre.class.getSimpleName())),
                                 parameterWithName("baseDate").description("기준일")
                         ),
                         responseFields(
