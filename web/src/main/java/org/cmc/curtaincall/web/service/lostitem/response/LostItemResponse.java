@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.service.lostitem.response;
 
+import jakarta.annotation.Nullable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class LostItemResponse {
 
     private LocalDate foundDate;
 
+    @Nullable
     private LocalTime foundTime;
 
     private String imageUrl;

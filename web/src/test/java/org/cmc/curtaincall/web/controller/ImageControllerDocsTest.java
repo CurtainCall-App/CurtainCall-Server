@@ -26,6 +26,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(RestDocsConfig.class)
 @AutoConfigureRestDocs
@@ -59,6 +60,7 @@ class ImageControllerDocsTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .with(csrf()))
+                .andExpect(status().isOk())
                 .andDo(document("image-save-image",
                         requestParts(
                                 partWithName("image").description("이미지")

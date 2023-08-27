@@ -27,12 +27,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,13 +91,16 @@ class LostItemControllerDocsTest {
                 .andDo(print())
                 .andDo(document("lostitem-create-lostitem",
                         requestFields(
-                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("title").description("제목")
+                                        .attributes(key("constraint").value("최대 20")),
                                 fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("facilityId").description("습득장소(공연장) ID"),
-                                fieldWithPath("foundPlaceDetail").description("세부장수"),
+                                fieldWithPath("foundPlaceDetail").description("세부장수")
+                                        .attributes(key("constraint").value("최대 30")),
                                 fieldWithPath("foundDate").description("습득일자"),
-                                fieldWithPath("foundTime").description("습득시간"),
-                                fieldWithPath("particulars").description("특이사항"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
+                                fieldWithPath("particulars").description("특이사항")
+                                        .attributes(constraint("최대: 100")),
                                 fieldWithPath("imageId").description("이미지 ID")
                         ),
                         responseFields(
@@ -137,7 +143,9 @@ class LostItemControllerDocsTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("facilityId").description("공연시설 ID").optional(),
-                                parameterWithName("type").description("분류").optional(),
+                                parameterWithName("type").description("분류")
+                                        .attributes(type(LostItemType.class.getSimpleName()))
+                                        .optional(),
                                 parameterWithName("foundDate").description("습득일자").optional(),
                                 parameterWithName("title").description("제목").optional()
                         ),
@@ -148,7 +156,7 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("facilityName").description("공연시설 이름"),
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("foundDate").description("습득일자"),
-                                fieldWithPath("foundTime").description("습득시간"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
                                 fieldWithPath("imageUrl").description("이미지")
                         )
                 ));
@@ -196,7 +204,7 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장소"),
                                 fieldWithPath("foundDate").description("습득일자"),
-                                fieldWithPath("foundTime").description("습득시간"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
                                 fieldWithPath("particulars").description("특이사항"),
                                 fieldWithPath("imageId").description("이미지 ID"),
                                 fieldWithPath("imageUrl").description("이미지")
@@ -220,6 +228,7 @@ class LostItemControllerDocsTest {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("lostitem-delete-lostitem",
                         pathParameters(
                                 parameterWithName("lostItemId").description("분실물 ID")
@@ -260,12 +269,16 @@ class LostItemControllerDocsTest {
                                 parameterWithName("lostItemId").description("분실물 ID")
                         ),
                         requestFields(
-                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("title").description("제목")
+                                        .attributes(constraint("max=20")),
                                 fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
-                                fieldWithPath("foundPlaceDetail").description("세부장수"),
+                                fieldWithPath("foundPlaceDetail").description("세부장수")
+                                        .attributes(constraint("max=30")),
                                 fieldWithPath("foundDate").description("습득일자"),
-                                fieldWithPath("foundTime").description("습득시간"),
-                                fieldWithPath("particulars").description("특이사항"),
+                                fieldWithPath("foundTime").description("습득시간")
+                                        .optional(),
+                                fieldWithPath("particulars").description("특이사항")
+                                        .attributes(constraint("max=100")),
                                 fieldWithPath("imageId").description("이미지 ID")
                         )
                 ));
