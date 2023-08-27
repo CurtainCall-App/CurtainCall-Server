@@ -59,11 +59,15 @@ public class ShowReviewService {
     @Transactional
     public void edit(ShowReviewEdit showReviewEdit, Long id) {
         ShowReview showReview = getShowReviewById(id);
+        int prevReviewGrade = showReviewEdit.getGrade();
 
         ShowReviewEditor editor = showReview.toEditor()
                 .grade(showReviewEdit.getGrade())
-                .content(showReview.getContent())
+                .content(showReviewEdit.getContent())
                 .build();
+
+        Show show = showReview.getShow();
+        show.applyReviewEdit(showReview, prevReviewGrade);
 
         showReview.edit(editor);
     }

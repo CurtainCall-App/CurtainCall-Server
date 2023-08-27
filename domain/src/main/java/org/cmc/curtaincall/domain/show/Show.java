@@ -160,6 +160,12 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         calculateReviewGradeAvg();
     }
 
+    public void applyReviewEdit(ShowReview review, int prevReviewGrade) {
+        reviewGradeSum -= prevReviewGrade;
+        reviewGradeSum += review.getGrade();
+        calculateReviewGradeAvg();
+    }
+
     private void calculateReviewGradeAvg() {
         reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
     }
