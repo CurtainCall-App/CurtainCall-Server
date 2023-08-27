@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.domain.show.repository;
 
+import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.springframework.data.domain.Pageable;
@@ -26,4 +27,8 @@ public interface ShowRepository extends JpaRepository<Show, String>, ShowReposit
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithByGenreAndEndDateGreaterThanEqualAndUseYnIsTrue(
             Pageable pageable, ShowGenre genre, LocalDate endDate);
+
+    Slice<Show> findSliceWithByFacilityAndUseYnIsTrue(Pageable pageable, Facility facility);
+
+    Slice<Show> findSliceWithByFacilityAndGenreAndUseYnIsTrue(Pageable pageable, Facility facility, ShowGenre genre);
 }

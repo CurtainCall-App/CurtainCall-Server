@@ -11,3 +11,9 @@
 == 공연 시설 상세 조회
 
 operation::facility-get-facility-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+
+[[facility-get-show-list-of-facility]]
+== 공연 시설의 공연
+
+operation::facility-get-show-list-of-facility[snippets='http-request,path-parameters,query-parameters,http-response,response-fields-content']
