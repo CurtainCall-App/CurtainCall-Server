@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -111,6 +112,7 @@ class FavoriteShowControllerDocsTest {
                 .andDo(document("favorite-get-favorite",
                         queryParameters(
                                 parameterWithName("showIds").description("공연 아이디 리스트")
+                                        .attributes(type(List.class.getSimpleName()))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
