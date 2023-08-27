@@ -2,8 +2,10 @@ package org.cmc.curtaincall.web.service.show;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -23,6 +26,8 @@ import java.util.Optional;
 public class ShowService {
 
     private final ShowRepository showRepository;
+
+    private final FacilityRepository facilityRepository;
 
     public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
         return showRepository.findSliceWithFacilityByGenreAndUseYnIsTrue(pageable, request.getGenre())
@@ -50,6 +55,26 @@ public class ShowService {
                 .map(ShowResponse::of);
     }
 
+    public Slice<ShowResponse> getListOfFacility(Pageable pageable, String facilityId, @Nullable ShowGenre genre) {
+        Facility facility = getFacilityById(facilityId);
+        return Optional.ofNullable(genre)
+                .map(g -> showRepository.findSliceWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
+                .orElseGet(() -> showRepository.findSliceWithByFacilityAndUseYnIsTrue(pageable, facility))
+                .map(show -> ShowResponse.builder()
+                        .id(show.getId())
+                        .name(show.getName())
+                        .startDate(show.getStartDate())
+                        .endDate(show.getEndDate())
+                        .facilityName(facility.getName())
+                        .poster(show.getPoster())
+                        .genre(show.getGenre())
+                        .showTimes(new ArrayList<>(show.getShowTimes()))
+                        .reviewCount(show.getReviewCount())
+                        .reviewGradeSum(show.getReviewGradeSum())
+                        .runtime(show.getRuntime())
+                        .build());
+    }
+
     public ShowDetailResponse getDetail(String id) {
         Show show = getShowById(id);
         return ShowDetailResponse.of(show);
@@ -59,5 +84,11 @@ public class ShowService {
         return showRepository.findById(id)
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
+    }
+
+    private Facility getFacilityById(String id) {
+        return facilityRepository.findById(id)
+                .filter(Facility::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
     }
 }
