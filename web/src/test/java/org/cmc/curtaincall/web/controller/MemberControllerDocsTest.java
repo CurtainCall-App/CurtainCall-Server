@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
@@ -32,8 +33,6 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -78,11 +77,8 @@ class MemberControllerDocsTest {
                         .param("nickname", "테스트닉네임"))
                 .andDo(print())
                 .andDo(document("member-get-nickname-duplicate",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         queryParameters(
-                                parameterWithName("nickname").description("중복 확인 하려는 닉네임. 최대 15.")
+                                parameterWithName("nickname").description("중복 확인 하려는 닉네임.")
                         ),
                         responseFields(
                                 fieldWithPath("result").description("중복 여부. 중복이면 true.")
@@ -110,11 +106,9 @@ class MemberControllerDocsTest {
                 )
                 .andDo(print())
                 .andDo(document("member-signup",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         requestFields(
                                 fieldWithPath("nickname").description("회원 닉네임")
+                                        .attributes(RestDocsAttribute.constraint("max=15"))
                         ),
                         responseFields(
                                 fieldWithPath("id").description("생성된 회원 ID (memberId)")
@@ -150,9 +144,10 @@ class MemberControllerDocsTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 ID"),
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("imageId").description("회원 이미지 ID, 없을 경우 NULL"),
-                                fieldWithPath("imageUrl").description("회원 이미지, 없을 경우 NULL"),
+                                fieldWithPath("nickname").description("닉네임")
+                                        .attributes(RestDocsAttribute.constraint("max=15")),
+                                fieldWithPath("imageId").description("회원 이미지 ID").optional(),
+                                fieldWithPath("imageUrl").description("회원 이미지").optional(),
                                 fieldWithPath("recruitingNum").description("My 모집"),
                                 fieldWithPath("participationNum").description("My 참여")
                         )
@@ -185,8 +180,9 @@ class MemberControllerDocsTest {
                 .andDo(print())
                 .andDo(document("member-edit-member",
                         requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("imageId").description("이미지 ID")
+                                fieldWithPath("nickname").description("닉네임")
+                                        .attributes(RestDocsAttribute.constraint("max=15")),
+                                fieldWithPath("imageId").description("이미지 ID").optional()
                         )
                 ));
     }
@@ -231,7 +227,9 @@ class MemberControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리").optional()
+                                parameterWithName("category").description("카테고리")
+                                        .attributes(RestDocsAttribute.type(PartyCategory.class.getSimpleName()))
+                                        .optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
