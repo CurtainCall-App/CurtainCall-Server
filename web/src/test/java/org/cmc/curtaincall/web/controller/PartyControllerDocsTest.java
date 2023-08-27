@@ -26,13 +26,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -98,18 +99,18 @@ class PartyControllerDocsTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
-                                fieldWithPath("showAt").description("공연 일시"),
+                                fieldWithPath("showAt").description("공연 일시").optional(),
                                 fieldWithPath("createdAt").description("작성 일시"),
                                 fieldWithPath("category").type(PartyCategory.class.getSimpleName())
                                         .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
-                                fieldWithPath("showId").description("공연 ID"),
-                                fieldWithPath("showName").description("공연 이름"),
-                                fieldWithPath("showPoster").description("공연 포스터"),
-                                fieldWithPath("facilityId").description("공연 시설 ID"),
-                                fieldWithPath("facilityName").description("공연 시설 이름")
+                                fieldWithPath("showId").description("공연 ID").optional(),
+                                fieldWithPath("showName").description("공연 이름").optional(),
+                                fieldWithPath("showPoster").description("공연 포스터").optional(),
+                                fieldWithPath("facilityId").description("공연 시설 ID").optional(),
+                                fieldWithPath("facilityName").description("공연 시설 이름").optional()
                         )
                 ));
     }
@@ -161,18 +162,18 @@ class PartyControllerDocsTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
-                                fieldWithPath("showAt").description("공연 일시"),
+                                fieldWithPath("showAt").description("공연 일시").optional(),
                                 fieldWithPath("createdAt").description("작성 일시"),
                                 fieldWithPath("category").type(PartyCategory.class.getSimpleName())
                                         .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
-                                fieldWithPath("showId").description("공연 ID"),
-                                fieldWithPath("showName").description("공연 이름"),
-                                fieldWithPath("showPoster").description("공연 포스터"),
-                                fieldWithPath("facilityId").description("공연 시설 ID"),
-                                fieldWithPath("facilityName").description("공연 시설 이름")
+                                fieldWithPath("showId").description("공연 ID").optional(),
+                                fieldWithPath("showName").description("공연 이름").optional(),
+                                fieldWithPath("showPoster").description("공연 포스터").optional(),
+                                fieldWithPath("facilityId").description("공연 시설 ID").optional(),
+                                fieldWithPath("facilityName").description("공연 시설 이름").optional()
                         )
                 ));
     }
@@ -220,16 +221,16 @@ class PartyControllerDocsTest {
                                         .description("카테고리"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
-                                fieldWithPath("showAt").description("공연 일시"),
+                                fieldWithPath("showAt").description("공연 일시").optional(),
                                 fieldWithPath("createdAt").description("작성 일시"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
-                                fieldWithPath("showId").description("공연 ID"),
-                                fieldWithPath("showName").description("공연 이름"),
-                                fieldWithPath("showPoster").description("공연 포스터"),
-                                fieldWithPath("facilityId").description("공연 시설 ID"),
-                                fieldWithPath("facilityName").description("공연 시설 이름")
+                                fieldWithPath("showId").description("공연 ID").optional(),
+                                fieldWithPath("showName").description("공연 이름").optional(),
+                                fieldWithPath("showPoster").description("공연 포스터").optional(),
+                                fieldWithPath("facilityId").description("공연 시설 ID").optional(),
+                                fieldWithPath("facilityName").description("공연 시설 이름").optional()
                         )
                 ));
     }
@@ -260,15 +261,16 @@ class PartyControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(document("party-create-party",
                         requestFields(
-                                fieldWithPath("showId").description("공연 ID"),
-                                fieldWithPath("showAt").description("공연일시"),
-                                fieldWithPath("title").description("제목"),
-                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("showId").description("공연 ID").optional(),
+                                fieldWithPath("showAt").description("공연일시").optional(),
+                                fieldWithPath("title").description("제목")
+                                        .attributes(constraint("max = 100")),
+                                fieldWithPath("content").description("내용")
+                                        .attributes(constraint("max = 400")),
                                 fieldWithPath("maxMemberNum").description("최대 인원")
-                                        .attributes(key("constraint").value("최대 10")),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("분류")
-                                        .attributes(key("constraint").value(PartyCategory.values()))
+                                        .attributes(constraint("positive, max = 10")),
+                                fieldWithPath("category").description("분류")
+                                        .type(PartyCategory.class.getSimpleName())
                         ),
                         responseFields(
                                 fieldWithPath("id").description("파티 ID")
@@ -326,8 +328,10 @@ class PartyControllerDocsTest {
                                 parameterWithName("partyId").description("파티 ID")
                         ),
                         requestFields(
-                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("title").description("제목")
+                                        .attributes(constraint("max = 100")),
                                 fieldWithPath("content").description("내용")
+                                        .attributes(constraint("max = 400"))
                         )
                 ));
     }
@@ -379,6 +383,7 @@ class PartyControllerDocsTest {
                 .andDo(document("party-get-participated",
                         queryParameters(
                                 parameterWithName("partyIds").description("파티 ID 리스트")
+                                        .attributes(type(List.class.getSimpleName()))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
