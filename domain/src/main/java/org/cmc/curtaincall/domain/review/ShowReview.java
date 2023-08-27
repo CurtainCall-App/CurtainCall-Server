@@ -26,6 +26,10 @@ public class ShowReview extends BaseEntity {
     @Column(name = "show_review_id")
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Show show;

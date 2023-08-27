@@ -197,17 +197,18 @@ create index IX_party_member__member_party
 
 create table show_review
 (
-    grade            integer      not null,
-    like_count       integer      not null,
-    use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    created_by       bigint       not null,
-    last_modified_at datetime(6) not null,
     show_review_id   bigint       not null auto_increment,
     show_id          varchar(25)  not null,
+    grade            integer      not null,
     content          varchar(255) not null,
+    like_count       integer      not null,
+    use_yn           bit          not null,
+    created_at       datetime(6)  not null,
+    created_by       bigint       not null,
+    last_modified_at datetime(6)  not null,
+    version          bigint       not null,
     primary key (show_review_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_show_review__show_created_by_created_at
     on show_review (show_id, created_by, created_at desc);
