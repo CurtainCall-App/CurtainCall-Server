@@ -45,7 +45,17 @@ public class SecurityConfig {
                                 "/login/reissue"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,
-                                "/code"
+                                "/code",
+                                "/facilities/{facilityId}",
+                                "/shows",
+                                "/search/shows",
+                                "/shows-to-open",
+                                "/shows-to-end",
+                                "/shows/{showId}",
+                                "/box-office",
+                                "/shows/{showId}/reviews",
+                                "/notices",
+                                "/notices/{noticeId}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
