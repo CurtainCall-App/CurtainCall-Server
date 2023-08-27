@@ -153,21 +153,21 @@ alter table member
 
 create table party
 (
-    closed           bit           not null,
-    cur_member_num   integer       not null,
-    max_member_num   integer       not null,
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    created_by       bigint        not null,
-    last_modified_at datetime(6) not null,
-    party_id         bigint        not null auto_increment,
-    show_at          datetime(6),
+    party_id         bigint                              not null auto_increment,
+    title            varchar(255)                        not null,
+    content          varchar(2000)                       not null,
+    cur_member_num   integer                             not null,
+    max_member_num   integer                             not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
+    closed           bit                                 not null,
     show_id          varchar(25),
-    content          varchar(2000) not null,
-    title            varchar(255)  not null,
+    show_at          datetime(6),
+    use_yn           bit                                 not null,
+    created_at       datetime(6)                         not null,
+    created_by       bigint                              not null,
+    last_modified_at datetime(6)                         not null,
     primary key (party_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_party__category_created_at
     on party (category, created_at desc);

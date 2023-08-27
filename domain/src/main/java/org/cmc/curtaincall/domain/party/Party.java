@@ -32,6 +32,10 @@ public class Party extends BaseEntity {
     @Column(name = "party_id")
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Show show;
@@ -59,7 +63,7 @@ public class Party extends BaseEntity {
     private PartyCategory category;
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<PartyMember> partyMembers = new ArrayList<>();
+    private List<PartyMember> partyMembers = new ArrayList<>();
 
     @Builder
     public Party(
