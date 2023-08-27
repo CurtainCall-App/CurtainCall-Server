@@ -383,7 +383,7 @@ class PartyControllerDocsTest {
                 .andDo(document("party-get-participated",
                         queryParameters(
                                 parameterWithName("partyIds").description("파티 ID 리스트")
-                                        .attributes(type(List.class.getSimpleName()))
+                                        .attributes(type(List.class))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

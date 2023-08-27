@@ -10,8 +10,8 @@ public final class RestDocsAttribute {
         return key("constraint").value(value);
     }
 
-    public static Attributes.Attribute type(String value) {
-        return key("type").value(value);
+    public static Attributes.Attribute type(Class<?> clazz) {
+        return key("type").value(clazz.getSimpleName());
     }
 
     public static Attributes.Attribute defaultValue(String value) {

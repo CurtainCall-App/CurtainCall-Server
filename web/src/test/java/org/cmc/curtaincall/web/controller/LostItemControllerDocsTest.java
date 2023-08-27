@@ -144,7 +144,7 @@ class LostItemControllerDocsTest {
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("facilityId").description("공연시설 ID").optional(),
                                 parameterWithName("type").description("분류")
-                                        .attributes(type(LostItemType.class.getSimpleName()))
+                                        .attributes(type(LostItemType.class))
                                         .optional(),
                                 parameterWithName("foundDate").description("습득일자").optional(),
                                 parameterWithName("title").description("제목").optional()

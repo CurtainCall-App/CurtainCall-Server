@@ -228,7 +228,7 @@ class MemberControllerDocsTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("category").description("카테고리")
-                                        .attributes(RestDocsAttribute.type(PartyCategory.class.getSimpleName()))
+                                        .attributes(RestDocsAttribute.type(PartyCategory.class))
                                         .optional()
                         ),
                         responseFields(

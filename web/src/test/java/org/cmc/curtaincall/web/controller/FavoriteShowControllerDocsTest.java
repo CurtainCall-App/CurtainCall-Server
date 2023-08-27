@@ -112,7 +112,7 @@ class FavoriteShowControllerDocsTest {
                 .andDo(document("favorite-get-favorite",
                         queryParameters(
                                 parameterWithName("showIds").description("공연 아이디 리스트")
-                                        .attributes(type(List.class.getSimpleName()))
+                                        .attributes(type(List.class))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

@@ -96,7 +96,7 @@ class ShowControllerDocsTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("genre").description("공연 장르")
-                                        .attributes(type(ShowGenre.class.getSimpleName()))
+                                        .attributes(type(ShowGenre.class))
                                         .optional(),
                                 parameterWithName("sort").description(
                                         "reviewGradeAvg,desc: 공연 리뷰 평점 평균 내림차순 정렬, " +
@@ -300,7 +300,7 @@ class ShowControllerDocsTest {
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("endDate").description("기준일"),
                                 parameterWithName("genre").description("장르")
-                                        .attributes(type(ShowGenre.class.getSimpleName()))
+                                        .attributes(type(ShowGenre.class))
                                         .optional()
                         ),
                         responseFields(

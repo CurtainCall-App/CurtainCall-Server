@@ -115,7 +115,7 @@ class ShowReviewLikeControllerDocsTest {
                 .andDo(document("show-review-like-get-liked",
                         queryParameters(
                                 parameterWithName("reviewIds").description("공연 리뷰 아이디 리스트")
-                                        .attributes(type(List.class.getSimpleName()))
+                                        .attributes(type(List.class))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
