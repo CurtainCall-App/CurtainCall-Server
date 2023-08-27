@@ -32,6 +32,10 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "show_id", length = 25)
     private String id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Facility facility;
