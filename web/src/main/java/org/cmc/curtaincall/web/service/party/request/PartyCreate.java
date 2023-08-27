@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.service.party.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.cmc.curtaincall.domain.party.PartyCategory;
@@ -12,8 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PartyCreate {
 
+    @Nullable
     private String showId;
 
+    @Nullable
     private LocalDateTime showAt;
 
     @NotBlank

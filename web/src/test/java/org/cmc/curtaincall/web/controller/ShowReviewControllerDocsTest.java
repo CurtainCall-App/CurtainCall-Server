@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -74,8 +75,10 @@ class ShowReviewControllerDocsTest {
                                 parameterWithName("showId").description("공연 아이디")
                         ),
                         requestFields(
-                                fieldWithPath("grade").description("평점"),
+                                fieldWithPath("grade").description("평점")
+                                        .attributes(constraint("PositiveOrZero, max=5")),
                                 fieldWithPath("content").description("내용")
+                                        .attributes(constraint("max=200"))
                         ),
                         responseFields(
                                 fieldWithPath("id").description("공연 리뷰 ID")
@@ -186,8 +189,10 @@ class ShowReviewControllerDocsTest {
                                 parameterWithName("reviewId").description("리뷰 ID")
                         ),
                         requestFields(
-                                fieldWithPath("content").description("내용"),
                                 fieldWithPath("grade").description("평점")
+                                        .attributes(constraint("PositiveOrZero, max=5")),
+                                fieldWithPath("content").description("내용")
+                                        .attributes(constraint("max=200"))
                         )
                 ));
     }

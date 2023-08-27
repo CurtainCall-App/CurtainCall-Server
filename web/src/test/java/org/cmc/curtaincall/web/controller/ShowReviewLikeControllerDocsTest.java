@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -83,9 +84,6 @@ class ShowReviewLikeControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-cancel-like",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         pathParameters(
                                 parameterWithName("reviewId").description("공연 리뷰 ID")
                         )
@@ -115,11 +113,9 @@ class ShowReviewLikeControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-get-liked",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         queryParameters(
                                 parameterWithName("reviewIds").description("공연 리뷰 아이디 리스트")
+                                        .attributes(type(List.class))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

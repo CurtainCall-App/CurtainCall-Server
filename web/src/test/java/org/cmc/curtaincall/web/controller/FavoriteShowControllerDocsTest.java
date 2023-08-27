@@ -20,11 +20,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -63,9 +62,6 @@ class FavoriteShowControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-show-favorite-show",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         pathParameters(
                                 parameterWithName("showId").description("공연 ID")
                         )
@@ -85,9 +81,6 @@ class FavoriteShowControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-show-cancel-favorite",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         pathParameters(
                                 parameterWithName("showId").description("공연 ID")
                         )
@@ -117,11 +110,9 @@ class FavoriteShowControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-get-favorite",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         queryParameters(
                                 parameterWithName("showIds").description("공연 아이디 리스트")
+                                        .attributes(type(List.class))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -160,9 +151,6 @@ class FavoriteShowControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-get-favorite-list",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
                         pathParameters(
                                 parameterWithName("memberId").description("회원 ID")
                         ),
