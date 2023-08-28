@@ -83,7 +83,7 @@ public class PartyService {
     @Transactional
     public void participate(Long partyId, Long memberId) {
         Party party = getPartyById(partyId);
-        if (Boolean.FALSE.equals(party.getClosed())) {
+        if (Boolean.TRUE.equals(party.getClosed())) {
             throw new AlreadyClosedPartyException("Party id=" + partyId);
         }
 
