@@ -6,6 +6,7 @@ import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
+import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.domain.show.*;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.junit.jupiter.api.DisplayName;
@@ -98,6 +99,7 @@ class CodeControllerDocsTest {
                 .andExpect(jsonPath("$.ShowGenre").isNotEmpty())
                 .andExpect(jsonPath("$.MemberDeleteReason").isNotEmpty())
                 .andExpect(jsonPath("$." + ShowState.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + ReportType.class.getSimpleName()).isNotEmpty())
                 .andDo(document("code-api-get-all",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -120,7 +122,9 @@ class CodeControllerDocsTest {
                                 subsectionWithPath("MemberDeleteReason").description("회원 탈퇴 사유: "
                                         + Arrays.toString(MemberDeleteReason.values())),
                                 subsectionWithPath(ShowState.class.getSimpleName()).description("공연 상태: "
-                                        + Arrays.toString(ShowState.values()))
+                                        + Arrays.toString(ShowState.values())),
+                                subsectionWithPath(ReportType.class.getSimpleName()).description("신고 타입: "
+                                        + Arrays.toString(ReportType.values()))
                         )
                 ));
     }

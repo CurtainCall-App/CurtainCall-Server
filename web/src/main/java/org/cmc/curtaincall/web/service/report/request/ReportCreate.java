@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.cmc.curtaincall.domain.report.ReportReason;
+import org.cmc.curtaincall.domain.report.ReportType;
 
 @Getter
 @Builder
@@ -14,7 +15,10 @@ public class ReportCreate {
 
     @NotNull
     @Positive
-    private Long partyId;
+    private Long idToReport;
+
+    @NotNull
+    private ReportType type;
 
     @NotNull
     private ReportReason reason;
