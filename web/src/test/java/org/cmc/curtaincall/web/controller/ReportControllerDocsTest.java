@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.report.ReportReason;
+import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.report.ReportService;
@@ -17,9 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +51,8 @@ class ReportControllerDocsTest {
         ReportCreate reportCreate = ReportCreate.builder()
                 .reason(ReportReason.HATE_SPEECH)
                 .content("나쁜말 ㅠㅠ")
-                .partyId(22L)
+                .idToReport(22L)
+                .type(ReportType.PARTY)
                 .build();
 
         // expected
@@ -62,9 +66,13 @@ class ReportControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(document("report-create-report",
                         requestFields(
-                                fieldWithPath("reason").description("신고 이유"),
-                                fieldWithPath("partyId").description("파티 ID"),
+                                fieldWithPath("idToReport").description("신고하려는 글 ID"),
+                                fieldWithPath("type").description("신고하려는 글 유형")
+                                        .type(ReportType.class),
+                                fieldWithPath("reason").description("신고 이유")
+                                        .type(ReportReason.class),
                                 fieldWithPath("content").description("내용")
+                                        .type(constraint("max=400"))
                         )
                 ));
     }
