@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
-import org.cmc.curtaincall.domain.party.Party;
 
 @Entity
 @Table(name = "report")
@@ -22,18 +21,22 @@ public class Report extends BaseEntity {
     @Column(name = "content", length = 1000, nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "party_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Party party;
+    @Column(name = "reported_id", nullable = false)
+    private Long reportedId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reason", length = 45, nullable = false)
     private ReportReason reason;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private ReportType type;
+
     @Builder
-    private Report(String content, Party party, ReportReason reason) {
+    private Report(String content, Long reportedId, ReportReason reason, ReportType type) {
         this.content = content;
-        this.party = party;
+        this.reportedId = reportedId;
         this.reason = reason;
+        this.type = type;
     }
 }

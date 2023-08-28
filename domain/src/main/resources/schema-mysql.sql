@@ -322,14 +322,15 @@ create index IX_notice__created_at
 
 create table report
 (
-    use_yn           bit                                                                                                               not null,
-    created_at       datetime(6)                                                                                                       not null,
-    created_by       bigint                                                                                                            not null,
-    last_modified_at datetime(6)                                                                                                       not null,
-    party_id         bigint                                                                                                            not null,
     report_id        bigint                                                                                                            not null auto_increment,
+    reported_id      bigint                                                                                                            not null,
+    type             enum ('PARTY', 'SHOW_REVIEW', 'LOST_ITEM')                                                                        not null,
     reason           enum ('BAD_MANNERS','ETC','HARMFUL_TO_TEENAGER','HATE_SPEECH','ILLEGAL','PERSONAL_INFORMATION_DISCLOSURE','SPAM') not null,
     content          varchar(1000)                                                                                                     not null,
+    use_yn           bit                                                                                                               not null,
+    created_at       datetime(6)                                                                                                       not null,
+    last_modified_at datetime(6)                                                                                                       not null,
+    created_by       bigint                                                                                                            not null,
     primary key (report_id)
 ) engine = InnoDB;
 

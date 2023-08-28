@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.report.Report;
+import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.domain.report.repository.ReportRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
@@ -25,7 +26,8 @@ public class ReportService {
         Party party = getPartyById(reportCreate.getPartyId());
         Report report = reportRepository.save(Report.builder()
                 .content(reportCreate.getContent())
-                .party(party)
+                .reportedId(party.getId())
+                .type(ReportType.PARTY)
                 .reason(reportCreate.getReason())
                 .build());
         return new IdResult<>(report.getId());
