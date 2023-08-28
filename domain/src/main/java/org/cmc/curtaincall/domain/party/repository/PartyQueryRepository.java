@@ -25,7 +25,7 @@ public class PartyQueryRepository {
         List<Party> content = query
                 .selectFrom(party)
                 .join(party.createdBy).fetchJoin()
-                .join(party.createdBy.image).fetchJoin()
+                .leftJoin(party.createdBy.image).fetchJoin()
                 .join(party.show, show).fetchJoin()
                 .join(show.facility, facility).fetchJoin()
                 .where(

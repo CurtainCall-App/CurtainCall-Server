@@ -16,6 +16,7 @@ public class PartySearchParam {
     private PartyCategory category;
 
     @Size(max = 200)
+    @NotNull
     private String keyword;
 
 }

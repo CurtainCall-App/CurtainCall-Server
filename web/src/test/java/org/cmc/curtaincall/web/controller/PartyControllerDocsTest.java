@@ -153,7 +153,8 @@ class PartyControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리"),
+                                parameterWithName("category").description("카테고리")
+                                        .attributes(type(PartyCategory.class)),
                                 parameterWithName("keyword").description("검색 키워드")
                         ),
                         responseFields(
