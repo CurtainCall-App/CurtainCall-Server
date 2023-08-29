@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewEditor;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
@@ -54,8 +55,9 @@ public class ShowReviewService {
     }
 
     @Transactional
+    @OptimisticLock
     public void edit(ShowReviewEdit showReviewEdit, Long id) {
-        ShowReview showReview = getShowReviewById(id);
+        ShowReview showReview = getShowReviewWithLockById(id);
         int prevReviewGrade = showReview.getGrade();
 
         ShowReviewEditor editor = showReview.toEditor()
@@ -82,6 +84,12 @@ public class ShowReviewService {
 
     private ShowReview getShowReviewById(Long id) {
         return showReviewRepository.findById(id)
+                .filter(ShowReview::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+    }
+
+    private ShowReview getShowReviewWithLockById(Long id) {
+        return showReviewRepository.findWithLockById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
     }
