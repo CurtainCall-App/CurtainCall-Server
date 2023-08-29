@@ -1,11 +1,3 @@
-alter table show_time
-drop
-foreign key FK_show_time;
-
-alter table shows_introduction_images
-drop
-foreign key FK_shows_introduction_images;
-
 drop table if exists account;
 drop table if exists facility;
 drop table if exists favorite_show;
@@ -289,10 +281,8 @@ create table show_time
     show_id     varchar(25) not null
 ) engine=InnoDB;
 
-alter table show_time
-    add constraint FK_show_time
-        foreign key (show_id)
-            references shows (show_id);
+create index IX_show_time__show
+    on show_time (show_id);
 
 
 create table shows_introduction_images
@@ -301,10 +291,8 @@ create table shows_introduction_images
     introduction_images varchar(255)
 ) engine=InnoDB;
 
-alter table shows_introduction_images
-    add constraint FK_shows_introduction_images
-        foreign key (show_id)
-            references shows (show_id);
+create index IX_shows_introduction_images__show
+    on shows_introduction_images (show_id);
 
 
 create table notice

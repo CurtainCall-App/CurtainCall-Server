@@ -96,14 +96,14 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @ElementCollection
     @CollectionTable(
             name = "show_time",
-            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(name = "FK_show_time"))
+            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
     private List<ShowTime> showTimes;
 
     @ElementCollection
     @CollectionTable(
             name = "shows_introduction_images",
-            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(name = "FK_shows_introduction_images"))
+            joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
     private List<String> introductionImages;
 
