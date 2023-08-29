@@ -45,7 +45,7 @@ public class ShowItemProcessor implements ItemProcessor<ShowResponse, Show> {
         ShowDetailResponse showDetail = kopisService.getShowDetail(item.id());
         List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
 
-        return Show.builder()
+        Show show = Show.builder()
                 .id(showDetail.id())
                 .facility(new Facility(showDetail.facilityId()))
                 .name(showDetail.name())
@@ -62,8 +62,9 @@ public class ShowItemProcessor implements ItemProcessor<ShowResponse, Show> {
                 .genre(showGenre)
                 .state(stateMapper.get(showDetail.state()))
                 .openRun(showDetail.openRun())
-                .showTimes(showTimes)
-                .introductionImages(showDetail.introductionImages())
                 .build();
+        show.getShowTimes().addAll(showTimes);
+        show.getIntroductionImages().addAll(showDetail.introductionImages());
+        return show;
     }
 }

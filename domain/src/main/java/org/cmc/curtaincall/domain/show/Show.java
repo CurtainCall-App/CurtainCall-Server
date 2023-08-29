@@ -10,6 +10,7 @@ import org.cmc.curtaincall.domain.review.ShowReview;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -98,14 +99,14 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             name = "show_time",
             joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
-    private List<ShowTime> showTimes;
+    private List<ShowTime> showTimes = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(
             name = "shows_introduction_images",
             joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
-    private List<String> introductionImages;
+    private List<String> introductionImages = new ArrayList<>();
 
     @Builder
     private Show(
@@ -124,9 +125,8 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             String story,
             ShowGenre genre,
             ShowState state,
-            String openRun,
-            List<ShowTime> showTimes,
-            List<String> introductionImages) {
+            String openRun
+    ) {
         this.id = id;
         this.facility = facility;
         this.name = name;
@@ -143,8 +143,6 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         this.genre = genre;
         this.state = state;
         this.openRun = openRun;
-        this.showTimes = showTimes;
-        this.introductionImages = introductionImages;
     }
 
     @Override
