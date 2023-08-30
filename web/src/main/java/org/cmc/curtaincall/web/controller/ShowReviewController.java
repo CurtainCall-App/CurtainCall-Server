@@ -29,7 +29,7 @@ public class ShowReviewController {
 
     @GetMapping("/shows/{showId}/reviews")
     public Slice<ShowReviewResponse> getList(
-            @SortDefault(sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable,
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable String showId) {
         return showReviewService.getList(pageable, showId);
     }
