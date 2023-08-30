@@ -15,6 +15,8 @@ import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.review.ShowReviewService;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -61,6 +63,9 @@ class MemberControllerDocsTest {
 
     @MockBean
     ImageService imageService;
+
+    @MockBean
+    ShowReviewService showReviewService;
 
     @Test
     @WithMockUser
@@ -313,6 +318,52 @@ class MemberControllerDocsTest {
                                 fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getMyShowReviewList_Docs() throws Exception {
+        // given
+        List<ShowReviewMyResponse> reviewResponseList = List.of(
+                ShowReviewMyResponse.builder()
+                        .id(5L)
+                        .showId("PF223355")
+                        .showName("잘자요, 엄마 [청주]")
+                        .grade(4)
+                        .content("좋아요")
+                        .createdAt(LocalDateTime.of(2023, 8, 31, 3, 28))
+                        .likeCount(100)
+                        .build()
+        );
+        given(showReviewService.getMyList(any(), any()))
+                .willReturn(new SliceImpl<>(reviewResponseList));
+
+        // expected
+        mockMvc.perform(get("/member/reviews")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("member-get-my-show-review-list",
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("페이지 사이즈").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 리뷰 ID"),
+                                fieldWithPath("showId").description("공연 ID"),
+                                fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("grade").description("평점"),
+                                fieldWithPath("content").description("리뷰 내용"),
+                                fieldWithPath("createdAt").description("생성일시"),
+                                fieldWithPath("likeCount").description("좋아요 개수")
                         )
                 ));
     }

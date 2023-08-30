@@ -17,6 +17,8 @@ import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.review.ShowReviewService;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -35,6 +37,8 @@ public class MemberController {
     private final AccountService accountService;
 
     private final ImageService imageService;
+
+    private final ShowReviewService showReviewService;
 
     @GetMapping("/members/duplicate/nickname")
     public BooleanResult getNicknameDuplicate(@RequestParam @NotBlank @Size(max = 15) String nickname) {
@@ -80,6 +84,11 @@ public class MemberController {
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
         return memberService.getParticipationList(pageable, memberId, category);
+    }
+
+    @GetMapping("/member/reviews")
+    public Slice<ShowReviewMyResponse> getMyShowReviewList(Pageable pageable, @LoginMemberId Long memberId) {
+        return showReviewService.getMyList(pageable, memberId);
     }
 
     @DeleteMapping("/member")
