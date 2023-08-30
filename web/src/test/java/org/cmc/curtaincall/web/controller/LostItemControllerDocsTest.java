@@ -97,7 +97,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("facilityId").description("습득장소(공연장) ID"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수")
                                         .attributes(key("constraint").value("최대 30")),
-                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundDate").description("습득일자")
+                                        .attributes(constraint("과거 혹은 오늘 날짜")),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
                                 fieldWithPath("particulars").description("특이사항")
                                         .attributes(constraint("최대: 100")),
@@ -274,7 +275,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수")
                                         .attributes(constraint("max=30")),
-                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundDate").description("습득일자")
+                                        .attributes(constraint("과거 혹은 오늘 날짜")),
                                 fieldWithPath("foundTime").description("습득시간")
                                         .optional(),
                                 fieldWithPath("particulars").description("특이사항")
