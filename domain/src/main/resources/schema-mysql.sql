@@ -202,6 +202,9 @@ create table show_review
     primary key (show_review_id)
 ) engine = InnoDB;
 
+create index IX_show_review__created_by_created_at
+    on show_review (created_by, created_at desc);
+
 create index IX_show_review__show_created_by_created_at
     on show_review (show_id, created_by, created_at desc);
 
