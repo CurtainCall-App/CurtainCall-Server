@@ -58,7 +58,7 @@ public class ShowUpdateJobConfig {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
                 .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
-                .reader(showPagingItemReader(null))
+                .reader(showPagingItemReader(null, null))
                 .processor(showItemProcessor())
                 .writer(showItemWriter())
                 .build();
@@ -66,11 +66,17 @@ public class ShowUpdateJobConfig {
 
     @Bean
     @StepScope
-    public ShowPagingItemReader showPagingItemReader(@Value("#{jobParameters[date]}") String date) {
+    public ShowPagingItemReader showPagingItemReader(
+            @Value("#{jobParameters[startDate]}") String startDate,
+            @Value("#{jobParameters[endDate]}") String endDate
+    ) {
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         ShowPagingItemReader itemReader = new ShowPagingItemReader(
                 kopisService,
-                LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")));
+                LocalDate.parse(startDate, formatter),
+                LocalDate.parse(endDate, formatter)
+        );
         itemReader.setPageSize(CHUNK_SIZE);
         return itemReader;
     }

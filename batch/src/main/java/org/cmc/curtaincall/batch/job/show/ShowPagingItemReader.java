@@ -15,12 +15,12 @@ public class ShowPagingItemReader extends AbstractPagingItemReader<ShowResponse>
 
     private final KopisService kopisService;
 
-    private final LocalDate date;
+    private final LocalDate startDate;
+
+    private final LocalDate endDate;
 
     @Override
     protected void doReadPage() {
-        LocalDate startDate = date.minusDays(10L);
-        LocalDate endDate = date.plusMonths(1L);
         ShowListRequest requestParam = ShowListRequest.builder()
                 .page(getPage() + 1)
                 .size(getPageSize())

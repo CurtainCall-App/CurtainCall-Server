@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.error;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,7 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             MaxUploadSizeExceededException.class,
             AccessDeniedException.class,
+            OptimisticLockingFailureException.class,
             Exception.class
     })
     public final ResponseEntity<Object> handleUnhandledException(Exception ex, WebRequest request) {
@@ -25,6 +27,8 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleMaxUploadSizeExceededException(subEx, headers, HttpStatus.FORBIDDEN, request);
         } else if (ex instanceof AccessDeniedException subEx) {
             return handleAccessDeniedException(subEx, headers, HttpStatus.FORBIDDEN, request);
+        } else if (ex instanceof OptimisticLockingFailureException subEx) {
+            return handleOptimisticLockingFailureException(subEx, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
         } else {
             return handleRootException(ex, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
         }
@@ -44,6 +48,14 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             AccessDeniedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemDetail body = createProblemDetail(
                 ex, status, "접근이 허용되지 않습니다.", null, null, request);
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    protected ResponseEntity<Object> handleOptimisticLockingFailureException(
+            OptimisticLockingFailureException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ProblemDetail body = createProblemDetail(
+                ex, status, "업데이트에 실패했습니다. 다시 시도해주세요",
+                null, null, request);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 

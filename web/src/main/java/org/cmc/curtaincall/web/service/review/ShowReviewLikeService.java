@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.review.ShowReview;
@@ -27,9 +28,10 @@ public class ShowReviewLikeService {
 
     private final MemberRepository memberRepository;
 
+    @OptimisticLock
     @Transactional
     public void like(Long memberId, Long reviewId) {
-        ShowReview showReview = getShowReviewById(reviewId);
+        ShowReview showReview = getShowReviewWithLockById(reviewId);
         Member member = memberRepository.getReferenceById(memberId);
         if (showReviewLikeRepository.existsByMemberAndShowReview(member, showReview)) {
             return;
@@ -38,6 +40,7 @@ public class ShowReviewLikeService {
         showReview.plusLikeCount();
     }
 
+    @OptimisticLock
     @Transactional
     public void cancelLike(Long memberId, Long reviewId) {
         ShowReview showReview = getShowReviewById(reviewId);
@@ -62,6 +65,12 @@ public class ShowReviewLikeService {
 
     private ShowReview getShowReviewById(Long id) {
         return showReviewRepository.findById(id)
+                .filter(ShowReview::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+    }
+
+    private ShowReview getShowReviewWithLockById(Long id) {
+        return showReviewRepository.findWithLockById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
     }

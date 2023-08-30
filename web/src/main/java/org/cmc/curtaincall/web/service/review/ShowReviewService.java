@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewEditor;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
@@ -28,8 +29,9 @@ public class ShowReviewService {
     private final ShowReviewRepository showReviewRepository;
 
     @Transactional
+    @OptimisticLock
     public IdResult<Long> create(String showId, ShowReviewCreate showReviewCreate) {
-        Show show = getShowById(showId);
+        Show show = getShowWithLockById(showId);
         ShowReview showReview = showReviewRepository.save(ShowReview.builder()
                 .show(show)
                 .grade(showReviewCreate.getGrade())
@@ -46,16 +48,18 @@ public class ShowReviewService {
     }
 
     @Transactional
+    @OptimisticLock
     public void delete(Long id) {
         ShowReview showReview = getShowReviewById(id);
-        Show show = showReview.getShow();
+        Show show = getShowWithLockById(showReview.getShow().getId());
         show.cancelReview(showReview);
         showReview.delete();
     }
 
     @Transactional
+    @OptimisticLock
     public void edit(ShowReviewEdit showReviewEdit, Long id) {
-        ShowReview showReview = getShowReviewById(id);
+        ShowReview showReview = getShowReviewWithLockById(id);
         int prevReviewGrade = showReview.getGrade();
 
         ShowReviewEditor editor = showReview.toEditor()
@@ -74,16 +78,22 @@ public class ShowReviewService {
         return Objects.equals(showReview.getCreatedBy().getId(), memberId);
     }
 
-    private Show getShowById(String id) {
-        return showRepository.findById(id)
-                .filter(Show::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
-    }
-
     private ShowReview getShowReviewById(Long id) {
         return showReviewRepository.findById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+    }
+
+    private ShowReview getShowReviewWithLockById(Long id) {
+        return showReviewRepository.findWithLockById(id)
+                .filter(ShowReview::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+    }
+
+    private Show getShowWithLockById(String id) {
+        return showRepository.findWithLockById(id)
+                .filter(Show::getUseYn)
+                .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
     }
 
 }

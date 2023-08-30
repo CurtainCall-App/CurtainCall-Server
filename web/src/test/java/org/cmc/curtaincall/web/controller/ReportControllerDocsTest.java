@@ -68,9 +68,9 @@ class ReportControllerDocsTest {
                         requestFields(
                                 fieldWithPath("idToReport").description("신고하려는 글 ID"),
                                 fieldWithPath("type").description("신고하려는 글 유형")
-                                        .type(ReportType.class),
+                                        .type(ReportType.class.getSimpleName()),
                                 fieldWithPath("reason").description("신고 이유")
-                                        .type(ReportReason.class),
+                                        .type(ReportReason.class.getSimpleName()),
                                 fieldWithPath("content").description("내용")
                                         .type(constraint("max=400"))
                         )

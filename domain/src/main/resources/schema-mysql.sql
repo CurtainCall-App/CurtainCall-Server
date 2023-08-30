@@ -1,11 +1,3 @@
-alter table show_time
-drop
-foreign key FK_show_time;
-
-alter table shows_introduction_images
-drop
-foreign key FK_shows_introduction_images;
-
 drop table if exists account;
 drop table if exists facility;
 drop table if exists favorite_show;
@@ -153,21 +145,21 @@ alter table member
 
 create table party
 (
-    closed           bit           not null,
-    cur_member_num   integer       not null,
-    max_member_num   integer       not null,
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    created_by       bigint        not null,
-    last_modified_at datetime(6) not null,
-    party_id         bigint        not null auto_increment,
-    show_at          datetime(6),
+    party_id         bigint                              not null auto_increment,
+    title            varchar(255)                        not null,
+    content          varchar(2000)                       not null,
+    cur_member_num   integer                             not null,
+    max_member_num   integer                             not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
+    closed           bit                                 not null,
     show_id          varchar(25),
-    content          varchar(2000) not null,
-    title            varchar(255)  not null,
+    show_at          datetime(6),
+    use_yn           bit                                 not null,
+    created_at       datetime(6)                         not null,
+    created_by       bigint                              not null,
+    last_modified_at datetime(6)                         not null,
     primary key (party_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_party__category_created_at
     on party (category, created_at desc);
@@ -197,17 +189,18 @@ create index IX_party_member__member_party
 
 create table show_review
 (
-    grade            integer      not null,
-    like_count       integer      not null,
-    use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    created_by       bigint       not null,
-    last_modified_at datetime(6) not null,
     show_review_id   bigint       not null auto_increment,
     show_id          varchar(25)  not null,
+    grade            integer      not null,
     content          varchar(255) not null,
+    like_count       integer      not null,
+    use_yn           bit          not null,
+    created_at       datetime(6)  not null,
+    created_by       bigint       not null,
+    last_modified_at datetime(6)  not null,
+    version          bigint       not null,
     primary key (show_review_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_show_review__show_created_by_created_at
     on show_review (show_id, created_by, created_at desc);
@@ -230,30 +223,31 @@ alter table show_review_like
 
 create table shows
 (
-    end_date         date          not null,
-    review_count     integer       not null,
-    review_grade_sum bigint        not null,
-    review_grade_avg double        not null,
-    start_date       date          not null,
-    facility_id      varchar(25)   not null,
-    genre            enum ('MUSICAL','PLAY') not null,
-    openrun          varchar(25)   not null,
-    show_id          varchar(25)   not null,
+    show_id          varchar(25)                                 not null,
+    version          bigint                                      not null,
+    facility_id      varchar(25)                                 not null,
+    start_date       date                                        not null,
+    end_date         date                                        not null,
+    genre            enum ('MUSICAL','PLAY')                     not null,
+    openrun          varchar(25)                                 not null,
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
-    story            varchar(4000) not null,
-    age              varchar(255)  not null,
-    cast             varchar(255)  not null,
-    crew             varchar(255)  not null,
-    enterprise       varchar(255)  not null,
-    name             varchar(255)  not null,
-    poster           varchar(255)  not null,
-    runtime          varchar(255)  not null,
-    ticket_price     varchar(255)  not null,
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
+    story            varchar(4000)                               not null,
+    age              varchar(255)                                not null,
+    cast             varchar(255)                                not null,
+    crew             varchar(255)                                not null,
+    enterprise       varchar(255)                                not null,
+    name             varchar(255)                                not null,
+    poster           varchar(255)                                not null,
+    runtime          varchar(255)                                not null,
+    ticket_price     varchar(255)                                not null,
+    review_count     integer                                     not null,
+    review_grade_sum bigint                                      not null,
+    review_grade_avg double                                      not null,
+    use_yn           bit                                         not null,
+    created_at       datetime(6)                                 not null,
+    last_modified_at datetime(6)                                 not null,
     primary key (show_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_show__facility
     on shows (facility_id);
@@ -287,10 +281,8 @@ create table show_time
     show_id     varchar(25) not null
 ) engine=InnoDB;
 
-alter table show_time
-    add constraint FK_show_time
-        foreign key (show_id)
-            references shows (show_id);
+create index IX_show_time__show
+    on show_time (show_id);
 
 
 create table shows_introduction_images
@@ -299,10 +291,8 @@ create table shows_introduction_images
     introduction_images varchar(255)
 ) engine=InnoDB;
 
-alter table shows_introduction_images
-    add constraint FK_shows_introduction_images
-        foreign key (show_id)
-            references shows (show_id);
+create index IX_shows_introduction_images__show
+    on shows_introduction_images (show_id);
 
 
 create table notice

@@ -269,7 +269,7 @@ class PartyControllerDocsTest {
                                 fieldWithPath("content").description("내용")
                                         .attributes(constraint("max = 400")),
                                 fieldWithPath("maxMemberNum").description("최대 인원")
-                                        .attributes(constraint("positive, max = 10")),
+                                        .attributes(constraint("positive, max = 100")),
                                 fieldWithPath("category").description("분류")
                                         .type(PartyCategory.class.getSimpleName())
                         ),
