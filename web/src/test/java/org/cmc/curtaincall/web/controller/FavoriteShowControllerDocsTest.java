@@ -1,6 +1,9 @@
 package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.show.ShowDay;
+import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
@@ -18,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
@@ -132,10 +137,22 @@ class FavoriteShowControllerDocsTest {
                 FavoriteShowResponse.builder()
                         .id("PF220846")
                         .name("잘자요, 엄마 [청주]")
-                        .story("[시놉시스] 외딴곳, 시골에서 함께 살아가고 있는 모녀. 여느 때처럼 평범한 일상을 보내고 있던 토요일 저녁 모녀에게 위기가 닥친다. 느닷없이 던져진 제씨의 폭탄선언, 엄마를 위한다는 제씨의 행동은 엄마인 델마에겐 도저히 받아들일 수 없는데….")
+                        .startDate(LocalDate.of(2023, 4, 28))
+                        .endDate(LocalDate.of(2023, 5, 12))
+                        .facilityName("예술나눔 터")
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
+                        .genre(ShowGenre.PLAY)
+                        .showTimes(List.of(
+                                new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                                new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
+                        ))
                         .reviewCount(10)
-                        .reviewGradeSum(45L)
+                        .reviewGradeSum(48L)
+                        .runtime("1시간 40분")
                         .build()
         );
         given(favoriteShowService.getFavoriteShowList(any(), any())).willReturn(
@@ -156,12 +173,20 @@ class FavoriteShowControllerDocsTest {
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
-                                fieldWithPath("id").description("공연 ID"),
-                                fieldWithPath("name").description("공연 이름"),
-                                fieldWithPath("story").description("공연 줄거리"),
-                                fieldWithPath("poster").description("공연 포스터"),
-                                fieldWithPath("reviewCount").description("공연 리뷰 개수"),
-                                fieldWithPath("reviewGradeSum").description("공연 평점 합")
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("name").description("공연명"),
+                                fieldWithPath("startDate").description("공연 시작일"),
+                                fieldWithPath("endDate").description("공연 종료일"),
+                                fieldWithPath("facilityName").description("공연 시설명"),
+                                fieldWithPath("poster").description("공연 포스터 경로"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
     }
