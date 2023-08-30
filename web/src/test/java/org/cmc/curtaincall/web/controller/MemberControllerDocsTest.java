@@ -108,7 +108,7 @@ class MemberControllerDocsTest {
                 .andDo(document("member-signup",
                         requestFields(
                                 fieldWithPath("nickname").description("회원 닉네임")
-                                        .attributes(RestDocsAttribute.constraint("max=15"))
+                                        .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
                         ),
                         responseFields(
                                 fieldWithPath("id").description("생성된 회원 ID (memberId)")
@@ -181,7 +181,7 @@ class MemberControllerDocsTest {
                 .andDo(document("member-edit-member",
                         requestFields(
                                 fieldWithPath("nickname").description("닉네임")
-                                        .attributes(RestDocsAttribute.constraint("max=15")),
+                                        .attributes(RestDocsAttribute.constraint("min = 2, max = 15")),
                                 fieldWithPath("imageId").description("이미지 ID").optional()
                         )
                 ));
