@@ -1,8 +1,10 @@
 package org.cmc.curtaincall.batch.job.show;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.cmc.curtaincall.domain.show.Show;
@@ -27,11 +29,11 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-public class ShowUpdateJobConfig {
+public class ShowCreateJobConfig {
 
-    private static final String JOB_NAME = "ShowUpdateJob";
+    private static final String JOB_NAME = "ShowCreateJob";
 
-    private static final String STEP_NAME = "ShowUpdateStep";
+    private static final String STEP_NAME = "ShowCreateStep";
 
     private static final int CHUNK_SIZE = 100;
 
@@ -41,41 +43,44 @@ public class ShowUpdateJobConfig {
 
     private final EntityManagerFactory emf;
 
+    private final EntityManager em;
+
     private final PlatformTransactionManager txManager;
 
     @Bean
-    public Job showUpdateJob() {
+    public Job showCreateJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
         return jobBuilder
-                .start(showUpdateStep())
+                .start(showCreateStep())
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step showUpdateStep() {
+    public Step showCreateStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
-                .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
-                .reader(showPagingItemReader(null, null))
-                .processor(showItemProcessor())
+                .<WithPresent<ShowResponse>, Show>chunk(CHUNK_SIZE, txManager)
+                .reader(showKopisPagingItemReader(null, null))
+                .processor(showKopisItemProcessor())
                 .writer(showItemWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public ShowPagingItemReader showPagingItemReader(
+    public ShowKopisPagingItemReader showKopisPagingItemReader(
             @Value("#{jobParameters[startDate]}") String startDate,
             @Value("#{jobParameters[endDate]}") String endDate
     ) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        ShowPagingItemReader itemReader = new ShowPagingItemReader(
+        ShowKopisPagingItemReader itemReader = new ShowKopisPagingItemReader(
                 kopisService,
                 LocalDate.parse(startDate, formatter),
-                LocalDate.parse(endDate, formatter)
+                LocalDate.parse(endDate, formatter),
+                em
         );
         itemReader.setPageSize(CHUNK_SIZE);
         return itemReader;
@@ -83,8 +88,8 @@ public class ShowUpdateJobConfig {
 
     @Bean
     @StepScope
-    public ShowItemProcessor showItemProcessor() {
-        return new ShowItemProcessor(kopisService);
+    public ShowKopisItemProcessor showKopisItemProcessor() {
+        return new ShowKopisItemProcessor(kopisService);
     }
 
     @Bean
@@ -92,6 +97,7 @@ public class ShowUpdateJobConfig {
     public JpaItemWriter<Show> showItemWriter() {
         return new JpaItemWriterBuilder<Show>()
                 .entityManagerFactory(emf)
+                .usePersist(true)
                 .build();
     }
 }
