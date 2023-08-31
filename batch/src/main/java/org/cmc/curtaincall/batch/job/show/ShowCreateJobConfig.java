@@ -27,11 +27,11 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-public class ShowUpdateJobConfig {
+public class ShowCreateJobConfig {
 
-    private static final String JOB_NAME = "ShowUpdateJob";
+    private static final String JOB_NAME = "ShowCreateJob";
 
-    private static final String STEP_NAME = "ShowUpdateStep";
+    private static final String STEP_NAME = "ShowCreateStep";
 
     private static final int CHUNK_SIZE = 100;
 
@@ -44,21 +44,21 @@ public class ShowUpdateJobConfig {
     private final PlatformTransactionManager txManager;
 
     @Bean
-    public Job showUpdateJob() {
+    public Job showCreateJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
         return jobBuilder
-                .start(showUpdateStep())
+                .start(showCreateStep())
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step showUpdateStep() {
+    public Step showCreateStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
                 .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
-                .reader(showPagingItemReader(null, null))
+                .reader(showKopisPagingItemReader(null, null))
                 .processor(showItemProcessor())
                 .writer(showItemWriter())
                 .build();
@@ -66,13 +66,13 @@ public class ShowUpdateJobConfig {
 
     @Bean
     @StepScope
-    public ShowPagingItemReader showPagingItemReader(
+    public ShowKopisPagingItemReader showKopisPagingItemReader(
             @Value("#{jobParameters[startDate]}") String startDate,
             @Value("#{jobParameters[endDate]}") String endDate
     ) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        ShowPagingItemReader itemReader = new ShowPagingItemReader(
+        ShowKopisPagingItemReader itemReader = new ShowKopisPagingItemReader(
                 kopisService,
                 LocalDate.parse(startDate, formatter),
                 LocalDate.parse(endDate, formatter)
@@ -83,8 +83,8 @@ public class ShowUpdateJobConfig {
 
     @Bean
     @StepScope
-    public ShowItemProcessor showItemProcessor() {
-        return new ShowItemProcessor(kopisService);
+    public ShowKopisItemProcessor showItemProcessor() {
+        return new ShowKopisItemProcessor(kopisService);
     }
 
     @Bean

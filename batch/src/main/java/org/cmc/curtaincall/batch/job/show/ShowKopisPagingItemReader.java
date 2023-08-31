@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @RequiredArgsConstructor
-public class ShowPagingItemReader extends AbstractPagingItemReader<ShowResponse> {
+public class ShowKopisPagingItemReader extends AbstractPagingItemReader<ShowResponse> {
 
     private final KopisService kopisService;
 

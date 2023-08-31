@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ShowItemProcessor implements ItemProcessor<ShowResponse, Show> {
+public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show> {
 
     private final KopisService kopisService;
 
