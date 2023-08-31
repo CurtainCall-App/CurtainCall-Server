@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show> {
+public class ShowKopisItemProcessor implements ItemProcessor<ShowPresentResponse, Show> {
 
     private final KopisService kopisService;
 
@@ -36,13 +36,17 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
             .collect(Collectors.toMap(ShowState::getTitle, Function.identity()));
 
     @Override
-    public Show process(ShowResponse item) throws Exception {
-        if (!allowedGenreNames.contains(item.genreName())) {
+    public Show process(ShowPresentResponse item) throws Exception {
+        if (item.present()) {
+            return null;
+        }
+        ShowResponse showResponse = item.showResponse();
+        if (!allowedGenreNames.contains(showResponse.genreName())) {
             return null;
         }
 
-        ShowGenre showGenre = genreNameToValue.get(item.genreName());
-        ShowDetailResponse showDetail = kopisService.getShowDetail(item.id());
+        ShowGenre showGenre = genreNameToValue.get(showResponse.genreName());
+        ShowDetailResponse showDetail = kopisService.getShowDetail(showResponse.id());
         List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
 
         Show show = Show.builder()

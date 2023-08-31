@@ -1,10 +1,10 @@
 package org.cmc.curtaincall.batch.job.show;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
-import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.cmc.curtaincall.domain.show.Show;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -41,6 +41,8 @@ public class ShowCreateJobConfig {
 
     private final EntityManagerFactory emf;
 
+    private final EntityManager em;
+
     private final PlatformTransactionManager txManager;
 
     @Bean
@@ -57,9 +59,9 @@ public class ShowCreateJobConfig {
     public Step showCreateStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
-                .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
+                .<ShowPresentResponse, Show>chunk(CHUNK_SIZE, txManager)
                 .reader(showKopisPagingItemReader(null, null))
-                .processor(showItemProcessor())
+                .processor(showKopisItemProcessor())
                 .writer(showItemWriter())
                 .build();
     }
@@ -75,7 +77,8 @@ public class ShowCreateJobConfig {
         ShowKopisPagingItemReader itemReader = new ShowKopisPagingItemReader(
                 kopisService,
                 LocalDate.parse(startDate, formatter),
-                LocalDate.parse(endDate, formatter)
+                LocalDate.parse(endDate, formatter),
+                em
         );
         itemReader.setPageSize(CHUNK_SIZE);
         return itemReader;
@@ -83,7 +86,7 @@ public class ShowCreateJobConfig {
 
     @Bean
     @StepScope
-    public ShowKopisItemProcessor showItemProcessor() {
+    public ShowKopisItemProcessor showKopisItemProcessor() {
         return new ShowKopisItemProcessor(kopisService);
     }
 
