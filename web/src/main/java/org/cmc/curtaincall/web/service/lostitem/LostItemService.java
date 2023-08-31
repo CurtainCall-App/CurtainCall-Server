@@ -57,16 +57,7 @@ public class LostItemService {
 
     public Slice<LostItemResponse> search(Pageable pageable, LostItemQueryParam queryParam) {
         return lostItemQueryRepository.query(pageable, queryParam)
-                .map(lostItem -> LostItemResponse.builder()
-                        .id(lostItem.getId())
-                        .facilityId(lostItem.getFacility().getId())
-                        .facilityName(lostItem.getFacility().getName())
-                        .title(lostItem.getTitle())
-                        .foundDate(lostItem.getFoundDate())
-                        .foundTime(lostItem.getFoundTime())
-                        .imageUrl(lostItem.getImage().getUrl())
-                        .build()
-                );
+                .map(LostItemResponse::of);
     }
 
     public LostItemDetailResponse getDetail(Long id) {
@@ -84,6 +75,7 @@ public class LostItemService {
                 .particulars(lostItem.getParticulars())
                 .imageId(lostItem.getImage().getId())
                 .imageUrl(lostItem.getImage().getUrl())
+                .createdAt(lostItem.getCreatedAt())
                 .build();
     }
 

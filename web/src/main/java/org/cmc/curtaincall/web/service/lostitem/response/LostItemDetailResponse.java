@@ -4,6 +4,7 @@ import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -35,4 +36,6 @@ public class LostItemDetailResponse {
     private Long imageId;
 
     private String imageUrl;
+
+    private LocalDateTime createdAt;
 }
