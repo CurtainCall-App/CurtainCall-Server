@@ -2,6 +2,7 @@ package org.cmc.curtaincall.batch.job.show;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.request.ShowListRequest;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
@@ -12,10 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ShowKopisPagingItemReader extends AbstractPagingItemReader<ShowPresentResponse> {
+public class ShowKopisPagingItemReader extends AbstractPagingItemReader<WithPresent<ShowResponse>> {
 
     private final KopisService kopisService;
 
@@ -57,7 +57,7 @@ public class ShowKopisPagingItemReader extends AbstractPagingItemReader<ShowPres
         }
 
         results.addAll(showListResponse.stream()
-                .map(show -> new ShowPresentResponse(show, existenceIds.contains(show.id())))
+                .map(show -> new WithPresent<>(show, existenceIds.contains(show.id())))
                 .toList()
         );
     }

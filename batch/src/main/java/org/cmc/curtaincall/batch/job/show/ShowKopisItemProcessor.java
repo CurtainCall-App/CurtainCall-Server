@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.batch.job.show;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
@@ -17,7 +18,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ShowKopisItemProcessor implements ItemProcessor<ShowPresentResponse, Show> {
+public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowResponse>, Show> {
 
     private final KopisService kopisService;
 
@@ -36,11 +37,11 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowPresentResponse
             .collect(Collectors.toMap(ShowState::getTitle, Function.identity()));
 
     @Override
-    public Show process(ShowPresentResponse item) throws Exception {
+    public Show process(WithPresent<ShowResponse> item) throws Exception {
         if (item.present()) {
             return null;
         }
-        ShowResponse showResponse = item.showResponse();
+        ShowResponse showResponse = item.value();
         if (!allowedGenreNames.contains(showResponse.genreName())) {
             return null;
         }
