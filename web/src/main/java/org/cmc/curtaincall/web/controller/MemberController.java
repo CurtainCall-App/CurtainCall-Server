@@ -9,6 +9,8 @@ import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
+import org.cmc.curtaincall.web.service.lostitem.LostItemService;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
@@ -33,12 +35,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-
     private final AccountService accountService;
-
     private final ImageService imageService;
-
     private final ShowReviewService showReviewService;
+    private final LostItemService lostItemService;
 
     @GetMapping("/members/duplicate/nickname")
     public BooleanResult getNicknameDuplicate(@RequestParam @NotBlank @Size(max = 15) String nickname) {
@@ -87,8 +87,19 @@ public class MemberController {
     }
 
     @GetMapping("/member/reviews")
-    public Slice<ShowReviewMyResponse> getMyShowReviewList(Pageable pageable, @LoginMemberId Long memberId) {
+    public Slice<ShowReviewMyResponse> getMyShowReviewList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @LoginMemberId Long memberId
+    ) {
         return showReviewService.getMyList(pageable, memberId);
+    }
+
+    @GetMapping("/member/lostItems")
+    public Slice<LostItemMyResponse> getMyLostItemList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @LoginMemberId Long memberId
+    ) {
+        return lostItemService.getMyList(pageable, memberId);
     }
 
     @DeleteMapping("/member")

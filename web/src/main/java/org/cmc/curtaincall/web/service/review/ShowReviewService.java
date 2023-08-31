@@ -17,8 +17,6 @@ import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,8 +52,7 @@ public class ShowReviewService {
                 .map(ShowReviewResponse::of);
     }
 
-    public Slice<ShowReviewMyResponse> getMyList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable, Long memberId) {
+    public Slice<ShowReviewMyResponse> getMyList(Pageable pageable, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
         return showReviewRepository.findSliceByCreatedByAndUseYnIsTrue(pageable, member)
                 .map(ShowReviewMyResponse::of);

@@ -8,6 +8,8 @@ import org.cmc.curtaincall.domain.lostitem.LostItemEditor;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemQueryRepository;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
+import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
@@ -15,6 +17,7 @@ import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -29,12 +32,10 @@ import java.util.Objects;
 public class LostItemService {
 
     private final LostItemRepository lostItemRepository;
-
     private final LostItemQueryRepository lostItemQueryRepository;
-
     private final FacilityRepository facilityRepository;
-
     private final ImageRepository imageRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public IdResult<Long> create(LostItemCreate lostItemCreate) {
@@ -84,6 +85,12 @@ public class LostItemService {
                 .imageId(lostItem.getImage().getId())
                 .imageUrl(lostItem.getImage().getUrl())
                 .build();
+    }
+
+    public Slice<LostItemMyResponse> getMyList(Pageable pageable, Long memberId) {
+        Member member = memberRepository.getReferenceById(memberId);
+        return lostItemRepository.findSliceByCreatedByAndUseYnIsTrue(pageable, member)
+                .map(LostItemMyResponse::of);
     }
 
     @Transactional

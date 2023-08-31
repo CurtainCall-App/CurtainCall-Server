@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
@@ -9,6 +10,8 @@ import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
+import org.cmc.curtaincall.web.service.lostitem.LostItemService;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
@@ -29,7 +32,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -66,6 +71,9 @@ class MemberControllerDocsTest {
 
     @MockBean
     ShowReviewService showReviewService;
+
+    @MockBean
+    LostItemService lostItemService;
 
     @Test
     @WithMockUser
@@ -364,6 +372,57 @@ class MemberControllerDocsTest {
                                 fieldWithPath("content").description("리뷰 내용"),
                                 fieldWithPath("createdAt").description("생성일시"),
                                 fieldWithPath("likeCount").description("좋아요 개수")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getMyLostItemList_Docs() throws Exception {
+        // given
+        var responseList = List.of(
+                LostItemMyResponse.builder()
+                        .id(10L)
+                        .facilityId("FC001298")
+                        .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
+                        .type(LostItemType.ELECTRONIC_EQUIPMENT)
+                        .title("아이패드 핑크")
+                        .foundDate(LocalDate.of(2023, 3, 4))
+                        .foundTime(LocalTime.of(11, 23))
+                        .imageUrl("image-url")
+                        .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
+                        .build()
+        );
+        given(lostItemService.getMyList(any(), any()))
+                .willReturn(new SliceImpl<>(responseList));
+
+        // expected
+        mockMvc.perform(get("/member/lostItems")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("member-get-my-lost-item-list",
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("페이지 사이즈").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("facilityId").description("공연시설 ID"),
+                                fieldWithPath("facilityName").description("공연시설 이름"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
+                                fieldWithPath("type").description("분실물 타입")
+                                        .type(LostItemType.class.getSimpleName()),
+                                fieldWithPath("imageUrl").description("이미지"),
+                                fieldWithPath("createdAt").description("생성일시")
                         )
                 ));
     }
