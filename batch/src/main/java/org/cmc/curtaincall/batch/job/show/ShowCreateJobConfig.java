@@ -97,6 +97,7 @@ public class ShowCreateJobConfig {
     public JpaItemWriter<Show> showItemWriter() {
         return new JpaItemWriterBuilder<Show>()
                 .entityManagerFactory(emf)
+                .usePersist(true)
                 .build();
     }
 }
