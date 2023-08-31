@@ -2,6 +2,8 @@ package org.cmc.curtaincall.web.service.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
+import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewEditor;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
@@ -11,6 +13,7 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,6 +30,8 @@ public class ShowReviewService {
     private final ShowRepository showRepository;
 
     private final ShowReviewRepository showReviewRepository;
+
+    private final MemberRepository memberRepository;
 
     @Transactional
     @OptimisticLock
@@ -45,6 +50,12 @@ public class ShowReviewService {
         Show show = showRepository.getReferenceById(showId);
         return showReviewRepository.findSliceByShowAndUseYnIsTrue(pageable, show)
                 .map(ShowReviewResponse::of);
+    }
+
+    public Slice<ShowReviewMyResponse> getMyList(Pageable pageable, Long memberId) {
+        Member member = memberRepository.getReferenceById(memberId);
+        return showReviewRepository.findSliceByCreatedByAndUseYnIsTrue(pageable, member)
+                .map(ShowReviewMyResponse::of);
     }
 
     @Transactional

@@ -93,19 +93,19 @@ create table images
 
 create table lost_item
 (
-    use_yn             bit                                                                                          not null,
-    created_at         datetime(6)                                                                                  not null,
-    created_by         bigint                                                                                       not null,
+    lost_item_id       bigint                                                                                       not null auto_increment,
+    title              varchar(255)                                                                                 not null,
     found_date         date                                                                                         not null,
     found_time         time(6),
     image_id           bigint                                                                                       not null,
-    last_modified_at   datetime(6)                                                                                  not null,
-    lost_item_id       bigint                                                                                       not null auto_increment,
     facility_id        varchar(25)                                                                                  not null,
     found_place_detail varchar(255)                                                                                 not null,
     particulars        varchar(255)                                                                                 not null,
-    title              varchar(255)                                                                                 not null,
     type               enum ('BAG','BOOK','CARD','CASH','CLOTHING','ELECTRONIC_EQUIPMENT','ETC','JEWELRY','WALLET') not null,
+    use_yn             bit                                                                                          not null,
+    created_at         datetime(6)                                                                                  not null,
+    created_by         bigint                                                                                       not null,
+    last_modified_at   datetime(6)                                                                                  not null,
     primary key (lost_item_id)
 ) engine = InnoDB;
 
@@ -126,6 +126,9 @@ create index IX_lost_item__facility_found_date_title
 
 create index IX_lost_item__facility_type_found_date_title
     on lost_item (facility_id, type, found_date, title);
+
+create index IX_lost_item__created_by_created_at
+    on lost_item (created_by, created_at desc);
 
 
 create table member
@@ -202,11 +205,17 @@ create table show_review
     primary key (show_review_id)
 ) engine = InnoDB;
 
+create index IX_show_review__created_by_created_at
+    on show_review (created_by, created_at desc);
+
 create index IX_show_review__show_created_by_created_at
     on show_review (show_id, created_by, created_at desc);
 
 create index IX_show_review__show_like_count_created_at
     on show_review (show_id, like_count desc, created_at desc);
+
+create index IX_show_review__show_created_at
+    on show_review (show_id, created_at desc);
 
 
 create table show_review_like

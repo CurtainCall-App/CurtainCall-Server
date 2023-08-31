@@ -17,12 +17,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "lost_item",
         indexes = {
-                @Index(name = "IX_lost_item__found_date_found_time", columnList = "found_date desc, found_time desc"),
-                @Index(name = "IX_lost_item__facility_found_date_found_time", columnList = "facility_id, found_date desc, found_time desc"),
-                @Index(name = "IX_lost_item__facility_type_found_date_found_time", columnList = "facility_id, type, found_date desc, found_time desc"),
+                @Index(name = "IX_lost_item__found_date_found_time",
+                        columnList = "found_date desc, found_time desc"),
+                @Index(name = "IX_lost_item__facility_found_date_found_time",
+                        columnList = "facility_id, found_date desc, found_time desc"),
+                @Index(name = "IX_lost_item__facility_type_found_date_found_time",
+                        columnList = "facility_id, type, found_date desc, found_time desc"),
                 @Index(name = "IX_lost_item__found_date_title", columnList = "found_date, title"),
                 @Index(name = "IX_lost_item__facility_found_date_title", columnList = "facility_id, found_date, title"),
-                @Index(name = "IX_lost_item__facility_type_found_date_title", columnList = "facility_id, type, found_date, title"),
+                @Index(name = "IX_lost_item__facility_type_found_date_title",
+                        columnList = "facility_id, type, found_date, title"),
+                @Index(name = "IX_lost_item__created_by_created_at", columnList = "created_by, created_at desc")
         }
 )
 @Getter

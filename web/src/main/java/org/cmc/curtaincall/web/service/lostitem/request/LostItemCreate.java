@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.service.lostitem.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
@@ -31,6 +32,7 @@ public class LostItemCreate {
     private String foundPlaceDetail;
 
     @NotNull
+    @PastOrPresent
     private LocalDate foundDate;
 
     private LocalTime foundTime;

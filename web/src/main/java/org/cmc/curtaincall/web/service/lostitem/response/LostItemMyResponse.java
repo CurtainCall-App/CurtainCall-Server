@@ -10,20 +10,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Builder
-public record LostItemResponse (
-    Long id,
-    String facilityId,
-    String facilityName,
-    String title,
-    LostItemType type,
-    LocalDate foundDate,
-    @Nullable
-    LocalTime foundTime,
-    String imageUrl,
-    LocalDateTime createdAt
+public record LostItemMyResponse(
+        Long id,
+        String facilityId,
+        String facilityName,
+        String title,
+        LostItemType type,
+        LocalDate foundDate,
+        @Nullable
+        LocalTime foundTime,
+        String imageUrl,
+        LocalDateTime createdAt
 ) {
-    public static LostItemResponse of(LostItem lostItem) {
-        return LostItemResponse.builder()
+
+    public static LostItemMyResponse of(LostItem lostItem) {
+        return LostItemMyResponse.builder()
                 .id(lostItem.getId())
                 .facilityId(lostItem.getFacility().getId())
                 .facilityName(lostItem.getFacility().getName())

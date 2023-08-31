@@ -1,6 +1,11 @@
 package org.cmc.curtaincall.web.service.show.response;
 
 import lombok.*;
+import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowTime;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -12,11 +17,21 @@ public class FavoriteShowResponse {
 
     private String name;
 
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private String facilityName;
+
     private String poster;
 
-    private String story;
+    private ShowGenre genre;
+
+    private List<ShowTime> showTimes;
 
     private Integer reviewCount;
 
     private Long reviewGradeSum;
+
+    private String runtime;
 }

@@ -17,6 +17,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,10 +75,15 @@ public class FavoriteShowService {
                 .map(show -> FavoriteShowResponse.builder()
                         .id(show.getId())
                         .name(show.getName())
+                        .startDate(show.getStartDate())
+                        .endDate(show.getEndDate())
+                        .facilityName(show.getFacility().getName())
                         .poster(show.getPoster())
-                        .story(show.getStory())
+                        .genre(show.getGenre())
+                        .showTimes(new ArrayList<>(show.getShowTimes()))
                         .reviewCount(show.getReviewCount())
                         .reviewGradeSum(show.getReviewGradeSum())
+                        .runtime(show.getRuntime())
                         .build()
                 ).toList();
         return new SliceImpl<>(shows, pageable, favoriteShows.hasNext());

@@ -24,6 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -97,7 +98,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("facilityId").description("습득장소(공연장) ID"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수")
                                         .attributes(key("constraint").value("최대 30")),
-                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundDate").description("습득일자")
+                                        .attributes(constraint("과거 혹은 오늘 날짜")),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
                                 fieldWithPath("particulars").description("특이사항")
                                         .attributes(constraint("최대: 100")),
@@ -117,10 +119,12 @@ class LostItemControllerDocsTest {
                 .id(10L)
                 .facilityId("FC001298")
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
+                .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .title("아이패드 핑크")
                 .foundDate(LocalDate.of(2023, 3, 4))
                 .foundTime(LocalTime.of(11, 23))
                 .imageUrl("image-url")
+                .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
                 .build();
         given(lostItemService.search(any(), any())).willReturn(new SliceImpl<>(List.of(lostItemResponse)));
 
@@ -157,7 +161,10 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
-                                fieldWithPath("imageUrl").description("이미지")
+                                fieldWithPath("type").description("분실물 타입")
+                                        .type(LostItemType.class.getSimpleName()),
+                                fieldWithPath("imageUrl").description("이미지"),
+                                fieldWithPath("createdAt").description("생성일시")
                         )
                 ));
     }
@@ -179,6 +186,7 @@ class LostItemControllerDocsTest {
                 .particulars("기스있음")
                 .imageId(12L)
                 .imageUrl("image-url")
+                .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
                 .build();
         given(lostItemService.getDetail(any())).willReturn(lostItemDetailResponse);
 
@@ -207,7 +215,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("foundTime").description("습득시간").optional(),
                                 fieldWithPath("particulars").description("특이사항"),
                                 fieldWithPath("imageId").description("이미지 ID"),
-                                fieldWithPath("imageUrl").description("이미지")
+                                fieldWithPath("imageUrl").description("이미지"),
+                                fieldWithPath("createdAt").description("생성일시")
                         )
                 ));
     }
@@ -274,7 +283,8 @@ class LostItemControllerDocsTest {
                                 fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장수")
                                         .attributes(constraint("max=30")),
-                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundDate").description("습득일자")
+                                        .attributes(constraint("과거 혹은 오늘 날짜")),
                                 fieldWithPath("foundTime").description("습득시간")
                                         .optional(),
                                 fieldWithPath("particulars").description("특이사항")

@@ -20,6 +20,6 @@ public interface FavoriteShowRepository extends JpaRepository<FavoriteShow, Long
 
     List<FavoriteShow> findAllByMemberAndShowIn(Member member, Collection<Show> shows);
 
-    @EntityGraph(attributePaths = "show")
+    @EntityGraph(attributePaths = "show, show.facility")
     Slice<FavoriteShow> findSliceWithShowByMember(Pageable pageable, Member member);
 }

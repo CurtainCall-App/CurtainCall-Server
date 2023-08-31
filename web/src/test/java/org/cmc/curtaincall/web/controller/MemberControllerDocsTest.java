@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
@@ -9,12 +10,16 @@ import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
+import org.cmc.curtaincall.web.service.lostitem.LostItemService;
+import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.review.ShowReviewService;
+import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -27,7 +32,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -61,6 +68,12 @@ class MemberControllerDocsTest {
 
     @MockBean
     ImageService imageService;
+
+    @MockBean
+    ShowReviewService showReviewService;
+
+    @MockBean
+    LostItemService lostItemService;
 
     @Test
     @WithMockUser
@@ -108,7 +121,7 @@ class MemberControllerDocsTest {
                 .andDo(document("member-signup",
                         requestFields(
                                 fieldWithPath("nickname").description("회원 닉네임")
-                                        .attributes(RestDocsAttribute.constraint("max=15"))
+                                        .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
                         ),
                         responseFields(
                                 fieldWithPath("id").description("생성된 회원 ID (memberId)")
@@ -181,7 +194,7 @@ class MemberControllerDocsTest {
                 .andDo(document("member-edit-member",
                         requestFields(
                                 fieldWithPath("nickname").description("닉네임")
-                                        .attributes(RestDocsAttribute.constraint("max=15")),
+                                        .attributes(RestDocsAttribute.constraint("min = 2, max = 15")),
                                 fieldWithPath("imageId").description("이미지 ID").optional()
                         )
                 ));
@@ -313,6 +326,103 @@ class MemberControllerDocsTest {
                                 fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getMyShowReviewList_Docs() throws Exception {
+        // given
+        List<ShowReviewMyResponse> reviewResponseList = List.of(
+                ShowReviewMyResponse.builder()
+                        .id(5L)
+                        .showId("PF223355")
+                        .showName("잘자요, 엄마 [청주]")
+                        .grade(4)
+                        .content("좋아요")
+                        .createdAt(LocalDateTime.of(2023, 8, 31, 3, 28))
+                        .likeCount(100)
+                        .build()
+        );
+        given(showReviewService.getMyList(any(), any()))
+                .willReturn(new SliceImpl<>(reviewResponseList));
+
+        // expected
+        mockMvc.perform(get("/member/reviews")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("member-get-my-show-review-list",
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("페이지 사이즈").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 리뷰 ID"),
+                                fieldWithPath("showId").description("공연 ID"),
+                                fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("grade").description("평점"),
+                                fieldWithPath("content").description("리뷰 내용"),
+                                fieldWithPath("createdAt").description("생성일시"),
+                                fieldWithPath("likeCount").description("좋아요 개수")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getMyLostItemList_Docs() throws Exception {
+        // given
+        var responseList = List.of(
+                LostItemMyResponse.builder()
+                        .id(10L)
+                        .facilityId("FC001298")
+                        .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
+                        .type(LostItemType.ELECTRONIC_EQUIPMENT)
+                        .title("아이패드 핑크")
+                        .foundDate(LocalDate.of(2023, 3, 4))
+                        .foundTime(LocalTime.of(11, 23))
+                        .imageUrl("image-url")
+                        .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
+                        .build()
+        );
+        given(lostItemService.getMyList(any(), any()))
+                .willReturn(new SliceImpl<>(responseList));
+
+        // expected
+        mockMvc.perform(get("/member/lostItems")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("member-get-my-lost-item-list",
+                        queryParameters(
+                                parameterWithName("page").description("페이지 번호"),
+                                parameterWithName("size").description("페이지 사이즈").optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("facilityId").description("공연시설 ID"),
+                                fieldWithPath("facilityName").description("공연시설 이름"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
+                                fieldWithPath("type").description("분실물 타입")
+                                        .type(LostItemType.class.getSimpleName()),
+                                fieldWithPath("imageUrl").description("이미지"),
+                                fieldWithPath("createdAt").description("생성일시")
                         )
                 ));
     }
