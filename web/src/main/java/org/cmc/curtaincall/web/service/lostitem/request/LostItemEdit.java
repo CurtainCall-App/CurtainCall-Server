@@ -33,7 +33,7 @@ public class LostItemEdit {
 
     private LocalTime foundTime;
 
-    @NotBlank
+    @NotNull
     @Size(max = 100)
     private String particulars;
 

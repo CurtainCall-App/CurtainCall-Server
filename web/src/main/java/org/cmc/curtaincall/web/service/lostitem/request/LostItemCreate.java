@@ -37,7 +37,7 @@ public class LostItemCreate {
 
     private LocalTime foundTime;
 
-    @NotBlank
+    @NotNull
     @Size(max = 100)
     private String particulars;
 
