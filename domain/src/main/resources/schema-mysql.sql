@@ -148,19 +148,20 @@ alter table member
 
 create table party
 (
-    party_id         bigint                              not null auto_increment,
-    title            varchar(255)                        not null,
-    content          varchar(2000)                       not null,
-    cur_member_num   integer                             not null,
-    max_member_num   integer                             not null,
+    party_id         bigint        not null auto_increment,
+    title            varchar(255)  not null,
+    content          varchar(2000) not null,
+    cur_member_num   integer       not null,
+    max_member_num   integer       not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
-    closed           bit                                 not null,
+    closed           bit           not null,
     show_id          varchar(25),
     show_at          datetime(6),
-    use_yn           bit                                 not null,
-    created_at       datetime(6)                         not null,
-    created_by       bigint                              not null,
-    last_modified_at datetime(6)                         not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    created_by       bigint        not null,
+    last_modified_at datetime(6) not null,
+    version          bigint        not null,
     primary key (party_id)
 ) engine = InnoDB;
 
@@ -233,7 +234,6 @@ alter table show_review_like
 create table shows
 (
     show_id          varchar(25)                                 not null,
-    version          bigint                                      not null,
     facility_id      varchar(25)                                 not null,
     start_date       date                                        not null,
     end_date         date                                        not null,
@@ -255,6 +255,7 @@ create table shows
     use_yn           bit                                         not null,
     created_at       datetime(6)                                 not null,
     last_modified_at datetime(6)                                 not null,
+    version          bigint                                      not null,
     primary key (show_id)
 ) engine = InnoDB;
 
