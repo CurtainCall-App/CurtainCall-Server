@@ -10,6 +10,7 @@ import org.cmc.curtaincall.domain.review.ShowReview;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,9 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     )
     private List<String> introductionImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShowDateTime> showDateTimes = new ArrayList<>();
+
     @Builder
     private Show(
             String id,
@@ -170,5 +174,9 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
 
     private void calculateReviewGradeAvg() {
         reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
+    }
+
+    public void addShowDateTime(LocalDateTime showAt) {
+        showDateTimes.add(new ShowDateTime(this, showAt));
     }
 }
