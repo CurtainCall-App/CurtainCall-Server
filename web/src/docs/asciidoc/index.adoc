@@ -24,6 +24,7 @@
 - xref:party.adoc[Party(파티)]
 - xref:notice.adoc[Notice(공지사항)]
 - xref:report.adoc[Report(신고)]
+- xref:chat.adoc[Chat(채팅)]
 
 == HTTP Method
 

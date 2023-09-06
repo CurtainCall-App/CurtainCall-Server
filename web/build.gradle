@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.95.Final:osx-aarch_64'
+    implementation "io.getstream:stream-chat-java:1.15.1"
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

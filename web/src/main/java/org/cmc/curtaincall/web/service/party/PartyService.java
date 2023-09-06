@@ -15,6 +15,7 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.AlreadyClosedPartyException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
@@ -47,6 +48,8 @@ public class PartyService {
 
     private final PartyMemberRepository partyMemberRepository;
 
+    private final GetStreamChatService getStreamChatService;
+
     public PartyDetailResponse getDetail(Long id) {
         Party party = getPartyById(id);
         return PartyDetailResponse.of(party);
@@ -77,6 +80,8 @@ public class PartyService {
                 .build()
         );
 
+        getStreamChatService.createPartyChannel(party);
+
         return new IdResult<>(party.getId());
     }
 
@@ -93,6 +98,7 @@ public class PartyService {
 
         Member member = getMemberById(memberId);
         party.participate(member);
+        getStreamChatService.addMember(GetStreamChatService.getPartyChannelId(party), member.getId());
     }
 
     public List<PartyParticipatedResponse> areParticipated(Long memberId, List<Long> partyIds) {
@@ -137,12 +143,7 @@ public class PartyService {
         Party party = getPartyById(partyId);
         party.getPartyMembers().clear();
         party.delete();
-    }
-
-    private Show getShowById(String id) {
-        return showRepository.findById(id)
-                .filter(Show::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
+        getStreamChatService.deletePartyChannel(party);
     }
 
     private Party getPartyById(Long id) {

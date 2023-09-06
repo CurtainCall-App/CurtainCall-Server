@@ -14,6 +14,7 @@ import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.web.exception.AlreadyNicknameExistsException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
@@ -45,6 +46,8 @@ public class MemberService {
 
     private final ImageRepository imageRepository;
 
+    private final GetStreamChatService getStreamChatService;
+
     public BooleanResult checkNicknameDuplicate(String nickname) {
         return new BooleanResult(memberRepository.existsByNickname(nickname));
     }
@@ -58,6 +61,7 @@ public class MemberService {
         Member member = memberRepository.save(Member.builder()
                 .nickname(nickname)
                 .build());
+        getStreamChatService.upsertUser(member);
         return new IdResult<>(member.getId());
     }
 
@@ -90,6 +94,7 @@ public class MemberService {
         }
 
         member.edit(editorBuilder.build());
+        getStreamChatService.upsertUser(member);
     }
 
     public Slice<PartyResponse> getRecruitmentList(

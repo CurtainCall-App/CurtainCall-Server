@@ -8,12 +8,9 @@ import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.cmc.curtaincall.domain.show.*;
 import org.springframework.batch.item.ItemProcessor;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -36,6 +33,16 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
     private final Map<String, ShowState> stateMapper = Arrays.stream(ShowState.values())
             .collect(Collectors.toMap(ShowState::getTitle, Function.identity()));
 
+    private final Map<ShowDay, DayOfWeek> showDayToDayOfWeek = Map.of(
+            ShowDay.MONDAY, DayOfWeek.MONDAY,
+            ShowDay.TUESDAY, DayOfWeek.TUESDAY,
+            ShowDay.WEDNESDAY, DayOfWeek.WEDNESDAY,
+            ShowDay.THURSDAY, DayOfWeek.THURSDAY,
+            ShowDay.FRIDAY, DayOfWeek.FRIDAY,
+            ShowDay.SATURDAY, DayOfWeek.SATURDAY,
+            ShowDay.SUNDAY, DayOfWeek.SUNDAY
+    );
+
     @Override
     public Show process(WithPresent<ShowResponse> item) throws Exception {
         if (item.present()) {
@@ -49,13 +56,16 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
         ShowGenre showGenre = genreNameToValue.get(showResponse.genreName());
         ShowDetailResponse showDetail = kopisService.getShowDetail(showResponse.id());
         List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
+        LocalDate startDate = LocalDate.parse(showDetail.startDate(), showDateFormatter);
+        LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
+        List<LocalDateTime> showDateTimes = getShowDateTimes(startDate, endDate, showTimes);
 
         Show show = Show.builder()
                 .id(showDetail.id())
                 .facility(new Facility(showDetail.facilityId()))
                 .name(showDetail.name())
-                .startDate(LocalDate.parse(showDetail.startDate(), showDateFormatter))
-                .endDate(LocalDate.parse(showDetail.endDate(), showDateFormatter))
+                .startDate(startDate)
+                .endDate(endDate)
                 .crew(showDetail.crew())
                 .cast(showDetail.cast())
                 .runtime(showDetail.runtime())
@@ -70,6 +80,26 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
                 .build();
         show.getShowTimes().addAll(showTimes);
         show.getIntroductionImages().addAll(showDetail.introductionImages());
+        showDateTimes.forEach(show::addShowDateTime);
         return show;
+    }
+
+    private List<LocalDateTime> getShowDateTimes(LocalDate startDate, LocalDate endDate, List<ShowTime> showTimes) {
+        Map<DayOfWeek, List<ShowTime>> dayOfWeekToShowTimes = showTimes.stream()
+                .filter(showTime -> showDayToDayOfWeek.containsKey(showTime.getDayOfWeek()))
+                .collect(Collectors.groupingBy(showTime -> showDayToDayOfWeek.get(showTime.getDayOfWeek())));
+
+        List<LocalDateTime> result = new ArrayList<>();
+        for (int i = 0; i < Period.between(startDate, endDate).getDays(); i++) {
+            LocalDate date = startDate.plusDays(i);
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+            if (dayOfWeekToShowTimes.containsKey(dayOfWeek)) {
+                result.addAll(dayOfWeekToShowTimes.get(dayOfWeek).stream()
+                        .map(showTime -> LocalDateTime.of(date, showTime.getTime()))
+                        .toList()
+                );
+            }
+        }
+        return result;
     }
 }
