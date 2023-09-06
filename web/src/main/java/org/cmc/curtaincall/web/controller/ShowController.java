@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
+import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,6 +54,13 @@ public class ShowController {
     public Slice<ShowResponse> searchShows(
             Pageable pageable, @RequestParam @Validated @Size(max = 100) @NotBlank String keyword) {
         return showService.search(pageable, keyword);
+    }
+
+    @GetMapping("/show-times")
+    public Slice<ShowDateTimeResponse> getShowTimeList(
+            Pageable pageable, @RequestParam LocalDateTime showAt, LocalDateTime showEndAt
+    ) {
+        return showService.getShowTimeList(pageable, showAt, showEndAt);
     }
 
 }

@@ -6,9 +6,11 @@ import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
+import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
+import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -28,6 +31,8 @@ public class ShowService {
     private final ShowRepository showRepository;
 
     private final FacilityRepository facilityRepository;
+
+    private final ShowDateTimeRepository showDateTimeRepository;
 
     public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
         return showRepository.findSliceWithFacilityByGenreAndUseYnIsTrue(pageable, request.getGenre())
@@ -78,6 +83,14 @@ public class ShowService {
     public ShowDetailResponse getDetail(String id) {
         Show show = getShowById(id);
         return ShowDetailResponse.of(show);
+    }
+
+    public Slice<ShowDateTimeResponse> getShowTimeList(
+            Pageable pageable, LocalDateTime showAt, LocalDateTime showEndAt
+    ) {
+        return showDateTimeRepository.findSliceByShowAtAfterAndShowEndAtBefore(
+                pageable, showAt, showEndAt
+        ).map(ShowDateTimeResponse::of);
     }
 
     private Show getShowById(String id) {
