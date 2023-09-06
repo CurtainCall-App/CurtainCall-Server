@@ -309,6 +309,7 @@ create table show_date_time
     show_date_time_id bigint      not null auto_increment,
     show_id           varchar(25) not null,
     show_at           datetime(6) not null,
+    show_end_at       datetime(6) not null,
     primary key (show_date_time_id)
 ) engine = InnoDB;
 
@@ -317,6 +318,9 @@ create index IX_show_date_time__show_show_at
 
 create index IX_show_date_time__show_at
     on show_date_time (show_at);
+
+create index IX_show_date_time__show_end_at
+    on show_date_time (show_end_at);
 
 
 create table notice
