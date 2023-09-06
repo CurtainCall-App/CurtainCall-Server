@@ -1,0 +1,13 @@
+= Chat(채팅)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[chat-get-chat-token]]
+== 채팅 토큰
+
+operation::chat-get-chat-token[snippets='http-request,http-response,response-fields']
