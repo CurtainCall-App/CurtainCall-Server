@@ -7,6 +7,7 @@ import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.show.ShowService;
+import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -392,6 +394,58 @@ class ShowControllerDocsTest {
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                        )
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void getShowTimeList_Docs() throws Exception {
+        // given
+        var response = List.of(
+                ShowDateTimeResponse.builder()
+                        .id("PF220846")
+                        .name("잘자요, 엄마 [청주]")
+                        .facilityId("FC000182")
+                        .facilityName("예술나눔 터")
+                        .genre(ShowGenre.PLAY)
+                        .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
+                        .showAt(LocalDateTime.of(2023, 4, 28, 19, 0))
+                        .showEndAt(LocalDateTime.of(2023, 4, 28, 20, 30))
+                        .build()
+        );
+
+        given(showService.getShowTimeList(any(), any(), any())).willReturn(new SliceImpl<>(response));
+
+        // expected
+        mockMvc.perform(get("/show-times")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("showAt", LocalDateTime.of(2023, 4, 13, 16, 0).toString())
+                        .param("showEndAt", LocalDateTime.of(2023, 4, 13, 22, 0).toString())
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("show-get-show-time-list",
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("showAt").description("공연 시작 시간. 이 이후 시간."),
+                                parameterWithName("showEndAt").description("공연 종료 시간. 이 이전 시간.")
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("name").description("공연명"),
+                                fieldWithPath("facilityId").description("공연 시설 ID"),
+                                fieldWithPath("facilityName").description("공연 시설명"),
+                                fieldWithPath("poster").description("공연 포스터 경로"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showAt").description("공연 시작 일시"),
+                                fieldWithPath("showEndAt").description("공연 종료 일시")
                         )
                 ));
     }
