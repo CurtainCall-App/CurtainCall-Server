@@ -27,7 +27,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -86,10 +85,7 @@ public class PartyService {
     @OptimisticLock
     public void participate(Long partyId, Long memberId) {
         Party party = getPartyById(partyId);
-        boolean laterParty = Optional.ofNullable(party.getShowAt())
-                .filter(showAt -> LocalDateTime.now().isAfter(showAt))
-                .isPresent();
-        if (Boolean.TRUE.equals(party.getClosed()) || laterParty) {
+        if (Boolean.TRUE.equals(party.getClosed())) {
             throw new AlreadyClosedPartyException("Party id=" + partyId);
         }
 
