@@ -76,7 +76,7 @@ public class AccountService {
     @Transactional
     public void delete(String username) {
         Account account = getAccountByUsername(username);
-        account.delete();
+        accountRepository.delete(account);
     }
 
     @Transactional

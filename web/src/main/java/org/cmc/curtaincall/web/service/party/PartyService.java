@@ -142,7 +142,7 @@ public class PartyService {
     public void delete(Long partyId) {
         Party party = getPartyById(partyId);
         party.getPartyMembers().clear();
-        party.delete();
+        partyRepository.delete(party);
     }
 
     private Party getPartyById(Long id) {
