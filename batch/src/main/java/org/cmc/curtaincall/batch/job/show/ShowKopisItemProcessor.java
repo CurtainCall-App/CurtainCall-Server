@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.batch.job.show;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowResponse>, Show> {
 
@@ -46,10 +48,12 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
     @Override
     public Show process(WithPresent<ShowResponse> item) throws Exception {
         if (item.present()) {
+            log.debug("공연({})은 존재하는 데이터입니다.", item.value().id());
             return null;
         }
         ShowResponse showResponse = item.value();
         if (!allowedGenreNames.contains(showResponse.genreName())) {
+            log.debug("공연({})은 다루지 않는 장르({})입니다.", showResponse.id(), showResponse.genreName());
             return null;
         }
 

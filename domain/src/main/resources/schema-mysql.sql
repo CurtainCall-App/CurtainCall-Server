@@ -18,15 +18,15 @@ drop table if exists box_office;
 
 create table account
 (
-    use_yn                   bit          not null,
     account_id               bigint       not null auto_increment,
-    created_at               datetime(6) not null,
-    last_modified_at         datetime(6) not null,
     member_id                bigint,
-    refresh_token_expires_at datetime(6) not null,
+    username                 varchar(255) not null,
     password                 varchar(255),
     refresh_token            varchar(255) not null,
-    username                 varchar(255) not null,
+    refresh_token_expires_at datetime(6) not null,
+    created_at               datetime(6) not null,
+    last_modified_at         datetime(6) not null,
+    use_yn                   bit          not null,
     primary key (account_id)
 ) engine=InnoDB;
 
@@ -39,22 +39,22 @@ alter table account
 
 create table facility
 (
+    facility_id      varchar(25)  not null,
+    name             varchar(105) not null,
     hall_num         integer      not null,
-    latitude         float(53)    not null,
-    longitude        float(53)    not null,
     opening_year     integer,
     seat_num         integer      not null,
-    use_yn           bit          not null,
-    created_at       datetime(6)  not null,
-    last_modified_at datetime(6)  not null,
-    facility_id      varchar(25)  not null,
     address          varchar(255) not null,
     sido             varchar(25)  not null,
     gugun            varchar(25)  not null,
     characteristics  varchar(255) not null,
     homepage         varchar(255) not null,
-    name             varchar(105) not null,
     phone            varchar(45)  not null,
+    latitude         float(53)    not null,
+    longitude        float(53)    not null,
+    use_yn           bit          not null,
+    created_at       datetime(6)  not null,
+    last_modified_at datetime(6)  not null,
     primary key (facility_id)
 ) engine = InnoDB;
 
@@ -79,14 +79,14 @@ alter table favorite_show
 
 create table images
 (
-    use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    created_by       bigint       not null,
     images_id        bigint       not null auto_increment,
-    last_modified_at datetime(6) not null,
     origin_name      varchar(255) not null,
     stored_name      varchar(255) not null,
     url              varchar(255) not null,
+    use_yn           bit          not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
+    created_by       bigint       not null,
     primary key (images_id)
 ) engine=InnoDB;
 
@@ -133,12 +133,12 @@ create index IX_lost_item__created_by_created_at
 
 create table member
 (
-    use_yn           bit         not null,
-    created_at       datetime(6) not null,
-    image_id         bigint,
-    last_modified_at datetime(6) not null,
     member_id        bigint      not null auto_increment,
     nickname         varchar(25) not null,
+    image_id         bigint,
+    use_yn           bit         not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (member_id)
 ) engine=InnoDB;
 
@@ -148,19 +148,20 @@ alter table member
 
 create table party
 (
-    party_id         bigint                              not null auto_increment,
-    title            varchar(255)                        not null,
-    content          varchar(2000)                       not null,
-    cur_member_num   integer                             not null,
-    max_member_num   integer                             not null,
+    party_id         bigint        not null auto_increment,
+    title            varchar(255)  not null,
+    content          varchar(2000) not null,
+    cur_member_num   integer       not null,
+    max_member_num   integer       not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
-    closed           bit                                 not null,
+    closed           bit           not null,
     show_id          varchar(25),
     show_at          datetime(6),
-    use_yn           bit                                 not null,
-    created_at       datetime(6)                         not null,
-    created_by       bigint                              not null,
-    last_modified_at datetime(6)                         not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    created_by       bigint        not null,
+    last_modified_at datetime(6) not null,
+    version          bigint        not null,
     primary key (party_id)
 ) engine = InnoDB;
 
@@ -233,7 +234,6 @@ alter table show_review_like
 create table shows
 (
     show_id          varchar(25)                                 not null,
-    version          bigint                                      not null,
     facility_id      varchar(25)                                 not null,
     start_date       date                                        not null,
     end_date         date                                        not null,
@@ -255,6 +255,7 @@ create table shows
     use_yn           bit                                         not null,
     created_at       datetime(6)                                 not null,
     last_modified_at datetime(6)                                 not null,
+    version          bigint                                      not null,
     primary key (show_id)
 ) engine = InnoDB;
 
@@ -325,12 +326,12 @@ create index IX_show_date_time__show_end_at
 
 create table notice
 (
+    notice_id        bigint        not null auto_increment,
+    title            varchar(255)  not null,
+    content          varchar(4000) not null,
     use_yn           bit           not null,
     created_at       datetime(6)   not null,
     last_modified_at datetime(6)   not null,
-    notice_id        bigint        not null auto_increment,
-    content          varchar(4000) not null,
-    title            varchar(255)  not null,
     primary key (notice_id)
 ) engine = InnoDB;
 

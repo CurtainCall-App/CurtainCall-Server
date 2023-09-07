@@ -88,8 +88,8 @@ public class LostItemService {
     @Transactional
     public void delete(Long id) {
         LostItem lostItem = getLostItemById(id);
-        lostItem.delete();
-        lostItem.getImage().delete();
+        lostItemRepository.delete(lostItem);
+        imageRepository.delete(lostItem.getImage());
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.batch.job.facility;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,7 @@ public class FacilityJobConfig {
     @Bean
     @StepScope
     public FacilityItemProcessor facilityItemProcessor() {
-        return new FacilityItemProcessor(kopisService);
+        return new FacilityItemProcessor(kopisService, emf.createEntityManager());
     }
 
     @Bean

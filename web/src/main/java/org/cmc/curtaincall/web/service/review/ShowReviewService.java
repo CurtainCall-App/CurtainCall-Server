@@ -64,7 +64,7 @@ public class ShowReviewService {
         ShowReview showReview = getShowReviewById(id);
         Show show = getShowWithLockById(showReview.getShow().getId());
         show.cancelReview(showReview);
-        showReview.delete();
+        showReviewRepository.delete(showReview);
     }
 
     @Transactional
