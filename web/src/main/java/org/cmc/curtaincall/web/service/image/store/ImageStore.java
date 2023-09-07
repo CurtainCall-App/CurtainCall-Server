@@ -10,4 +10,6 @@ public interface ImageStore {
      * @return 저장된 URL, 경로
      */
     String store(Resource image, String storedName);
+
+    void delete(String storedName);
 }

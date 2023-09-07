@@ -28,4 +28,10 @@ public class LocalImageStore implements ImageStore {
             throw new InvalidImageException(e);
         }
     }
+
+    @Override
+    public void delete(String storedName) {
+        File imagePath = new File(IMAGE_DIR, storedName);
+        imagePath.delete();
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,14 +23,10 @@ public class AwsS3ImageStore implements ImageStore {
 
     private final String bucketName;
 
-    private final S3Client s3Client;
-
     private final S3Template s3Template;
 
-    public AwsS3ImageStore(
-            @Value("${app.s3.bucket-name}") String bucketName, S3Client s3Client, S3Template s3Template) {
+    public AwsS3ImageStore(@Value("${app.s3.bucket-name}") String bucketName, S3Template s3Template) {
         this.bucketName = bucketName;
-        this.s3Client = s3Client;
         this.s3Template = s3Template;
     }
 
@@ -50,4 +45,8 @@ public class AwsS3ImageStore implements ImageStore {
         }
     }
 
+    @Override
+    public void delete(String storedName) {
+        s3Template.deleteObject(bucketName, storedName);
+    }
 }
