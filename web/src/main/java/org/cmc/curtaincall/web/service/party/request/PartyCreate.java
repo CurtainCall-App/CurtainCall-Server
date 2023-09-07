@@ -27,7 +27,7 @@ public class PartyCreate {
     @Size(max = 400)
     private String content;
 
-    @Positive
+    @Min(2L)
     @Max(100L)
     private Integer maxMemberNum;
 
