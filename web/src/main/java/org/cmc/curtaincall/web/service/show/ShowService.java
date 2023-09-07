@@ -89,7 +89,9 @@ public class ShowService {
     public List<ShowDateTimeResponse> getLiveTalkShowTimeList(LocalDateTime baseDateTime) {
         return showDateTimeRepository.findAllByShowAtAfterAndShowEndAtBefore(
                 baseDateTime.minusHours(2L), baseDateTime.plusHours(4L)
-        ).stream().map(ShowDateTimeResponse::of).toList();
+        ).stream()
+                .filter(showDateTime -> baseDateTime.isBefore(showDateTime.getShowEndAt().plusHours(2L)))
+                .map(ShowDateTimeResponse::of).toList();
     }
 
     private Show getShowById(String id) {
