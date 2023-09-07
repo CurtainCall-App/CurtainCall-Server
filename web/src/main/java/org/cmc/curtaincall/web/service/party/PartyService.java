@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.party;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -81,9 +83,14 @@ public class PartyService {
     }
 
     @Transactional
+    @OptimisticLock
     public void participate(Long partyId, Long memberId) {
         Party party = getPartyById(partyId);
-        if (Boolean.TRUE.equals(party.getClosed())) {
+        boolean laterParty = Optional.ofNullable(party.getShow())
+                .map(Show::getEndDate)
+                .filter(endDate -> LocalDate.now().isAfter(endDate))
+                .isPresent();
+        if (Boolean.TRUE.equals(party.getClosed()) || laterParty) {
             throw new AlreadyClosedPartyException("Party id=" + partyId);
         }
 
