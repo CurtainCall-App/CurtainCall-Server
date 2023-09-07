@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -85,12 +86,10 @@ public class ShowService {
         return ShowDetailResponse.of(show);
     }
 
-    public Slice<ShowDateTimeResponse> getShowTimeList(
-            Pageable pageable, LocalDateTime showAt, LocalDateTime showEndAt
-    ) {
-        return showDateTimeRepository.findSliceByShowAtAfterAndShowEndAtBefore(
-                pageable, showAt, showEndAt
-        ).map(ShowDateTimeResponse::of);
+    public List<ShowDateTimeResponse> getLiveTalkShowTimeList(LocalDateTime baseDateTime) {
+        return showDateTimeRepository.findAllByShowAtAfterAndShowEndAtBefore(
+                baseDateTime.minusHours(2L), baseDateTime.plusHours(4L)
+        ).stream().map(ShowDateTimeResponse::of).toList();
     }
 
     private Show getShowById(String id) {

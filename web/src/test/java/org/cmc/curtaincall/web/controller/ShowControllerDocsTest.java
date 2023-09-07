@@ -400,7 +400,7 @@ class ShowControllerDocsTest {
 
     @Test
     @WithMockUser
-    void getShowTimeList_Docs() throws Exception {
+    void getLiveTalkShowTimeList_Docs() throws Exception {
         // given
         var response = List.of(
                 ShowDateTimeResponse.builder()
@@ -415,16 +415,15 @@ class ShowControllerDocsTest {
                         .build()
         );
 
-        given(showService.getShowTimeList(any(), any(), any())).willReturn(new SliceImpl<>(response));
+        given(showService.getLiveTalkShowTimeList(any())).willReturn(response);
 
         // expected
-        mockMvc.perform(get("/show-times")
+        mockMvc.perform(get("/livetalk-show-times")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("showAt", LocalDateTime.of(2023, 4, 13, 16, 0).toString())
-                        .param("showEndAt", LocalDateTime.of(2023, 4, 13, 22, 0).toString())
+                        .param("baseDateTime", LocalDateTime.of(2023, 4, 13, 22, 0).toString())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -432,8 +431,7 @@ class ShowControllerDocsTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("showAt").description("공연 시작 시간. 이 이후 시간."),
-                                parameterWithName("showEndAt").description("공연 종료 시간. 이 이전 시간.")
+                                parameterWithName("baseDateTime").description("기준 시간 (현재 시간)")
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

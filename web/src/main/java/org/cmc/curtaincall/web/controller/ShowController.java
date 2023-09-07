@@ -11,6 +11,7 @@ import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,11 +57,9 @@ public class ShowController {
         return showService.search(pageable, keyword);
     }
 
-    @GetMapping("/show-times")
-    public Slice<ShowDateTimeResponse> getShowTimeList(
-            Pageable pageable, @RequestParam LocalDateTime showAt, LocalDateTime showEndAt
-    ) {
-        return showService.getShowTimeList(pageable, showAt, showEndAt);
+    @GetMapping("/livetalk-show-times")
+    public Slice<ShowDateTimeResponse> getLiveTalkShowTimeList(@RequestParam LocalDateTime baseDateTime) {
+        return new SliceImpl<>(showService.getLiveTalkShowTimeList(baseDateTime));
     }
 
 }
