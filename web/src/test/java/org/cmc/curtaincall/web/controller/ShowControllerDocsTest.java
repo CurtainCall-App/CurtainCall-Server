@@ -3,7 +3,9 @@ package org.cmc.curtaincall.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowState;
 import org.cmc.curtaincall.domain.show.ShowTime;
+import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.service.account.AccountService;
 import org.cmc.curtaincall.web.service.show.ShowService;
@@ -100,6 +102,8 @@ class ShowControllerDocsTest {
                                 parameterWithName("genre").description("공연 장르")
                                         .attributes(type(ShowGenre.class))
                                         .optional(),
+                                parameterWithName("state").description("공연 상태").optional()
+                                        .attributes(RestDocsAttribute.defaultValue(ShowState.PERFORMING.name())),
                                 parameterWithName("sort").description(
                                         "reviewGradeAvg,desc: 공연 리뷰 평점 평균 내림차순 정렬, " +
                                         "name: 가나다순, " +

@@ -36,8 +36,9 @@ public class ShowService {
     private final ShowDateTimeRepository showDateTimeRepository;
 
     public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
-        return showRepository.findSliceWithFacilityByGenreAndUseYnIsTrue(pageable, request.getGenre())
-                .map(ShowResponse::of);
+        return showRepository.findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(
+                pageable, request.getGenre(), request.getState()
+        ).map(ShowResponse::of);
     }
 
     public Slice<ShowResponse> search(Pageable pageable, String keyword) {

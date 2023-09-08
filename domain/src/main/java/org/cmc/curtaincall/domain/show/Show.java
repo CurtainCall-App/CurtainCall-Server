@@ -24,6 +24,8 @@ import java.util.List;
                 @Index(name = "IX_show__genre_end_date", columnList = "genre, end_date"),
                 @Index(name = "IX_show__genre_name", columnList = "genre, name"),
                 @Index(name = "IX_show__genre_review_grade_avg", columnList = "genre, review_grade_avg desc"),
+                @Index(name = "IX_show__genre_state_name", columnList = "genre, state, name"),
+                @Index(name = "IX_show__genre_state_review_grade_avg", columnList = "genre, state, review_grade_avg desc"),
         }
 )
 @Getter

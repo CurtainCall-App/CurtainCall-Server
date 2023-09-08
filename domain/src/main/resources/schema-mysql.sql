@@ -283,6 +283,12 @@ create index IX_show__genre_review_grade_sum
 create index IX_show__genre_review_grade_avg
     on shows (genre, review_grade_avg desc);
 
+create index IX_show__genre_state_name
+    on shows (genre, state, name);
+
+create index IX_show__genre_state_review_grade_avg
+    on shows (genre, state, review_grade_avg desc);
+
 
 create table show_time
 (

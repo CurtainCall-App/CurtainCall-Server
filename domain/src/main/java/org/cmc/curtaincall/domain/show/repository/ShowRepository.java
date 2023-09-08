@@ -4,6 +4,7 @@ import jakarta.persistence.LockModeType;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowState;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -17,6 +18,9 @@ public interface ShowRepository extends JpaRepository<Show, String>, ShowReposit
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithFacilityByGenreAndUseYnIsTrue(Pageable pageable, ShowGenre genre);
+
+    @EntityGraph(attributePaths = {"facility"})
+    Slice<Show> findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(Pageable pageable, ShowGenre genre, ShowState state);
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithByNameStartsWithAndUseYnIsTrue(Pageable pageable, String name);
