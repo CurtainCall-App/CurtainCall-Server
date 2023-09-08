@@ -17,7 +17,7 @@ import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.junit.jupiter.api.Test;
@@ -204,9 +204,10 @@ class MemberControllerDocsTest {
     @WithMockUser
     void getRecruitmentList_Docs() throws Exception {
         // given
-        PartyResponse partyResponse = PartyResponse.builder()
+        var partyResponse = MyPartyResponse.builder()
                 .id(10L)
                 .title("공연 같이 보실분~")
+                .content("저랑 같이 봐요~")
                 .curMemberNum(2)
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
@@ -248,6 +249,7 @@ class MemberControllerDocsTest {
                                 beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("파티 ID"),
                                 fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),
@@ -270,15 +272,16 @@ class MemberControllerDocsTest {
     @WithMockUser
     void getParticipationList_Docs() throws Exception {
         // given
-        PartyResponse partyResponse = PartyResponse.builder()
+        var partyResponse = MyPartyResponse.builder()
                 .id(10L)
                 .title("공연 같이 보실분~")
+                .content("저랑 같이 봐요~")
                 .curMemberNum(2)
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(4L)
+                .creatorId(2L)
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
                 .showId("PF220846")
@@ -312,6 +315,7 @@ class MemberControllerDocsTest {
                                 beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("파티 ID"),
                                 fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),

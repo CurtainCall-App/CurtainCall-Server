@@ -20,7 +20,7 @@ import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -92,17 +92,17 @@ public class MemberService {
         member.edit(editorBuilder.build());
     }
 
-    public Slice<PartyResponse> getRecruitmentList(
+    public Slice<MyPartyResponse> getRecruitmentList(
             Pageable pageable, Long memberId, @Nullable PartyCategory category
     ) {
         Member member = memberRepository.getReferenceById(memberId);
         return Optional.ofNullable(category)
                 .map(cat -> partyRepository.findSliceWithByCreatedByAndCategoryAndUseYnIsTrue(pageable, member, cat))
                 .orElseGet(() -> partyRepository.findSliceWithByCreatedByAndUseYnIsTrue(pageable, member))
-                .map(PartyResponse::of);
+                .map(MyPartyResponse::of);
     }
 
-    public Slice<PartyResponse> getParticipationList(
+    public Slice<MyPartyResponse> getParticipationList(
             Pageable pageable, Long memberId, @Nullable PartyCategory category
     ) {
         Member member = memberRepository.getReferenceById(memberId);
@@ -117,7 +117,7 @@ public class MemberService {
                 .orElseGet(() -> partyRepository.findAllWithByIdInAndUseYnIsTrue(partyIds));
         parties.sort(Comparator.comparingLong(Party::getId).reversed());
         return new SliceImpl<>(parties, partyMemberSlice.getPageable(), partyMemberSlice.hasNext())
-                .map(PartyResponse::of);
+                .map(MyPartyResponse::of);
     }
 
     @Transactional

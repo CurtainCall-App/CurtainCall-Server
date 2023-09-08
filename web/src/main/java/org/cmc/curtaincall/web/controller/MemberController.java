@@ -8,17 +8,17 @@ import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.service.common.response.BooleanResult;
+import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.web.service.member.MemberService;
 import org.cmc.curtaincall.web.service.member.request.MemberCreate;
-import org.cmc.curtaincall.web.service.common.response.BooleanResult;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.springframework.data.domain.Pageable;
@@ -71,7 +71,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId}/recruitments")
-    public Slice<PartyResponse> getRecruitmentList(
+    public Slice<MyPartyResponse> getRecruitmentList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
@@ -79,7 +79,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId}/participations")
-    public Slice<PartyResponse> getParticipationList(
+    public Slice<MyPartyResponse> getParticipationList(
             Pageable pageable,
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
