@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -102,9 +104,13 @@ public class PartyService {
         List<Party> parties = partyIds.stream()
                 .map(partyRepository::getReferenceById)
                 .toList();
-        Set<Long> participatedPartyIds = partyMemberRepository.findAllByMemberAndPartyIn(member, parties).stream()
-                .map(PartyMember::getParty)
-                .map(Party::getId)
+        Set<Long> participatedPartyIds = Stream.of(
+                        partyMemberRepository.findAllByMemberAndPartyIn(member, parties).stream()
+                                .map(PartyMember::getParty)
+                                .map(Party::getId),
+                        partyRepository.findAllIdByCreatedByAndIdIn(member, partyIds).stream()
+                )
+                .flatMap(Function.identity())
                 .collect(Collectors.toSet());
         return partyIds.stream()
                 .map(partyId -> new PartyParticipatedResponse(partyId, participatedPartyIds.contains(partyId)))

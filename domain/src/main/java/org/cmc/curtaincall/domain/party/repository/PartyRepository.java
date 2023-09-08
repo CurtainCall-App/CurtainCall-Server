@@ -9,7 +9,10 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,4 +38,11 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     @Lock(LockModeType.OPTIMISTIC)
     Optional<Party> findWithLockById(Long id);
+
+    @Query("""
+        select party.id
+        from Party party
+        where party.createdBy = :createdBy and party.id in :ids
+    """)
+    List<Long> findAllIdByCreatedByAndIdIn(@Param("createdBy") Member createdBy, @Param("ids") Collection<Long> ids);
 }
