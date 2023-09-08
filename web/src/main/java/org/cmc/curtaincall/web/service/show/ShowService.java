@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -88,11 +89,19 @@ public class ShowService {
     }
 
     public List<ShowDateTimeResponse> getLiveTalkShowTimeList(LocalDateTime baseDateTime) {
-        return showDateTimeRepository.findAllByShowAtAfterAndShowEndAtBefore(
-                baseDateTime.minusHours(2L), baseDateTime.plusHours(4L)
-        ).stream()
-                .filter(showDateTime -> baseDateTime.isBefore(showDateTime.getShowEndAt().plusHours(2L)))
-                .map(ShowDateTimeResponse::of).toList();
+        return Stream.of(
+                        showDateTimeRepository.findAllByShowAtLessThanEqualAndShowAtGreaterThan(
+                                baseDateTime.plusHours(2L), baseDateTime),
+                        showDateTimeRepository.findAllByShowAtLessThanEqualAndShowEndAtGreaterThanEqual(
+                                baseDateTime, baseDateTime),
+                        showDateTimeRepository.findAllByShowEndAtLessThanEqualAndShowEndAtGreaterThan(
+                                baseDateTime, baseDateTime.minusHours(2)
+                        )
+                )
+                .flatMap(List::stream)
+                .distinct()
+                .map(ShowDateTimeResponse::of)
+                .toList();
     }
 
     private Show getShowById(String id) {

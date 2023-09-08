@@ -12,4 +12,16 @@ public interface ShowDateTimeRepository extends JpaRepository<ShowDateTime, Long
     @EntityGraph(attributePaths = {"show", "show.facility"})
     List<ShowDateTime> findAllByShowAtAfterAndShowEndAtBefore(
             LocalDateTime showAt, LocalDateTime showEndAt);
+
+    @EntityGraph(attributePaths = {"show", "show.facility"})
+    List<ShowDateTime> findAllByShowAtLessThanEqualAndShowAtGreaterThan(
+            LocalDateTime showAtLoe, LocalDateTime showAtGt);
+
+    @EntityGraph(attributePaths = {"show", "show.facility"})
+    List<ShowDateTime> findAllByShowAtLessThanEqualAndShowEndAtGreaterThanEqual(
+            LocalDateTime showAt, LocalDateTime showEndAt);
+
+    @EntityGraph(attributePaths = {"show", "show.facility"})
+    List<ShowDateTime> findAllByShowEndAtLessThanEqualAndShowEndAtGreaterThan(
+            LocalDateTime showEndAtLoe, LocalDateTime showEndAtGt);
 }
