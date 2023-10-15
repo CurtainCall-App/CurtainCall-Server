@@ -1,32 +1,29 @@
 package org.cmc.curtaincall.web.service.account;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.Account;
+import org.cmc.curtaincall.domain.account.MemberId;
 import org.cmc.curtaincall.domain.account.repository.AccountRepository;
-import org.cmc.curtaincall.domain.member.Member;
-import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.web.exception.AlreadySignupAccountException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.service.account.response.AccountDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@org.springframework.transaction.annotation.Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    private final MemberRepository memberRepository;
-
     public Long getMemberId(String username) {
         Account account = getAccountByUsername(username);
-        return Optional.ofNullable(account.getMember())
-                .map(Member::getId)
+        return Optional.ofNullable(account.getMemberId())
+                .map(MemberId::getId)
                 .orElse(null);
     }
 
@@ -46,9 +43,7 @@ public class AccountService {
     private Account getOrCreate(String username) {
         Optional<Account> accountOptional = accountRepository.findByUsernameAndUseYnIsTrue(username);
         if (accountOptional.isEmpty()) {
-            Account account = accountRepository.save(Account.builder()
-                    .username(username)
-                    .build());
+            Account account = accountRepository.save(new Account(username));
             accountOptional = Optional.of(account);
         }
         Account account = accountOptional.get();
@@ -66,23 +61,16 @@ public class AccountService {
     @Transactional
     public void signupMember(String username, Long memberId) {
         Account account = getAccountByUsername(username);
-        if (account.getMember() != null) {
+        if (account.getMemberId() != null) {
             throw new AlreadySignupAccountException("username=" + username);
         }
-        Member member = getMemberById(memberId);
-        account.setMember(member);
+        account.registerMember(new MemberId(memberId));
     }
 
     @Transactional
-    public void delete(String username) {
-        Account account = getAccountByUsername(username);
+    public void delete(MemberId memberId) {
+        Account account = getAccountByMember(memberId);
         accountRepository.delete(account);
-    }
-
-    @Transactional
-    public void withdraw(Long memberId) {
-        accountRepository.findByMember(memberRepository.getReferenceById(memberId))
-                .ifPresent(account -> account.setMember(null));
     }
 
     private Account getAccountByUsername(String username) {
@@ -90,9 +78,8 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account.username=" + username));
     }
 
-    private Member getMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .filter(Member::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Member id=" + memberId));
+    private Account getAccountByMember(MemberId memberId) {
+        return accountRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Account.username=" + memberId));
     }
 }

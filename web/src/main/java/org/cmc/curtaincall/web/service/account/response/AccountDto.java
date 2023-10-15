@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.service.account.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.account.Account;
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.account.MemberId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,8 +17,8 @@ public record AccountDto(
 
     public static AccountDto of(Account account) {
         return AccountDto.builder()
-                .memberId(Optional.ofNullable(account.getMember())
-                        .map(Member::getId)
+                .memberId(Optional.ofNullable(account.getMemberId())
+                        .map(MemberId::getId)
                         .orElse(null))
                 .username(account.getUsername())
                 .refreshToken(account.getRefreshToken())
