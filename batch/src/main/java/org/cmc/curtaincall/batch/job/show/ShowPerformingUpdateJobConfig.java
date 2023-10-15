@@ -52,14 +52,14 @@ public class ShowPerformingUpdateJobConfig {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
                 .tasklet((contribution, chunkContext) -> {
-                    LocalDateTime now = LocalDateTime.now();
                     em.createQuery("""
                                     update Show show
                                     set show.state = :state, show.lastModifiedAt = :lastModifiedAt
-                                    where show.startDate = :date
+                                    where show.state = :prevState and show.startDate <= :date
                                     """)
                             .setParameter("state", ShowState.PERFORMING)
-                            .setParameter("lastModifiedAt", now)
+                            .setParameter("prevState", ShowState.TO_PERFORM)
+                            .setParameter("lastModifiedAt", LocalDateTime.now())
                             .setParameter("date", LocalDate.parse(date, formatter))
                             .executeUpdate();
 
