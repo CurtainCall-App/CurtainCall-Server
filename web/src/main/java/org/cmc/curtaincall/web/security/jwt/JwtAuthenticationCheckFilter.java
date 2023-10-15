@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.security.UserWithMemberId;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

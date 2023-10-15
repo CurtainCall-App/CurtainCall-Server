@@ -3,7 +3,7 @@ package org.cmc.curtaincall.web.security.argumentresolver;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

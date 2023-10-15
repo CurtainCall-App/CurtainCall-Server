@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.security;
 
 import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

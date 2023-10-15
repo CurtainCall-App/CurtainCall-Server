@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.notice.NoticeService;
 import org.cmc.curtaincall.web.service.notice.response.NoticeDetailResponse;
 import org.cmc.curtaincall.web.service.notice.response.NoticeResponse;

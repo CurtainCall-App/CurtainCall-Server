@@ -8,7 +8,7 @@ import org.cmc.curtaincall.domain.account.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.common.response.BooleanResult;
 import org.cmc.curtaincall.web.service.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;

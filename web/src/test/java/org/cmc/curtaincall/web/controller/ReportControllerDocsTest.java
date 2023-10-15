@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.report.ReportService;
 import org.cmc.curtaincall.web.service.report.request.ReportCreate;
 import org.junit.jupiter.api.Test;

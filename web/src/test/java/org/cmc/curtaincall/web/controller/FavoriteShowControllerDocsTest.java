@@ -5,7 +5,7 @@ import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
 import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;

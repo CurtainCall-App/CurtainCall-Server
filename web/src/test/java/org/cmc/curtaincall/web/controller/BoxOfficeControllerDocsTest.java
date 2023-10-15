@@ -5,7 +5,7 @@ import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.show.BoxOfficeService;
 import org.cmc.curtaincall.web.service.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.Test;

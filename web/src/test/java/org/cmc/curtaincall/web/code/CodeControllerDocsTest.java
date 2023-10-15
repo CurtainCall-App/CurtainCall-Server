@@ -8,7 +8,7 @@ import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.domain.show.*;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
