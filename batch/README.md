@@ -1,16 +1,19 @@
 # Curtain Call Batch
 
-## Jobs
+## Jobs & JobParameters
 
 - `FacilityJob`
 - `ShowCreateJob`
+  - `startDate`
+  - `endDate`
 - `BoxOfficeJob`
+  - `date`
 - `ShowCompleteUpdateJob`
+  - `date`
 - `ShowPerformingUpdateJob`
+  - `date`
 
-## Parameter
-
-### Properties
+## Properties
 
 - `DATABASE_URL`
 - `DATABASE_USERNAME`
