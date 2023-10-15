@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.config;
+package org.cmc.curtaincall.web.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.security.argumentresolver.LoginMemberIdArgumentResolver;

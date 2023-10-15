@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.security.service.AccountService;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;

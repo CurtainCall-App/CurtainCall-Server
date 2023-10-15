@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
-import org.cmc.curtaincall.web.service.common.response.ValueResult;
+import org.cmc.curtaincall.web.common.response.ValueResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

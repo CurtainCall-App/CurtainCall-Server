@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.security.service.AccountService;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;

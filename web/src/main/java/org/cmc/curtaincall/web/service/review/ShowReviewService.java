@@ -10,7 +10,7 @@ import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;

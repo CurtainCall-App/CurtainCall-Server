@@ -3,7 +3,7 @@ package org.cmc.curtaincall.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.common.RestDocsConfig;
 import org.cmc.curtaincall.web.security.service.AccountService;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;

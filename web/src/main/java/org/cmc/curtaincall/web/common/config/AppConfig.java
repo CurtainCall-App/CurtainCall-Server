@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.config;
+package org.cmc.curtaincall.web.common.config;
 
 import jakarta.annotation.PostConstruct;
 import org.cmc.curtaincall.domain.member.Member;

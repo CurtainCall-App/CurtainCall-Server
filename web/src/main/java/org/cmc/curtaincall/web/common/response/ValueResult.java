@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.common.response;
+package org.cmc.curtaincall.web.common.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

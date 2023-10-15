@@ -13,7 +13,7 @@ import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;

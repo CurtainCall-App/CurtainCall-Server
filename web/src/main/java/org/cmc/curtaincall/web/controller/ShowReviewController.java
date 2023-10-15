@@ -3,7 +3,7 @@ package org.cmc.curtaincall.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
