@@ -1,15 +1,18 @@
 package org.cmc.curtaincall.web.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
 import org.cmc.curtaincall.web.security.jwt.JwtLogoutHandler;
 import org.cmc.curtaincall.web.security.jwt.JwtLogoutSuccessHandler;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
+import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
 import org.cmc.curtaincall.web.security.service.AccountService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -27,7 +30,8 @@ public class SecurityConfig {
             HttpSecurity httpSecurity,
             JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
             JwtLogoutHandler jwtLogoutHandler,
-            JwtLogoutSuccessHandler jwtLogoutSuccessHandler
+            JwtLogoutSuccessHandler jwtLogoutSuccessHandler,
+            OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler
     ) throws Exception {
         return httpSecurity
                 .csrf(config -> config.disable())
@@ -60,12 +64,10 @@ public class SecurityConfig {
 //                        .addLogoutHandler(jwtLogoutHandler)
 //                        .logoutSuccessHandler(jwtLogoutSuccessHandler)
 //                )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .userInfoEndpoint(config -> config
-//                                .userService(oAuth2UserService))
-//                        .successHandler(oAuth2AuthenticationSuccessHandler)
-//                )
-//                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oidcAuthenticationSuccessHandler)
+                )
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
@@ -77,6 +79,12 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler(
+            final ObjectMapper objectMapper, final JwtTokenProvider jwtTokenProvider) {
+        return new OidcAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
     }
 
     @Bean
