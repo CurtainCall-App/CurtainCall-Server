@@ -49,13 +49,14 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             client-name: Kakao
-            scope: ~
+            scope: openid
         provider:
           kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
+            issuer-uri: https://kauth.kakao.com
+            user-name-attribute: sub
+          apple:
+            issuer-uri: https://appleid.apple.com
+            user-name-attribute: sub
 
   cloud:
     aws:
@@ -101,6 +102,7 @@ logging:
         SQL: debug
         orm.jdbc.bind: trace
       apache.coyote.http11: debug
+      springframework.security: trace
 
 ---
 spring:
@@ -119,4 +121,3 @@ spring:
         registration:
           kakao:
             redirect-uri: http://curtaincall.ap-northeast-2.elasticbeanstalk.com:8080/login/oauth2/code/kakao
-
