@@ -2,8 +2,6 @@ package org.cmc.curtaincall.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
-import org.cmc.curtaincall.web.security.jwt.JwtLogoutHandler;
-import org.cmc.curtaincall.web.security.jwt.JwtLogoutSuccessHandler;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
 import org.cmc.curtaincall.web.security.service.AccountService;
@@ -29,8 +27,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
             JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
-            JwtLogoutHandler jwtLogoutHandler,
-            JwtLogoutSuccessHandler jwtLogoutSuccessHandler,
             OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler
     ) throws Exception {
         return httpSecurity
@@ -60,10 +56,6 @@ public class SecurityConfig {
                 .exceptionHandling(config -> config
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
-//                .logout(logout -> logout
-//                        .addLogoutHandler(jwtLogoutHandler)
-//                        .logoutSuccessHandler(jwtLogoutSuccessHandler)
-//                )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oidcAuthenticationSuccessHandler)
                 )
@@ -100,16 +92,6 @@ public class SecurityConfig {
     public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(
             JwtTokenProvider jwtTokenProvider, AccountService accountService) {
         return new JwtAuthenticationCheckFilter(jwtTokenProvider, accountService);
-    }
-
-    @Bean
-    public JwtLogoutHandler jwtLogoutHandler(JwtTokenProvider jwtTokenProvider, AccountService accountService) {
-        return new JwtLogoutHandler(jwtTokenProvider, accountService);
-    }
-
-    @Bean
-    public JwtLogoutSuccessHandler jwtLogoutSuccessHandler() {
-        return new JwtLogoutSuccessHandler();
     }
 
 }
