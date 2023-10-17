@@ -20,34 +20,19 @@ public class JwtTokenProvider {
 
     private final long accessTokenValidityInMillis;
 
-    private final long refreshTokenValidityInMillis;
-
     private final JwtParser jwtParser;
 
     public JwtTokenProvider(
             long accessTokenValidity,
-            long refreshTokenValidity,
             String secret) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.accessTokenValidityInMillis = accessTokenValidity * 1000;
-        this.refreshTokenValidityInMillis = refreshTokenValidity * 1000;
         this.jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
     }
 
     public String createAccessToken(String username) {
         Date issuedAt = new Date();
         Date expiresAt = new Date(issuedAt.getTime() + accessTokenValidityInMillis);
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(issuedAt)
-                .setExpiration(expiresAt)
-                .signWith(secretKey, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String createRefreshToken(String username) {
-        Date issuedAt = new Date();
-        Date expiresAt = new Date(issuedAt.getTime() + refreshTokenValidityInMillis);
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(issuedAt)
@@ -81,10 +66,6 @@ public class JwtTokenProvider {
         return jwtParser.parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Date getExpiration(String token) {
-        return jwtParser.parseClaimsJws(token).getBody().getExpiration();
-    }
-
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtTokenProvider.TOKEN_PREFIX)) {
@@ -93,7 +74,4 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public long getRefreshTokenValidityInDay() {
-        return refreshTokenValidityInMillis / (24 * 60 * 60 * 1000);
-    }
 }
