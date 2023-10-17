@@ -29,10 +29,10 @@ public class OidcAuthenticationSuccessHandler implements AuthenticationSuccessHa
         String name = authentication.getName();
         String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
         String username = registrationId.toUpperCase() + "-" + name;
+
         String accessToken = jwtTokenProvider.createAccessToken(username);
-        LoginResponse loginResponse = LoginResponse.builder()
-                .accessToken(accessToken)
-                .build();
+        LoginResponse loginResponse = new LoginResponse(accessToken);
+
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
