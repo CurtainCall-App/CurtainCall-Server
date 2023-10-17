@@ -1,22 +1,22 @@
 package org.cmc.curtaincall.web.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.security.jwt.*;
-import org.cmc.curtaincall.web.security.oauth2.OAuth2AuthenticationSuccessHandlerCustom;
-import org.cmc.curtaincall.web.security.oauth2.OAuth2UserServiceCustom;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
+import org.cmc.curtaincall.web.security.jwt.JwtLogoutHandler;
+import org.cmc.curtaincall.web.security.jwt.JwtLogoutSuccessHandler;
+import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -25,10 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            OAuth2UserServiceCustom oAuth2UserService,
-            OAuth2AuthenticationSuccessHandlerCustom oAuth2AuthenticationSuccessHandler,
             JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtLogoutHandler jwtLogoutHandler,
             JwtLogoutSuccessHandler jwtLogoutSuccessHandler
     ) throws Exception {
@@ -36,14 +33,10 @@ public class SecurityConfig {
                 .csrf(config -> config.disable())
                 .formLogin(config -> config.disable())
                 .httpBasic(config -> config.disable())
-                .sessionManagement(config -> config
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+//                .sessionManagement(config -> config
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.POST,
-                                "/login/oauth2/token/{registrationId}",
-                                "/login/reissue"
-                        ).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/code",
                                 "/facilities/{facilityId}",
@@ -59,19 +52,20 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(config -> config
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
-                .logout(logout -> logout
-                        .addLogoutHandler(jwtLogoutHandler)
-                        .logoutSuccessHandler(jwtLogoutSuccessHandler)
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(config -> config
-                                .userService(oAuth2UserService))
-                        .successHandler(oAuth2AuthenticationSuccessHandler)
-                )
+//                .logout(logout -> logout
+//                        .addLogoutHandler(jwtLogoutHandler)
+//                        .logoutSuccessHandler(jwtLogoutSuccessHandler)
+//                )
+//                .oauth2Login(oauth2 -> oauth2
+//                        .userInfoEndpoint(config -> config
+//                                .userService(oAuth2UserService))
+//                        .successHandler(oAuth2AuthenticationSuccessHandler)
+//                )
+//                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
@@ -110,8 +104,4 @@ public class SecurityConfig {
         return new JwtLogoutSuccessHandler();
     }
 
-    @Bean
-    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        return new JwtAuthenticationEntryPoint(objectMapper);
-    }
 }

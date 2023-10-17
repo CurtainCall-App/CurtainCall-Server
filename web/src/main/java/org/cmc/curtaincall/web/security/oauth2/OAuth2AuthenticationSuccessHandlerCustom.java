@@ -6,22 +6,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
+import org.cmc.curtaincall.web.security.response.AccountDto;
 import org.cmc.curtaincall.web.security.response.LoginResponse;
 import org.cmc.curtaincall.web.security.service.AccountService;
-import org.cmc.curtaincall.web.security.response.AccountDto;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandlerCustom implements AuthenticationSuccessHandler {
 
