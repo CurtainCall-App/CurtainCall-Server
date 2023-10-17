@@ -33,11 +33,7 @@ class AuthDocsTest {
         mockMvc.perform(get("/docs/auth/login-response"))
                 .andDo(document("auth-LoginResponse",
                         responseFields(
-                                fieldWithPath("memberId").description("회원 ID"),
-                                fieldWithPath("accessToken").description("엑세스 토큰"),
-                                fieldWithPath("accessTokenExpiresAt").description("엑세스 토큰 만료 시간"),
-                                fieldWithPath("refreshToken").description("리프레쉬 토큰"),
-                                fieldWithPath("refreshTokenExpiresAt").description("리프레쉬 토큰 만료 시간")
+                                fieldWithPath("accessToken").description("엑세스 토큰")
                         )
                 ));
     }

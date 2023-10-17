@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
+// TODO JDBC 템플릿 사용하도록 변경
 @RequiredArgsConstructor
 @Slf4j
 public class LoginMemberAuditorAware implements AuditorAware<Member> {

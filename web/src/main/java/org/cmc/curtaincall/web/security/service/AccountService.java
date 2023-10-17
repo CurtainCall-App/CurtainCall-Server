@@ -10,7 +10,6 @@ import org.cmc.curtaincall.web.security.response.AccountDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,19 +24,6 @@ public class AccountService {
         return Optional.ofNullable(account.getMemberId())
                 .map(MemberId::getId)
                 .orElse(null);
-    }
-
-    @Transactional
-    public AccountDto login(String username, String refreshToken, LocalDateTime refreshTokenExpiresAt) {
-        Account account = getOrCreate(username);
-        account.renewRefreshToken(refreshToken, refreshTokenExpiresAt);
-        return AccountDto.of(account);
-    }
-
-    @Transactional
-    public void logout(String username) {
-        Account account = getAccountByUsername(username);
-        account.refreshTokenExpires();
     }
 
     private Account getOrCreate(String username) {

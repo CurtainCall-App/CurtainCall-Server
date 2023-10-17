@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+// TODO 제거하기
 public class UserWithMemberId implements UserDetails {
 
     private final UserDetails user;

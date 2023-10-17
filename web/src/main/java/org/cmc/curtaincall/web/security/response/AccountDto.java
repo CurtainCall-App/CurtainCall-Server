@@ -4,15 +4,12 @@ import lombok.Builder;
 import org.cmc.curtaincall.domain.account.Account;
 import org.cmc.curtaincall.domain.account.MemberId;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Builder
 public record AccountDto(
         Long memberId,
-        String username,
-        String refreshToken,
-        LocalDateTime refreshTokenExpiresAt
+        String username
 ) {
 
     public static AccountDto of(Account account) {
@@ -21,8 +18,6 @@ public record AccountDto(
                         .map(MemberId::getId)
                         .orElse(null))
                 .username(account.getUsername())
-                .refreshToken(account.getRefreshToken())
-                .refreshTokenExpiresAt(account.getRefreshTokenExpiresAt())
                 .build();
     }
 }

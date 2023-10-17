@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -53,9 +51,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 //                .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(config -> config
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
+//                .exceptionHandling(config -> config
+//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(oidcAuthenticationSuccessHandler)
                 )
@@ -82,10 +80,8 @@ public class SecurityConfig {
     @Bean
     public JwtTokenProvider jwtTokenProvider(
             @Value("${jwt.access-token-validity}") long accessTokenValidity,
-            @Value("${jwt.refresh-token-validity}") long refreshTokenValidity,
             @Value("${jwt.secret}") String secret) {
-        return new JwtTokenProvider(
-                accessTokenValidity, refreshTokenValidity, secret);
+        return new JwtTokenProvider(accessTokenValidity, secret);
     }
 
     @Bean
