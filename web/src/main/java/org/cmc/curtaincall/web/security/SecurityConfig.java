@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
-import org.cmc.curtaincall.web.security.service.AccountService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +12,11 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +32,9 @@ public class SecurityConfig {
                 .csrf(config -> config.disable())
                 .formLogin(config -> config.disable())
                 .httpBasic(config -> config.disable())
-//                .sessionManagement(config -> config
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
+                .sessionManagement(config -> config
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.GET,
                                 "/code",
@@ -50,7 +51,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-//                .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
 //                .exceptionHandling(config -> config
 //                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
 //                )
@@ -85,9 +86,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(
-            JwtTokenProvider jwtTokenProvider, AccountService accountService) {
-        return new JwtAuthenticationCheckFilter(jwtTokenProvider, accountService);
+    public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(JwtTokenProvider jwtTokenProvider) {
+        return new JwtAuthenticationCheckFilter(jwtTokenProvider);
     }
 
 }
