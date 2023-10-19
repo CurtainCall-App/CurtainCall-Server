@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.account.MemberId;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
 import org.cmc.curtaincall.web.common.response.ValueResult;
@@ -14,7 +15,7 @@ public class ChatController {
     private final GetStreamChatService getStreamChatService;
 
     @GetMapping("/chat-token")
-    public ValueResult<String> getChatToken(@LoginMemberId Long memberId) {
-        return getStreamChatService.createToken(memberId);
+    public ValueResult<String> getChatToken(@LoginMemberId MemberId memberId) {
+        return getStreamChatService.createToken(memberId.getId());
     }
 }

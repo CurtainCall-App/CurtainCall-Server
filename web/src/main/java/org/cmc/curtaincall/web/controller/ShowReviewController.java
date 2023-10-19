@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.account.MemberId;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
@@ -35,8 +36,8 @@ public class ShowReviewController {
     }
 
     @DeleteMapping("/reviews/{reviewId}")
-    public void deleteReview(@PathVariable Long reviewId, @LoginMemberId Long memberId) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId)) {
+    public void deleteReview(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
+        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
         showReviewService.delete(reviewId);
@@ -44,9 +45,9 @@ public class ShowReviewController {
 
     @PatchMapping("/reviews/{reviewId}")
     public void editReview(
-            @PathVariable Long reviewId, @LoginMemberId Long memberId,
+            @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId)) {
+        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
         showReviewService.edit(showReviewEdit, reviewId);

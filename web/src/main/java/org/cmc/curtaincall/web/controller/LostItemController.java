@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.account.MemberId;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
@@ -25,8 +26,10 @@ public class LostItemController {
     private final ImageService imageService;
 
     @PostMapping("/lostItems")
-    public IdResult<Long> createLostItem(@RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId Long memberId) {
-        if (!imageService.isOwnedByMember(memberId, lostItemCreate.getImageId())) {
+    public IdResult<Long> createLostItem(
+            @RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId MemberId memberId
+    ) {
+        if (!imageService.isOwnedByMember(memberId.getId(), lostItemCreate.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemCreate.getImageId());
         }
@@ -45,8 +48,8 @@ public class LostItemController {
     }
 
     @DeleteMapping("/lostItems/{lostItemId}")
-    public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId Long memberId) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId)) {
+    public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId MemberId memberId) {
+        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
             throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
         }
         lostItemService.delete(lostItemId);
@@ -54,12 +57,12 @@ public class LostItemController {
 
     @PatchMapping("/lostItems/{lostItemId}")
     public void editLostItem(
-            @PathVariable Long lostItemId, @LoginMemberId Long memberId,
+            @PathVariable Long lostItemId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated LostItemEdit lostItemEdit) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId)) {
+        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
             throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
         }
-        if (!imageService.isOwnedByMember(memberId, lostItemEdit.getImageId())) {
+        if (!imageService.isOwnedByMember(memberId.getId(), lostItemEdit.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());
         }

@@ -63,12 +63,12 @@ public class MemberController {
 
     @PatchMapping("/member")
     public void editMember(
-            @LoginMemberId Long memberId, @RequestBody @Validated MemberEdit memberEdit) {
-        if (memberEdit.getImageId() != null && !imageService.isOwnedByMember(memberId, memberEdit.getImageId())) {
+            @LoginMemberId MemberId memberId, @RequestBody @Validated MemberEdit memberEdit) {
+        if (memberEdit.getImageId() != null && !imageService.isOwnedByMember(memberId.getId(), memberEdit.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + memberEdit.getImageId());
         }
-        memberService.edit(memberId, memberEdit);
+        memberService.edit(memberId.getId(), memberEdit);
     }
 
     @GetMapping("/members/{memberId}/recruitments")
@@ -90,21 +90,21 @@ public class MemberController {
     @GetMapping("/member/reviews")
     public Slice<ShowReviewMyResponse> getMyShowReviewList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @LoginMemberId Long memberId
+            @LoginMemberId MemberId memberId
     ) {
-        return showReviewService.getMyList(pageable, memberId);
+        return showReviewService.getMyList(pageable, memberId.getId());
     }
 
     @GetMapping("/member/lostItems")
     public Slice<LostItemMyResponse> getMyLostItemList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @LoginMemberId Long memberId
+            @LoginMemberId MemberId memberId
     ) {
-        return lostItemService.getMyList(pageable, memberId);
+        return lostItemService.getMyList(pageable, memberId.getId());
     }
 
     @DeleteMapping("/member")
-    public void delete(@LoginMemberId Long memberId, @RequestBody @Validated MemberDelete memberDelete) {
-        accountService.delete(new MemberId(memberId));
+    public void delete(@LoginMemberId MemberId memberId, @RequestBody @Validated MemberDelete memberDelete) {
+        accountService.delete(new MemberId(memberId.getId()));
     }
 }
