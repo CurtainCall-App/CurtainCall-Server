@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @Import({RestDocsConfig.class, TestSecurityConfig.class})
@@ -29,9 +28,11 @@ public abstract class AbstractWebTest {
     @MockBean
     protected AccountDao accountDao;
 
+    protected Long loginMemberId = 1234L;
+
     @BeforeEach
     void setUpAccountDao() {
-        given(accountDao.findMemberIdByUsername(any()))
-                .willReturn(Optional.of(new MemberId(1234L)));
+        given(accountDao.findMemberIdByUsername(TestSecurityConfig.TEST_USERNAME))
+                .willReturn(Optional.of(new MemberId(loginMemberId)));
     }
 }

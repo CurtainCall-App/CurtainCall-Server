@@ -21,6 +21,8 @@ import static org.mockito.Mockito.mock;
 @TestConfiguration
 public class TestSecurityConfig {
 
+    public static final String TEST_USERNAME = "test-user";
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
@@ -64,7 +66,7 @@ public class TestSecurityConfig {
         JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);
         String token = "ACCESS_TOKEN";
         given(jwtTokenProvider.validateToken(token)).willReturn(true);
-        given(jwtTokenProvider.getSubject(token)).willReturn("test-user");
+        given(jwtTokenProvider.getSubject(token)).willReturn(TEST_USERNAME);
         return jwtTokenProvider;
     }
 }
