@@ -1,25 +1,19 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
 import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +21,6 @@ import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -37,29 +30,15 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(FavoriteShowController.class)
-class FavoriteShowControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class FavoriteShowControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
-
-    @MockBean
-    FavoriteShowService favoriteShowService;
+    private FavoriteShowService favoriteShowService;
 
     @Test
     @WithMockUser
     void favoriteShow_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         // expected
         mockMvc.perform(put("/shows/{showId}/favorite", "PF220846")
                         .with(csrf())
@@ -76,9 +55,6 @@ class FavoriteShowControllerDocsTest {
     @Test
     @WithMockUser
     void cancelFavorite_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         // expected
         mockMvc.perform(delete("/shows/{showId}/favorite", "PF220846")
                         .with(csrf())
@@ -95,9 +71,6 @@ class FavoriteShowControllerDocsTest {
     @Test
     @WithMockUser
     void getFavorite_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         given(favoriteShowService.areFavorite(any(), any())).willReturn(
                 List.of(
                         new ShowFavoriteResponse("PF220846", true),
@@ -130,9 +103,6 @@ class FavoriteShowControllerDocsTest {
     @Test
     @WithMockUser
     void getFavoriteShowList_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         List<FavoriteShowResponse> favoriteShowResponseList = List.of(
                 FavoriteShowResponse.builder()
                         .id("PF220846")

@@ -1,24 +1,18 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -33,22 +27,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(ShowReviewController.class)
-class ShowReviewControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class ShowReviewControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     ShowReviewService showReviewService;
-
-    @MockBean
-    AccountService accountService;
 
     @Test
     @WithMockUser
@@ -141,8 +124,6 @@ class ShowReviewControllerDocsTest {
     @WithMockUser
     void deleteReview_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         given(showReviewService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
@@ -169,8 +150,6 @@ class ShowReviewControllerDocsTest {
                 .content("수정된 내용")
                 .grade(4)
                 .build();
-
-        given(accountService.getMemberId(any())).willReturn(5L);
 
         given(showReviewService.isOwnedByMember(any(), any())).willReturn(true);
 

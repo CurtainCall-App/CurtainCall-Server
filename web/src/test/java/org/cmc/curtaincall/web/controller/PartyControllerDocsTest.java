@@ -1,9 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.party.PartyCategory;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
@@ -12,16 +10,12 @@ import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
 import org.cmc.curtaincall.web.service.party.response.PartyResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,22 +32,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(PartyController.class)
-class PartyControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class PartyControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
-
-    @MockBean
-    PartyService partyService;
+    private PartyService partyService;
 
     @Test
     @WithMockUser
@@ -283,8 +266,6 @@ class PartyControllerDocsTest {
     @WithMockUser
     void deleteParty_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         given(partyService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
@@ -305,8 +286,6 @@ class PartyControllerDocsTest {
     @WithMockUser
     void editParty_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         given(partyService.isOwnedByMember(any(), any())).willReturn(true);
 
         PartyEdit partyEdit = PartyEdit.builder()
@@ -340,9 +319,6 @@ class PartyControllerDocsTest {
     @Test
     @WithMockUser
     void participateParty_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(any())).willReturn(1L);
-
         // expected
         mockMvc.perform(put("/member/parties/{partyId}", 10)
                         .with(csrf())
@@ -363,8 +339,6 @@ class PartyControllerDocsTest {
     @WithMockUser
     void getParticipated_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(2L);
-
         given(partyService.areParticipated(any(), any())).willReturn(
                 List.of(
                         new PartyParticipatedResponse(4L, true),

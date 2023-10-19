@@ -1,14 +1,13 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
@@ -21,16 +20,12 @@ import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.cmc.curtaincall.web.service.review.ShowReviewService;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,31 +44,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(MemberController.class)
-class MemberControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class MemberControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    MemberService memberService;
+    private MemberService memberService;
 
     @MockBean
-    AccountService accountService;
+    private AccountService accountService;
 
     @MockBean
-    ImageService imageService;
+    private ImageService imageService;
 
     @MockBean
-    ShowReviewService showReviewService;
+    private ShowReviewService showReviewService;
 
     @MockBean
-    LostItemService lostItemService;
+    private LostItemService lostItemService;
 
     @Test
     @WithMockUser
@@ -177,8 +164,6 @@ class MemberControllerDocsTest {
                 .nickname("수정이닉네임")
                 .imageId(null)
                 .build();
-
-        given(accountService.getMemberId(any())).willReturn(5L);
 
         given(imageService.isOwnedByMember(any(), any())).willReturn(true);
 

@@ -1,26 +1,19 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.service.review.ShowReviewLikeService;
 import org.cmc.curtaincall.web.service.review.response.ShowReviewLikedResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -32,29 +25,15 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(ShowReviewLikeController.class)
-class ShowReviewLikeControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
-
-    @MockBean
-    ShowReviewLikeService showReviewLikeService;
+    private ShowReviewLikeService showReviewLikeService;
 
     @Test
     @WithMockUser
     void likeReview_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         // expected
         mockMvc.perform(put("/reviews/{reviewId}/like", "10")
                         .with(csrf())
@@ -74,9 +53,6 @@ class ShowReviewLikeControllerDocsTest {
     @Test
     @WithMockUser
     void cancelLike_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         // expected
         mockMvc.perform(delete("/reviews/{reviewId}/like", "10")
                         .with(csrf())
@@ -94,8 +70,6 @@ class ShowReviewLikeControllerDocsTest {
     @WithMockUser
     void getFavorite_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(anyString())).willReturn(2L);
-
         given(showReviewLikeService.areLiked(any(), any())).willReturn(
                 List.of(
                         new ShowReviewLikedResponse(4L, true),

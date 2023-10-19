@@ -1,9 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
@@ -12,16 +10,12 @@ import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,32 +35,18 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(LostItemController.class)
-class LostItemControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class LostItemControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
+    private LostItemService lostItemService;
 
     @MockBean
-    LostItemService lostItemService;
-
-    @MockBean
-    ImageService imageService;
+    private ImageService imageService;
 
     @Test
     @WithMockUser
     void createLostItem_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         LostItemCreate lostItemCreate = LostItemCreate.builder()
                 .title("아이폰 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
@@ -225,8 +205,6 @@ class LostItemControllerDocsTest {
     @WithMockUser
     void deleteReview_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
@@ -249,8 +227,6 @@ class LostItemControllerDocsTest {
     @WithMockUser
     void editLostItem_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         var lostItemEdit = LostItemEdit.builder()
                 .title("아이폰 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
