@@ -6,32 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.springframework.data.domain.Persistable;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "account",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "UK_account__username", columnNames = "username")
-        },
         indexes = {
                 @Index(name = "IX_account__member", columnList = "member_id")
         }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account extends BaseTimeEntity {
+public class Account extends BaseTimeEntity implements Persistable<String> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
-    private Long id;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Embedded
     private MemberId memberId;
-
-    @Column(name = "username", nullable = false)
-    private String username;
 
     public Account(final String username) {
         this.username = username;
@@ -40,5 +34,15 @@ public class Account extends BaseTimeEntity {
 
     public void registerMember(final MemberId memberId) {
         this.memberId = Objects.requireNonNull(memberId);
+    }
+
+    @Override
+    public String getId() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isNew() {
+        return getCreatedAt() == null;
     }
 }
