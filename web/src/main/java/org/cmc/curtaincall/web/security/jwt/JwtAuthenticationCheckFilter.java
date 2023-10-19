@@ -21,10 +21,12 @@ public class JwtAuthenticationCheckFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final BearerTokenResolver bearerTokenResolver;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = bearerTokenResolver.resolve(request);
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getSubject(token);
             UserDetails user = User.withUsername(username)

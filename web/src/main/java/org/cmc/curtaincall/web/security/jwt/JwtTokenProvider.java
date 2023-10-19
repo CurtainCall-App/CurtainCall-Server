@@ -3,18 +3,13 @@ package org.cmc.curtaincall.web.security.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Slf4j
 public class JwtTokenProvider {
-
-    public static final String TOKEN_PREFIX = "Bearer ";
 
     private final SecretKey secretKey;
 
@@ -64,14 +59,6 @@ public class JwtTokenProvider {
 
     public String getSubject(String token) {
         return jwtParser.parseClaimsJws(token).getBody().getSubject();
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtTokenProvider.TOKEN_PREFIX)) {
-            return bearerToken.substring(JwtTokenProvider.TOKEN_PREFIX.length());
-        }
-        return null;
     }
 
 }

@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.web.security.jwt.BearerTokenResolver;
 import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
@@ -89,7 +90,6 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(JwtTokenProvider jwtTokenProvider) {
-        return new JwtAuthenticationCheckFilter(jwtTokenProvider);
+        return new JwtAuthenticationCheckFilter(jwtTokenProvider, new BearerTokenResolver());
     }
-
 }
