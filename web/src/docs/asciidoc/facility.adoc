@@ -16,4 +16,4 @@ operation::facility-get-facility-detail[snippets='http-request,path-parameters,h
 [[facility-get-show-list-of-facility]]
 == 공연 시설의 공연
 
-operation::facility-get-show-list-of-facility[snippets='http-request,path-parameters,query-parameters,http-response,response-fields-content']
+operation::facility-get-show-list-of-facility[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']

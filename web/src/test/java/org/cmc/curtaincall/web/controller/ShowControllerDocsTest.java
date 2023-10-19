@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +25,8 @@ import java.util.List;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -39,7 +41,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     private ShowService showService;
 
     @Test
-    @WithMockUser
     void getShows_Docs() throws Exception {
         // given
         List<ShowResponse> showResponses = List.of(
@@ -114,7 +115,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void searchShows_Docs() throws Exception {
         // given
         List<ShowResponse> showResponses = List.of(
@@ -179,7 +179,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getShowListToOpen_Docs() throws Exception {
         // given
         List<ShowResponse> showResponses = List.of(
@@ -244,7 +243,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getShowListToEnd_Docs() throws Exception {
         // given
         List<ShowResponse> showResponses = List.of(
@@ -313,7 +311,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getShowDetail_Docs() throws Exception {
         // given
         ShowDetailResponse response = ShowDetailResponse.builder()
@@ -386,7 +383,6 @@ class ShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getLiveTalkShowTimeList_Docs() throws Exception {
         // given
         var response = List.of(
@@ -406,6 +402,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/livetalk-show-times")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -415,6 +412,9 @@ class ShowControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("show-get-show-time-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),

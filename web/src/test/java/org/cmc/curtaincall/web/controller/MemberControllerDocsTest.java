@@ -25,7 +25,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +34,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -63,7 +64,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     private LostItemService lostItemService;
 
     @Test
-    @WithMockUser
     void getNicknameDuplicate_Docs() throws Exception {
         // given
         BooleanResult duplicateResult = new BooleanResult(false);
@@ -73,10 +73,13 @@ class MemberControllerDocsTest extends AbstractWebTest {
         mockMvc.perform(get("/members/duplicate/nickname")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .param("nickname", "테스트닉네임"))
                 .andDo(print())
                 .andDo(document("member-get-nickname-duplicate",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("nickname").description("중복 확인 하려는 닉네임.")
                         ),
@@ -88,7 +91,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void signup_Docs() throws Exception {
         // given
         MemberCreate memberCreate = MemberCreate.builder()
@@ -98,14 +100,17 @@ class MemberControllerDocsTest extends AbstractWebTest {
         given(memberService.create(any())).willReturn(new IdResult<>(1L));
 
         // expected
-        mockMvc.perform(post("/signup").with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+        mockMvc.perform(post("/signup")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberCreate))
                 )
                 .andDo(print())
                 .andDo(document("member-signup",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("nickname").description("회원 닉네임")
                                         .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
@@ -119,7 +124,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getMemberDetail_Docs() throws Exception {
         // given
         MemberDetailResponse response = MemberDetailResponse.builder()
@@ -134,11 +138,14 @@ class MemberControllerDocsTest extends AbstractWebTest {
         // expected
         mockMvc.perform(get("/members/{memberId}", 10L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-get-member-detail",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("memberId").description("회원 ID")
                         ),
@@ -157,7 +164,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void editMember_Docs() throws Exception {
         // given
         MemberEdit memberEdit = MemberEdit.builder()
@@ -169,14 +175,16 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(patch("/member")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberEdit))
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-edit-member",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("nickname").description("닉네임")
                                         .attributes(RestDocsAttribute.constraint("min = 2, max = 15")),
@@ -186,7 +194,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getRecruitmentList_Docs() throws Exception {
         // given
         var partyResponse = MyPartyResponse.builder()
@@ -212,6 +219,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/members/{memberId}/recruitments", 2L)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
@@ -220,6 +228,9 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-get-recruitment-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("memberId").description("회원 ID")
                         ),
@@ -254,7 +265,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getParticipationList_Docs() throws Exception {
         // given
         var partyResponse = MyPartyResponse.builder()
@@ -280,6 +290,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/members/{memberId}/participations", 2L)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
@@ -288,6 +299,9 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-get-participation-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("memberId").description("회원 ID")
                         ),
@@ -320,7 +334,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getMyShowReviewList_Docs() throws Exception {
         // given
         List<ShowReviewMyResponse> reviewResponseList = List.of(
@@ -339,7 +352,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/member/reviews")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -348,6 +361,9 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("member-get-my-show-review-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
                                 parameterWithName("size").description("페이지 사이즈").optional()
@@ -366,7 +382,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getMyLostItemList_Docs() throws Exception {
         // given
         var responseList = List.of(
@@ -387,7 +402,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/member/lostItems")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -396,6 +411,9 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("member-get-my-lost-item-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
                                 parameterWithName("size").description("페이지 사이즈").optional()
@@ -417,7 +435,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void deleteMember_Docs() throws Exception {
         // given
         var memberDelete = MemberDelete.builder()
@@ -430,13 +447,16 @@ class MemberControllerDocsTest extends AbstractWebTest {
         // expected
         mockMvc.perform(delete("/member")
                         .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberDelete))
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-delete-member",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("reason").type(MemberDeleteReason.class.getSimpleName())
                                         .description("회원탈퇴 사유"),

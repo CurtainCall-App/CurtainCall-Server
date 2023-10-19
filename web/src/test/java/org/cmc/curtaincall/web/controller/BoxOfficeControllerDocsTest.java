@@ -9,9 +9,7 @@ import org.cmc.curtaincall.web.service.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +33,6 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
     private BoxOfficeService boxOfficeService;
 
     @Test
-    @WithMockUser
     void getBoxOffice_Docs() throws Exception {
         // given
         BoxOfficeResponse boxOfficeResponse = BoxOfficeResponse.builder()
@@ -53,7 +50,6 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/box-office")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("type", BoxOfficeType.WEEK.name())

@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +23,12 @@ import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,7 +39,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     private PartyService partyService;
 
     @Test
-    @WithMockUser
     void getPartyList_Docs() throws Exception {
         // given
         PartyResponse partyResponse = PartyResponse.builder()
@@ -63,6 +62,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/parties")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
@@ -71,6 +71,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("party-get-party-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
@@ -100,7 +103,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
 
     @Test
-    @WithMockUser
     void searchParty_Docs() throws Exception {
         // given
         PartyResponse partyResponse = PartyResponse.builder()
@@ -124,6 +126,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/search/party")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
@@ -133,6 +136,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("party-search",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
@@ -164,7 +170,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
 
     @Test
-    @WithMockUser
     void getPartyDetail_Docs() throws Exception {
         // given
         PartyDetailResponse partyDetailResponse = PartyDetailResponse.builder()
@@ -189,11 +194,14 @@ class PartyControllerDocsTest extends AbstractWebTest {
         // expected
         mockMvc.perform(get("/parties/{partyId}", 10L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("party-get-party-detail",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("partyId").description("공연 아이디")
                         ),
@@ -220,7 +228,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void createParty_Docs() throws Exception {
         // given
         PartyCreate partyCreate = PartyCreate.builder()
@@ -235,8 +242,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(post("/parties")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partyCreate))
@@ -244,6 +250,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("party-create-party",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("showId").description("공연 ID").optional(),
                                 fieldWithPath("showAt").description("공연일시").optional(),
@@ -263,19 +272,20 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void deleteParty_Docs() throws Exception {
         // given
         given(partyService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
         mockMvc.perform(delete("/parties/{partyId}", 10)
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("party-delete-party",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("partyId").description("파티 ID")
                         )
@@ -283,7 +293,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void editParty_Docs() throws Exception {
         // given
         given(partyService.isOwnedByMember(any(), any())).willReturn(true);
@@ -295,8 +304,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(patch("/parties/{partyId}", 10)
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partyEdit))
@@ -304,6 +312,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("party-edit-party",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("partyId").description("파티 ID")
                         ),
@@ -317,18 +328,19 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void participateParty_Docs() throws Exception {
         // expected
         mockMvc.perform(put("/member/parties/{partyId}", 10)
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("party-participate-party",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("partyId").description("파티 ID")
                         )
@@ -336,7 +348,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getParticipated_Docs() throws Exception {
         // given
         given(partyService.areParticipated(any(), any())).willReturn(
@@ -348,7 +359,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/member/participated")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("partyIds", "4", "12")
@@ -356,6 +367,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("party-get-participated",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("partyIds").description("파티 ID 리스트")
                                         .attributes(type(List.class))

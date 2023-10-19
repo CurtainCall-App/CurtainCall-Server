@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +29,6 @@ class NoticeControllerDocsTest extends AbstractWebTest {
     private NoticeService noticeService;
 
     @Test
-    @WithMockUser
     void getNoticeList_Docs() throws Exception {
         // given
         NoticeResponse noticeResponse = NoticeResponse.builder()
@@ -55,7 +53,7 @@ class NoticeControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
-                                beneathPath("content[]").withSubsectionId("`content`"),
+                                beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("공지사항 ID"),
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("createdAt").description("생성 일시")
@@ -64,7 +62,6 @@ class NoticeControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getNoticeDetail_Docs() throws Exception {
         // given
         NoticeDetailResponse noticeResponse = NoticeDetailResponse.builder()

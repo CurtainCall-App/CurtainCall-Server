@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -25,18 +26,20 @@ class ChatControllerDocsTest extends AbstractWebTest {
     private GetStreamChatService getStreamChatService;
 
     @Test
-    @WithMockUser
     void getChatToken_Docs() throws Exception {
         // given
         given(getStreamChatService.createToken(anyLong())).willReturn(new ValueResult<>("CHAT_TOKEN"));
 
         // expected
         mockMvc.perform(get("/chat-token")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("chat-get-chat-token",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         responseFields(
                                 fieldWithPath("value").description("채팅 토큰")
                         )

@@ -10,9 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -28,7 +29,6 @@ class ReportControllerDocsTest extends AbstractWebTest {
     private ReportService reportService;
 
     @Test
-    @WithMockUser
     void createReport_Docs() throws Exception {
         // given
         ReportCreate reportCreate = ReportCreate.builder()
@@ -41,13 +41,16 @@ class ReportControllerDocsTest extends AbstractWebTest {
         // expected
         mockMvc.perform(post("/reports")
                         .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reportCreate))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("report-create-report",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("idToReport").description("신고하려는 글 ID"),
                                 fieldWithPath("type").description("신고하려는 글 유형")

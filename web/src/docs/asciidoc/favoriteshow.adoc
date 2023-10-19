@@ -10,21 +10,21 @@
 [[favorite-show-favorite-show]]
 == 공연 즐겨찾기
 
-operation::favorite-show-favorite-show[snippets='http-request,path-parameters,http-response']
+operation::favorite-show-favorite-show[snippets='http-request,request-headers,path-parameters,http-response']
 
 [[favorite-show-cancel-favorite]]
 == 공연 즐겨찾기 취소
 
-operation::favorite-show-cancel-favorite[snippets='http-request,path-parameters,http-response']
+operation::favorite-show-cancel-favorite[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[favorite-get-favorite]]
 == 공연 즐겨찾기 여부 조회
 
-operation::favorite-get-favorite[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::favorite-get-favorite[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[favorite-get-favorite-list]]
 == 즐겨찾기된 공연 조회
 
-operation::favorite-get-favorite-list[snippets='http-request,path-parameters,http-response,response-fields-content']
+operation::favorite-get-favorite-list[snippets='http-request,request-headers,path-parameters,http-response,response-fields-content']

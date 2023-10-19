@@ -62,7 +62,7 @@ public class TestSecurityConfig {
     @Bean
     public JwtTokenProvider jwtTokenProvider() {
         JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);
-        String token = "{ACCESS_TOKEN}";
+        String token = "ACCESS_TOKEN";
         given(jwtTokenProvider.validateToken(token)).willReturn(true);
         given(jwtTokenProvider.getSubject(token)).willReturn("test-user");
         return jwtTokenProvider;

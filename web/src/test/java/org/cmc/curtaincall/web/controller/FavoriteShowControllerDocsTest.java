@@ -13,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,11 +21,12 @@ import java.util.List;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,15 +37,16 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     private FavoriteShowService favoriteShowService;
 
     @Test
-    @WithMockUser
     void favoriteShow_Docs() throws Exception {
         // expected
         mockMvc.perform(put("/shows/{showId}/favorite", "PF220846")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}"))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-show-favorite-show",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("showId").description("공연 ID")
                         )
@@ -53,15 +54,16 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void cancelFavorite_Docs() throws Exception {
         // expected
         mockMvc.perform(delete("/shows/{showId}/favorite", "PF220846")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}"))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-show-cancel-favorite",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("showId").description("공연 ID")
                         )
@@ -69,7 +71,6 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getFavorite_Docs() throws Exception {
         given(favoriteShowService.areFavorite(any(), any())).willReturn(
                 List.of(
@@ -80,7 +81,7 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/member/favorite")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("showIds", "PF220846", "PF189549")
@@ -88,6 +89,9 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-get-favorite",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("showIds").description("공연 아이디 리스트")
                                         .attributes(type(List.class))
@@ -101,7 +105,6 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getFavoriteShowList_Docs() throws Exception {
         List<FavoriteShowResponse> favoriteShowResponseList = List.of(
                 FavoriteShowResponse.builder()
@@ -131,13 +134,16 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/members/{memberId}/favorite", 1L)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("favorite-get-favorite-list",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("memberId").description("회원 ID")
                         ),

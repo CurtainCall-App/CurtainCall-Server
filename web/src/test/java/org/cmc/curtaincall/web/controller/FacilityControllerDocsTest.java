@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,6 +22,8 @@ import java.util.List;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -39,7 +41,6 @@ class FacilityControllerDocsTest extends AbstractWebTest {
     private ShowService showService;
 
     @Test
-    @WithMockUser
     void getFacilityDetail_Docs() throws Exception {
         // given
         FacilityDetailResponse response = FacilityDetailResponse.builder()
@@ -85,7 +86,6 @@ class FacilityControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getShowListOfFacility_Docs() throws Exception {
         // given
         var response = ShowResponse.builder()
@@ -114,6 +114,7 @@ class FacilityControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/facilities/{facilityId}/shows", "FC001298")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -123,6 +124,9 @@ class FacilityControllerDocsTest extends AbstractWebTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("facility-get-show-list-of-facility",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("facilityId").description("공연장 ID")
                         ),

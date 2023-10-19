@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
@@ -32,12 +31,10 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     private ShowReviewLikeService showReviewLikeService;
 
     @Test
-    @WithMockUser
     void likeReview_Docs() throws Exception {
         // expected
         mockMvc.perform(put("/reviews/{reviewId}/like", "10")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}"))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-review-like",
@@ -51,15 +48,17 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void cancelLike_Docs() throws Exception {
         // expected
         mockMvc.perform(delete("/reviews/{reviewId}/like", "10")
                         .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}"))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-cancel-like",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("reviewId").description("공연 리뷰 ID")
                         )
@@ -67,7 +66,6 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    @WithMockUser
     void getFavorite_Docs() throws Exception {
         // given
         given(showReviewLikeService.areLiked(any(), any())).willReturn(
@@ -79,7 +77,7 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
 
         // expected
         mockMvc.perform(get("/member/like")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("reviewIds", "4", "12")
@@ -87,6 +85,9 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("show-review-like-get-liked",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("reviewIds").description("공연 리뷰 아이디 리스트")
                                         .attributes(type(List.class))
