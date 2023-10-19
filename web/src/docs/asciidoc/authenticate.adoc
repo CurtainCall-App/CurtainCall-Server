@@ -8,6 +8,15 @@
 :operation-http-request-title: Example request
 :operation-http-response-title: Example response
 
+[[login-page]]
+== 로그인 페이지(웹 용)
+
+[source]
+----
+GET /oauth2/authorization/{provider}
+----
+
+- kakao
 
 [[auth-LoginResponse]]
 == 인증 및 토큰 재발급 성공 시 응답
