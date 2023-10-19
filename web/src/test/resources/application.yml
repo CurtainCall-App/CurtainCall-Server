@@ -48,10 +48,8 @@ spring:
 
 logging:
   level:
-    #    root: debug
-    org.hibernate:
-      SQL: debug
-      type: trace
+    apache.coyote.http11: debug
+    springframework.security: trace
 
 app:
   kopis:
