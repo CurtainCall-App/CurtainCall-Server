@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.security.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.account.Account;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 
 import java.util.Optional;
 

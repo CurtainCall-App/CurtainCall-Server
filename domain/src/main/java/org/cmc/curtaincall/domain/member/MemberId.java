@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.domain.account;
+package org.cmc.curtaincall.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

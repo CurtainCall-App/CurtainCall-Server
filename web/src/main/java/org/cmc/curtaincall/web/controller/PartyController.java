@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;

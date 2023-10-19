@@ -2,7 +2,7 @@ package org.cmc.curtaincall.domain.account.dao;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

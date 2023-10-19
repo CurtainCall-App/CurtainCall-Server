@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;

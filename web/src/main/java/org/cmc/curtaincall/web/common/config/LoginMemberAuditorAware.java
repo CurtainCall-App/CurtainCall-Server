@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.common.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.member.Member;
 import org.springframework.data.domain.AuditorAware;

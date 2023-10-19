@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
+import org.cmc.curtaincall.domain.member.MemberId;
 
 import java.util.Objects;
 

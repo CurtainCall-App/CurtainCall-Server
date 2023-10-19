@@ -2,6 +2,7 @@ package org.cmc.curtaincall.domain.account;
 
 import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.domain.common.AbstractDataJpaTest;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

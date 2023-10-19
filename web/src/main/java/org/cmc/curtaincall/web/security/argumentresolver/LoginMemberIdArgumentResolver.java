@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.security.argumentresolver;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.springframework.core.MethodParameter;

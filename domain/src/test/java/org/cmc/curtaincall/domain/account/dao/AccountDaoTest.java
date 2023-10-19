@@ -2,7 +2,7 @@ package org.cmc.curtaincall.domain.account.dao;
 
 import org.assertj.core.api.Assertions;
 import org.cmc.curtaincall.domain.account.Account;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.domain.common.AbstractDataJpaTest;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.domain.account.MemberId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
