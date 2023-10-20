@@ -47,6 +47,9 @@ public class TestSecurityConfig {
                                         .flatMap(Stream::of)
                                         .toArray(String[]::new)
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/login/oauth2/code/{provider}"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
