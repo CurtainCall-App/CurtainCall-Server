@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.error;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cmc.curtaincall.domain.common.DomainException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,6 +20,7 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             MaxUploadSizeExceededException.class,
             AccessDeniedException.class,
             OptimisticLockingFailureException.class,
+            DomainException.class,
             Exception.class
     })
     public final ResponseEntity<Object> handleUnhandledException(Exception ex, WebRequest request) {
@@ -29,6 +31,8 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleAccessDeniedException(subEx, headers, HttpStatus.FORBIDDEN, request);
         } else if (ex instanceof OptimisticLockingFailureException subEx) {
             return handleOptimisticLockingFailureException(subEx, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        } else if (ex instanceof DomainException subEx) {
+            return handleDomainException(subEx, headers, request);
         } else {
             return handleRootException(ex, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
         }
@@ -56,6 +60,15 @@ public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail body = createProblemDetail(
                 ex, status, "업데이트에 실패했습니다. 다시 시도해주세요",
                 null, null, request);
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleDomainException(
+            DomainException ex, HttpHeaders headers, WebRequest request
+    ) {
+        HttpStatusCode status = HttpStatusCode.valueOf(ex.getCode().getStatus());
+        ProblemDetail body = createProblemDetail(
+                ex, status, ex.getExternalMessage(), null, null, request);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
