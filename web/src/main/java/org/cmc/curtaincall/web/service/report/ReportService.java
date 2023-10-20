@@ -3,7 +3,7 @@ package org.cmc.curtaincall.web.service.report;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.report.Report;
 import org.cmc.curtaincall.domain.report.repository.ReportRepository;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.report.request.ReportCreate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

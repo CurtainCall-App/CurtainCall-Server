@@ -46,4 +46,4 @@ operation::box-office-get-box-office[snippets='http-request,query-parameters,htt
 [[show-get-show-time-list]]
 == 공연 시작 종료 일시로 조회
 
-operation::show-get-show-time-list[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::show-get-show-time-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']

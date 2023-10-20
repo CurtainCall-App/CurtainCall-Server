@@ -10,7 +10,7 @@
 [[report-create-report]]
 == 신고하기
 
-operation::report-create-report[snippets='http-request,request-fields,http-response']
+operation::report-create-report[snippets='http-request,request-headers,request-fields,http-response']
 
 신고 이유
 

@@ -2,11 +2,12 @@ package org.cmc.curtaincall.web.controller;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.party.PartyService;
 import org.cmc.curtaincall.web.service.party.request.PartyCreate;
 import org.cmc.curtaincall.web.service.party.request.PartyEdit;
@@ -53,8 +54,8 @@ public class PartyController {
     }
 
     @DeleteMapping("/parties/{partyId}")
-    public void deleteParty(@PathVariable Long partyId, @LoginMemberId Long memberId) {
-        if (!partyService.isOwnedByMember(partyId, memberId)) {
+    public void deleteParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
+        if (!partyService.isOwnedByMember(partyId, memberId.getId())) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
         partyService.delete(partyId);
@@ -63,23 +64,23 @@ public class PartyController {
     @PatchMapping("/parties/{partyId}")
     public void editParty(
             @PathVariable Long partyId, @RequestBody @Validated PartyEdit partyEdit,
-            @LoginMemberId Long memberId) {
-        if (!partyService.isOwnedByMember(partyId, memberId)) {
+            @LoginMemberId MemberId memberId) {
+        if (!partyService.isOwnedByMember(partyId, memberId.getId())) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
         partyService.edit(partyId, partyEdit);
     }
 
     @PutMapping("/member/parties/{partyId}")
-    public void participateParty(@PathVariable Long partyId, @LoginMemberId Long memberId) {
-        partyService.participate(partyId, memberId);
+    public void participateParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
+        partyService.participate(partyId, memberId.getId());
     }
 
     @GetMapping("/member/participated")
     public Slice<PartyParticipatedResponse> getParticipated(
-            @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId Long memberId
+            @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId MemberId memberId
     ) {
-        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId, partyIds);
+        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId.getId(), partyIds);
         return new SliceImpl<>(partyParticipatedResponses);
     }
 }

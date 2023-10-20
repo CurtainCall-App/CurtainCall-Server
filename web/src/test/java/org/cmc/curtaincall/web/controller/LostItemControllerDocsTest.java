@@ -1,10 +1,8 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
@@ -12,16 +10,11 @@ import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,41 +25,27 @@ import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(LostItemController.class)
-class LostItemControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class LostItemControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
+    private LostItemService lostItemService;
 
     @MockBean
-    LostItemService lostItemService;
-
-    @MockBean
-    ImageService imageService;
+    private ImageService imageService;
 
     @Test
-    @WithMockUser
     void createLostItem_Docs() throws Exception {
-        // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         LostItemCreate lostItemCreate = LostItemCreate.builder()
                 .title("아이폰 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
@@ -82,8 +61,7 @@ class LostItemControllerDocsTest {
 
         // expected
         mockMvc.perform(post("/lostItems")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lostItemCreate))
@@ -91,6 +69,9 @@ class LostItemControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("lostitem-create-lostitem",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         requestFields(
                                 fieldWithPath("title").description("제목")
                                         .attributes(key("constraint").value("최대 20")),
@@ -112,7 +93,6 @@ class LostItemControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void getLostItemList_Docs() throws Exception {
         // given
         LostItemResponse lostItemResponse = LostItemResponse.builder()
@@ -130,7 +110,7 @@ class LostItemControllerDocsTest {
 
         // expected
         mockMvc.perform(get("/lostItems")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -143,6 +123,9 @@ class LostItemControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("lostitem-search",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
@@ -170,7 +153,6 @@ class LostItemControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void getDetail_Docs() throws Exception {
         // given
         LostItemDetailResponse lostItemDetailResponse = LostItemDetailResponse.builder()
@@ -192,13 +174,16 @@ class LostItemControllerDocsTest {
 
         // expected
         mockMvc.perform(get("/lostItems/{lostItemId}", "10")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("lostitem-get-detail",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("lostItemId").description("분실물 ID")
                         ),
@@ -222,23 +207,22 @@ class LostItemControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void deleteReview_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
         mockMvc.perform(delete("/lostItems/{lostItemId}", "10")
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("lostitem-delete-lostitem",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("lostItemId").description("분실물 ID")
                         )
@@ -246,11 +230,8 @@ class LostItemControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void editLostItem_Docs() throws Exception {
         // given
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         var lostItemEdit = LostItemEdit.builder()
                 .title("아이폰 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
@@ -265,8 +246,7 @@ class LostItemControllerDocsTest {
 
         // expected
         mockMvc.perform(patch("/lostItems/{lostItemId}", 10L)
-                        .with(csrf())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lostItemEdit))
@@ -274,6 +254,9 @@ class LostItemControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("lostitem-edit-lostitem",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("lostItemId").description("분실물 ID")
                         ),

@@ -1,36 +1,46 @@
 package org.cmc.curtaincall.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.security.jwt.*;
-import org.cmc.curtaincall.web.security.oauth2.OAuth2AuthenticationSuccessHandlerCustom;
-import org.cmc.curtaincall.web.security.oauth2.OAuth2UserServiceCustom;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.security.jwt.BearerTokenResolver;
+import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
+import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
+import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String[] PERMITTED_GET_PATH = {
+            "/code",
+            "/facilities/{facilityId}",
+            "/shows",
+            "/search/shows",
+            "/shows-to-open",
+            "/shows-to-end",
+            "/shows/{showId}",
+            "/box-office",
+            "/shows/{showId}/reviews",
+            "/notices",
+            "/notices/{noticeId}"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            OAuth2UserServiceCustom oAuth2UserService,
-            OAuth2AuthenticationSuccessHandlerCustom oAuth2AuthenticationSuccessHandler,
             JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtLogoutHandler jwtLogoutHandler,
-            JwtLogoutSuccessHandler jwtLogoutSuccessHandler
+            OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler
     ) throws Exception {
         return httpSecurity
                 .csrf(config -> config.disable())
@@ -40,37 +50,17 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.POST,
-                                "/login/oauth2/token/{registrationId}",
-                                "/login/reissue"
-                        ).permitAll()
                         .requestMatchers(HttpMethod.GET,
-                                "/code",
-                                "/facilities/{facilityId}",
-                                "/shows",
-                                "/search/shows",
-                                "/shows-to-open",
-                                "/shows-to-end",
-                                "/shows/{showId}",
-                                "/box-office",
-                                "/shows/{showId}/reviews",
-                                "/notices",
-                                "/notices/{noticeId}"
+                                PERMITTED_GET_PATH
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterAfter(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(config -> config
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
-                .logout(logout -> logout
-                        .addLogoutHandler(jwtLogoutHandler)
-                        .logoutSuccessHandler(jwtLogoutSuccessHandler)
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(config -> config
-                                .userService(oAuth2UserService))
-                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .successHandler(oidcAuthenticationSuccessHandler)
                 )
                 .build();
     }
@@ -81,37 +71,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler(
+            final ObjectMapper objectMapper, final JwtTokenProvider jwtTokenProvider) {
+        return new OidcAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
     }
 
     @Bean
     public JwtTokenProvider jwtTokenProvider(
             @Value("${jwt.access-token-validity}") long accessTokenValidity,
-            @Value("${jwt.refresh-token-validity}") long refreshTokenValidity,
             @Value("${jwt.secret}") String secret) {
-        return new JwtTokenProvider(
-                accessTokenValidity, refreshTokenValidity, secret);
+        return new JwtTokenProvider(accessTokenValidity, secret);
     }
 
     @Bean
-    public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(
-            JwtTokenProvider jwtTokenProvider, AccountService accountService) {
-        return new JwtAuthenticationCheckFilter(jwtTokenProvider, accountService);
-    }
-
-    @Bean
-    public JwtLogoutHandler jwtLogoutHandler(JwtTokenProvider jwtTokenProvider, AccountService accountService) {
-        return new JwtLogoutHandler(jwtTokenProvider, accountService);
-    }
-
-    @Bean
-    public JwtLogoutSuccessHandler jwtLogoutSuccessHandler() {
-        return new JwtLogoutSuccessHandler();
-    }
-
-    @Bean
-    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        return new JwtAuthenticationEntryPoint(objectMapper);
+    public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(JwtTokenProvider jwtTokenProvider) {
+        return new JwtAuthenticationCheckFilter(jwtTokenProvider, new BearerTokenResolver());
     }
 }

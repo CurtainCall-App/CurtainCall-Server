@@ -10,28 +10,28 @@
 [[lostitem-create-lostitem]]
 == 분실물 생성
 
-operation::lostitem-create-lostitem[snippets='http-request,request-fields,http-response,response-fields']
+operation::lostitem-create-lostitem[snippets='http-request,request-headers,request-fields,http-response,response-fields']
 
 
 [[lostitem-search]]
 == 분실물 리스트 조회(검색)
 
-operation::lostitem-search[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::lostitem-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[lostitem-get-detail]]
 == 분실물 상세 조회
 
-operation::lostitem-get-detail[snippets='http-request,path-parameters,http-response,response-fields']
+operation::lostitem-get-detail[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
 
 [[lostitem-delete-lostitem]]
 == 분실물 삭제
 
-operation::lostitem-delete-lostitem[snippets='http-request,path-parameters,http-response']
+operation::lostitem-delete-lostitem[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[lostitem-edit-lostitem]]
 == 분실물 수정
 
-operation::lostitem-edit-lostitem[snippets='http-request,path-parameters,request-fields,http-response']
+operation::lostitem-edit-lostitem[snippets='http-request,request-headers,path-parameters,request-fields,http-response']

@@ -8,48 +8,21 @@
 :operation-http-request-title: Example request
 :operation-http-response-title: Example response
 
+[[login-page]]
+== 소셜 로그인 페이지(웹 용)
 
-[[auth-LoginResponse]]
-== 인증 및 토큰 재발급 성공 시 응답
+operation::auth-login-page[snippets='http-request,path-parameters']
 
-operation::auth-LoginResponse[snippets='response-body,response-fields']
-
-[[auth-login-oauthtoken]]
-== OAuth AccessToken 을 통한 로그인
-
-- method: POST
-- path: /login/oauth2/token/+{registrationId}+
-- registrationId: kakao, apple
-- ex) http://localhost:8080/login/oauth2/token/kakao
-
-Request Body
-
-[source]
-----
-{
-    "accessToken": {OAUTH_ACCESS_TOKEN}
-}
-----
-
-[[auth-reissue]]
-== 토큰 재발급
-
-- method: POST
-- path: /login/reissue
-- Authorization: Bearer +{REFRESH_TOKEN}+
+소셜 로그인 별 로그인 웹 페이지 응답
 
 
-[[logout]]
-== 로그아웃
+[[oauth2-login]]
+== 소셜 로그인
 
-- method: POST
-- path: /logout
-- Authorization: Bearer +{ACCESS_TOKEN}+
+operation::auth-oauth2-login[snippets='http-request,path-parameters,query-parameters,http-response,response-fields']
 
-Response
-[source]
-----
-{
-    "success": true
-}
-----
+
+[[account-get-user-member]]
+== 로그인된 유저 회원 ID 조회
+
+operation::account-get-user-member[snippets='http-request,request-headers,response-fields']

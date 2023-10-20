@@ -1,25 +1,19 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.service.facility.FacilityService;
 import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.response.ShowResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,6 +22,8 @@ import java.util.List;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -35,28 +31,16 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(FacilityController.class)
-class FacilityControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class FacilityControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
+    private FacilityService facilityService;
 
     @MockBean
-    FacilityService facilityService;
-
-    @MockBean
-    ShowService showService;
+    private ShowService showService;
 
     @Test
-    @WithMockUser
     void getFacilityDetail_Docs() throws Exception {
         // given
         FacilityDetailResponse response = FacilityDetailResponse.builder()
@@ -102,7 +86,6 @@ class FacilityControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void getShowListOfFacility_Docs() throws Exception {
         // given
         var response = ShowResponse.builder()
@@ -131,6 +114,7 @@ class FacilityControllerDocsTest {
 
         // expected
         mockMvc.perform(get("/facilities/{facilityId}/shows", "FC001298")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
@@ -140,6 +124,9 @@ class FacilityControllerDocsTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("facility-get-show-list-of-facility",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
                         pathParameters(
                                 parameterWithName("facilityId").description("공연장 ID")
                         ),

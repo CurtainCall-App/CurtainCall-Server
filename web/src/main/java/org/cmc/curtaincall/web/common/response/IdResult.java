@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.common.response;
+package org.cmc.curtaincall.web.common.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BooleanResult {
+public class IdResult<ID> {
 
-    private boolean result;
+    private ID id;
 }

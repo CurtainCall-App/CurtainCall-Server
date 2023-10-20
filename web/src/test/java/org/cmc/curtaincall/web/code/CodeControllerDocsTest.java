@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.code;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.core.EnumMapperType;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
@@ -8,7 +9,6 @@ import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.domain.show.*;
-import org.cmc.curtaincall.web.service.account.AccountService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ class CodeControllerDocsTest {
     private EnumMapperFactory enumMapperFactory;
 
     @MockBean
-    AccountService accountService;
+    private AccountDao accountDao;
 
     @Test
     @DisplayName("코드 리스트 조회 API")

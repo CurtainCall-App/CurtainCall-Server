@@ -1,10 +1,11 @@
 package org.cmc.curtaincall.web.security.argumentresolver;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.account.AccountService;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -17,12 +18,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginMemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AccountService accountService;
+    private final AccountDao accountDao;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasCurrentUsernameAnnotation = parameter.hasParameterAnnotation(LoginMemberId.class);
-        boolean hasStringType = (Long.class == parameter.getParameterType());
+        boolean hasStringType = (MemberId.class == parameter.getParameterType());
         return hasCurrentUsernameAnnotation && hasStringType;
     }
 
@@ -34,8 +35,8 @@ public class LoginMemberIdArgumentResolver implements HandlerMethodArgumentResol
         return Optional.ofNullable(authentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName)
-                .map(accountService::getMemberId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .flatMap(accountDao::findMemberIdByUsername)
+                .orElseThrow(() -> new AccessDeniedException(
                         "로그인되지 않은 회원이거나 존재하지 않는 회원입니다." + authentication
                 ));
     }

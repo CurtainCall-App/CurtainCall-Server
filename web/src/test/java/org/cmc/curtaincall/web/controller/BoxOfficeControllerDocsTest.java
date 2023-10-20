@@ -1,23 +1,15 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.service.show.BoxOfficeService;
 import org.cmc.curtaincall.web.service.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,32 +19,20 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(BoxOfficeController.class)
-class BoxOfficeControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class BoxOfficeControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
-
-    @MockBean
-    BoxOfficeService boxOfficeService;
+    private BoxOfficeService boxOfficeService;
 
     @Test
-    @WithMockUser
     void getBoxOffice_Docs() throws Exception {
         // given
         BoxOfficeResponse boxOfficeResponse = BoxOfficeResponse.builder()
@@ -70,7 +50,6 @@ class BoxOfficeControllerDocsTest {
 
         // expected
         mockMvc.perform(get("/box-office")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer {ACCESS_TOKEN}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("type", BoxOfficeType.WEEK.name())

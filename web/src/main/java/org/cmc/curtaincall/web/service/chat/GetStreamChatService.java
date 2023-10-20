@@ -7,7 +7,7 @@ import io.getstream.chat.java.models.User;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.web.exception.GetStreamChatException;
-import org.cmc.curtaincall.web.service.common.response.ValueResult;
+import org.cmc.curtaincall.web.common.response.ValueResult;
 import org.springframework.stereotype.Service;
 
 @Service

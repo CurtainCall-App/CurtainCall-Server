@@ -1,21 +1,14 @@
 package org.cmc.curtaincall.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.common.RestDocsConfig;
-import org.cmc.curtaincall.web.service.account.AccountService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.service.notice.NoticeService;
 import org.cmc.curtaincall.web.service.notice.response.NoticeDetailResponse;
 import org.cmc.curtaincall.web.service.notice.response.NoticeResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,25 +22,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(RestDocsConfig.class)
-@AutoConfigureRestDocs
 @WebMvcTest(NoticeController.class)
-class NoticeControllerDocsTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class NoticeControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    AccountService accountService;
-
-    @MockBean
-    NoticeService noticeService;
+    private NoticeService noticeService;
 
     @Test
-    @WithMockUser
     void getNoticeList_Docs() throws Exception {
         // given
         NoticeResponse noticeResponse = NoticeResponse.builder()
@@ -72,7 +53,7 @@ class NoticeControllerDocsTest {
                                 parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
-                                beneathPath("content[]").withSubsectionId("`content`"),
+                                beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("공지사항 ID"),
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("createdAt").description("생성 일시")
@@ -81,7 +62,6 @@ class NoticeControllerDocsTest {
     }
 
     @Test
-    @WithMockUser
     void getNoticeDetail_Docs() throws Exception {
         // given
         NoticeDetailResponse noticeResponse = NoticeDetailResponse.builder()
