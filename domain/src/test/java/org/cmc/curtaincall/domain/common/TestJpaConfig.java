@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.Optional;
+import static org.mockito.Mockito.mock;
 
 @TestConfiguration
 @EnableJpaAuditing
@@ -18,8 +18,6 @@ public class TestJpaConfig {
 
     private final EntityManager em;
 
-    public static final long AUDITOR_MEMBER_ID = 100L;
-
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
@@ -27,6 +25,6 @@ public class TestJpaConfig {
 
     @Bean
     public AuditorAware<Member> auditorProvider() {
-        return () -> Optional.of(new Member(AUDITOR_MEMBER_ID));
+        return mock(AuditorAware.class);
     }
 }
