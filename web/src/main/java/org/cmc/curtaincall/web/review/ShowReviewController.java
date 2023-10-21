@@ -1,14 +1,13 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.review.ShowReviewService;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
+import org.cmc.curtaincall.web.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;

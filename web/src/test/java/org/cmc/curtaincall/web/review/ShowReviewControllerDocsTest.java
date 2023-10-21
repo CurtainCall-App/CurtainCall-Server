@@ -1,11 +1,10 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.review;
 
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.review.ShowReviewService;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
+import org.cmc.curtaincall.web.review.response.ShowReviewResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

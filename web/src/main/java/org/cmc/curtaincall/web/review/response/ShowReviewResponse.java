@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.review.response;
+package org.cmc.curtaincall.web.review.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.image.Image;

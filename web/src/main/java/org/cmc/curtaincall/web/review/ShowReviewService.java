@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.review;
+package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
@@ -12,10 +12,10 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewMyResponse;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
+import org.cmc.curtaincall.web.review.response.ShowReviewMyResponse;
+import org.cmc.curtaincall.web.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.review;
+package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
@@ -9,7 +9,7 @@ import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewLikedResponse;
+import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

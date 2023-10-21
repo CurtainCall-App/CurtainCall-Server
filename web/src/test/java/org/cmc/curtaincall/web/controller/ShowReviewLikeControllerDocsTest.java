@@ -1,8 +1,8 @@
 package org.cmc.curtaincall.web.controller;
 
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.service.review.ShowReviewLikeService;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewLikedResponse;
+import org.cmc.curtaincall.web.review.ShowReviewLikeService;
+import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
