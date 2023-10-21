@@ -23,7 +23,7 @@ public record ShowReviewResponse (
     public static ShowReviewResponse of(ShowReview showReview) {
         return ShowReviewResponse.builder()
                 .id(showReview.getId())
-                .showId(showReview.getShow().getId())
+                .showId(showReview.getShowId().getId())
                 .grade(showReview.getGrade())
                 .content(showReview.getContent())
                 .creatorId(showReview.getCreatedBy().getId())
