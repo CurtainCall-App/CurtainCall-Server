@@ -6,12 +6,13 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewEditor;
+import org.cmc.curtaincall.domain.review.exception.ShowReviewNotFoundException;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.review.response.ShowReviewMyResponse;
@@ -49,7 +50,7 @@ public class ShowReviewService {
 
     public Slice<ShowReviewResponse> getList(Pageable pageable, String showId) {
         Show show = showRepository.getReferenceById(showId);
-        return showReviewRepository.findSliceByShowAndUseYnIsTrue(pageable, show)
+        return showReviewRepository.findSliceByShowIdAndUseYnIsTrue(pageable, new ShowId(showId))
                 .map(ShowReviewResponse::of);
     }
 
@@ -102,13 +103,13 @@ public class ShowReviewService {
     private ShowReview getShowReviewById(Long id) {
         return showReviewRepository.findById(id)
                 .filter(ShowReview::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+                .orElseThrow(() -> new ShowReviewNotFoundException(id));
     }
 
     private ShowReview getShowReviewWithLockById(Long id) {
         return showReviewRepository.findWithLockById(id)
                 .filter(ShowReview::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
+                .orElseThrow(() -> new ShowReviewNotFoundException(id));
     }
 
     private Show getShowWithLockById(String id) {
