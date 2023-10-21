@@ -24,7 +24,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
     private ShowReviewDao showReviewDao;
 
     @Test
-    void findAllByShowId() {
+    void getList() {
         // given
         Member member = Member.builder()
                 .nickname("test-nickname")
@@ -54,7 +54,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 10);
-        List<ShowReviewResponse> result = showReviewDao.findAllByShowId(pageRequest, new ShowId("test-show-id"));
+        List<ShowReviewResponse> result = showReviewDao.getList(pageRequest, new ShowId("test-show-id"));
 
         // then
         assertThat(result)
@@ -64,7 +64,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
     }
 
     @Test
-    void findAllByShowId_LikeCountOrderDesc() {
+    void getList_LikeCountOrderDesc() {
         // given
         Member member = Member.builder()
                 .nickname("test-nickname")
@@ -89,7 +89,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("likeCount")));
-        List<ShowReviewResponse> result = showReviewDao.findAllByShowId(pageRequest, new ShowId("test-show-id"));
+        List<ShowReviewResponse> result = showReviewDao.getList(pageRequest, new ShowId("test-show-id"));
 
         // then
         assertThat(result)

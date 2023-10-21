@@ -24,7 +24,7 @@ public class ShowReviewDao {
 
     private final JPAQueryFactory query;
 
-    public List<ShowReviewResponse> findAllByShowId(Pageable pageable, ShowId showId) {
+    public List<ShowReviewResponse> getList(Pageable pageable, ShowId showId) {
 
         return query.select(new QShowReviewResponse(
                         showReview.id,

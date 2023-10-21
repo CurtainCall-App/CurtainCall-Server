@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.domain.review.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -28,6 +29,7 @@ public class ShowReviewResponse {
 
     private Integer likeCount;
 
+    @Builder
     @QueryProjection
     public ShowReviewResponse(
             Long id,

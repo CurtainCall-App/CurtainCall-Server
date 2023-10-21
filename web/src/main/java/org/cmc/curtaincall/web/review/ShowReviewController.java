@@ -2,16 +2,11 @@ package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
-import org.cmc.curtaincall.web.review.response.ShowReviewResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
+import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +20,6 @@ public class ShowReviewController {
     public IdResult<Long> createShowReview(
             @PathVariable String showId, @Validated @RequestBody ShowReviewCreate showReviewCreate) {
         return showReviewService.create(showId, showReviewCreate);
-    }
-
-    @GetMapping("/shows/{showId}/reviews")
-    public Slice<ShowReviewResponse> getList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable String showId) {
-        return showReviewService.getList(pageable, showId);
     }
 
     @DeleteMapping("/reviews/{reviewId}")
