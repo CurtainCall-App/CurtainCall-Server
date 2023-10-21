@@ -16,7 +16,6 @@ import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.review.response.ShowReviewMyResponse;
-import org.cmc.curtaincall.web.review.response.ShowReviewResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -46,12 +45,6 @@ public class ShowReviewService {
                 .build());
         show.applyReview(showReview);
         return new IdResult<>(showReview.getId());
-    }
-
-    public Slice<ShowReviewResponse> getList(Pageable pageable, String showId) {
-        Show show = showRepository.getReferenceById(showId);
-        return showReviewRepository.findSliceByShowIdAndUseYnIsTrue(pageable, new ShowId(showId))
-                .map(ShowReviewResponse::of);
     }
 
     public Slice<ShowReviewMyResponse> getMyList(Pageable pageable, Long memberId) {
