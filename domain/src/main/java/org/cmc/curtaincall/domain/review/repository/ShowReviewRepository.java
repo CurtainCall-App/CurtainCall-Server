@@ -3,7 +3,7 @@ package org.cmc.curtaincall.domain.review.repository;
 import jakarta.persistence.LockModeType;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.review.ShowReview;
-import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ShowReviewRepository extends JpaRepository<ShowReview, Long> {
 
     @EntityGraph(attributePaths = {"createdBy", "createdBy.image"})
-    Slice<ShowReview> findSliceByShowAndUseYnIsTrue(Pageable pageable, Show show);
+    Slice<ShowReview> findSliceByShowIdAndUseYnIsTrue(Pageable pageable, ShowId showId);
 
     @Lock(LockModeType.OPTIMISTIC)
     Optional<ShowReview> findWithLockById(Long id);
