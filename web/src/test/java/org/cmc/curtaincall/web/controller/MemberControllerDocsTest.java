@@ -442,8 +442,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .content("")
                 .build();
 
-        given(accountService.getMemberId(any())).willReturn(5L);
-
         // expected
         mockMvc.perform(delete("/member")
                         .with(csrf())
