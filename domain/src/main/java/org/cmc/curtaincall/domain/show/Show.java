@@ -56,7 +56,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "crew", nullable = false)
     private String crew;
 
-    @Column(name = "cast", nullable = false)
+    @Column(name = "casts", nullable = false)
     private String cast;
 
     @Column(name = "runtime", nullable = false)
