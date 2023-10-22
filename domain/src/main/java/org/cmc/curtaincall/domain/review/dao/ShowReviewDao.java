@@ -84,7 +84,7 @@ public class ShowReviewDao {
                         showReview.likeCount
                 ))
                 .from(showReview)
-                .innerJoin(show).on(showReview.showId.id.eq(show.id))
+                .join(show).on(showReview.showId.id.eq(show.id))
                 .where(showReview.createdBy.id.eq(creatorId.getId()))
                 .orderBy(
                         RepositoryHelper.filterNullOrderByArr(
