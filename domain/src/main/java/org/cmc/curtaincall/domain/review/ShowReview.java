@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.review.exception.ShowReviewInvalidGradeException;
 import org.cmc.curtaincall.domain.show.ShowId;
+
+import java.util.stream.IntStream;
 
 @Entity
 @Table(name = "show_review",
@@ -47,7 +50,10 @@ public class ShowReview extends BaseEntity {
     private Integer likeCount;
 
     @Builder
-    private ShowReview(final ShowId showId, final Integer grade, final String content) {
+    public ShowReview(final ShowId showId, final Integer grade, final String content) {
+        if (IntStream.rangeClosed(0, 5).noneMatch(grade::equals)) {
+            throw new ShowReviewInvalidGradeException(grade);
+        }
         this.showId = showId;
         this.grade = grade;
         this.content = content;
