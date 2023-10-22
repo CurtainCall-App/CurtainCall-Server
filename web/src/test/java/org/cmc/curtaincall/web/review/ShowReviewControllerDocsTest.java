@@ -48,7 +48,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("show-review-create-show-review",
+                .andDo(document("showreview-create-show-review",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
@@ -81,7 +81,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("show-review-delete-review",
+                .andDo(document("showreview-delete-review",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
@@ -111,7 +111,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("show-review-edit-review",
+                .andDo(document("showreview-edit-review",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),

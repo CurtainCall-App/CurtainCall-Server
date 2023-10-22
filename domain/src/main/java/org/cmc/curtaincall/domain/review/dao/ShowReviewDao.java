@@ -5,7 +5,10 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.RepositoryHelper;
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.review.response.QShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.QShowReviewResponse;
+import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import java.util.List;
 
 import static org.cmc.curtaincall.domain.member.QMember.member;
 import static org.cmc.curtaincall.domain.review.QShowReview.showReview;
+import static org.cmc.curtaincall.domain.show.QShow.show;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,7 +29,6 @@ public class ShowReviewDao {
     private final JPAQueryFactory query;
 
     public List<ShowReviewResponse> getList(Pageable pageable, ShowId showId) {
-
         return query.select(new QShowReviewResponse(
                         showReview.id,
                         showReview.showId.id,
@@ -48,7 +51,7 @@ public class ShowReviewDao {
                         )
                 )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1L)
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -68,6 +71,29 @@ public class ShowReviewDao {
         }
         Order order = Order.valueOf(sortOrder.getDirection().name());
         return new OrderSpecifier<>(order, showReview.createdAt);
+    }
+
+    public List<ShowReviewMyResponse> getMyList(Pageable pageable, CreatorId creatorId) {
+        return query.select(new QShowReviewMyResponse(
+                        showReview.id,
+                        showReview.showId.id,
+                        show.name,
+                        showReview.grade,
+                        showReview.content,
+                        showReview.createdAt,
+                        showReview.likeCount
+                ))
+                .from(showReview)
+                .innerJoin(show).on(showReview.showId.id.eq(show.id))
+                .where(showReview.createdBy.id.eq(creatorId.getId()))
+                .orderBy(
+                        RepositoryHelper.filterNullOrderByArr(
+                                getCreatedAtOrder(pageable)
+                        )
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
 }

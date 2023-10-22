@@ -10,22 +10,28 @@
 [[show-review-create-show-review]]
 == 공연 리뷰 생성
 
-operation::show-review-create-show-review[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
+operation::showreview-create-show-review[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
 
-[[show-review-get-list]]
+[[showreview-get-list]]
 == 공연 리뷰 리스트 조회
 
-operation::show-review-get-list[snippets='http-request,request-headers,path-parameters,http-response,response-fields-content']
+operation::showreview-get-list[snippets='http-request,request-headers,path-parameters,http-response,response-fields-content']
+
+
+[[showreview-get-my-list]]
+== 내가 쓴 글 (한 줄 리뷰)
+
+operation::showreview-get-my-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[show-review-delete-review]]
 == 공연 리뷰 삭제
 
-operation::show-review-delete-review[snippets='http-request,request-headers,path-parameters,http-response']
+operation::showreview-delete-review[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[show-review-edit-review]]
 == 공연 리뷰 수정
 
-operation::show-review-edit-review[snippets='http-request,request-headers,path-parameters,request-fields,http-response']
+operation::showreview-edit-review[snippets='http-request,request-headers,path-parameters,request-fields,http-response']

@@ -7,6 +7,7 @@ import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.review.ShowReviewService;
 import org.cmc.curtaincall.web.security.service.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
@@ -17,8 +18,6 @@ import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
-import org.cmc.curtaincall.web.review.ShowReviewService;
-import org.cmc.curtaincall.web.review.response.ShowReviewMyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -329,54 +328,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
-                        )
-                ));
-    }
-
-    @Test
-    void getMyShowReviewList_Docs() throws Exception {
-        // given
-        List<ShowReviewMyResponse> reviewResponseList = List.of(
-                ShowReviewMyResponse.builder()
-                        .id(5L)
-                        .showId("PF223355")
-                        .showName("잘자요, 엄마 [청주]")
-                        .grade(4)
-                        .content("좋아요")
-                        .createdAt(LocalDateTime.of(2023, 8, 31, 3, 28))
-                        .likeCount(100)
-                        .build()
-        );
-        given(showReviewService.getMyList(any(), any()))
-                .willReturn(new SliceImpl<>(reviewResponseList));
-
-        // expected
-        mockMvc.perform(get("/member/reviews")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .param("page", "0")
-                        .param("size", "20")
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("member-get-my-show-review-list",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        queryParameters(
-                                parameterWithName("page").description("페이지 번호"),
-                                parameterWithName("size").description("페이지 사이즈").optional()
-                        ),
-                        responseFields(
-                                beneathPath("content[]").withSubsectionId("content"),
-                                fieldWithPath("id").description("공연 리뷰 ID"),
-                                fieldWithPath("showId").description("공연 ID"),
-                                fieldWithPath("showName").description("공연 이름"),
-                                fieldWithPath("grade").description("평점"),
-                                fieldWithPath("content").description("리뷰 내용"),
-                                fieldWithPath("createdAt").description("생성일시"),
-                                fieldWithPath("likeCount").description("좋아요 개수")
                         )
                 ));
     }
