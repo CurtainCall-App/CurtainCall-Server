@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.review;
 
+import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 .grade(5)
                 .content("조아유~~")
                 .build();
-        given(showReviewService.create(any(), any())).willReturn(new IdResult<>(10L));
+        given(showReviewService.create(any(), any())).willReturn(new ShowReviewId(10L));
 
         // expected
         mockMvc.perform(post("/shows/{showId}/reviews", "PF220846")

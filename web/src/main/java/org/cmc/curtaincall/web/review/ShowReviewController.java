@@ -2,6 +2,8 @@ package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.review.ShowReviewId;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
@@ -19,24 +21,27 @@ public class ShowReviewController {
     @PostMapping("/shows/{showId}/reviews")
     public IdResult<Long> createShowReview(
             @PathVariable String showId, @Validated @RequestBody ShowReviewCreate showReviewCreate) {
-        return showReviewService.create(showId, showReviewCreate);
+        ShowReviewId showReviewId = showReviewService.create(new ShowId(showId), showReviewCreate);
+        return new IdResult<>(showReviewId.getId());
     }
 
     @DeleteMapping("/reviews/{reviewId}")
     public void deleteReview(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
+        ShowReviewId id = new ShowReviewId(reviewId);
+        if (!showReviewService.isOwnedByMember(id, memberId)) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
-        showReviewService.delete(reviewId);
+        showReviewService.delete(id);
     }
 
     @PatchMapping("/reviews/{reviewId}")
     public void editReview(
             @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
+        ShowReviewId id = new ShowReviewId(reviewId);
+        if (!showReviewService.isOwnedByMember(id, memberId)) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
-        showReviewService.edit(showReviewEdit, reviewId);
+        showReviewService.edit(id, showReviewEdit);
     }
 }

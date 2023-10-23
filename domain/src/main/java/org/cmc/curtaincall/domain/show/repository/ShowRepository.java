@@ -17,9 +17,6 @@ import java.util.Optional;
 public interface ShowRepository extends JpaRepository<Show, String>, ShowRepositoryCustom {
 
     @EntityGraph(attributePaths = {"facility"})
-    Slice<Show> findSliceWithFacilityByGenreAndUseYnIsTrue(Pageable pageable, ShowGenre genre);
-
-    @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(Pageable pageable, ShowGenre genre, ShowState state);
 
     @EntityGraph(attributePaths = {"facility"})

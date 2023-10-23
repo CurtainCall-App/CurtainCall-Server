@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.review.ShowReview;
+import org.cmc.curtaincall.domain.show.exception.ShowUnableToCancelReviewException;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
@@ -162,9 +163,24 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         calculateReviewGradeAvg();
     }
 
+    public void applyReviewGrade(int grade) {
+        reviewCount += 1;
+        reviewGradeSum += grade;
+        calculateReviewGradeAvg();
+    }
+
     public void cancelReview(ShowReview review) {
         reviewCount -= 1;
         reviewGradeSum -= review.getGrade();
+        calculateReviewGradeAvg();
+    }
+
+    public void cancelReviewGrade(int grade) {
+        if (reviewCount == 0) {
+            throw new ShowUnableToCancelReviewException(this);
+        }
+        reviewCount -= 1;
+        reviewGradeSum -= grade;
         calculateReviewGradeAvg();
     }
 
