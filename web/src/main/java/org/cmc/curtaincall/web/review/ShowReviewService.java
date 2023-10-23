@@ -1,7 +1,6 @@
 package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.*;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
@@ -41,7 +40,6 @@ public class ShowReviewService {
     }
 
     @Transactional
-    @OptimisticLock
     public void edit(ShowReviewId id, ShowReviewEdit showReviewEdit) {
         ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(id, showReviewRepository);
         showReviewGradeApplyService.cancel(showReview);
