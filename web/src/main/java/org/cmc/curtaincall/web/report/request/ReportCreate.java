@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.report.request;
+package org.cmc.curtaincall.web.report.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

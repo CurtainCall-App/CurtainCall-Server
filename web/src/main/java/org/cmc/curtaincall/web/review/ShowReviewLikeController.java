@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.review;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;

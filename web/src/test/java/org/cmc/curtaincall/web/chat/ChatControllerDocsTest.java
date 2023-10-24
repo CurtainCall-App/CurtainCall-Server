@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.chat;
 
 import org.cmc.curtaincall.web.chat.ChatController;
 import org.cmc.curtaincall.web.common.AbstractWebTest;

@@ -1,8 +1,7 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.report;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.service.report.ReportService;
-import org.cmc.curtaincall.web.service.report.request.ReportCreate;
+import org.cmc.curtaincall.web.report.request.ReportCreate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

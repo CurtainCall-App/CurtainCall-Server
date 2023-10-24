@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.notice;
 
 import org.assertj.core.api.Assertions;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
