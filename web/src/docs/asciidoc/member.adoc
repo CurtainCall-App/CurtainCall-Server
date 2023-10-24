@@ -42,12 +42,6 @@ operation::member-get-recruitment-list[snippets='http-request,request-headers,pa
 operation::member-get-participation-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
 
 
-[[member-get-my-show-review-list]]
-== 내가 쓴 글 (한 줄 리뷰)
-
-operation::member-get-my-show-review-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
-
-
 [[member-get-my-lost-item-list]]
 == 내가 쓴 글 (분실물)
 

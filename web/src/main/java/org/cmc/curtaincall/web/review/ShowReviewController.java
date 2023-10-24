@@ -1,18 +1,14 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
+import org.cmc.curtaincall.domain.review.ShowReviewId;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.review.ShowReviewService;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewCreate;
-import org.cmc.curtaincall.web.service.review.request.ShowReviewEdit;
-import org.cmc.curtaincall.web.service.review.response.ShowReviewResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
+import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,31 +21,27 @@ public class ShowReviewController {
     @PostMapping("/shows/{showId}/reviews")
     public IdResult<Long> createShowReview(
             @PathVariable String showId, @Validated @RequestBody ShowReviewCreate showReviewCreate) {
-        return showReviewService.create(showId, showReviewCreate);
-    }
-
-    @GetMapping("/shows/{showId}/reviews")
-    public Slice<ShowReviewResponse> getList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable String showId) {
-        return showReviewService.getList(pageable, showId);
+        ShowReviewId showReviewId = showReviewService.create(new ShowId(showId), showReviewCreate);
+        return new IdResult<>(showReviewId.getId());
     }
 
     @DeleteMapping("/reviews/{reviewId}")
     public void deleteReview(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
+        ShowReviewId id = new ShowReviewId(reviewId);
+        if (!showReviewService.isOwnedByMember(id, memberId)) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
-        showReviewService.delete(reviewId);
+        showReviewService.delete(id);
     }
 
     @PatchMapping("/reviews/{reviewId}")
     public void editReview(
             @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
-        if (!showReviewService.isOwnedByMember(reviewId, memberId.getId())) {
+        ShowReviewId id = new ShowReviewId(reviewId);
+        if (!showReviewService.isOwnedByMember(id, memberId)) {
             throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
         }
-        showReviewService.edit(showReviewEdit, reviewId);
+        showReviewService.edit(id, showReviewEdit);
     }
 }

@@ -1,11 +1,10 @@
 package org.cmc.curtaincall.web.security.argumentresolver;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -31,13 +30,10 @@ public class LoginMemberIdArgumentResolver implements HandlerMethodArgumentResol
     public Object resolveArgument(
             MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return Optional.ofNullable(authentication)
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName)
                 .flatMap(accountDao::findMemberIdByUsername)
-                .orElseThrow(() -> new AccessDeniedException(
-                        "로그인되지 않은 회원이거나 존재하지 않는 회원입니다." + authentication
-                ));
+                .orElse(null);
     }
 }

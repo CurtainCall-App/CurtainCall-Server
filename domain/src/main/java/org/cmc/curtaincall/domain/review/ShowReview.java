@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
-import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.review.exception.ShowReviewInvalidGradeException;
+import org.cmc.curtaincall.domain.show.ShowId;
+
+import java.util.stream.IntStream;
 
 @Entity
 @Table(name = "show_review",
@@ -34,9 +37,8 @@ public class ShowReview extends BaseEntity {
     @Column(nullable = false)
     private Long version;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Show show;
+    @Embedded
+    private ShowId showId;
 
     @Column(name = "grade", nullable = false)
     private Integer grade;
@@ -48,8 +50,11 @@ public class ShowReview extends BaseEntity {
     private Integer likeCount;
 
     @Builder
-    public ShowReview(Show show, Integer grade, String content) {
-        this.show = show;
+    public ShowReview(final ShowId showId, final Integer grade, final String content) {
+        if (IntStream.rangeClosed(0, 5).noneMatch(grade::equals)) {
+            throw new ShowReviewInvalidGradeException(grade);
+        }
+        this.showId = showId;
         this.grade = grade;
         this.content = content;
         this.likeCount = 0;
@@ -61,7 +66,7 @@ public class ShowReview extends BaseEntity {
                 .content(content);
     }
 
-    public void edit(ShowReviewEditor editor) {
+    public void edit(final ShowReviewEditor editor) {
         grade = editor.getGrade();
         content = editor.getContent();
     }
@@ -71,6 +76,9 @@ public class ShowReview extends BaseEntity {
     }
 
     public void minusLikeCount() {
+        if (this.likeCount == 0) {
+            throw new IllegalStateException("좋아요 개수는 음수가 될 수 없음");
+        }
         this.likeCount -= 1;
     }
 }
