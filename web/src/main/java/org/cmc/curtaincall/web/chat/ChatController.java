@@ -1,10 +1,9 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.chat;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
-import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
 import org.cmc.curtaincall.web.common.response.ValueResult;
+import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,8 +1,9 @@
 package org.cmc.curtaincall.web.controller;
 
+import org.cmc.curtaincall.web.chat.ChatController;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.ValueResult;
-import org.cmc.curtaincall.web.service.chat.GetStreamChatService;
+import org.cmc.curtaincall.web.chat.GetStreamChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
