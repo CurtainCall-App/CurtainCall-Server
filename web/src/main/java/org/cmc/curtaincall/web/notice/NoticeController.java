@@ -1,9 +1,9 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.notice;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.service.notice.NoticeService;
-import org.cmc.curtaincall.web.service.notice.response.NoticeDetailResponse;
-import org.cmc.curtaincall.web.service.notice.response.NoticeResponse;
+import org.cmc.curtaincall.web.notice.NoticeService;
+import org.cmc.curtaincall.web.notice.response.NoticeDetailResponse;
+import org.cmc.curtaincall.web.notice.response.NoticeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;

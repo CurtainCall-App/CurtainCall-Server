@@ -1,11 +1,11 @@
-package org.cmc.curtaincall.web.service.notice;
+package org.cmc.curtaincall.web.notice;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.notice.Notice;
 import org.cmc.curtaincall.domain.notice.repository.NoticeRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.notice.response.NoticeDetailResponse;
-import org.cmc.curtaincall.web.service.notice.response.NoticeResponse;
+import org.cmc.curtaincall.web.notice.response.NoticeDetailResponse;
+import org.cmc.curtaincall.web.notice.response.NoticeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

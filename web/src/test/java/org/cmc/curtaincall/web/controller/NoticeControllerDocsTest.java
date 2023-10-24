@@ -1,9 +1,10 @@
 package org.cmc.curtaincall.web.controller;
 
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.service.notice.NoticeService;
-import org.cmc.curtaincall.web.service.notice.response.NoticeDetailResponse;
-import org.cmc.curtaincall.web.service.notice.response.NoticeResponse;
+import org.cmc.curtaincall.web.notice.NoticeController;
+import org.cmc.curtaincall.web.notice.NoticeService;
+import org.cmc.curtaincall.web.notice.response.NoticeDetailResponse;
+import org.cmc.curtaincall.web.notice.response.NoticeResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
