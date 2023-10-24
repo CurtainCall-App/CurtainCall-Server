@@ -1,14 +1,17 @@
 package org.cmc.curtaincall.web.controller;
 
+import org.assertj.core.api.Assertions;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.notice.NoticeController;
 import org.cmc.curtaincall.web.notice.NoticeService;
 import org.cmc.curtaincall.web.notice.response.NoticeDetailResponse;
 import org.cmc.curtaincall.web.notice.response.NoticeResponse;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
@@ -37,7 +40,8 @@ class NoticeControllerDocsTest extends AbstractWebTest {
                 .title("커튼콜 서비스 개편 안내")
                 .createdAt(LocalDateTime.of(2023, 6, 17, 1, 23))
                 .build();
-        given(noticeService.getList(any())).willReturn(new SliceImpl<>(List.of(noticeResponse)));
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        given(noticeService.getList(pageableCaptor.capture())).willReturn(List.of(noticeResponse));
 
         // expected
         mockMvc.perform(get("/notices")
@@ -60,6 +64,8 @@ class NoticeControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("createdAt").description("생성 일시")
                         )
                 ));
+        Assertions.assertThat(pageableCaptor.getValue().getSort().stream().toList())
+                .containsExactly(Sort.Order.desc("createdAt"));
     }
 
     @Test
