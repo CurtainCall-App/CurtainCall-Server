@@ -1,10 +1,8 @@
 package org.cmc.curtaincall.web.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.security.jwt.BearerTokenResolver;
 import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
-import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,8 +37,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter,
-            OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler
+            JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter
     ) throws Exception {
         return httpSecurity
                 .csrf(config -> config.disable())
@@ -59,21 +56,13 @@ public class SecurityConfig {
                 .exceptionHandling(config -> config
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(oidcAuthenticationSuccessHandler)
-                )
+                .oauth2Login(oauth2Login -> oauth2Login.disable())
                 .build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers("/docs/**");
-    }
-
-    @Bean
-    public OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler(
-            final ObjectMapper objectMapper, final JwtTokenProvider jwtTokenProvider) {
-        return new OidcAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
     }
 
     @Bean
