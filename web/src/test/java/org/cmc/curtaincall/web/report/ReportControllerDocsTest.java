@@ -1,10 +1,9 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.report;
 
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.service.report.ReportService;
-import org.cmc.curtaincall.web.service.report.request.ReportCreate;
+import org.cmc.curtaincall.web.report.request.ReportCreate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
