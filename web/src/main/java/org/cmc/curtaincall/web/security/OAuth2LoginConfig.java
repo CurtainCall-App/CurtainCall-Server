@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
-import org.cmc.curtaincall.web.security.oauth2.OidcAuthenticationSuccessHandler;
+import org.cmc.curtaincall.web.security.oauth2.OAuth2LoginAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -18,7 +18,7 @@ public class OAuth2LoginConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain oauth2LoginSecurityFilterChain(
             HttpSecurity http,
-            OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler
+            OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler
     ) throws Exception {
         return http.securityMatcher("/oauth2/**", "/login/oauth2/**")
                 .csrf(config -> config.disable())
@@ -28,13 +28,13 @@ public class OAuth2LoginConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
-                        .successHandler(oidcAuthenticationSuccessHandler)
+                        .successHandler(oAuth2LoginAuthenticationSuccessHandler)
                 ).build();
     }
 
     @Bean
-    public OidcAuthenticationSuccessHandler oidcAuthenticationSuccessHandler(
+    public OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler(
             final ObjectMapper objectMapper, final JwtTokenProvider jwtTokenProvider) {
-        return new OidcAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
+        return new OAuth2LoginAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
     }
 }
