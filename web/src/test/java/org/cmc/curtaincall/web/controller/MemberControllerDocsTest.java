@@ -8,7 +8,7 @@ import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.review.ShowReviewService;
-import org.cmc.curtaincall.web.security.service.AccountService;
+import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
