@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security.service;
+package org.cmc.curtaincall.web.security;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.Account;

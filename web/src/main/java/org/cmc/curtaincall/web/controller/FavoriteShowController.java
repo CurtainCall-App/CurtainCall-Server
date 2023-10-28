@@ -3,7 +3,7 @@ package org.cmc.curtaincall.web.controller;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.security.annotation.LoginMemberId;
+import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
 import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;

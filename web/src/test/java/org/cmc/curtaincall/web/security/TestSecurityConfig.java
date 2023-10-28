@@ -1,19 +1,18 @@
 package org.cmc.curtaincall.web.security;
 
-import org.cmc.curtaincall.web.security.jwt.BearerTokenResolver;
-import org.cmc.curtaincall.web.security.jwt.JwtAuthenticationCheckFilter;
-import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.stream.Stream;
+import java.time.Instant;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -26,33 +25,25 @@ public class TestSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter
+            JwtDecoder curtainCallJwtDecoder
     ) throws Exception {
         return httpSecurity
-                .csrf(config -> config.disable())
-                .formLogin(config -> config.disable())
-                .httpBasic(config -> config.disable())
-                .oauth2Login(config -> config.disable())
+                .csrf(csrf -> csrf.disable())
+                .formLogin(formLogin -> formLogin.disable())
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .oauth2Login(oauth2Login -> oauth2Login.disable())
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+                        .jwt(jwt -> jwt
+                                .decoder(curtainCallJwtDecoder)
+                        )
+                )
                 .sessionManagement(config -> config
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.GET,
-                                Stream.of(
-                                                SecurityConfig.PERMITTED_GET_PATH,
-                                                new String[] {
-                                                        "/oauth2/authorization/{provider}"
-                                                }
-                                        )
-                                        .flatMap(Stream::of)
-                                        .toArray(String[]::new)
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/login/oauth2/code/{provider}"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, SecurityConfig.PERMITTED_GET_PATH).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterAt(jwtAuthenticationCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(config -> config
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
@@ -60,16 +51,19 @@ public class TestSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter(final JwtTokenProvider jwtTokenProvider) {
-        return new JwtAuthenticationCheckFilter(jwtTokenProvider, new BearerTokenResolver());
-    }
-
-    @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);
+    public JwtDecoder curtainCallJwtDecoder() {
+        JwtDecoder jwtDecoder = mock(JwtDecoder.class);
         String token = "ACCESS_TOKEN";
-        given(jwtTokenProvider.validateToken(token)).willReturn(true);
-        given(jwtTokenProvider.getSubject(token)).willReturn(TEST_USERNAME);
-        return jwtTokenProvider;
+        Instant issuedAt = Instant.now();
+        Instant expiresAt = issuedAt.plusMillis(1000 * 60 * 60);
+        Jwt jwt = Jwt.withTokenValue(token)
+                .header("alg", MacAlgorithm.HS256.getName())
+                .subject(TEST_USERNAME)
+                .issuer("curtaincall")
+                .issuedAt(issuedAt)
+                .expiresAt(expiresAt)
+                .build();
+        given(jwtDecoder.decode(token)).willReturn(jwt);
+        return jwtDecoder;
     }
 }

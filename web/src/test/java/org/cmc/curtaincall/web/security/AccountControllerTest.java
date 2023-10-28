@@ -1,13 +1,16 @@
 package org.cmc.curtaincall.web.security;
 
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -20,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest extends AbstractWebTest {
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtDecoder jwtDecoder;
 
     @Test
     void getUserMemberId_Signup() throws Exception {
@@ -39,9 +42,17 @@ class AccountControllerTest extends AbstractWebTest {
     @Test
     void getUserMemberId_NotSignup() throws Exception {
         // given
-        given(jwtTokenProvider.getSubject("NOT_SIGNUP_ACCESS_TOKEN"))
-                .willReturn("not-signup");
-        given(jwtTokenProvider.validateToken("NOT_SIGNUP_ACCESS_TOKEN")).willReturn(true);
+        String token = "ACCESS_TOKEN";
+        Instant issuedAt = Instant.now();
+        Instant expiresAt = issuedAt.plusMillis(1000 * 60 * 60);
+        Jwt jwt = Jwt.withTokenValue(token)
+                .header("alg", MacAlgorithm.HS256.getName())
+                .subject("not-signup")
+                .issuer("curtaincall")
+                .issuedAt(issuedAt)
+                .expiresAt(expiresAt)
+                .build();
+        given(jwtDecoder.decode("NOT_SIGNUP_ACCESS_TOKEN")).willReturn(jwt);
         given(accountDao.findMemberIdByUsername("not-signup")).willReturn(Optional.empty());
 
         // expected
