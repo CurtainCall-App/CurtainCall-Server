@@ -1,8 +1,6 @@
 package org.cmc.curtaincall.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.web.security.jwt.JwtTokenProvider;
-import org.cmc.curtaincall.web.security.oauth2.OAuth2LoginAuthenticationSuccessHandler;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,8 +40,10 @@ public class OAuth2LoginConfig {
 
     @Bean
     public OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler(
-            final ObjectMapper objectMapper, final JwtTokenProvider jwtTokenProvider) {
-        return new OAuth2LoginAuthenticationSuccessHandler(objectMapper, jwtTokenProvider);
+            final ObjectMapper objectMapper,
+            final CurtainCallJwtEncoderService jwtEncoderService,
+            final UsernameService usernameService) {
+        return new OAuth2LoginAuthenticationSuccessHandler(objectMapper, jwtEncoderService, usernameService);
     }
 
     @Bean
