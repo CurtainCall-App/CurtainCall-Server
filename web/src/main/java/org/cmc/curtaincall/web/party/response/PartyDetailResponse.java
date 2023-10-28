@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.party.response;
+package org.cmc.curtaincall.web.party.response;
 
 
 import jakarta.annotation.Nullable;

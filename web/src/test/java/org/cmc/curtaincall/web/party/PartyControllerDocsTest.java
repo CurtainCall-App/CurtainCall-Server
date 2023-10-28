@@ -1,14 +1,15 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.party.PartyService;
-import org.cmc.curtaincall.web.service.party.request.PartyCreate;
-import org.cmc.curtaincall.web.service.party.request.PartyEdit;
-import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.party.PartyController;
+import org.cmc.curtaincall.web.party.PartyService;
+import org.cmc.curtaincall.web.party.request.PartyCreate;
+import org.cmc.curtaincall.web.party.request.PartyEdit;
+import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.web.party.response.PartyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

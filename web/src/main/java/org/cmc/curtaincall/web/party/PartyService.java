@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.party;
+package org.cmc.curtaincall.web.party;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
@@ -17,11 +17,11 @@ import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.AlreadyClosedPartyException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.party.request.PartyCreate;
-import org.cmc.curtaincall.web.service.party.request.PartyEdit;
-import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.party.request.PartyCreate;
+import org.cmc.curtaincall.web.party.request.PartyEdit;
+import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.web.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.party;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +8,12 @@ import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.party.PartyService;
-import org.cmc.curtaincall.web.service.party.request.PartyCreate;
-import org.cmc.curtaincall.web.service.party.request.PartyEdit;
-import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.party.PartyService;
+import org.cmc.curtaincall.web.party.request.PartyCreate;
+import org.cmc.curtaincall.web.party.request.PartyEdit;
+import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.web.party.response.PartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
