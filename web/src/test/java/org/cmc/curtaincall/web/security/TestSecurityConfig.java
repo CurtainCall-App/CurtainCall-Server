@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import java.time.Instant;
-import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -42,19 +41,7 @@ public class TestSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.GET,
-                                Stream.of(
-                                                SecurityConfig.PERMITTED_GET_PATH,
-                                                new String[] {
-                                                        "/oauth2/authorization/{provider}"
-                                                }
-                                        )
-                                        .flatMap(Stream::of)
-                                        .toArray(String[]::new)
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/login/oauth2/code/{provider}"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, SecurityConfig.PERMITTED_GET_PATH).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(config -> config
