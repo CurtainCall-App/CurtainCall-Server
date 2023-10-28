@@ -33,7 +33,7 @@ public class Party extends BaseEntity {
     private Long id;
 
     @Version
-    @Column(nullable = false)
+    @Column(name = "version", nullable = false)
     private Long version;
 
     @ManyToOne(fetch = FetchType.LAZY)
