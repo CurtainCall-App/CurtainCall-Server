@@ -40,10 +40,12 @@ public class SecurityConfig {
             JwtAuthenticationCheckFilter jwtAuthenticationCheckFilter
     ) throws Exception {
         return httpSecurity
-                .csrf(config -> config.disable())
-                .formLogin(config -> config.disable())
-                .httpBasic(config -> config.disable())
-                .sessionManagement(config -> config
+                .csrf(csrf -> csrf.disable())
+                .formLogin(formLogin -> formLogin.disable())
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .oauth2Login(oauth2Login -> oauth2Login.disable())
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.disable())
+                .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(config -> config
@@ -56,7 +58,6 @@ public class SecurityConfig {
                 .exceptionHandling(config -> config
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
-                .oauth2Login(oauth2Login -> oauth2Login.disable())
                 .build();
     }
 
