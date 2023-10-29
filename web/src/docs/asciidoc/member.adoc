@@ -30,18 +30,6 @@ operation::member-get-member-detail[snippets='http-request,request-headers,path-
 operation::member-edit-member[snippets='http-request,request-headers,request-fields,http-response']
 
 
-[[member-get-recruitment-list]]
-== My 모집 리스트 조회
-
-operation::member-get-recruitment-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
-
-
-[[member-get-participation-list]]
-== My 참여 리스트 조회
-
-operation::member-get-participation-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
-
-
 [[member-get-my-lost-item-list]]
 == 내가 쓴 글 (분실물)
 

@@ -5,13 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
-import org.cmc.curtaincall.domain.party.dao.PartyDao;
-import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
-import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.security.LoginMemberId;
@@ -41,8 +36,6 @@ public class MemberController {
     private final ImageService imageService;
     private final LostItemService lostItemService;
 
-    private final PartyDao partyDao;
-
     @GetMapping("/members/duplicate/nickname")
     public BooleanResult getNicknameDuplicate(@RequestParam @NotBlank @Size(max = 15) String nickname) {
         return memberService.checkNicknameDuplicate(nickname);
@@ -71,22 +64,6 @@ public class MemberController {
                     "Member ID=" + memberId + ", Image ID=" + memberEdit.getImageId());
         }
         memberService.edit(memberId.getId(), memberEdit);
-    }
-
-    @GetMapping("/members/{memberId}/recruitments")
-    public ListResult<PartyRecruitmentResponse> getRecruitmentList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
-    ) {
-        return new ListResult<>(partyDao.getRecruitmentList(pageable, new MemberId(memberId), category));
-    }
-
-    @GetMapping("/members/{memberId}/participations")
-    public ListResult<PartyParticipationResponse> getParticipationList(
-            Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
-    ) {
-        return new ListResult<>(partyDao.getParticipationList(pageable, new MemberId(memberId), category));
     }
 
     @GetMapping("/member/lostItems")

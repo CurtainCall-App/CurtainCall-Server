@@ -53,3 +53,15 @@ operation::party-participate-party[snippets='http-request,request-headers,path-p
 == 파티 참여 여부
 
 operation::party-get-participated[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-recruitment-list]]
+== My 모집 리스트 조회
+
+operation::party-get-recruitment-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-participation-list]]
+== My 참여 리스트 조회
+
+operation::party-get-participation-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
