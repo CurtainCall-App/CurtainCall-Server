@@ -6,9 +6,11 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.PartyMember;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
+import org.cmc.curtaincall.domain.party.response.PartyHelper;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.common.response.IdResult;
@@ -61,8 +63,8 @@ public class PartyService {
 
     @Transactional
     @OptimisticLock
-    public void participate(Long partyId, Long memberId) {
-        Party party = getPartyById(partyId);
+    public void participate(PartyId partyId, Long memberId) {
+        Party party = PartyHelper.get(partyId, partyRepository);
         if (Boolean.TRUE.equals(party.getClosed())) {
             throw new AlreadyClosedPartyException("Party id=" + partyId);
         }
@@ -94,8 +96,8 @@ public class PartyService {
     }
 
     @Transactional
-    public void edit(Long id, PartyEdit partyEdit) {
-        Party party = getPartyById(id);
+    public void edit(PartyId id, PartyEdit partyEdit) {
+        Party party = PartyHelper.get(id, partyRepository);
 
         PartyEditor editor = party.toEditor()
                 .title(partyEdit.getTitle())
@@ -111,22 +113,16 @@ public class PartyService {
                 || Objects.equals(party.getCreatedBy().getId(), memberId);
     }
 
-    public boolean isOwnedByMember(Long partyId, Long memberId) {
-        Party party = getPartyById(partyId);
+    public boolean isOwnedByMember(PartyId partyId, Long memberId) {
+        Party party = PartyHelper.get(partyId, partyRepository);
         return Objects.equals(party.getCreatedBy().getId(), memberId);
     }
 
     @Transactional
-    public void delete(Long partyId) {
-        Party party = getPartyById(partyId);
+    public void delete(PartyId partyId) {
+        Party party = PartyHelper.get(partyId, partyRepository);
         party.getPartyMembers().clear();
         partyRepository.delete(party);
-    }
-
-    private Party getPartyById(Long id) {
-        return partyRepository.findById(id)
-                .filter(Party::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Party id=" + id));
     }
 
     private Member getMemberById(Long id) {

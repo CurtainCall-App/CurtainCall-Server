@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.party;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
@@ -29,25 +30,25 @@ public class PartyController {
 
     @DeleteMapping("/parties/{partyId}")
     public void deleteParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        if (!partyService.isOwnedByMember(partyId, memberId.getId())) {
+        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId.getId())) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
-        partyService.delete(partyId);
+        partyService.delete(new PartyId(partyId));
     }
 
     @PatchMapping("/parties/{partyId}")
     public void editParty(
             @PathVariable Long partyId, @RequestBody @Validated PartyEdit partyEdit,
             @LoginMemberId MemberId memberId) {
-        if (!partyService.isOwnedByMember(partyId, memberId.getId())) {
+        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId.getId())) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
-        partyService.edit(partyId, partyEdit);
+        partyService.edit(new PartyId(partyId), partyEdit);
     }
 
     @PutMapping("/member/parties/{partyId}")
     public void participateParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        partyService.participate(partyId, memberId.getId());
+        partyService.participate(new PartyId(partyId), memberId.getId());
     }
 
     @GetMapping("/member/participated")
