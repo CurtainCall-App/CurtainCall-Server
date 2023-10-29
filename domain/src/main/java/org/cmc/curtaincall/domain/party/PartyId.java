@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class PartyId implements Serializable {
 
-    @Column(name = "party_id")
+    @Column(name = "party_id", nullable = false)
     private Long id;
 
     public PartyId(final Long id) {

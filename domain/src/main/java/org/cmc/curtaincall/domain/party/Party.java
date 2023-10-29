@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
@@ -96,8 +96,8 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
-    public void participate(Member member) {
-        partyMembers.add(new PartyMember(this, member));
+    public void participate(final MemberId memberId) {
+        partyMembers.add(new PartyMember(this, memberId));
         curMemberNum += 1;
 
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {

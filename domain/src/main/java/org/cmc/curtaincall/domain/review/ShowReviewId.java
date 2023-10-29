@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class ShowReviewId implements Serializable {
 
-    @Column(name = "show_review_id")
+    @Column(name = "show_review_id", nullable = false)
     private Long id;
 
     public ShowReviewId(final Long id) {

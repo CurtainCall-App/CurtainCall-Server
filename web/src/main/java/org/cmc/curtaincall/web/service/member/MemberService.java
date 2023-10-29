@@ -2,10 +2,12 @@ package org.cmc.curtaincall.web.service.member;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberEditor;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
@@ -54,8 +56,8 @@ public class MemberService {
 
     public MemberDetailResponse getDetail(Long memberId) {
         Member member = getMemberById(memberId);
-        long recruitingNum = partyRepository.countByCreatedByAndUseYnIsTrue(member);
-        long participationNum = partyMemberRepository.countByMember(member);
+        long recruitingNum = partyRepository.countByCreatedByAndUseYnIsTrue(new CreatorId(new MemberId(member.getId())));
+        long participationNum = partyMemberRepository.countByMemberId(new MemberId(member.getId()));
         return MemberDetailResponse.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())

@@ -159,7 +159,7 @@ public class PartyDao {
                 .join(show).on(party.show.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
-                        partyMember.member.id.eq(memberId.getId()),
+                        partyMember.memberId.eq(memberId),
                         partyCategoryEq(category),
                         party.useYn.isTrue()
                 )
