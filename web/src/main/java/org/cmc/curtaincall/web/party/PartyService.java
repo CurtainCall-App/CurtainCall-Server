@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.party;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
@@ -63,7 +64,7 @@ public class PartyService {
 
     @Transactional
     @OptimisticLock
-    public void participate(PartyId partyId, Long memberId) {
+    public void participate(PartyId partyId, MemberId memberId) {
         Party party = PartyHelper.get(partyId, partyRepository);
         if (Boolean.TRUE.equals(party.getClosed())) {
             throw new AlreadyClosedPartyException("Party id=" + partyId);
@@ -77,8 +78,8 @@ public class PartyService {
         party.participate(member);
     }
 
-    public List<PartyParticipatedResponse> areParticipated(Long memberId, List<Long> partyIds) {
-        Member member = memberRepository.getReferenceById(memberId);
+    public List<PartyParticipatedResponse> areParticipated(MemberId memberId, List<Long> partyIds) {
+        Member member = memberRepository.getReferenceById(memberId.getId());
         List<Party> parties = partyIds.stream()
                 .map(partyRepository::getReferenceById)
                 .toList();
@@ -107,15 +108,15 @@ public class PartyService {
         party.edit(editor);
     }
 
-    private boolean isParticipated(Long memberId, Party party) {
+    private boolean isParticipated(MemberId memberId, Party party) {
         return party.getPartyMembers().stream()
-                .anyMatch(partyMember -> Objects.equals(partyMember.getMember().getId(), memberId))
-                || Objects.equals(party.getCreatedBy().getId(), memberId);
+                .anyMatch(partyMember -> Objects.equals(partyMember.getMember().getId(), memberId.getId()))
+                || Objects.equals(party.getCreatedBy().getMemberId(), memberId);
     }
 
-    public boolean isOwnedByMember(PartyId partyId, Long memberId) {
+    public boolean isOwnedByMember(PartyId partyId, MemberId memberId) {
         Party party = PartyHelper.get(partyId, partyRepository);
-        return Objects.equals(party.getCreatedBy().getId(), memberId);
+        return Objects.equals(party.getCreatedBy().getMemberId(), memberId);
     }
 
     @Transactional
@@ -125,8 +126,8 @@ public class PartyService {
         partyRepository.delete(party);
     }
 
-    private Member getMemberById(Long id) {
-        return memberRepository.findById(id)
+    private Member getMemberById(MemberId id) {
+        return memberRepository.findById(id.getId())
                 .filter(Member::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Member id=" + id));
     }

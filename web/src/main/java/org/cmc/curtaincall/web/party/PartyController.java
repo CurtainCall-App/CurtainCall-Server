@@ -30,7 +30,7 @@ public class PartyController {
 
     @DeleteMapping("/parties/{partyId}")
     public void deleteParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId.getId())) {
+        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId)) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
         partyService.delete(new PartyId(partyId));
@@ -40,7 +40,7 @@ public class PartyController {
     public void editParty(
             @PathVariable Long partyId, @RequestBody @Validated PartyEdit partyEdit,
             @LoginMemberId MemberId memberId) {
-        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId.getId())) {
+        if (!partyService.isOwnedByMember(new PartyId(partyId), memberId)) {
             throw new EntityAccessDeniedException("partyId=" + partyId + "memberId=" + memberId);
         }
         partyService.edit(new PartyId(partyId), partyEdit);
@@ -48,14 +48,14 @@ public class PartyController {
 
     @PutMapping("/member/parties/{partyId}")
     public void participateParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        partyService.participate(new PartyId(partyId), memberId.getId());
+        partyService.participate(new PartyId(partyId), memberId);
     }
 
     @GetMapping("/member/participated")
     public Slice<PartyParticipatedResponse> getParticipated(
             @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId MemberId memberId
     ) {
-        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId.getId(), partyIds);
+        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId, partyIds);
         return new SliceImpl<>(partyParticipatedResponses);
     }
 }
