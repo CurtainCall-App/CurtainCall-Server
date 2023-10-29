@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static org.cmc.curtaincall.domain.image.QImage.image;
 import static org.cmc.curtaincall.domain.party.QParty.party;
 import static org.cmc.curtaincall.domain.show.QFacility.facility;
 import static org.cmc.curtaincall.domain.show.QShow.show;
@@ -24,8 +25,7 @@ public class PartyQueryRepository {
     public Slice<Party> search(Pageable pageable, PartySearchParam searchParam) {
         List<Party> content = query
                 .selectFrom(party)
-                .join(party.createdBy).fetchJoin()
-                .leftJoin(party.createdBy.image).fetchJoin()
+                .leftJoin(image).on(party.createdBy.memberId.id.eq(image.createdBy.memberId.id)).fetchJoin()
                 .join(party.show, show).fetchJoin()
                 .join(show.facility, facility).fetchJoin()
                 .where(

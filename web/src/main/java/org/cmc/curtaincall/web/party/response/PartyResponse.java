@@ -3,13 +3,9 @@ package org.cmc.curtaincall.web.party.response;
 
 import jakarta.annotation.Nullable;
 import lombok.*;
-import org.cmc.curtaincall.domain.image.Image;
-import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
-import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Getter
 @Builder
@@ -54,27 +50,4 @@ public class PartyResponse {
     @Nullable
     private String facilityName;
 
-    public static PartyResponse of(Party party) {
-        Optional<Show> showOptional = Optional.ofNullable(party.getShow());
-        return PartyResponse.builder()
-                .id(party.getId())
-                .title(party.getTitle())
-                .curMemberNum(party.getCurMemberNum())
-                .maxMemberNum(party.getMaxMemberNum())
-                .showAt(party.getShowAt())
-                .createdAt(party.getCreatedAt())
-                .category(party.getCategory())
-                .creatorId(party.getCreatedBy().getId())
-                .creatorNickname(party.getCreatedBy().getNickname())
-                .creatorImageUrl(Optional.ofNullable(party.getCreatedBy().getImage())
-                        .filter(Image::getUseYn)
-                        .map(Image::getUrl)
-                        .orElse(null))
-                .showId(showOptional.map(Show::getId).orElse(null))
-                .showName(showOptional.map(Show::getName).orElse(null))
-                .showPoster(showOptional.map(Show::getPoster).orElse(null))
-                .facilityId(showOptional.map(show -> show.getFacility().getId()).orElse(null))
-                .facilityName(showOptional.map(show -> show.getFacility().getName()).orElse(null))
-                .build();
-    }
 }

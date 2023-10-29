@@ -1,19 +1,17 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.dao.PartyDao;
+import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.PartyResponse;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.party.PartyController;
-import org.cmc.curtaincall.web.party.PartyService;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
-import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.party.response.PartyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -39,6 +37,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @MockBean
     private PartyService partyService;
 
+    @MockBean
+    private PartyDao partyDao;
+
     @Test
     void getPartyList_Docs() throws Exception {
         // given
@@ -59,7 +60,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.getList(any(), any())).willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.getList(any(), any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/parties")
@@ -123,7 +124,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.search(any(), any())).willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.search(any(), any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/search/party")
@@ -190,7 +191,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.getDetail(any())).willReturn(partyDetailResponse);
+        given(partyDao.getDetail(any())).willReturn(partyDetailResponse);
 
         // expected
         mockMvc.perform(get("/parties/{partyId}", 10L)

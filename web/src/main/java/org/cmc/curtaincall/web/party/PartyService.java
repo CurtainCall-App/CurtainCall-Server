@@ -5,25 +5,18 @@ import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.PartyMember;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
-import org.cmc.curtaincall.domain.party.repository.PartyQueryRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
-import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.AlreadyClosedPartyException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
-import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.party.response.PartyResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,24 +39,7 @@ public class PartyService {
 
     private final MemberRepository memberRepository;
 
-    private final PartyQueryRepository partyQueryRepository;
-
     private final PartyMemberRepository partyMemberRepository;
-
-    public PartyDetailResponse getDetail(Long id) {
-        Party party = getPartyById(id);
-        return PartyDetailResponse.of(party);
-    }
-
-    public Slice<PartyResponse> getList(Pageable pageable, PartyCategory category) {
-        return partyRepository.findSliceWithByCategoryAndUseYnIsTrue(pageable, category)
-                .map(PartyResponse::of);
-    }
-
-    public Slice<PartyResponse> search(Pageable pageable, PartySearchParam searchParam) {
-        return partyQueryRepository.search(pageable, searchParam)
-                .map(PartyResponse::of);
-    }
 
     @Transactional
     public IdResult<Long> create(PartyCreate partyCreate) {

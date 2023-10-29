@@ -6,11 +6,15 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.dao.PartyDao;
+import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.security.AccountService;
+import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.cmc.curtaincall.web.service.lostitem.LostItemService;
 import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
@@ -19,7 +23,6 @@ import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
-import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -37,6 +40,8 @@ public class MemberController {
     private final AccountService accountService;
     private final ImageService imageService;
     private final LostItemService lostItemService;
+
+    private final PartyDao partyDao;
 
     @GetMapping("/members/duplicate/nickname")
     public BooleanResult getNicknameDuplicate(@RequestParam @NotBlank @Size(max = 15) String nickname) {
@@ -69,19 +74,19 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId}/recruitments")
-    public Slice<MyPartyResponse> getRecruitmentList(
+    public ListResult<PartyRecruitmentResponse> getRecruitmentList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
-        return memberService.getRecruitmentList(pageable, memberId, category);
+        return new ListResult<>(partyDao.getRecruitmentList(pageable, new MemberId(memberId), category));
     }
 
     @GetMapping("/members/{memberId}/participations")
-    public Slice<MyPartyResponse> getParticipationList(
+    public ListResult<PartyParticipationResponse> getParticipationList(
             Pageable pageable,
             @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
     ) {
-        return memberService.getParticipationList(pageable, memberId, category);
+        return new ListResult<>(partyDao.getParticipationList(pageable, new MemberId(memberId), category));
     }
 
     @GetMapping("/member/lostItems")

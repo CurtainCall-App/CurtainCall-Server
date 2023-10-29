@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.common.config;
 
 import jakarta.annotation.PostConstruct;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,7 +24,7 @@ public class AppConfig {
     }
 
     @Bean
-    public AuditorAware<Member> auditorProvider(AccountDao accountDao) {
+    public AuditorAware<CreatorId> auditorProvider(AccountDao accountDao) {
         return new LoginMemberAuditorAware(accountDao);
     }
 }

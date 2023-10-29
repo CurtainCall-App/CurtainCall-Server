@@ -4,16 +4,18 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
+import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.PartyResponse;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.party.PartyService;
+import org.cmc.curtaincall.web.common.response.ListResult;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
-import org.cmc.curtaincall.web.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.party.response.PartyResponse;
+import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -30,22 +32,24 @@ public class PartyController {
 
     private final PartyService partyService;
 
+    private final PartyDao partyDao;
+
     @GetMapping("/parties")
-    public Slice<PartyResponse> getPartyList(
+    public ListResult<PartyResponse> getPartyList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam PartyCategory category) {
-        return partyService.getList(pageable, category);
+        return new ListResult<>(partyDao.getList(pageable, category));
     }
 
     @GetMapping("/search/party")
-    public Slice<PartyResponse> searchParty(
+    public ListResult<PartyResponse> searchParty(
             Pageable pageable, @ModelAttribute @Validated PartySearchParam partySearchParam) {
-        return partyService.search(pageable, partySearchParam);
+        return new ListResult<>(partyDao.search(pageable, partySearchParam));
     }
 
     @GetMapping("/parties/{partyId}")
     public PartyDetailResponse getPartyDetail(@PathVariable Long partyId) {
-        return partyService.getDetail(partyId);
+        return partyDao.getDetail(new PartyId(partyId));
     }
 
     @PostMapping("/parties")

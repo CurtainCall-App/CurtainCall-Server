@@ -3,6 +3,9 @@ package org.cmc.curtaincall.web.controller;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.dao.PartyDao;
+import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
@@ -17,7 +20,6 @@ import org.cmc.curtaincall.web.service.member.request.MemberCreate;
 import org.cmc.curtaincall.web.service.member.request.MemberDelete;
 import org.cmc.curtaincall.web.service.member.request.MemberEdit;
 import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
-import org.cmc.curtaincall.web.service.member.response.MyPartyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -61,6 +63,9 @@ class MemberControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private LostItemService lostItemService;
+
+    @MockBean
+    private PartyDao partyDao;
 
     @Test
     void getNicknameDuplicate_Docs() throws Exception {
@@ -195,7 +200,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
     @Test
     void getRecruitmentList_Docs() throws Exception {
         // given
-        var partyResponse = MyPartyResponse.builder()
+        var partyResponse = PartyRecruitmentResponse.builder()
                 .id(10L)
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
@@ -204,17 +209,14 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
-                .creatorNickname("고라파덕")
-                .creatorImageUrl("creator-image-url")
                 .showId("PF220846")
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(memberService.getRecruitmentList(any(), any(), any()))
-                .willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.getRecruitmentList(any(), any(), any()))
+                .willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/members/{memberId}/recruitments", 2L)
@@ -251,9 +253,6 @@ class MemberControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("createdAt").description("작성 일시"),
                                 fieldWithPath("category").type(PartyCategory.class.getSimpleName())
                                         .description("카테고리"),
-                                fieldWithPath("creatorId").description("작성자 ID"),
-                                fieldWithPath("creatorNickname").description("작성자 닉네임"),
-                                fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
                                 fieldWithPath("showId").description("공연 ID"),
                                 fieldWithPath("showName").description("공연 이름"),
                                 fieldWithPath("showPoster").description("공연 포스터"),
@@ -266,7 +265,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
     @Test
     void getParticipationList_Docs() throws Exception {
         // given
-        var partyResponse = MyPartyResponse.builder()
+        var partyResponse = PartyParticipationResponse.builder()
                 .id(10L)
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
@@ -284,8 +283,8 @@ class MemberControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(memberService.getParticipationList(any(), any(), any()))
-                .willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.getParticipationList(any(), any(), any()))
+                .willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/members/{memberId}/participations", 2L)
