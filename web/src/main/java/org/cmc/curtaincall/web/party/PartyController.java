@@ -13,6 +13,7 @@ import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,11 @@ public class PartyController {
     @PostMapping("/parties")
     public IdResult<Long> createParty(@RequestBody @Validated PartyCreate partyCreate) {
         return partyService.create(partyCreate);
+    }
+
+    @InitBinder("partyCreate")
+    public void init(WebDataBinder dataBinder) {
+        dataBinder.addValidators(new PartyCreateValidator());
     }
 
     @DeleteMapping("/parties/{partyId}")

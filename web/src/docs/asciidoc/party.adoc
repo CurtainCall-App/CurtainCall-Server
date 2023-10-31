@@ -30,6 +30,10 @@ operation::party-get-party-detail[snippets='http-request,request-headers,path-pa
 
 operation::party-create-party[snippets='http-request,request-headers,request-fields,http-response,response-fields']
 
+- 기타 파티일 시 showId, showAt 값은 null 이어야함
+- 기타 파티가 아닐 경우 showId, showAt 은 not null 이고, maxMemberNum 최대 10
+- 기타 파티가 아닐 경우 showId, showAt 은 무시됨
+
 
 [[party-delete-party]]
 == 파티 삭제

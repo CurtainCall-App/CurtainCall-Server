@@ -79,6 +79,11 @@ public class Party extends BaseEntity {
         this.content = content;
         this.maxMemberNum = maxMemberNum;
         this.category = category;
+
+        if (category == PartyCategory.ETC) {
+            this.show = null;
+            this.showAt = null;
+        }
     }
 
     public PartyEditor.PartyEditorBuilder toEditor() {

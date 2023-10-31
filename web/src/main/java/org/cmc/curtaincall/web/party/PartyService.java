@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.PartyId;
@@ -38,8 +37,6 @@ public class PartyService {
     private final PartyRepository partyRepository;
 
     private final ShowRepository showRepository;
-
-    private final MemberRepository memberRepository;
 
     private final PartyMemberRepository partyMemberRepository;
 
