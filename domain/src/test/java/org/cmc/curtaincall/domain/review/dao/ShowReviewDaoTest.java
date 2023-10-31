@@ -34,7 +34,8 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .nickname("test-nickname")
                 .build();
         em.persist(member);
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(member));
+        given(auditorProvider.getCurrentAuditor()).willReturn(
+                Optional.of(new CreatorId(new MemberId(member.getId()))));
 
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
@@ -55,6 +56,9 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
         );
         showReviews.forEach(em::persist);
 
+        em.flush();
+        em.clear();
+
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -74,7 +78,8 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .nickname("test-nickname")
                 .build();
         em.persist(member);
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(member));
+        given(auditorProvider.getCurrentAuditor()).willReturn(
+                Optional.of(new CreatorId(new MemberId(member.getId()))));
 
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
@@ -124,11 +129,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .genre(ShowGenre.MUSICAL)
                 .build()
         );
-        Member member1 = Member.builder()
-                .nickname("test-nickname-1")
-                .build();
-        em.persist(member1);
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(member1));
+        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(new CreatorId(new MemberId(10L))));
 
         ShowReview showReview1 = ShowReview.builder()
                 .showId(new ShowId("show-id"))
@@ -137,14 +138,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .build();
         em.persist(showReview1);
 
-        em.flush();
-        em.clear();
-
-        Member member2 = Member.builder()
-                .nickname("test-nickname-2")
-                .build();
-        em.persist(member2);
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(member2));
+        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(new CreatorId(new MemberId(20L))));
 
         ShowReview showReview2 = ShowReview.builder()
                 .showId(new ShowId("test-show-id"))
@@ -153,14 +147,10 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .build();
         em.persist(showReview2);
 
-        em.flush();
-        em.clear();
-
-
         // when
         PageRequest pageRequest = PageRequest.of(0, 10);
         List<ShowReviewMyResponse> result = showReviewDao.getMyList(
-                pageRequest, new CreatorId(new MemberId(member1.getId())));
+                pageRequest, new CreatorId(new MemberId(10L)));
 
         // then
         assertThat(result).hasSize(1);
