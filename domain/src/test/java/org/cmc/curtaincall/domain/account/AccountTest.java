@@ -18,9 +18,9 @@ class AccountTest extends AbstractDataJpaTest {
         // given
         Account account = new Account("test-username");
         account.registerMember(new MemberId(1L));
+        accountRepository.save(account);
 
         // when
-        accountRepository.save(account);
         em.flush();
         em.clear();
 

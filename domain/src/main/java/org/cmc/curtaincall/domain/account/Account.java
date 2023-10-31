@@ -25,6 +25,10 @@ public class Account extends BaseTimeEntity implements Persistable<String> {
     private String username;
 
     @Embedded
+    @AttributeOverride(
+            name = "id",
+            column = @Column(name = "member_id")
+    )
     private MemberId memberId;
 
     public Account(final String username) {
