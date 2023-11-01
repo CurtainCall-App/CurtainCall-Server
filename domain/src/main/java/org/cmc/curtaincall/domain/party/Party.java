@@ -105,15 +105,13 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
-    public void participate(final MemberId memberId, final PartyMemberIdValidator partyMemberIdValidator) {
+    public void participate(final MemberId memberId) {
         if (Boolean.TRUE.equals(closed) || !partyAt.isBefore(LocalDateTime.now())) {
             throw new PartyAlreadyClosedException(new PartyId(id));
         }
         if (isParticipated(memberId)) {
             throw new PartyAlreadyParticipatedException(new PartyId(id), memberId);
         }
-        partyMemberIdValidator.validate(memberId);
-
         partyMembers.add(new PartyMember(this, memberId));
         curMemberNum += 1;
 

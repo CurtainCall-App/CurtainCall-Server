@@ -56,8 +56,9 @@ public class PartyService {
     @Transactional
     @OptimisticLock
     public void participate(final PartyId partyId, final MemberId memberId) {
+        memberIdValidator.validate(memberId);
         Party party = PartyHelper.get(partyId, partyRepository);
-        party.participate(memberId, memberIdValidator);
+        party.participate(memberId);
     }
 
     public List<PartyParticipatedResponse> areParticipated(MemberId memberId, List<Long> partyIds) {
