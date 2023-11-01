@@ -6,7 +6,6 @@ import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
-import org.cmc.curtaincall.web.party.response.PartyParticipatedResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,10 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
-import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -25,7 +22,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -155,38 +153,4 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 ));
     }
 
-    @Test
-    void getParticipated_Docs() throws Exception {
-        // given
-        given(partyService.areParticipated(any(), any())).willReturn(
-                List.of(
-                        new PartyParticipatedResponse(4L, true),
-                        new PartyParticipatedResponse(12L, false)
-                )
-        );
-
-        // expected
-        mockMvc.perform(get("/member/participated")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .param("partyIds", "4", "12")
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("party-get-participated",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        queryParameters(
-                                parameterWithName("partyIds").description("파티 ID 리스트")
-                                        .attributes(type(List.class))
-                        ),
-                        responseFields(
-                                beneathPath("content[]").withSubsectionId("content"),
-                                fieldWithPath("partyId").description("파티 ID"),
-                                fieldWithPath("participated").description("참여 여부")
-                        )
-                ));
-    }
 }

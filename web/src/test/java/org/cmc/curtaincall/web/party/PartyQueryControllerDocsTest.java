@@ -2,10 +2,7 @@ package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
-import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
-import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
-import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
-import org.cmc.curtaincall.domain.party.response.PartyResponse;
+import org.cmc.curtaincall.domain.party.response.*;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.junit.jupiter.api.Test;
@@ -18,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -26,9 +22,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -357,6 +351,41 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showPoster").description("공연 포스터"),
                                 fieldWithPath("facilityId").description("공연 시설 ID"),
                                 fieldWithPath("facilityName").description("공연 시설 이름")
+                        )
+                ));
+    }
+
+    @Test
+    void getParticipated_Docs() throws Exception {
+        // given
+        given(partyDao.areParticipated(any(), any())).willReturn(
+                List.of(
+                        new PartyParticipatedResponse(4L, true),
+                        new PartyParticipatedResponse(12L, false)
+                )
+        );
+
+        // expected
+        mockMvc.perform(get("/member/participated")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("partyIds", "4", "12")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-get-participated",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        queryParameters(
+                                parameterWithName("partyIds").description("파티 ID 리스트")
+                                        .attributes(type(List.class))
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("partyId").description("파티 ID"),
+                                fieldWithPath("participated").description("참여 여부")
                         )
                 ));
     }

@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.RepositoryHelper;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.cmc.curtaincall.domain.member.QMember.member;
 import static org.cmc.curtaincall.domain.party.QParty.party;
@@ -216,5 +219,29 @@ public class PartyDao {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    public List<PartyParticipatedResponse> areParticipated(final List<PartyId> partyIds, final MemberId memberId) {
+        Set<PartyId> participating = query.select(partyMember.party.id)
+                .from(partyMember)
+                .where(
+                        partyMember.memberId.eq(memberId),
+                        partyMember.party.id.in(partyIds.stream().map(PartyId::getId).toList())
+                )
+                .fetch()
+                .stream()
+                .map(PartyId::new)
+                .collect(Collectors.toSet());
+        participating.addAll(query.select(party.id)
+                .from(party)
+                .where(party.createdBy.eq(new CreatorId(memberId)))
+                .fetch()
+                .stream()
+                .map(PartyId::new)
+                .collect(Collectors.toSet())
+        );
+        return partyIds.stream()
+                .map(partyId -> new PartyParticipatedResponse(partyId.getId(), participating.contains(partyId)))
+                .toList();
     }
 }

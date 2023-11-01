@@ -1,7 +1,7 @@
-package org.cmc.curtaincall.web.party.response;
+package org.cmc.curtaincall.domain.party.response;
 
 public record PartyParticipatedResponse(
-        Long partyId,
+        long partyId,
         boolean participated
 ) {
 }
