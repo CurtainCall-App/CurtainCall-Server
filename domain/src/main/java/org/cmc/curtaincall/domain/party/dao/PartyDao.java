@@ -55,7 +55,7 @@ public class PartyDao {
                 .from(party)
                 .join(member).on(party.createdBy.memberId.id.eq(member.id))
                 .join(member.image)
-                .join(show).on(party.show.id.eq(show.id))
+                .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(party.id.eq(partyId.getId()))
                 .fetchOne()
@@ -84,7 +84,7 @@ public class PartyDao {
                 .from(party)
                 .join(member).on(party.createdBy.memberId.id.eq(member.id))
                 .join(member.image)
-                .join(show).on(party.show.id.eq(show.id))
+                .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
                         party.category.eq(category),
@@ -118,7 +118,7 @@ public class PartyDao {
                         facility.name
                 ))
                 .from(party)
-                .join(show).on(party.show.id.eq(show.id))
+                .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
                         partyCategoryEq(category),
@@ -156,7 +156,7 @@ public class PartyDao {
                 .join(partyMember.party, party)
                 .join(member).on(party.createdBy.memberId.id.eq(member.id))
                 .join(member.image)
-                .join(show).on(party.show.id.eq(show.id))
+                .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
                         partyMember.memberId.eq(memberId),
@@ -205,7 +205,7 @@ public class PartyDao {
                 .from(party)
                 .join(member).on(party.createdBy.memberId.id.eq(member.id))
                 .join(member.image)
-                .join(show).on(party.show.id.eq(show.id))
+                .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
                         show.name.startsWith(searchParam.getKeyword())

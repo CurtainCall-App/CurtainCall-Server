@@ -8,8 +8,7 @@ import org.cmc.curtaincall.domain.party.*;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.party.response.PartyHelper;
-import org.cmc.curtaincall.domain.show.Show;
-import org.cmc.curtaincall.domain.show.repository.ShowRepository;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,19 +30,18 @@ public class PartyService {
 
     private final PartyRepository partyRepository;
 
-    private final ShowRepository showRepository;
-
     private final PartyMemberRepository partyMemberRepository;
 
     private final PartyMemberIdValidator memberIdValidator;
 
+    private final PartyShowIdValidator showIdValidator;
+
     @Transactional
     public IdResult<Long> create(PartyCreate partyCreate) {
+        ShowId showId = new ShowId(partyCreate.getShowId());
+        showIdValidator.validate(showId);
         Party party = partyRepository.save(Party.builder()
-                .show(Optional.ofNullable(partyCreate.getShowId())
-                        .flatMap(showRepository::findById)
-                        .filter(Show::getUseYn)
-                        .orElse(null))
+                .showId(showId)
                 .showAt(partyCreate.getShowAt())
                 .title(partyCreate.getTitle())
                 .content(partyCreate.getContent())
@@ -92,12 +89,6 @@ public class PartyService {
                 .build();
 
         party.edit(editor);
-    }
-
-    private boolean isParticipated(MemberId memberId, Party party) {
-        return party.getPartyMembers().stream()
-                .anyMatch(partyMember -> Objects.equals(partyMember.getMemberId(), memberId))
-                || Objects.equals(party.getCreatedBy().getMemberId(), memberId);
     }
 
     public boolean isOwnedByMember(PartyId partyId, MemberId memberId) {

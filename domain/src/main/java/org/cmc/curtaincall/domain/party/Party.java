@@ -9,7 +9,7 @@ import org.cmc.curtaincall.domain.core.BaseEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyParticipatedException;
-import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,9 +40,9 @@ public class Party extends BaseEntity {
     @Column(name = "version", nullable = false)
     private Long version;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Show show;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "show_id"))
+    private ShowId showId;
 
     @Column(name = "show_at")
     private LocalDateTime showAt;
@@ -71,13 +71,13 @@ public class Party extends BaseEntity {
 
     @Builder
     public Party(
-            Show show,
+            ShowId showId,
             LocalDateTime showAt,
             String title,
             String content,
             Integer maxMemberNum,
             PartyCategory category) {
-        this.show = show;
+        this.showId = showId;
         this.showAt = showAt;
         this.title = title;
         this.content = content;
@@ -85,7 +85,7 @@ public class Party extends BaseEntity {
         this.category = category;
 
         if (category == PartyCategory.ETC) {
-            this.show = null;
+            this.showId = null;
             this.showAt = null;
         }
     }
