@@ -44,8 +44,8 @@ public class Party extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "show_id"))
     private ShowId showId;
 
-    @Column(name = "show_at")
-    private LocalDateTime showAt;
+    @Column(name = "party_at")
+    private LocalDateTime partyAt;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -72,13 +72,13 @@ public class Party extends BaseEntity {
     @Builder
     public Party(
             ShowId showId,
-            LocalDateTime showAt,
+            LocalDateTime partyAt,
             String title,
             String content,
             Integer maxMemberNum,
             PartyCategory category) {
         this.showId = showId;
-        this.showAt = showAt;
+        this.partyAt = partyAt;
         this.title = title;
         this.content = content;
         this.maxMemberNum = maxMemberNum;
@@ -86,7 +86,7 @@ public class Party extends BaseEntity {
 
         if (category == PartyCategory.ETC) {
             this.showId = null;
-            this.showAt = null;
+            this.partyAt = null;
         }
     }
 
@@ -106,7 +106,7 @@ public class Party extends BaseEntity {
     }
 
     public void participate(final MemberId memberId, final PartyMemberIdValidator partyMemberIdValidator) {
-        if (Boolean.TRUE.equals(closed) || !showAt.isBefore(LocalDateTime.now())) {
+        if (Boolean.TRUE.equals(closed) || !partyAt.isBefore(LocalDateTime.now())) {
             throw new PartyAlreadyClosedException(new PartyId(id));
         }
         if (isParticipated(memberId)) {

@@ -48,7 +48,7 @@ public class PartyDao {
                         show.id,
                         show.name,
                         show.poster,
-                        party.showAt,
+                        party.partyAt,
                         facility.id,
                         facility.name
                 ))
@@ -77,7 +77,7 @@ public class PartyDao {
                         show.id,
                         show.name,
                         show.poster,
-                        party.showAt,
+                        party.partyAt,
                         facility.id,
                         facility.name
                 ))
@@ -113,7 +113,7 @@ public class PartyDao {
                         show.id,
                         show.name,
                         show.poster,
-                        party.showAt,
+                        party.partyAt,
                         facility.id,
                         facility.name
                 ))
@@ -148,7 +148,7 @@ public class PartyDao {
                         show.id,
                         show.name,
                         show.poster,
-                        party.showAt,
+                        party.partyAt,
                         facility.id,
                         facility.name
                 ))
@@ -198,7 +198,7 @@ public class PartyDao {
                         show.id,
                         show.name,
                         show.poster,
-                        party.showAt,
+                        party.partyAt,
                         facility.id,
                         facility.name
                 ))

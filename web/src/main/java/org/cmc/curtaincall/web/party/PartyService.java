@@ -42,7 +42,7 @@ public class PartyService {
         showIdValidator.validate(showId);
         Party party = partyRepository.save(Party.builder()
                 .showId(showId)
-                .showAt(partyCreate.getShowAt())
+                .partyAt(partyCreate.getShowAt())
                 .title(partyCreate.getTitle())
                 .content(partyCreate.getContent())
                 .maxMemberNum(partyCreate.getMaxMemberNum())
