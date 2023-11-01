@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.domain.party.infra;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.party.PartyShowIdValidator;
+import org.cmc.curtaincall.domain.party.validation.PartyShowIdValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.dao.ShowExistsDao;
 import org.cmc.curtaincall.domain.show.exception.ShowNotFoundException;

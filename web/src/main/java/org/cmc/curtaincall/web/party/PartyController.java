@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.party.PartyCreatorValidator;
+import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;

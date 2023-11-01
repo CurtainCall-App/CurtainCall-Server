@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.domain.party;
+package org.cmc.curtaincall.domain.party.validation;
 
 import org.cmc.curtaincall.domain.member.MemberId;
 

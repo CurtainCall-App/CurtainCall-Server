@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.dao.MemberExistsDao;
 import org.cmc.curtaincall.domain.member.exception.MemberNotFoundException;
-import org.cmc.curtaincall.domain.party.PartyMemberIdValidator;
+import org.cmc.curtaincall.domain.party.validation.PartyMemberIdValidator;
 import org.springframework.stereotype.Component;
 
 @Component

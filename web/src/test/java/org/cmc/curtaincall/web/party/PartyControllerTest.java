@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
-import org.cmc.curtaincall.domain.party.PartyCreatorValidator;
+import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;

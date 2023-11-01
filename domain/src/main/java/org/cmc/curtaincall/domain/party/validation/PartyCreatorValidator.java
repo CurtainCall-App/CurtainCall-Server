@@ -1,6 +1,7 @@
-package org.cmc.curtaincall.domain.party;
+package org.cmc.curtaincall.domain.party.validation;
 
 import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.party.PartyId;
 
 public interface PartyCreatorValidator {
 
