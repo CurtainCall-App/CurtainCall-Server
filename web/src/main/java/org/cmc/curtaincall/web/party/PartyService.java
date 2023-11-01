@@ -92,11 +92,6 @@ public class PartyService {
         party.edit(editor);
     }
 
-    public boolean isOwnedByMember(PartyId partyId, MemberId memberId) {
-        Party party = PartyHelper.get(partyId, partyRepository);
-        return Objects.equals(party.getCreatedBy().getMemberId(), memberId);
-    }
-
     @Transactional
     public void delete(PartyId partyId) {
         Party party = PartyHelper.get(partyId, partyRepository);

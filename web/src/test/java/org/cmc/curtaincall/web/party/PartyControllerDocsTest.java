@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
@@ -33,6 +34,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private PartyService partyService;
+
+    @MockBean
+    private PartyCreatorValidator partyCreatorValidator;
 
     @Test
     void createParty_Docs() throws Exception {
@@ -81,7 +85,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @Test
     void deleteParty_Docs() throws Exception {
         // given
-        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
         mockMvc.perform(delete("/parties/{partyId}", 10)
@@ -102,8 +105,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @Test
     void editParty_Docs() throws Exception {
         // given
-        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
-
         PartyEdit partyEdit = PartyEdit.builder()
                 .title("수정 제목")
                 .content("수정 내용")

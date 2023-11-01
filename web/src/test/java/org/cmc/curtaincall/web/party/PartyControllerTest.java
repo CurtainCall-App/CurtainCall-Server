@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
@@ -24,6 +25,9 @@ class PartyControllerTest extends AbstractWebTest {
 
     @MockBean
     private PartyService partyService;
+
+    @MockBean
+    private PartyCreatorValidator partyCreatorValidator;
 
     @Test
     @DisplayName("파티 생성 - 기타 파티 아닌 경우 showId not null 검증")
