@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.party.Party;
-import org.cmc.curtaincall.domain.party.PartyEditor;
-import org.cmc.curtaincall.domain.party.PartyId;
-import org.cmc.curtaincall.domain.party.PartyMember;
-import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
+import org.cmc.curtaincall.domain.party.*;
 import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.domain.party.response.PartyHelper;
@@ -40,6 +36,8 @@ public class PartyService {
 
     private final PartyMemberRepository partyMemberRepository;
 
+    private final PartyMemberIdValidator memberIdValidator;
+
     @Transactional
     public IdResult<Long> create(PartyCreate partyCreate) {
         Party party = partyRepository.save(Party.builder()
@@ -60,17 +58,9 @@ public class PartyService {
 
     @Transactional
     @OptimisticLock
-    public void participate(PartyId partyId, MemberId memberId) {
+    public void participate(final PartyId partyId, final MemberId memberId) {
         Party party = PartyHelper.get(partyId, partyRepository);
-        if (Boolean.TRUE.equals(party.getClosed())) {
-            throw new PartyAlreadyClosedException(partyId);
-        }
-
-        if (isParticipated(memberId, party)) {
-            return;
-        }
-
-        party.participate(memberId);
+        party.participate(memberId, memberIdValidator);
     }
 
     public List<PartyParticipatedResponse> areParticipated(MemberId memberId, List<Long> partyIds) {

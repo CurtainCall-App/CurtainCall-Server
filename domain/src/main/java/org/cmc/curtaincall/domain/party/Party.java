@@ -7,11 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
+import org.cmc.curtaincall.domain.party.exception.PartyAlreadyParticipatedException;
 import org.cmc.curtaincall.domain.show.Show;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "party",
@@ -63,7 +67,7 @@ public class Party extends BaseEntity {
     private PartyCategory category;
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PartyMember> partyMembers = new ArrayList<>();
+    private final List<PartyMember> partyMembers = new ArrayList<>();
 
     @Builder
     public Party(
@@ -101,13 +105,32 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
-    public void participate(final MemberId memberId) {
+    public void participate(final MemberId memberId, final PartyMemberIdValidator partyMemberIdValidator) {
+        if (Boolean.TRUE.equals(closed) || !showAt.isBefore(LocalDateTime.now())) {
+            throw new PartyAlreadyClosedException(new PartyId(id));
+        }
+        if (isParticipated(memberId)) {
+            throw new PartyAlreadyParticipatedException(new PartyId(id), memberId);
+        }
+        partyMemberIdValidator.validate(memberId);
+
         partyMembers.add(new PartyMember(this, memberId));
         curMemberNum += 1;
 
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {
             close();
         }
+    }
+
+    public boolean isParticipated(final MemberId memberId) {
+        boolean isCreator = Objects.equals(getCreatedBy().getMemberId(), memberId);
+        boolean isParticipant = getPartyMembers().stream()
+                .anyMatch(partyMember -> Objects.equals(partyMember.getMemberId(), memberId));
+        return isCreator || isParticipant;
+    }
+
+    public List<PartyMember> getPartyMembers() {
+        return Collections.unmodifiableList(this.partyMembers);
     }
 
 }
