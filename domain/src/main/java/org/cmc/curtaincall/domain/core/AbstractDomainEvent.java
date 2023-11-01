@@ -4,8 +4,8 @@ import org.springframework.context.ApplicationEvent;
 
 public abstract class AbstractDomainEvent<T> extends ApplicationEvent {
 
-    protected AbstractDomainEvent(T id) {
-        super(id);
+    protected AbstractDomainEvent(T source) {
+        super(source);
     }
 
     @Override

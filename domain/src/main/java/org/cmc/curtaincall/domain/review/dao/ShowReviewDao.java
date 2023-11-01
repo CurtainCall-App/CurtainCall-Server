@@ -34,14 +34,14 @@ public class ShowReviewDao {
                         showReview.showId.id,
                         showReview.grade,
                         showReview.content,
-                        showReview.createdBy.id,
+                        showReview.createdBy.memberId.id,
                         member.nickname,
                         member.image.url,
                         showReview.createdAt,
                         showReview.likeCount
                 ))
                 .from(showReview)
-                .innerJoin(member).on(showReview.createdBy.id.eq(member.id))
+                .innerJoin(member).on(showReview.createdBy.memberId.id.eq(member.id))
                 .leftJoin(member.image)
                 .where(showReview.showId.id.eq(showId.getId()))
                 .orderBy(
@@ -85,7 +85,7 @@ public class ShowReviewDao {
                 ))
                 .from(showReview)
                 .join(show).on(showReview.showId.id.eq(show.id))
-                .where(showReview.createdBy.id.eq(creatorId.getId()))
+                .where(showReview.createdBy.memberId.id.eq(creatorId.getId()))
                 .orderBy(
                         RepositoryHelper.filterNullOrderByArr(
                                 getCreatedAtOrder(pageable)

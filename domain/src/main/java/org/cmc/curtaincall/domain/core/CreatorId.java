@@ -1,5 +1,7 @@
 package org.cmc.curtaincall.domain.core;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import lombok.*;
@@ -16,6 +18,10 @@ import java.util.Optional;
 public class CreatorId {
 
     @Embedded
+    @AttributeOverride(
+            name = "id",
+            column = @Column(name = "created_by", updatable = false, nullable = false)
+    )
     private MemberId memberId;
 
     public CreatorId(final MemberId memberId) {

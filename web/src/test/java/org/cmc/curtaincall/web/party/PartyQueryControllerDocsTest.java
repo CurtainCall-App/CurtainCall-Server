@@ -1,42 +1,36 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.dao.PartyDao;
+import org.cmc.curtaincall.domain.party.response.*;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.party.PartyService;
-import org.cmc.curtaincall.web.service.party.request.PartyCreate;
-import org.cmc.curtaincall.web.service.party.request.PartyEdit;
-import org.cmc.curtaincall.web.service.party.response.PartyDetailResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyParticipatedResponse;
-import org.cmc.curtaincall.web.service.party.response.PartyResponse;
+import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PartyController.class)
-class PartyControllerDocsTest extends AbstractWebTest {
+@WebMvcTest(PartyQueryController.class)
+class PartyQueryControllerDocsTest extends AbstractWebTest {
 
     @MockBean
-    private PartyService partyService;
+    private PartyDao partyDao;
 
     @Test
     void getPartyList_Docs() throws Exception {
@@ -58,7 +52,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.getList(any(), any())).willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.getList(any(), any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/parties")
@@ -122,7 +116,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.search(any(), any())).willReturn(new SliceImpl<>(List.of(partyResponse)));
+        given(partyDao.search(any(), any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/search/party")
@@ -189,7 +183,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.getDetail(any())).willReturn(partyDetailResponse);
+        given(partyDao.getDetail(any())).willReturn(partyDetailResponse);
 
         // expected
         mockMvc.perform(get("/parties/{partyId}", 10L)
@@ -228,121 +222,135 @@ class PartyControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    void createParty_Docs() throws Exception {
+    void getRecruitmentList_Docs() throws Exception {
         // given
-        PartyCreate partyCreate = PartyCreate.builder()
-                .showId("PF220846")
-                .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
+        var partyResponse = PartyRecruitmentResponse.builder()
+                .id(10L)
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
+                .curMemberNum(2)
                 .maxMemberNum(5)
+                .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
+                .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
+                .showId("PF220846")
+                .showName("잘자요, 엄마 [청주]")
+                .showPoster("post-image-url")
+                .facilityId("FC000182")
+                .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyDao.getRecruitmentList(any(), any(), any()))
+                .willReturn(List.of(partyResponse));
 
         // expected
-        mockMvc.perform(post("/parties")
+        mockMvc.perform(get("/members/{memberId}/recruitments", 2L)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(partyCreate))
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("category", PartyCategory.WATCHING.name())
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("party-create-party",
+                .andDo(print())
+                .andDo(document("party-get-recruitment-list",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
-                        requestFields(
-                                fieldWithPath("showId").description("공연 ID").optional(),
-                                fieldWithPath("showAt").description("공연일시").optional(),
-                                fieldWithPath("title").description("제목")
-                                        .attributes(constraint("max = 100")),
-                                fieldWithPath("content").description("내용")
-                                        .attributes(constraint("max = 400")),
-                                fieldWithPath("maxMemberNum").description("최대 인원")
-                                        .attributes(constraint("min = 2, max = 100")),
-                                fieldWithPath("category").description("분류")
-                                        .type(PartyCategory.class.getSimpleName())
+                        pathParameters(
+                                parameterWithName("memberId").description("회원 ID")
+                        ),
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("category").description("카테고리")
+                                        .attributes(RestDocsAttribute.type(PartyCategory.class))
+                                        .optional()
                         ),
                         responseFields(
-                                fieldWithPath("id").description("파티 ID")
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("파티 ID"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
+                                fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
+                                fieldWithPath("showAt").description("공연 일시"),
+                                fieldWithPath("createdAt").description("작성 일시"),
+                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
+                                        .description("카테고리"),
+                                fieldWithPath("showId").description("공연 ID"),
+                                fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("showPoster").description("공연 포스터"),
+                                fieldWithPath("facilityId").description("공연 시설 ID"),
+                                fieldWithPath("facilityName").description("공연 시설 이름")
                         )
                 ));
     }
 
     @Test
-    void deleteParty_Docs() throws Exception {
+    void getParticipationList_Docs() throws Exception {
         // given
-        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
-
-        // expected
-        mockMvc.perform(delete("/parties/{partyId}", 10)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("party-delete-party",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        pathParameters(
-                                parameterWithName("partyId").description("파티 ID")
-                        )
-                ));
-    }
-
-    @Test
-    void editParty_Docs() throws Exception {
-        // given
-        given(partyService.isOwnedByMember(any(), any())).willReturn(true);
-
-        PartyEdit partyEdit = PartyEdit.builder()
-                .title("수정 제목")
-                .content("수정 내용")
+        var partyResponse = PartyParticipationResponse.builder()
+                .id(10L)
+                .title("공연 같이 보실분~")
+                .content("저랑 같이 봐요~")
+                .curMemberNum(2)
+                .maxMemberNum(5)
+                .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
+                .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
+                .category(PartyCategory.WATCHING)
+                .creatorId(2L)
+                .creatorNickname("고라파덕")
+                .creatorImageUrl("creator-image-url")
+                .showId("PF220846")
+                .showName("잘자요, 엄마 [청주]")
+                .showPoster("post-image-url")
+                .facilityId("FC000182")
+                .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
+        given(partyDao.getParticipationList(any(), any(), any()))
+                .willReturn(List.of(partyResponse));
 
         // expected
-        mockMvc.perform(patch("/parties/{partyId}", 10)
+        mockMvc.perform(get("/members/{memberId}/participations", 2L)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(partyEdit))
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("category", PartyCategory.WATCHING.name())
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("party-edit-party",
+                .andDo(print())
+                .andDo(document("party-get-participation-list",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
                         pathParameters(
-                                parameterWithName("partyId").description("파티 ID")
+                                parameterWithName("memberId").description("회원 ID")
                         ),
-                        requestFields(
-                                fieldWithPath("title").description("제목")
-                                        .attributes(constraint("max = 100")),
-                                fieldWithPath("content").description("내용")
-                                        .attributes(constraint("max = 400"))
-                        )
-                ));
-    }
-
-    @Test
-    void participateParty_Docs() throws Exception {
-        // expected
-        mockMvc.perform(put("/member/parties/{partyId}", 10)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("party-participate-party",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("category").description("카테고리").optional()
                         ),
-                        pathParameters(
-                                parameterWithName("partyId").description("파티 ID")
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("파티 ID"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
+                                fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
+                                fieldWithPath("showAt").description("공연 일시"),
+                                fieldWithPath("createdAt").description("작성 일시"),
+                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
+                                        .description("카테고리"),
+                                fieldWithPath("creatorId").description("작성자 ID"),
+                                fieldWithPath("creatorNickname").description("작성자 닉네임"),
+                                fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
+                                fieldWithPath("showId").description("공연 ID"),
+                                fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("showPoster").description("공연 포스터"),
+                                fieldWithPath("facilityId").description("공연 시설 ID"),
+                                fieldWithPath("facilityName").description("공연 시설 이름")
                         )
                 ));
     }
@@ -350,7 +358,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @Test
     void getParticipated_Docs() throws Exception {
         // given
-        given(partyService.areParticipated(any(), any())).willReturn(
+        given(partyDao.areParticipated(any(), any())).willReturn(
                 List.of(
                         new PartyParticipatedResponse(4L, true),
                         new PartyParticipatedResponse(12L, false)

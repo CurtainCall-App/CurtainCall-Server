@@ -30,6 +30,10 @@ operation::party-get-party-detail[snippets='http-request,request-headers,path-pa
 
 operation::party-create-party[snippets='http-request,request-headers,request-fields,http-response,response-fields']
 
+- 기타 파티일 시 showId, showAt 값은 null 이어야함
+- 기타 파티가 아닐 경우 showId, showAt 은 not null 이고, maxMemberNum 최대 10
+- 기타 파티가 아닐 경우 showId, showAt 은 무시됨
+
 
 [[party-delete-party]]
 == 파티 삭제
@@ -53,3 +57,15 @@ operation::party-participate-party[snippets='http-request,request-headers,path-p
 == 파티 참여 여부
 
 operation::party-get-participated[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-recruitment-list]]
+== My 모집 리스트 조회
+
+operation::party-get-recruitment-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-participation-list]]
+== My 참여 리스트 조회
+
+operation::party-get-participation-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']

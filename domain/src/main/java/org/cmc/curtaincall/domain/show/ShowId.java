@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class ShowId implements Serializable {
 
-    @Column(name = "show_id")
+    @Column(name = "show_id", nullable = false)
     private String id;
 
     public ShowId(String id) {
