@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface PartyRepositoryCustom {
 
-    List<PartyId> findAllIdByCreatedByAndParty(CreatorId createdBy, Collection<Party> ids);
+    List<PartyId> findAllIdByCreatedByAndPartyIn(CreatorId createdBy, Collection<Party> ids);
 }

@@ -17,7 +17,7 @@ public class PartyRepositoryCustomImpl implements PartyRepositoryCustom {
     private final JPAQueryFactory query;
 
     @Override
-    public List<PartyId> findAllIdByCreatedByAndParty(CreatorId createdBy, Collection<Party> ids) {
+    public List<PartyId> findAllIdByCreatedByAndPartyIn(CreatorId createdBy, Collection<Party> ids) {
         return query.select(party.id)
                 .from(party)
                 .where(

@@ -61,8 +61,9 @@ public class PartyService {
         party.participate(memberId);
     }
 
-    public List<PartyParticipatedResponse> areParticipated(MemberId memberId, List<Long> partyIds) {
+    public List<PartyParticipatedResponse> areParticipated(final MemberId memberId, final List<PartyId> partyIds) {
         List<Party> parties = partyIds.stream()
+                .map(PartyId::getId)
                 .map(partyRepository::getReferenceById)
                 .toList();
         Set<PartyId> participatedPartyIds = Stream.of(
@@ -70,12 +71,11 @@ public class PartyService {
                                 .map(PartyMember::getParty)
                                 .map(Party::getId)
                                 .map(PartyId::new),
-                        partyRepository.findAllIdByCreatedByAndParty(new CreatorId(memberId), parties).stream()
+                        partyRepository.findAllIdByCreatedByAndPartyIn(new CreatorId(memberId), parties).stream()
                 )
                 .flatMap(Function.identity())
                 .collect(Collectors.toSet());
         return partyIds.stream()
-                .map(PartyId::new)
                 .map(partyId -> new PartyParticipatedResponse(partyId.getId(), participatedPartyIds.contains(partyId)))
                 .toList();
     }

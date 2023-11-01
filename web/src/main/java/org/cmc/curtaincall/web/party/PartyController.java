@@ -61,7 +61,8 @@ public class PartyController {
     public Slice<PartyParticipatedResponse> getParticipated(
             @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId MemberId memberId
     ) {
-        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(memberId, partyIds);
+        List<PartyParticipatedResponse> partyParticipatedResponses = partyService.areParticipated(
+                memberId, partyIds.stream().map(PartyId::new).toList());
         return new SliceImpl<>(partyParticipatedResponses);
     }
 }
