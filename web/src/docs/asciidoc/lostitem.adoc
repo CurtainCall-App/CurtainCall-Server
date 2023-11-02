@@ -19,6 +19,12 @@ operation::lostitem-create-lostitem[snippets='http-request,request-headers,reque
 operation::lostitem-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
+[[lostitem-get-my-list]]
+== 내가 쓴 글 (분실물)
+
+operation::lostitem-get-my-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
+
 [[lostitem-get-detail]]
 == 분실물 상세 조회
 

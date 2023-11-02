@@ -30,12 +30,6 @@ operation::member-get-member-detail[snippets='http-request,request-headers,path-
 operation::member-edit-member[snippets='http-request,request-headers,request-fields,http-response']
 
 
-[[member-get-my-lost-item-list]]
-== 내가 쓴 글 (분실물)
-
-operation::member-get-my-lost-item-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
-
-
 [[member-delete-member]]
 == 회원 탈퇴
 
