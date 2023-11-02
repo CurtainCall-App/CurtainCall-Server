@@ -67,7 +67,7 @@ public class LostItem extends BaseEntity {
     private String particulars;
 
     @Builder
-    private LostItem(
+    public LostItem(
             Facility facility,
             Image image,
             String title,

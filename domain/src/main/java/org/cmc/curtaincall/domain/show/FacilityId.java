@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.domain.member;
+package org.cmc.curtaincall.domain.show;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -11,12 +11,12 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 @ToString
-public class MemberId implements Serializable {
+public class FacilityId implements Serializable {
 
-    @Column(name = "member_id", nullable = false)
-    private Long id;
+    @Column(name = "facility_id", nullable = false)
+    private String id;
 
-    public MemberId(final Long id) {
+    public FacilityId(final String id) {
         this.id = id;
     }
 }
