@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
 import org.cmc.curtaincall.domain.image.Image;
-import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -39,9 +39,8 @@ public class LostItem extends BaseEntity {
     @Column(name = "lost_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Facility facility;
+    @Embedded
+    private FacilityId facilityId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -68,7 +67,7 @@ public class LostItem extends BaseEntity {
 
     @Builder
     public LostItem(
-            Facility facility,
+            FacilityId facilityId,
             Image image,
             String title,
             LostItemType type,
@@ -76,7 +75,7 @@ public class LostItem extends BaseEntity {
             LocalDate foundDate,
             @Nullable LocalTime foundTime,
             String particulars) {
-        this.facility = facility;
+        this.facilityId = facilityId;
         this.image = image;
         this.title = title;
         this.type = type;

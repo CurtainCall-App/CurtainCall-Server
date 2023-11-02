@@ -5,22 +5,16 @@ import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
 import org.cmc.curtaincall.domain.lostitem.LostItemEditor;
-import org.cmc.curtaincall.domain.lostitem.repository.LostItemQueryRepository;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
-import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.lostitem.validation.LostItemFacilityValidator;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.lostitem.response.LostItemDetailResponse;
-import org.cmc.curtaincall.web.lostitem.response.LostItemMyResponse;
-import org.cmc.curtaincall.web.lostitem.response.LostItemResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,17 +26,22 @@ import java.util.Objects;
 public class LostItemService {
 
     private final LostItemRepository lostItemRepository;
-    private final LostItemQueryRepository lostItemQueryRepository;
+
     private final FacilityRepository facilityRepository;
+
     private final ImageRepository imageRepository;
+
     private final MemberRepository memberRepository;
+
+    private final LostItemFacilityValidator lostItemFacilityValidator;
 
     @Transactional
     public IdResult<Long> create(LostItemCreate lostItemCreate) {
-        Facility facility = getFacilityById(lostItemCreate.getFacilityId());
+        FacilityId facilityId = new FacilityId(lostItemCreate.getFacilityId());
+        lostItemFacilityValidator.validate(facilityId);
         Image image = getImageById(lostItemCreate.getImageId());
         LostItem lostItem = lostItemRepository.save(LostItem.builder()
-                .facility(facility)
+                .facilityId(facilityId)
                 .image(image)
                 .title(lostItemCreate.getTitle())
                 .type(lostItemCreate.getType())
@@ -53,36 +52,6 @@ public class LostItemService {
                 .build()
         );
         return new IdResult<>(lostItem.getId());
-    }
-
-    public Slice<LostItemResponse> search(Pageable pageable, LostItemQueryParam queryParam) {
-        return lostItemQueryRepository.query(pageable, queryParam)
-                .map(LostItemResponse::of);
-    }
-
-    public LostItemDetailResponse getDetail(Long id) {
-        LostItem lostItem = getLostItemById(id);
-        return LostItemDetailResponse.builder()
-                .id(lostItem.getId())
-                .facilityId(lostItem.getFacility().getId())
-                .facilityName(lostItem.getFacility().getName())
-                .facilityPhone(lostItem.getFacility().getPhone())
-                .title(lostItem.getTitle())
-                .type(lostItem.getType())
-                .foundPlaceDetail(lostItem.getFoundPlaceDetail())
-                .foundDate(lostItem.getFoundDate())
-                .foundTime(lostItem.getFoundTime())
-                .particulars(lostItem.getParticulars())
-                .imageId(lostItem.getImage().getId())
-                .imageUrl(lostItem.getImage().getUrl())
-                .createdAt(lostItem.getCreatedAt())
-                .build();
-    }
-
-    public Slice<LostItemMyResponse> getMyList(Pageable pageable, Long memberId) {
-        Member member = memberRepository.getReferenceById(memberId);
-        return lostItemRepository.findSliceByCreatedByAndUseYnIsTrue(pageable, member)
-                .map(LostItemMyResponse::of);
     }
 
     @Transactional

@@ -1,19 +1,24 @@
 package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
+import org.cmc.curtaincall.domain.lostitem.dao.LostItemDao;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.domain.lostitem.response.LostItemDetailResponse;
+import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
+import org.cmc.curtaincall.domain.lostitem.response.LostItemResponse;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.lostitem.LostItemService;
+import org.cmc.curtaincall.web.common.response.ListResult;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.lostitem.response.LostItemDetailResponse;
-import org.cmc.curtaincall.web.lostitem.response.LostItemResponse;
+import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +29,8 @@ public class LostItemController {
     private final LostItemService lostItemService;
 
     private final ImageService imageService;
+
+    private final LostItemDao lostItemDao;
 
     @PostMapping("/lostItems")
     public IdResult<Long> createLostItem(
@@ -37,14 +44,22 @@ public class LostItemController {
     }
 
     @GetMapping("/lostItems")
-    public Slice<LostItemResponse> search(
+    public ListResult<LostItemResponse> search(
             Pageable pageable, @ModelAttribute LostItemQueryParam queryParam) {
-        return lostItemService.search(pageable, queryParam);
+        return new ListResult<>(lostItemDao.search(pageable, queryParam));
+    }
+
+    @GetMapping("/member/lostItems")
+    public ListResult<LostItemMyResponse> getMyLostItemList(
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @LoginMemberId MemberId memberId
+    ) {
+        return new ListResult<>(lostItemDao.getMyList(pageable, new CreatorId(memberId)));
     }
 
     @GetMapping("/lostItems/{lostItemId}")
     public LostItemDetailResponse getDetail(@PathVariable Long lostItemId) {
-        return lostItemService.getDetail(lostItemId);
+        return lostItemDao.getDetail(new LostItemId(lostItemId));
     }
 
     @DeleteMapping("/lostItems/{lostItemId}")
