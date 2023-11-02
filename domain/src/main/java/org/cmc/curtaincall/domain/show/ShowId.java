@@ -5,7 +5,6 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @Embeddable
 @Getter
@@ -17,7 +16,7 @@ public class ShowId implements Serializable {
     @Column(name = "show_id", nullable = false)
     private String id;
 
-    public ShowId(String id) {
-        this.id = Objects.requireNonNull(id);
+    public ShowId(final String id) {
+        this.id = id;
     }
 }

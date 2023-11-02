@@ -1,19 +1,16 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
+import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
+import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
+import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.service.lostitem.LostItemService;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +21,8 @@ public class LostItemController {
     private final LostItemService lostItemService;
 
     private final ImageService imageService;
+
+    private final LostItemCreatorValidator lostItemCreatorValidator;
 
     @PostMapping("/lostItems")
     public IdResult<Long> createLostItem(
@@ -36,36 +35,21 @@ public class LostItemController {
         return lostItemService.create(lostItemCreate);
     }
 
-    @GetMapping("/lostItems")
-    public Slice<LostItemResponse> search(
-            Pageable pageable, @ModelAttribute LostItemQueryParam queryParam) {
-        return lostItemService.search(pageable, queryParam);
-    }
-
-    @GetMapping("/lostItems/{lostItemId}")
-    public LostItemDetailResponse getDetail(@PathVariable Long lostItemId) {
-        return lostItemService.getDetail(lostItemId);
-    }
-
     @DeleteMapping("/lostItems/{lostItemId}")
     public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId MemberId memberId) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
-            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
-        }
-        lostItemService.delete(lostItemId);
+        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
+        lostItemService.delete(new LostItemId(lostItemId));
     }
 
     @PatchMapping("/lostItems/{lostItemId}")
     public void editLostItem(
             @PathVariable Long lostItemId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated LostItemEdit lostItemEdit) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
-            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
-        }
+        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
         if (!imageService.isOwnedByMember(memberId.getId(), lostItemEdit.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());
         }
-        lostItemService.edit(lostItemId, lostItemEdit);
+        lostItemService.edit(new LostItemId(lostItemId), lostItemEdit);
     }
 }
