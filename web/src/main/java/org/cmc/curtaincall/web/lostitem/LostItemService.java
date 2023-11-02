@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.lostitem;
+package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.image.Image;
@@ -14,11 +14,11 @@ import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemMyResponse;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
+import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
+import org.cmc.curtaincall.web.lostitem.response.LostItemDetailResponse;
+import org.cmc.curtaincall.web.lostitem.response.LostItemMyResponse;
+import org.cmc.curtaincall.web.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

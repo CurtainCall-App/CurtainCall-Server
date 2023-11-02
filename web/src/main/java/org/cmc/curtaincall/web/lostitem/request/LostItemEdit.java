@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.lostitem.request;
+package org.cmc.curtaincall.web.lostitem.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

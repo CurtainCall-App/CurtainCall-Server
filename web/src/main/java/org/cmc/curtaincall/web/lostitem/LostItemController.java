@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
@@ -7,11 +7,11 @@ import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.service.lostitem.LostItemService;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemCreate;
-import org.cmc.curtaincall.web.service.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemDetailResponse;
-import org.cmc.curtaincall.web.service.lostitem.response.LostItemResponse;
+import org.cmc.curtaincall.web.lostitem.LostItemService;
+import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
+import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
+import org.cmc.curtaincall.web.lostitem.response.LostItemDetailResponse;
+import org.cmc.curtaincall.web.lostitem.response.LostItemResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;

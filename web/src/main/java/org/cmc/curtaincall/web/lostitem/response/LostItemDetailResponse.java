@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.lostitem.response;
+package org.cmc.curtaincall.web.lostitem.response;
 
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;

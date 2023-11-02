@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.lostitem.response;
+package org.cmc.curtaincall.web.lostitem.response;
 
 import jakarta.annotation.Nullable;
 import lombok.Builder;
