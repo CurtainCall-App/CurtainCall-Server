@@ -38,7 +38,7 @@ public class LostItemController {
     @DeleteMapping("/lostItems/{lostItemId}")
     public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId MemberId memberId) {
         lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
-        lostItemService.delete(lostItemId);
+        lostItemService.delete(new LostItemId(lostItemId));
     }
 
     @PatchMapping("/lostItems/{lostItemId}")
@@ -50,6 +50,6 @@ public class LostItemController {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());
         }
-        lostItemService.edit(lostItemId, lostItemEdit);
+        lostItemService.edit(new LostItemId(lostItemId), lostItemEdit);
     }
 }

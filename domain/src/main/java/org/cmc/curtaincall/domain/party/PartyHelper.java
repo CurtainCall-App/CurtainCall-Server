@@ -1,7 +1,5 @@
-package org.cmc.curtaincall.domain.party.response;
+package org.cmc.curtaincall.domain.party;
 
-import org.cmc.curtaincall.domain.party.Party;
-import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.exception.PartyNotFoundException;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 

@@ -7,7 +7,7 @@ import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
-import org.cmc.curtaincall.domain.party.response.PartyHelper;
+import org.cmc.curtaincall.domain.party.PartyHelper;
 import org.cmc.curtaincall.domain.party.validation.PartyMemberIdValidator;
 import org.cmc.curtaincall.domain.party.validation.PartyShowIdValidator;
 import org.cmc.curtaincall.domain.show.ShowId;

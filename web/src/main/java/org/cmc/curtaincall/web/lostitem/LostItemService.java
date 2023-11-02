@@ -5,6 +5,8 @@ import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
 import org.cmc.curtaincall.domain.lostitem.LostItemEditor;
+import org.cmc.curtaincall.domain.lostitem.LostItemHelper;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemFacilityValidator;
 import org.cmc.curtaincall.domain.show.FacilityId;
@@ -27,7 +29,7 @@ public class LostItemService {
     private final LostItemFacilityValidator lostItemFacilityValidator;
 
     @Transactional
-    public IdResult<Long> create(LostItemCreate lostItemCreate) {
+    public IdResult<Long> create(final LostItemCreate lostItemCreate) {
         FacilityId facilityId = new FacilityId(lostItemCreate.getFacilityId());
         lostItemFacilityValidator.validate(facilityId);
         Image image = getImageById(lostItemCreate.getImageId());
@@ -46,15 +48,15 @@ public class LostItemService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        LostItem lostItem = getLostItemById(id);
+    public void delete(final LostItemId id) {
+        LostItem lostItem = LostItemHelper.get(id, lostItemRepository);
         lostItemRepository.delete(lostItem);
         imageRepository.delete(lostItem.getImage());
     }
 
     @Transactional
-    public void edit(Long id, LostItemEdit lostItemEdit) {
-        LostItem lostItem = getLostItemById(id);
+    public void edit(final LostItemId id, final LostItemEdit lostItemEdit) {
+        LostItem lostItem = LostItemHelper.get(id, lostItemRepository);
 
         LostItemEditor editor = lostItem.toEditor()
                 .image(getImageById(lostItemEdit.getImageId()))
@@ -75,9 +77,4 @@ public class LostItemService {
                 .orElseThrow(() -> new EntityNotFoundException("Image id=" + id));
     }
 
-    private LostItem getLostItemById(Long id) {
-        return lostItemRepository.findById(id)
-                .filter(LostItem::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("LostItem id=" + id));
-    }
 }
