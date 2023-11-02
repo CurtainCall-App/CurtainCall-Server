@@ -1,6 +1,9 @@
 package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
+import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
@@ -19,6 +22,8 @@ public class LostItemController {
 
     private final ImageService imageService;
 
+    private final LostItemCreatorValidator lostItemCreatorValidator;
+
     @PostMapping("/lostItems")
     public IdResult<Long> createLostItem(
             @RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId MemberId memberId
@@ -32,9 +37,7 @@ public class LostItemController {
 
     @DeleteMapping("/lostItems/{lostItemId}")
     public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId MemberId memberId) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
-            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
-        }
+        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
         lostItemService.delete(lostItemId);
     }
 
@@ -42,9 +45,7 @@ public class LostItemController {
     public void editLostItem(
             @PathVariable Long lostItemId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated LostItemEdit lostItemEdit) {
-        if (!lostItemService.isOwnedByMember(lostItemId, memberId.getId())) {
-            throw new EntityAccessDeniedException("lostItemId=" + lostItemId + "memberId=" + memberId);
-        }
+        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
         if (!imageService.isOwnedByMember(memberId.getId(), lostItemEdit.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());

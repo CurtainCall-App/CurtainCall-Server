@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.lostitem;
 
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
+import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
@@ -34,6 +35,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private LostItemService lostItemService;
+
+    @MockBean
+    private LostItemCreatorValidator lostItemCreatorValidator;
 
     @MockBean
     private ImageService imageService;
@@ -89,7 +93,6 @@ class LostItemControllerDocsTest extends AbstractWebTest {
     @Test
     void deleteReview_Docs() throws Exception {
         // given
-        given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
         mockMvc.perform(delete("/lostItems/{lostItemId}", "10")
@@ -121,7 +124,6 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
-        given(lostItemService.isOwnedByMember(any(), any())).willReturn(true);
         given(imageService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected

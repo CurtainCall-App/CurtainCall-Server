@@ -7,18 +7,13 @@ import org.cmc.curtaincall.domain.lostitem.LostItem;
 import org.cmc.curtaincall.domain.lostitem.LostItemEditor;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemFacilityValidator;
-import org.cmc.curtaincall.domain.member.repository.MemberRepository;
-import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.FacilityId;
-import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +22,7 @@ public class LostItemService {
 
     private final LostItemRepository lostItemRepository;
 
-    private final FacilityRepository facilityRepository;
-
     private final ImageRepository imageRepository;
-
-    private final MemberRepository memberRepository;
 
     private final LostItemFacilityValidator lostItemFacilityValidator;
 
@@ -76,17 +67,6 @@ public class LostItemService {
                 .build();
 
         lostItem.edit(editor);
-    }
-
-    public boolean isOwnedByMember(Long lostItemId, Long memberId) {
-        LostItem lostItem = getLostItemById(lostItemId);
-        return Objects.equals(lostItem.getCreatedBy().getId(), memberId);
-    }
-
-    private Facility getFacilityById(String id) {
-        return facilityRepository.findById(id)
-                .filter(Facility::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
     }
 
     private Image getImageById(Long id) {
