@@ -4,7 +4,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.common.RepositoryHelper;
+import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.review.response.QShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.QShowReviewResponse;
@@ -45,7 +45,7 @@ public class ShowReviewDao {
                 .leftJoin(member.image)
                 .where(showReview.showId.id.eq(showId.getId()))
                 .orderBy(
-                        RepositoryHelper.filterNullOrderByArr(
+                        QuerydslHelper.filterNullOrderByArr(
                                 getLikeCountOrder(pageable),
                                 getCreatedAtOrder(pageable)
                         )
@@ -87,7 +87,7 @@ public class ShowReviewDao {
                 .join(show).on(showReview.showId.id.eq(show.id))
                 .where(showReview.createdBy.memberId.id.eq(creatorId.getId()))
                 .orderBy(
-                        RepositoryHelper.filterNullOrderByArr(
+                        QuerydslHelper.filterNullOrderByArr(
                                 getCreatedAtOrder(pageable)
                         )
                 )
