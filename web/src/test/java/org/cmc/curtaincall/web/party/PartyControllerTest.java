@@ -1,9 +1,9 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyService.create(any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -66,7 +66,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyService.create(any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -91,7 +91,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(11)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyService.create(any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -116,7 +116,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(11)
                 .category(PartyCategory.ETC)
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyService.create(any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")

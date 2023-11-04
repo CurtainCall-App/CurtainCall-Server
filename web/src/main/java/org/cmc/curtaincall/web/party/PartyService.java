@@ -5,13 +5,12 @@ import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
+import org.cmc.curtaincall.domain.party.PartyHelper;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.repository.PartyRepository;
-import org.cmc.curtaincall.domain.party.PartyHelper;
 import org.cmc.curtaincall.domain.party.validation.PartyMemberIdValidator;
 import org.cmc.curtaincall.domain.party.validation.PartyShowIdValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class PartyService {
     private final PartyShowIdValidator showIdValidator;
 
     @Transactional
-    public IdResult<Long> create(PartyCreate partyCreate) {
+    public PartyId create(PartyCreate partyCreate) {
         ShowId showId = new ShowId(partyCreate.getShowId());
         showIdValidator.validate(showId);
         Party party = partyRepository.save(Party.builder()
@@ -42,7 +41,7 @@ public class PartyService {
                 .build()
         );
 
-        return new IdResult<>(party.getId());
+        return new PartyId(party.getId());
     }
 
     @Transactional

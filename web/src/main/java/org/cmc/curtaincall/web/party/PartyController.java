@@ -23,7 +23,7 @@ public class PartyController {
 
     @PostMapping("/parties")
     public IdResult<Long> createParty(@RequestBody @Validated PartyCreate partyCreate) {
-        return partyService.create(partyCreate);
+        return new IdResult<>(partyService.create(partyCreate).getId());
     }
 
     @InitBinder("partyCreate")

@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
+import org.cmc.curtaincall.domain.party.convert.PartyIdToLongConverter;
 import org.cmc.curtaincall.domain.party.convert.StringToPartyIdConverter;
 import org.cmc.curtaincall.domain.review.convert.StringToShowReviewIdConverter;
 import org.cmc.curtaincall.web.security.LoginMemberIdArgumentResolver;
@@ -27,5 +28,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StringToShowReviewIdConverter());
         registry.addConverter(new StringToPartyIdConverter());
+        registry.addConverter(new PartyIdToLongConverter());
     }
 }
