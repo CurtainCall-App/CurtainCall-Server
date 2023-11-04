@@ -34,8 +34,8 @@ public class ShowReviewController {
 
     @PostMapping("/shows/{showId}/reviews")
     public IdResult<Long> createShowReview(
-            @PathVariable String showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
-        ShowReviewId showReviewId = showReviewService.create(new ShowId(showId), showReviewCreate);
+            @PathVariable ShowId showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
+        ShowReviewId showReviewId = showReviewService.create(showId, showReviewCreate);
         return new IdResult<>(showReviewId.getId());
     }
 
