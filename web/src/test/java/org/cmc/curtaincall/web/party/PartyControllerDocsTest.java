@@ -19,7 +19,9 @@ import java.time.LocalDateTime;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -169,6 +171,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
+        then(partyService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
     }
 
 }
