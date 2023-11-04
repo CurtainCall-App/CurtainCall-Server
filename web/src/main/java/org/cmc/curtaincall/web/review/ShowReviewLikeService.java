@@ -28,8 +28,8 @@ public class ShowReviewLikeService {
 
     @OptimisticLock
     @Transactional
-    public void like(final MemberId memberId, final Long reviewId) {
-        ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(new ShowReviewId(reviewId), showReviewRepository);
+    public void like(final MemberId memberId, final ShowReviewId reviewId) {
+        ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(reviewId, showReviewRepository);
         if (showReviewLikeRepository.existsByMemberIdAndShowReview(memberId, showReview)) {
             return;
         }
@@ -39,22 +39,23 @@ public class ShowReviewLikeService {
 
     @OptimisticLock
     @Transactional
-    public void cancelLike(final MemberId memberId, final Long reviewId) {
-        ShowReview showReview = ShowReviewHelper.get(new ShowReviewId(reviewId), showReviewRepository);
+    public void cancelLike(final MemberId memberId, final ShowReviewId reviewId) {
+        ShowReview showReview = ShowReviewHelper.get(reviewId, showReviewRepository);
         showReviewLikeRepository.findByMemberIdAndShowReview(memberId, showReview)
                 .ifPresent(showReviewLikeRepository::delete);
         showReview.minusLikeCount();
     }
 
-    public List<ShowReviewLikedResponse> areLiked(final MemberId memberId, final List<Long> reviewIds) {
+    public List<ShowReviewLikedResponse> areLiked(final MemberId memberId, final List<ShowReviewId> reviewIds) {
         List<ShowReview> reviews = reviewIds.stream()
+                .map(ShowReviewId::getId)
                 .map(showReviewRepository::getReferenceById)
                 .toList();
-        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberIdAndShowReviewIn(memberId, reviews).stream()
-                .map(showReviewLike -> showReviewLike.getShowReview().getId())
+        Set<ShowReviewId> likedReviewIds = showReviewLikeRepository.findAllByMemberIdAndShowReviewIn(memberId, reviews).stream()
+                .map(showReviewLike -> new ShowReviewId(showReviewLike.getShowReview().getId()))
                 .collect(Collectors.toSet());
         return reviewIds.stream()
-                .map(reviewId -> new ShowReviewLikedResponse(reviewId, likedReviewIds.contains(reviewId)))
+                .map(reviewId -> new ShowReviewLikedResponse(reviewId.getId(), likedReviewIds.contains(reviewId)))
                 .toList();
     }
 
