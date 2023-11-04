@@ -7,6 +7,7 @@ import org.cmc.curtaincall.domain.review.ShowReviewGradeApplyService;
 import org.cmc.curtaincall.domain.review.ShowReviewHelper;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
+import org.cmc.curtaincall.domain.review.validation.ShowReviewShowValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
@@ -23,9 +24,12 @@ public class ShowReviewService {
 
     private final ShowReviewGradeApplyService showReviewGradeApplyService;
 
+    private final ShowReviewShowValidator showReviewShowValidator;
+
     @Transactional
     public ShowReviewId create(final ShowReviewCreate showReviewCreate) {
         ShowId showId = new ShowId(showReviewCreate.getShowId());
+        showReviewShowValidator.validate(showId);
         ShowReview showReview = showReviewRepository.save(ShowReview.builder()
                 .showId(showId)
                 .grade(showReviewCreate.getGrade())
