@@ -73,8 +73,8 @@ public class ShowReview extends BaseEntity {
     }
 
     public void edit(final ShowReviewEditor editor) {
-        grade = editor.getGrade();
-        content = editor.getContent();
+        grade = editor.grade();
+        content = editor.content();
     }
 
     public void like(final MemberId memberId, final ShowReviewLikeRepository showReviewLikeRepository) {
