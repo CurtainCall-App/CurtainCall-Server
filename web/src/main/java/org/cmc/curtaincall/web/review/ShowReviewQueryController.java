@@ -25,8 +25,8 @@ public class ShowReviewQueryController {
     @GetMapping("/shows/{showId}/reviews")
     public ListResult<ShowReviewResponse> getList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable String showId) {
-        return new ListResult<>(showReviewDao.getList(pageable, new ShowId(showId)));
+            @PathVariable ShowId showId) {
+        return new ListResult<>(showReviewDao.getList(pageable, showId));
     }
 
     @GetMapping("/member/reviews")

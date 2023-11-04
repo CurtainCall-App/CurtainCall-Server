@@ -13,6 +13,7 @@ import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.exception.LostItemNotFoundException;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
 import org.cmc.curtaincall.domain.lostitem.response.*;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -35,7 +36,7 @@ public class LostItemDao {
         JPAQuery<LostItemResponse> contentQuery = query
                 .select(new QLostItemResponse(
                         lostItem.id,
-                        facility.id,
+                        lostItem.facilityId,
                         facility.name,
                         lostItem.title,
                         lostItem.type,
@@ -70,9 +71,9 @@ public class LostItemDao {
                 .orElse(null);
     }
 
-    private BooleanExpression facilityIdEq(String facilityId) {
+    private BooleanExpression facilityIdEq(FacilityId facilityId) {
         return Optional.ofNullable(facilityId)
-                .map(lostItem.facilityId.id::eq)
+                .map(lostItem.facilityId::eq)
                 .orElse(null);
     }
 
@@ -92,7 +93,7 @@ public class LostItemDao {
         return Optional.ofNullable(query
                 .select(new QLostItemDetailResponse(
                         lostItem.id,
-                        facility.id,
+                        lostItem.facilityId,
                         facility.name,
                         facility.phone,
                         lostItem.title,
@@ -119,8 +120,8 @@ public class LostItemDao {
     public List<LostItemMyResponse> getMyList(final Pageable pageable, final CreatorId createdBy) {
         return query
                 .select(new QLostItemMyResponse(
-                    lostItem.id,
-                        facility.id,
+                        lostItem.id,
+                        lostItem.facilityId,
                         facility.name,
                         lostItem.title,
                         lostItem.type,

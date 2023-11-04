@@ -31,10 +31,10 @@ public class ShowReviewDao {
     public List<ShowReviewResponse> getList(Pageable pageable, ShowId showId) {
         return query.select(new QShowReviewResponse(
                         showReview.id,
-                        showReview.showId.id,
+                        showReview.showId,
                         showReview.grade,
                         showReview.content,
-                        showReview.createdBy.memberId.id,
+                        showReview.createdBy,
                         member.nickname,
                         member.image.url,
                         showReview.createdAt,
@@ -43,7 +43,7 @@ public class ShowReviewDao {
                 .from(showReview)
                 .innerJoin(member).on(showReview.createdBy.memberId.id.eq(member.id))
                 .leftJoin(member.image)
-                .where(showReview.showId.id.eq(showId.getId()))
+                .where(showReview.showId.eq(showId))
                 .orderBy(
                         QuerydslHelper.filterNullOrderByArr(
                                 getLikeCountOrder(pageable),
@@ -76,7 +76,7 @@ public class ShowReviewDao {
     public List<ShowReviewMyResponse> getMyList(Pageable pageable, CreatorId creatorId) {
         return query.select(new QShowReviewMyResponse(
                         showReview.id,
-                        showReview.showId.id,
+                        showReview.showId,
                         show.name,
                         showReview.grade,
                         showReview.content,

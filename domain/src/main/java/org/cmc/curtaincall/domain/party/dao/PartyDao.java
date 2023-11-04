@@ -45,10 +45,10 @@ public class PartyDao {
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
-                        party.createdBy.memberId.id,
+                        party.createdBy,
                         member.nickname,
                         member.image.url,
-                        show.id,
+                        party.showId,
                         show.name,
                         show.poster,
                         party.partyAt,
@@ -74,10 +74,10 @@ public class PartyDao {
                         party.maxMemberNum,
                         party.createdAt,
                         party.category,
-                        party.createdBy.memberId.id,
+                        party.createdBy,
                         member.nickname,
                         member.image.url,
-                        show.id,
+                        party.showId,
                         show.name,
                         show.poster,
                         party.partyAt,
@@ -113,7 +113,7 @@ public class PartyDao {
                         party.maxMemberNum,
                         party.createdAt,
                         party.category,
-                        show.id,
+                        party.showId,
                         show.name,
                         show.poster,
                         party.partyAt,
@@ -145,10 +145,10 @@ public class PartyDao {
                         party.maxMemberNum,
                         party.createdAt,
                         party.category,
-                        party.createdBy.memberId.id,
+                        party.createdBy,
                         member.nickname,
                         member.image.url,
-                        show.id,
+                        party.showId,
                         show.name,
                         show.poster,
                         party.partyAt,
@@ -195,10 +195,10 @@ public class PartyDao {
                         party.maxMemberNum,
                         party.createdAt,
                         party.category,
-                        party.createdBy.memberId.id,
+                        party.createdBy,
                         member.nickname,
                         member.image.url,
-                        show.id,
+                        party.showId,
                         show.name,
                         show.poster,
                         party.partyAt,
@@ -241,7 +241,7 @@ public class PartyDao {
                 .collect(Collectors.toSet())
         );
         return partyIds.stream()
-                .map(partyId -> new PartyParticipatedResponse(partyId.getId(), participating.contains(partyId)))
+                .map(partyId -> new PartyParticipatedResponse(partyId, participating.contains(partyId)))
                 .toList();
     }
 }

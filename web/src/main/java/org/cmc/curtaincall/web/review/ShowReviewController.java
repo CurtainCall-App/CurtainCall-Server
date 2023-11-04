@@ -28,30 +28,28 @@ public class ShowReviewController {
     private final ShowReviewCreatorValidator showReviewCreatorValidator;
 
     @PostMapping("/review")
-    public IdResult<Long> create(@Validated @RequestBody ShowReviewCreate showReviewCreate) {
-        return new IdResult<>(showReviewService.create(showReviewCreate).getId());
+    public IdResult<ShowReviewId> create(@Validated @RequestBody ShowReviewCreate showReviewCreate) {
+        return new IdResult<>(showReviewService.create(showReviewCreate));
     }
 
     @PostMapping("/shows/{showId}/reviews")
-    public IdResult<Long> createShowReview(
-            @PathVariable String showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
-        ShowReviewId showReviewId = showReviewService.create(new ShowId(showId), showReviewCreate);
-        return new IdResult<>(showReviewId.getId());
+    public IdResult<ShowReviewId> createShowReview(
+            @PathVariable ShowId showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
+        ShowReviewId showReviewId = showReviewService.create(showId, showReviewCreate);
+        return new IdResult<>(showReviewId);
     }
 
     @DeleteMapping("/reviews/{reviewId}")
-    public void delete(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        ShowReviewId id = new ShowReviewId(reviewId);
-        showReviewCreatorValidator.validate(id, new CreatorId(memberId));
-        showReviewService.delete(id);
+    public void delete(@PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId) {
+        showReviewCreatorValidator.validate(reviewId, new CreatorId(memberId));
+        showReviewService.delete(reviewId);
     }
 
     @PatchMapping("/reviews/{reviewId}")
     public void edit(
-            @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
+            @PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
-        ShowReviewId id = new ShowReviewId(reviewId);
-        showReviewCreatorValidator.validate(id, new CreatorId(memberId));
-        showReviewService.edit(id, showReviewEdit);
+        showReviewCreatorValidator.validate(reviewId, new CreatorId(memberId));
+        showReviewService.edit(reviewId, showReviewEdit);
     }
 }

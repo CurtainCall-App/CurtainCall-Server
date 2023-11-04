@@ -25,31 +25,31 @@ public class LostItemController {
     private final LostItemCreatorValidator lostItemCreatorValidator;
 
     @PostMapping("/lostItems")
-    public IdResult<Long> createLostItem(
+    public IdResult<LostItemId> createLostItem(
             @RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId MemberId memberId
     ) {
         if (!imageService.isOwnedByMember(memberId.getId(), lostItemCreate.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemCreate.getImageId());
         }
-        return lostItemService.create(lostItemCreate);
+        return new IdResult<>(lostItemService.create(lostItemCreate));
     }
 
     @DeleteMapping("/lostItems/{lostItemId}")
-    public void deleteLostItem(@PathVariable Long lostItemId, @LoginMemberId MemberId memberId) {
-        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
-        lostItemService.delete(new LostItemId(lostItemId));
+    public void deleteLostItem(@PathVariable LostItemId lostItemId, @LoginMemberId MemberId memberId) {
+        lostItemCreatorValidator.validate(lostItemId, new CreatorId(memberId));
+        lostItemService.delete(lostItemId);
     }
 
     @PatchMapping("/lostItems/{lostItemId}")
     public void editLostItem(
-            @PathVariable Long lostItemId, @LoginMemberId MemberId memberId,
+            @PathVariable LostItemId lostItemId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated LostItemEdit lostItemEdit) {
-        lostItemCreatorValidator.validate(new LostItemId(lostItemId), new CreatorId(memberId));
+        lostItemCreatorValidator.validate(lostItemId, new CreatorId(memberId));
         if (!imageService.isOwnedByMember(memberId.getId(), lostItemEdit.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemEdit.getImageId());
         }
-        lostItemService.edit(new LostItemId(lostItemId), lostItemEdit);
+        lostItemService.edit(lostItemId, lostItemEdit);
     }
 }

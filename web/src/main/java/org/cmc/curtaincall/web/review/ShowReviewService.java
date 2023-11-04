@@ -28,7 +28,7 @@ public class ShowReviewService {
 
     @Transactional
     public ShowReviewId create(final ShowReviewCreate showReviewCreate) {
-        ShowId showId = new ShowId(showReviewCreate.getShowId());
+        ShowId showId = showReviewCreate.getShowId();
         showReviewShowValidator.validate(showId);
         ShowReview showReview = showReviewRepository.save(ShowReview.builder()
                 .showId(showId)

@@ -4,8 +4,8 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
 import org.junit.jupiter.api.Test;
@@ -51,14 +51,14 @@ class PartyControllerDocsTest extends AbstractWebTest {
     void createParty_Docs() throws Exception {
         // given
         PartyCreate partyCreate = PartyCreate.builder()
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(partyCreate)).willReturn(new IdResult<>(10L));
+        given(partyService.create(partyCreate)).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")

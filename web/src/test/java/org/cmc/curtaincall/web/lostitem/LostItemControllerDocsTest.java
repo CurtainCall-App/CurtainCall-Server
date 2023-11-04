@@ -4,8 +4,8 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.image.ImageService;
@@ -55,7 +55,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
         LostItemCreate lostItemCreate = LostItemCreate.builder()
                 .title("아이폰 핑크")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
-                .facilityId("FC001298")
+                .facilityId(new FacilityId("FC001298"))
                 .foundPlaceDetail("2열 8석")
                 .foundDate(LocalDate.of(2023, 3, 4))
                 .foundTime(LocalTime.of(11, 23))
@@ -63,7 +63,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .imageId(1L)
                 .build();
         given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
-        given(lostItemService.create(lostItemCreate)).willReturn(new IdResult<>(10L));
+        given(lostItemService.create(lostItemCreate)).willReturn(new LostItemId(10L));
 
         // expected
         mockMvc.perform(post("/lostItems")

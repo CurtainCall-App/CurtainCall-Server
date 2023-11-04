@@ -63,7 +63,6 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
         em.flush();
         em.clear();
 
-
         // when
         PageRequest pageRequest = PageRequest.of(0, 10);
         List<ShowReviewResponse> result = showReviewDao.getList(pageRequest, new ShowId("test-show-id"));
@@ -72,7 +71,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
         assertThat(result)
                 .hasSize(2)
                 .extracting("showId")
-                .containsOnly("test-show-id");
+                .containsOnly(new ShowId("test-show-id"));
     }
 
     @Test
@@ -164,7 +163,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
         assertThat(result.stream().map(ShowReviewMyResponse::getId))
                 .containsExactly(showReview1.getId());
         assertThat(result.stream().map(ShowReviewMyResponse::getShowId))
-                .containsExactly("show-id");
+                .containsExactly(new ShowId("show-id"));
         assertThat(result.stream().map(ShowReviewMyResponse::getShowName))
                 .containsExactly("show-name");
         assertThat(result.stream().map(ShowReviewMyResponse::getGrade))

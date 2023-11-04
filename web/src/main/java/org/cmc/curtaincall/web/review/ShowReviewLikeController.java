@@ -24,20 +24,20 @@ public class ShowReviewLikeController {
     private final ShowReviewLikeService showReviewLikeService;
 
     @PutMapping("/reviews/{reviewId}/like")
-    public void likeReview(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        showReviewLikeService.like(memberId, new ShowReviewId(reviewId));
+    public void likeReview(@PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId) {
+        showReviewLikeService.like(memberId, reviewId);
     }
 
     @DeleteMapping("/reviews/{reviewId}/like")
-    public void cancelLike(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        showReviewLikeService.cancelLike(memberId, new ShowReviewId(reviewId));
+    public void cancelLike(@PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId) {
+        showReviewLikeService.cancelLike(memberId, reviewId);
     }
 
     @GetMapping("/member/like")
     public ListResult<ShowReviewLikedResponse> getLiked(
-            @RequestParam @Validated @Size(max = 100) List<Long> reviewIds, @LoginMemberId MemberId memberId) {
+            @RequestParam @Validated @Size(max = 100) List<ShowReviewId> reviewIds, @LoginMemberId MemberId memberId) {
         List<ShowReviewLikedResponse> showReviewLikedResponses = showReviewLikeService.areLiked(
-                memberId, reviewIds.stream().map(ShowReviewId::new).toList());
+                memberId, reviewIds);
         return new ListResult<>(showReviewLikedResponses);
     }
 }

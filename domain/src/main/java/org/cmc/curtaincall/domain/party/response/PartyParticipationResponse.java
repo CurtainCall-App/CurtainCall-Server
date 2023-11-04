@@ -6,13 +6,16 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
 public class PartyParticipationResponse {
+
     private Long id;
     private String title;
     private String content;
@@ -22,12 +25,12 @@ public class PartyParticipationResponse {
     private LocalDateTime showAt;
     private LocalDateTime createdAt;
     private PartyCategory category;
-    private Long creatorId;
+    private CreatorId creatorId;
     private String creatorNickname;
     @Nullable
     private String creatorImageUrl;
     @Nullable
-    private String showId;
+    private ShowId showId;
     @Nullable
     private String showName;
     @Nullable
@@ -47,10 +50,10 @@ public class PartyParticipationResponse {
             Integer maxMemberNum,
             LocalDateTime createdAt,
             PartyCategory category,
-            Long creatorId,
+            CreatorId creatorId,
             String creatorNickname,
             String creatorImageUrl,
-            @Nullable String showId,
+            @Nullable ShowId showId,
             @Nullable String showName,
             @Nullable String showPoster,
             @Nullable LocalDateTime showAt,

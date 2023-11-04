@@ -6,6 +6,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
+import org.cmc.curtaincall.domain.show.FacilityId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,9 +26,8 @@ public class LostItemCreate {
     @NotNull
     private LostItemType type;
 
-    @NotBlank
-    @Size(max = 25)
-    private String facilityId;
+    @NotNull
+    private FacilityId facilityId;
 
     @NotNull
     @Size(max = 30)

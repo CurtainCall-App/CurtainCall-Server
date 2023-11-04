@@ -1,8 +1,11 @@
 package org.cmc.curtaincall.web.party;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.response.*;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.junit.jupiter.api.Test;
@@ -43,10 +46,10 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId("FC000182")
@@ -107,10 +110,10 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId("FC000182")
@@ -175,10 +178,10 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .facilityId("FC000182")
                 .facilityName("예술나눔 터 (예술나눔 터)")
@@ -233,7 +236,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId("FC000182")
@@ -298,10 +301,10 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId("FC000182")
@@ -360,8 +363,8 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
         // given
         given(partyDao.areParticipated(any(), any())).willReturn(
                 List.of(
-                        new PartyParticipatedResponse(4L, true),
-                        new PartyParticipatedResponse(12L, false)
+                        new PartyParticipatedResponse(new PartyId(4L), true),
+                        new PartyParticipatedResponse(new PartyId(12L), false)
                 )
         );
 

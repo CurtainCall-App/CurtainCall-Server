@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.service.show.ShowService;
 import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
@@ -31,8 +32,8 @@ public class ShowController {
     }
 
     @GetMapping("/shows/{showId}")
-    public ShowDetailResponse getShowDetail(@PathVariable String showId) {
-        return showService.getDetail(showId);
+    public ShowDetailResponse getShowDetail(@PathVariable ShowId showId) {
+        return showService.getDetail(showId.getId());
     }
 
     @GetMapping("/shows-to-open")

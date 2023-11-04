@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.controller;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.show.FavoriteShowService;
 import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
@@ -22,13 +23,13 @@ public class FavoriteShowController {
     private final FavoriteShowService favoriteShowService;
 
     @PutMapping("/shows/{showId}/favorite")
-    public void favoriteShow(@PathVariable String showId, @LoginMemberId MemberId memberId) {
-        favoriteShowService.favorite(memberId.getId(), showId);
+    public void favoriteShow(@PathVariable ShowId showId, @LoginMemberId MemberId memberId) {
+        favoriteShowService.favorite(memberId.getId(), showId.getId());
     }
 
     @DeleteMapping("/shows/{showId}/favorite")
-    public void cancelFavorite(@PathVariable String showId, @LoginMemberId MemberId memberId) {
-        favoriteShowService.cancelFavorite(memberId.getId(), showId);
+    public void cancelFavorite(@PathVariable ShowId showId, @LoginMemberId MemberId memberId) {
+        favoriteShowService.cancelFavorite(memberId.getId(), showId.getId());
     }
 
     @GetMapping("/member/favorite")
@@ -40,7 +41,7 @@ public class FavoriteShowController {
 
     @GetMapping("/members/{memberId}/favorite")
     public Slice<FavoriteShowResponse> getFavoriteShowList(
-            @PathVariable Long memberId, Pageable pageable) {
-        return favoriteShowService.getFavoriteShowList(pageable, memberId);
+            @PathVariable MemberId memberId, Pageable pageable) {
+        return favoriteShowService.getFavoriteShowList(pageable, memberId.getId());
     }
 }

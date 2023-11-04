@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class ShowReviewMyResponse {
 
     private Long id;
-    private String showId;
+    private ShowId showId;
     private String showName;
     private Integer grade;
     private String content;
@@ -24,7 +25,7 @@ public class ShowReviewMyResponse {
     @QueryProjection
     public ShowReviewMyResponse(
             final Long id,
-            final String showId,
+            final ShowId showId,
             final String showName,
             final Integer grade,
             final String content,

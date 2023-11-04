@@ -8,7 +8,6 @@ import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.lostitem.LostItemService;
 import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
@@ -20,7 +19,14 @@ import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,8 +52,8 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId}")
-    public MemberDetailResponse getMemberDetail(@PathVariable Long memberId) {
-        return memberService.getDetail(memberId);
+    public MemberDetailResponse getMemberDetail(@PathVariable MemberId memberId) {
+        return memberService.getDetail(memberId.getId());
     }
 
     @PatchMapping("/member")

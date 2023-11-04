@@ -38,32 +38,32 @@ public class PartyQueryController {
     }
 
     @GetMapping("/parties/{partyId}")
-    public PartyDetailResponse getPartyDetail(@PathVariable Long partyId) {
-        return partyDao.getDetail(new PartyId(partyId));
+    public PartyDetailResponse getPartyDetail(@PathVariable PartyId partyId) {
+        return partyDao.getDetail(partyId);
     }
 
     @GetMapping("/members/{memberId}/recruitments")
     public ListResult<PartyRecruitmentResponse> getRecruitmentList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
+            @RequestParam(required = false) PartyCategory category, @PathVariable MemberId memberId
     ) {
-        return new ListResult<>(partyDao.getRecruitmentList(pageable, new MemberId(memberId), category));
+        return new ListResult<>(partyDao.getRecruitmentList(pageable, memberId, category));
     }
 
     @GetMapping("/members/{memberId}/participations")
     public ListResult<PartyParticipationResponse> getParticipationList(
             Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
+            @RequestParam(required = false) PartyCategory category, @PathVariable MemberId memberId
     ) {
-        return new ListResult<>(partyDao.getParticipationList(pageable, new MemberId(memberId), category));
+        return new ListResult<>(partyDao.getParticipationList(pageable, memberId, category));
     }
 
     @GetMapping("/member/participated")
     public ListResult<PartyParticipatedResponse> getParticipated(
-            @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId MemberId memberId
+            @RequestParam @Validated @Size(max = 100) List<PartyId> partyIds, @LoginMemberId MemberId memberId
     ) {
         List<PartyParticipatedResponse> partyParticipatedResponses = partyDao.areParticipated(
-                partyIds.stream().map(PartyId::new).toList(), memberId);
+                partyIds, memberId);
         return new ListResult<>(partyParticipatedResponses);
     }
 }
