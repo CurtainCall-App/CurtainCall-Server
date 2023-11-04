@@ -13,6 +13,7 @@ import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.exception.LostItemNotFoundException;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
 import org.cmc.curtaincall.domain.lostitem.response.*;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -70,9 +71,9 @@ public class LostItemDao {
                 .orElse(null);
     }
 
-    private BooleanExpression facilityIdEq(String facilityId) {
+    private BooleanExpression facilityIdEq(FacilityId facilityId) {
         return Optional.ofNullable(facilityId)
-                .map(lostItem.facilityId.id::eq)
+                .map(lostItem.facilityId::eq)
                 .orElse(null);
     }
 
