@@ -65,7 +65,7 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    void getFavorite_Docs() throws Exception {
+    void getLiked_Docs() throws Exception {
         // given
         given(showReviewLikeService.areLiked(any(), any())).willReturn(
                 List.of(

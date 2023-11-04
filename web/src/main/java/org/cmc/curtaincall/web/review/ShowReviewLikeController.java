@@ -4,12 +4,16 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -30,10 +34,10 @@ public class ShowReviewLikeController {
     }
 
     @GetMapping("/member/like")
-    public Slice<ShowReviewLikedResponse> getLiked(
+    public ListResult<ShowReviewLikedResponse> getLiked(
             @RequestParam @Validated @Size(max = 100) List<Long> reviewIds, @LoginMemberId MemberId memberId) {
         List<ShowReviewLikedResponse> showReviewLikedResponses = showReviewLikeService.areLiked(
                 memberId, reviewIds.stream().map(ShowReviewId::new).toList());
-        return new SliceImpl<>(showReviewLikedResponses);
+        return new ListResult<>(showReviewLikedResponses);
     }
 }
