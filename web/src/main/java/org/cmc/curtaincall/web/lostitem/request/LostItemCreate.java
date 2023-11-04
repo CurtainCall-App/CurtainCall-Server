@@ -14,6 +14,8 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
+@EqualsAndHashCode
 public class LostItemCreate {
 
     @NotBlank

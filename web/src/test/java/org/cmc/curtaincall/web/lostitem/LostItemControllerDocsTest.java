@@ -28,6 +28,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LostItemController.class)
@@ -54,8 +55,8 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
-        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
-        given(lostItemService.create(any())).willReturn(new IdResult<>(10L));
+        given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
+        given(lostItemService.create(lostItemCreate)).willReturn(new IdResult<>(10L));
 
         // expected
         mockMvc.perform(post("/lostItems")
@@ -64,8 +65,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lostItemCreate))
                 )
-                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10L))
                 .andDo(document("lostitem-create-lostitem",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
