@@ -6,6 +6,7 @@ import org.cmc.curtaincall.domain.lostitem.convert.StringToLostItemIdConverter;
 import org.cmc.curtaincall.domain.member.convert.StringToMemberIdConverter;
 import org.cmc.curtaincall.domain.party.convert.StringToPartyIdConverter;
 import org.cmc.curtaincall.domain.review.convert.StringToShowReviewIdConverter;
+import org.cmc.curtaincall.domain.show.convert.StringToFacilityIdConverter;
 import org.cmc.curtaincall.domain.show.convert.StringToShowIdConverter;
 import org.cmc.curtaincall.web.security.LoginMemberIdArgumentResolver;
 import org.springframework.context.annotation.Configuration;
@@ -33,5 +34,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToShowIdConverter());
         registry.addConverter(new StringToMemberIdConverter());
         registry.addConverter(new StringToLostItemIdConverter());
+        registry.addConverter(new StringToFacilityIdConverter());
     }
 }
