@@ -241,7 +241,7 @@ public class PartyDao {
                 .collect(Collectors.toSet())
         );
         return partyIds.stream()
-                .map(partyId -> new PartyParticipatedResponse(partyId.getId(), participating.contains(partyId)))
+                .map(partyId -> new PartyParticipatedResponse(partyId, participating.contains(partyId)))
                 .toList();
     }
 }

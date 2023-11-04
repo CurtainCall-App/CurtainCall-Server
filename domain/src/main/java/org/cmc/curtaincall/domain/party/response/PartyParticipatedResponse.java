@@ -1,7 +1,9 @@
 package org.cmc.curtaincall.domain.party.response;
 
+import org.cmc.curtaincall.domain.party.PartyId;
+
 public record PartyParticipatedResponse(
-        long partyId,
+        PartyId partyId,
         boolean participated
 ) {
 }

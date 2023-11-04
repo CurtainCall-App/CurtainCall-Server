@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.response.*;
 import org.cmc.curtaincall.domain.show.ShowId;
@@ -362,8 +363,8 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
         // given
         given(partyDao.areParticipated(any(), any())).willReturn(
                 List.of(
-                        new PartyParticipatedResponse(4L, true),
-                        new PartyParticipatedResponse(12L, false)
+                        new PartyParticipatedResponse(new PartyId(4L), true),
+                        new PartyParticipatedResponse(new PartyId(12L), false)
                 )
         );
 
