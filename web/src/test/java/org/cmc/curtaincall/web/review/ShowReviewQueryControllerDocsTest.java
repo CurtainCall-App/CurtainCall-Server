@@ -4,6 +4,7 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.review.dao.ShowReviewDao;
 import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -39,7 +40,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
         List<ShowReviewResponse> reviewResponseList = List.of(
                 ShowReviewResponse.builder()
                         .id(5L)
-                        .showId("PF223355")
+                        .showId(new ShowId("PF223355"))
                         .grade(4)
                         .content("좋아요")
                         .creatorId(new CreatorId(4L))
@@ -93,7 +94,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
         List<ShowReviewMyResponse> reviewResponseList = List.of(
                 ShowReviewMyResponse.builder()
                         .id(5L)
-                        .showId("PF223355")
+                        .showId(new ShowId("PF223355"))
                         .showName("잘자요, 엄마 [청주]")
                         .grade(4)
                         .content("좋아요")

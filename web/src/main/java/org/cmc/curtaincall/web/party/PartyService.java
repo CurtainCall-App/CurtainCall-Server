@@ -29,7 +29,7 @@ public class PartyService {
 
     @Transactional
     public PartyId create(PartyCreate partyCreate) {
-        ShowId showId = new ShowId(partyCreate.getShowId());
+        ShowId showId = partyCreate.getShowId();
         showIdValidator.validate(showId);
         Party party = partyRepository.save(Party.builder()
                 .showId(showId)

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class ShowReviewResponse {
 
     private Long id;
-    private String showId;
+    private ShowId showId;
     private Integer grade;
     private String content;
     private CreatorId creatorId;
@@ -26,7 +27,7 @@ public class ShowReviewResponse {
     @QueryProjection
     public ShowReviewResponse(
             Long id,
-            String showId,
+            ShowId showId,
             Integer grade,
             String content,
             CreatorId creatorId,

@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.party;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +60,7 @@ class PartyControllerTest extends AbstractWebTest {
     void createParty_when_NotEtcCategory_then_showAtNotNull() throws Exception {
         // given
         PartyCreate partyCreate = PartyCreate.builder()
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showAt(null)
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
@@ -84,7 +85,7 @@ class PartyControllerTest extends AbstractWebTest {
     void createParty_when_NotEtcCategory_then_maxMemberNumLessOrEqual10() throws Exception {
         // given
         PartyCreate partyCreate = PartyCreate.builder()
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")

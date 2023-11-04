@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 public class PartyCreate {
 
     @Nullable
-    private String showId;
+    private ShowId showId;
 
     @Nullable
     private LocalDateTime showAt;

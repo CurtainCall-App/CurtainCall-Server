@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 @Getter
 @Builder
@@ -22,7 +23,7 @@ import lombok.ToString;
 public class ShowReviewCreate {
 
     @NotNull
-    private String showId;
+    private ShowId showId;
 
     @PositiveOrZero
     @Max(5L)

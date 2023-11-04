@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.review;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.domain.review.validation.ShowReviewCreatorValidator;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
@@ -83,7 +84,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
     void create_Docs() throws Exception {
         // given
         var showReviewCreate = ShowReviewCreate.builder()
-                .showId("PF220846")
+                .showId(new ShowId("PF220846"))
                 .grade(5)
                 .content("조아유~~")
                 .build();
