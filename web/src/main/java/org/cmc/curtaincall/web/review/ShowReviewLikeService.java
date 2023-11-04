@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReview;
+import org.cmc.curtaincall.domain.review.ShowReviewHelper;
+import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class ShowReviewLikeService {
     @OptimisticLock
     @Transactional
     public void like(final MemberId memberId, final Long reviewId) {
-        ShowReview showReview = getShowReviewWithLockById(reviewId);
+        ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(new ShowReviewId(reviewId), showReviewRepository);
         if (showReviewLikeRepository.existsByMemberIdAndShowReview(memberId, showReview)) {
             return;
         }
@@ -39,7 +40,7 @@ public class ShowReviewLikeService {
     @OptimisticLock
     @Transactional
     public void cancelLike(final MemberId memberId, final Long reviewId) {
-        ShowReview showReview = getShowReviewById(reviewId);
+        ShowReview showReview = ShowReviewHelper.get(new ShowReviewId(reviewId), showReviewRepository);
         showReviewLikeRepository.findByMemberIdAndShowReview(memberId, showReview)
                 .ifPresent(showReviewLikeRepository::delete);
         showReview.minusLikeCount();
@@ -57,15 +58,4 @@ public class ShowReviewLikeService {
                 .toList();
     }
 
-    private ShowReview getShowReviewById(final Long id) {
-        return showReviewRepository.findById(id)
-                .filter(ShowReview::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
-    }
-
-    private ShowReview getShowReviewWithLockById(final Long id) {
-        return showReviewRepository.findWithLockById(id)
-                .filter(ShowReview::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
-    }
 }
