@@ -6,6 +6,7 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ public class PartyDetailResponse {
 
     private Integer maxMemberNum;
 
-    private Long creatorId;
+    private CreatorId creatorId;
 
     private LocalDateTime createdAt;
 
@@ -63,7 +64,7 @@ public class PartyDetailResponse {
             Integer curMemberNum,
             Integer maxMemberNum,
             LocalDateTime createdAt,
-            Long creatorId,
+            CreatorId creatorId,
             String creatorNickname,
             @Nullable String creatorImageUrl,
             @Nullable String showId,

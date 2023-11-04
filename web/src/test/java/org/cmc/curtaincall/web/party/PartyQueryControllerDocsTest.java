@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.party;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.response.*;
@@ -43,7 +44,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
                 .showId("PF220846")
@@ -107,7 +108,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
                 .showId("PF220846")
@@ -175,7 +176,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
                 .showId("PF220846")
@@ -298,7 +299,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
                 .category(PartyCategory.WATCHING)
-                .creatorId(2L)
+                .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
                 .showId("PF220846")

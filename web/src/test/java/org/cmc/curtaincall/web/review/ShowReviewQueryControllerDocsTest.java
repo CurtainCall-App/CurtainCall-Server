@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.review;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.review.dao.ShowReviewDao;
 import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
@@ -41,7 +42,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                         .showId("PF223355")
                         .grade(4)
                         .content("좋아요")
-                        .creatorId(4L)
+                        .creatorId(new CreatorId(4L))
                         .creatorNickname("고라파덕")
                         .creatorImageUrl("http://image-url")
                         .build()

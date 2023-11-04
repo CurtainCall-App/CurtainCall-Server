@@ -34,7 +34,7 @@ public class ShowReviewDao {
                         showReview.showId.id,
                         showReview.grade,
                         showReview.content,
-                        showReview.createdBy.memberId.id,
+                        showReview.createdBy,
                         member.nickname,
                         member.image.url,
                         showReview.createdAt,

@@ -24,6 +24,10 @@ public class CreatorId {
     )
     private MemberId memberId;
 
+    public CreatorId(final long id) {
+        this.memberId = new MemberId(id);
+    }
+
     public CreatorId(final MemberId memberId) {
         this.memberId = Objects.requireNonNull(memberId);
     }

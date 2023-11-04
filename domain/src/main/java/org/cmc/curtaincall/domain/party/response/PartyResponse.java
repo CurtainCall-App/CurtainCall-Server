@@ -4,6 +4,7 @@ package org.cmc.curtaincall.domain.party.response;
 import com.querydsl.core.annotations.QueryProjection;
 import jakarta.annotation.Nullable;
 import lombok.*;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class PartyResponse {
 
     private PartyCategory category;
 
-    private Long creatorId;
+    private CreatorId creatorId;
 
     private String creatorNickname;
 
@@ -58,7 +59,7 @@ public class PartyResponse {
             Integer maxMemberNum,
             LocalDateTime createdAt,
             PartyCategory category,
-            Long creatorId,
+            CreatorId creatorId,
             String creatorNickname,
             @Nullable String creatorImageUrl,
             @Nullable String showId,
