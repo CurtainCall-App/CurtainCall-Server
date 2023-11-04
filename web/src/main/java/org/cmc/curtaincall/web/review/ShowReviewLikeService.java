@@ -6,7 +6,6 @@ import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewHelper;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
-import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.review.validation.ShowReviewMemberValidator;
@@ -37,17 +36,14 @@ public class ShowReviewLikeService {
             return;
         }
         showReviewMemberValidator.validate(memberId);
-        showReviewLikeRepository.save(new ShowReviewLike(showReview, memberId));
-        showReview.plusLikeCount();
+        showReview.like(memberId, showReviewLikeRepository);
     }
 
     @OptimisticLock
     @Transactional
     public void cancelLike(final MemberId memberId, final ShowReviewId reviewId) {
         ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(reviewId, showReviewRepository);
-        showReviewLikeRepository.findByMemberIdAndShowReview(memberId, showReview)
-                .ifPresent(showReviewLikeRepository::delete);
-        showReview.minusLikeCount();
+        showReview.cancelLike(memberId, showReviewLikeRepository);
     }
 
     public List<ShowReviewLikedResponse> areLiked(final MemberId memberId, final List<ShowReviewId> reviewIds) {

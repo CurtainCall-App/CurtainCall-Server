@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.exception.ShowReviewInvalidGradeException;
+import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.util.stream.IntStream;
@@ -75,8 +77,19 @@ public class ShowReview extends BaseEntity {
         content = editor.getContent();
     }
 
+    public void like(final MemberId memberId, final ShowReviewLikeRepository showReviewLikeRepository) {
+        showReviewLikeRepository.save(new ShowReviewLike(this, memberId));
+        plusLikeCount();
+    }
+
     public void plusLikeCount() {
         this.likeCount += 1;
+    }
+
+    public void cancelLike(final MemberId memberId, final ShowReviewLikeRepository showReviewLikeRepository) {
+        showReviewLikeRepository.findByMemberIdAndShowReview(memberId, this)
+                .ifPresent(showReviewLikeRepository::delete);
+        minusLikeCount();
     }
 
     public void minusLikeCount() {
