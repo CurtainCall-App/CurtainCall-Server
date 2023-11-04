@@ -38,12 +38,14 @@ public class AccountService {
     }
 
     private Account getAccountByUsername(String username) {
-        return accountRepository.findByUsernameAndUseYnIsTrue(username)
+        return accountRepository.findByUsername(username)
+                .filter(Account::getUseYn)
                 .orElseThrow(() -> new AccountNotFoundException("Account.username=" + username));
     }
 
     private Account getAccountByMember(MemberId memberId) {
         return accountRepository.findByMemberId(memberId)
+                .filter(Account::getUseYn)
                 .orElseThrow(() -> new AccountNotFoundException("Account.memberId=" + memberId));
     }
 }

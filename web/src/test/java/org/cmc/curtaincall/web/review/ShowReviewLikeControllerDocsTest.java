@@ -16,10 +16,15 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,7 +55,6 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     void cancelLike_Docs() throws Exception {
         // expected
         mockMvc.perform(delete("/reviews/{reviewId}/like", "10")
-                        .with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -65,7 +69,7 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    void getFavorite_Docs() throws Exception {
+    void getLiked_Docs() throws Exception {
         // given
         given(showReviewLikeService.areLiked(any(), any())).willReturn(
                 List.of(

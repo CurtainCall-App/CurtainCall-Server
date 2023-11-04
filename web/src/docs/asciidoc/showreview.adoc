@@ -7,8 +7,16 @@
 :sectlinks:
 
 
-[[show-review-create-show-review]]
+[[show-review-create]]
 == 공연 리뷰 생성
+
+operation::showreview-create[snippets='http-request,request-headers,http-response,response-fields']
+
+
+[[show-review-create-show-review]]
+== 공연 리뷰 생성 (Deprecated)
+
+위의 공연 리뷰 생성 API 로 모두 이전 후 삭제 예정
 
 operation::showreview-create-show-review[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
@@ -25,13 +33,13 @@ operation::showreview-get-list[snippets='http-request,request-headers,path-param
 operation::showreview-get-my-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
-[[show-review-delete-review]]
+[[showreview-delete]]
 == 공연 리뷰 삭제
 
-operation::showreview-delete-review[snippets='http-request,request-headers,path-parameters,http-response']
+operation::showreview-delete[snippets='http-request,request-headers,path-parameters,http-response']
 
 
-[[show-review-edit-review]]
+[[show-review-edit]]
 == 공연 리뷰 수정
 
-operation::showreview-edit-review[snippets='http-request,request-headers,path-parameters,request-fields,http-response']
+operation::showreview-edit[snippets='http-request,request-headers,path-parameters,request-fields,http-response']

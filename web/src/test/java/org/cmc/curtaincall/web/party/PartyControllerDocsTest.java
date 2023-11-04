@@ -1,12 +1,15 @@
 package org.cmc.curtaincall.web.party;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -15,16 +18,24 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PartyController.class)
@@ -47,7 +58,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new IdResult<>(10L));
+        given(partyService.create(partyCreate)).willReturn(new IdResult<>(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -56,8 +67,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partyCreate))
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10L))
+                .andDo(print())
                 .andDo(document("party-create-party",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
@@ -98,6 +110,10 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
+        PartyId partyId = new PartyId(10L);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(partyService).delete(partyId);
     }
 
     @Test
@@ -131,6 +147,10 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                         .attributes(constraint("max = 400"))
                         )
                 ));
+        PartyId partyId = new PartyId(10L);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(partyService).edit(partyId, partyEdit);
     }
 
     @Test
@@ -151,6 +171,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
+        then(partyService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
     }
 
 }

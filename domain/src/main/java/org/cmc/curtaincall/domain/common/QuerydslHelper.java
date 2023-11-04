@@ -5,7 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import java.util.Arrays;
 import java.util.Objects;
 
-public final class RepositoryHelper {
+public final class QuerydslHelper {
 
     public static OrderSpecifier<?>[] filterNullOrderByArr(OrderSpecifier<?>... o) {
         return Arrays.stream(o)
@@ -13,7 +13,7 @@ public final class RepositoryHelper {
                 .toArray(OrderSpecifier[]::new);
     }
 
-    private RepositoryHelper() {
+    private QuerydslHelper() {
         throw new UnsupportedOperationException();
     }
 }

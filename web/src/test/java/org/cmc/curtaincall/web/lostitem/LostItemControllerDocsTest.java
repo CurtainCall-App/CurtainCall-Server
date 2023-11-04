@@ -1,5 +1,7 @@
 package org.cmc.curtaincall.web.lostitem;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
@@ -17,17 +19,23 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LostItemController.class)
@@ -54,8 +62,8 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
-        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
-        given(lostItemService.create(any())).willReturn(new IdResult<>(10L));
+        given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
+        given(lostItemService.create(lostItemCreate)).willReturn(new IdResult<>(10L));
 
         // expected
         mockMvc.perform(post("/lostItems")
@@ -64,8 +72,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(lostItemCreate))
                 )
-                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10L))
                 .andDo(document("lostitem-create-lostitem",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
@@ -110,6 +119,11 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("lostItemId").description("분실물 ID")
                         )
                 ));
+
+        LostItemId lostItemId = new LostItemId(10L);
+        then(lostItemCreatorValidator).should(times(1))
+                .validate(lostItemId, new CreatorId(LOGIN_MEMBER_ID));
+        then(lostItemService).should(times(1)).delete(lostItemId);
     }
 
     @Test
@@ -124,7 +138,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
-        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
+        given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
 
         // expected
         mockMvc.perform(patch("/lostItems/{lostItemId}", 10L)
@@ -157,5 +171,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("imageId").description("이미지 ID")
                         )
                 ));
+        LostItemId lostItemId = new LostItemId(10L);
+        then(lostItemCreatorValidator).should(times(1))
+                .validate(lostItemId, new CreatorId(LOGIN_MEMBER_ID));
+        then(lostItemService).should(times(1)).edit(lostItemId, lostItemEdit);
     }
 }

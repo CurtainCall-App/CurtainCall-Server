@@ -22,6 +22,8 @@ public class TestSecurityConfig {
 
     public static final String TEST_USERNAME = "test-user";
 
+    public static final String ACCESS_TOKEN = "ACCESS_TOKEN";
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
@@ -53,17 +55,16 @@ public class TestSecurityConfig {
     @Bean
     public JwtDecoder curtainCallJwtDecoder() {
         JwtDecoder jwtDecoder = mock(JwtDecoder.class);
-        String token = "ACCESS_TOKEN";
         Instant issuedAt = Instant.now();
         Instant expiresAt = issuedAt.plusMillis(1000 * 60 * 60);
-        Jwt jwt = Jwt.withTokenValue(token)
+        Jwt jwt = Jwt.withTokenValue(ACCESS_TOKEN)
                 .header("alg", MacAlgorithm.HS256.getName())
                 .subject(TEST_USERNAME)
                 .issuer("curtaincall")
                 .issuedAt(issuedAt)
                 .expiresAt(expiresAt)
                 .build();
-        given(jwtDecoder.decode(token)).willReturn(jwt);
+        given(jwtDecoder.decode(ACCESS_TOKEN)).willReturn(jwt);
         return jwtDecoder;
     }
 }

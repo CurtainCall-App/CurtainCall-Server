@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class ShowReviewEdit {
+public class ShowReviewCreateDepr {
 
     @PositiveOrZero
     @Max(5L)

@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.common.RepositoryHelper;
+import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
@@ -93,7 +93,7 @@ public class PartyDao {
                         party.category.eq(category),
                         party.useYn.isTrue()
                 )
-                .orderBy(RepositoryHelper.filterNullOrderByArr(
+                .orderBy(QuerydslHelper.filterNullOrderByArr(
                         getCreatedAtOrder(pageable)
                 ))
                 .offset(pageable.getOffset())

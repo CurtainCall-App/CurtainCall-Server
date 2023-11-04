@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.common.RepositoryHelper;
+import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
@@ -136,7 +136,7 @@ public class LostItemDao {
                         lostItem.createdBy.eq(createdBy),
                         lostItem.useYn.isTrue()
                 )
-                .orderBy(RepositoryHelper.filterNullOrderByArr(getCreatedAtOrder(pageable)))
+                .orderBy(QuerydslHelper.filterNullOrderByArr(getCreatedAtOrder(pageable)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
