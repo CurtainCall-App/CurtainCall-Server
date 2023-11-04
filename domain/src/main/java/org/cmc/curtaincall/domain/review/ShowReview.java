@@ -50,14 +50,18 @@ public class ShowReview extends BaseEntity {
     private Integer likeCount;
 
     @Builder
-    public ShowReview(final ShowId showId, final Integer grade, final String content) {
-        if (IntStream.rangeClosed(0, 5).noneMatch(grade::equals)) {
+    public ShowReview(final ShowId showId, final int grade, final String content) {
+        if (isInGradeRange(grade)) {
             throw new ShowReviewInvalidGradeException(grade);
         }
         this.showId = showId;
         this.grade = grade;
         this.content = content;
         this.likeCount = 0;
+    }
+
+    private static boolean isInGradeRange(int grade) {
+        return IntStream.rangeClosed(0, 5).noneMatch(i -> i == grade);
     }
 
     public ShowReviewEditor.ShowReviewEditorBuilder toEditor() {
