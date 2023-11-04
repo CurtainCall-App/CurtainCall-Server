@@ -2,8 +2,7 @@ package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
-import org.cmc.curtaincall.domain.member.Member;
-import org.cmc.curtaincall.domain.member.repository.MemberRepository;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
@@ -26,17 +25,14 @@ public class ShowReviewLikeService {
 
     private final ShowReviewRepository showReviewRepository;
 
-    private final MemberRepository memberRepository;
-
     @OptimisticLock
     @Transactional
     public void like(Long memberId, Long reviewId) {
         ShowReview showReview = getShowReviewWithLockById(reviewId);
-        Member member = memberRepository.getReferenceById(memberId);
-        if (showReviewLikeRepository.existsByMemberAndShowReview(member, showReview)) {
+        if (showReviewLikeRepository.existsByMemberIdAndShowReview(new MemberId(memberId), showReview)) {
             return;
         }
-        showReviewLikeRepository.save(new ShowReviewLike(showReview, member));
+        showReviewLikeRepository.save(new ShowReviewLike(showReview, new MemberId(memberId)));
         showReview.plusLikeCount();
     }
 
@@ -44,18 +40,16 @@ public class ShowReviewLikeService {
     @Transactional
     public void cancelLike(Long memberId, Long reviewId) {
         ShowReview showReview = getShowReviewById(reviewId);
-        Member member = memberRepository.getReferenceById(memberId);
-        showReviewLikeRepository.findByMemberAndShowReview(member, showReview)
+        showReviewLikeRepository.findByMemberIdAndShowReview(new MemberId(memberId), showReview)
                 .ifPresent(showReviewLikeRepository::delete);
         showReview.minusLikeCount();
     }
 
     public List<ShowReviewLikedResponse> areLiked(Long memberId, List<Long> reviewIds) {
-        Member member = memberRepository.getReferenceById(memberId);
         List<ShowReview> reviews = reviewIds.stream()
                 .map(showReviewRepository::getReferenceById)
                 .toList();
-        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberAndShowReviewIn(member, reviews).stream()
+        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberIdAndShowReviewIn(new MemberId(memberId), reviews).stream()
                 .map(showReviewLike -> showReviewLike.getShowReview().getId())
                 .collect(Collectors.toSet());
         return reviewIds.stream()

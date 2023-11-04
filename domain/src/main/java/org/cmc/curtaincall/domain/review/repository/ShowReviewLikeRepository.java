@@ -1,6 +1,6 @@
 package org.cmc.curtaincall.domain.review.repository;
 
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewLike;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public interface ShowReviewLikeRepository extends JpaRepository<ShowReviewLike, Long> {
 
-    boolean existsByMemberAndShowReview(Member member, ShowReview showReview);
+    boolean existsByMemberIdAndShowReview(MemberId memberId, ShowReview showReview);
 
-    Optional<ShowReviewLike> findByMemberAndShowReview(Member member, ShowReview showReview);
+    Optional<ShowReviewLike> findByMemberIdAndShowReview(MemberId memberId, ShowReview showReview);
 
-    List<ShowReviewLike> findAllByMemberAndShowReviewIn(Member member, Collection<ShowReview> reviews);
+    List<ShowReviewLike> findAllByMemberIdAndShowReviewIn(MemberId memberId, Collection<ShowReview> reviews);
 }
