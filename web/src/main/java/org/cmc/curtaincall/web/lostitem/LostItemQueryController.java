@@ -40,7 +40,7 @@ public class LostItemQueryController {
     }
 
     @GetMapping("/lostItems/{lostItemId}")
-    public LostItemDetailResponse getDetail(@PathVariable Long lostItemId) {
-        return lostItemDao.getDetail(new LostItemId(lostItemId));
+    public LostItemDetailResponse getDetail(@PathVariable LostItemId lostItemId) {
+        return lostItemDao.getDetail(lostItemId);
     }
 }
