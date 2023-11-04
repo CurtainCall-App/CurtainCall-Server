@@ -110,8 +110,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 ));
         PartyId partyId = new PartyId(10L);
         InOrder inOrder = inOrder(partyCreatorValidator, partyService);
-        inOrder.verify(partyCreatorValidator).validate(
-                partyId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
         inOrder.verify(partyService).delete(partyId);
     }
 
@@ -146,6 +145,10 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                         .attributes(constraint("max = 400"))
                         )
                 ));
+        PartyId partyId = new PartyId(10L);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(partyService).edit(partyId, partyEdit);
     }
 
     @Test
