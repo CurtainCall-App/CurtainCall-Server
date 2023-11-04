@@ -10,7 +10,6 @@ import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.repository.LostItemRepository;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemFacilityValidator;
 import org.cmc.curtaincall.domain.show.FacilityId;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
@@ -29,7 +28,7 @@ public class LostItemService {
     private final LostItemFacilityValidator lostItemFacilityValidator;
 
     @Transactional
-    public IdResult<Long> create(final LostItemCreate lostItemCreate) {
+    public LostItemId create(final LostItemCreate lostItemCreate) {
         FacilityId facilityId = new FacilityId(lostItemCreate.getFacilityId());
         lostItemFacilityValidator.validate(facilityId);
         Image image = getImageById(lostItemCreate.getImageId());
@@ -44,7 +43,7 @@ public class LostItemService {
                 .particulars(lostItemCreate.getParticulars())
                 .build()
         );
-        return new IdResult<>(lostItem.getId());
+        return new LostItemId(lostItem.getId());
     }
 
     @Transactional

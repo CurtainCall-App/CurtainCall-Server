@@ -5,7 +5,6 @@ import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
 import org.cmc.curtaincall.web.service.image.ImageService;
@@ -63,7 +62,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .imageId(1L)
                 .build();
         given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
-        given(lostItemService.create(lostItemCreate)).willReturn(new IdResult<>(10L));
+        given(lostItemService.create(lostItemCreate)).willReturn(new LostItemId(10L));
 
         // expected
         mockMvc.perform(post("/lostItems")

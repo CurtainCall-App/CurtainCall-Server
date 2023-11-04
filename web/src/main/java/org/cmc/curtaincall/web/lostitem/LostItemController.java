@@ -25,14 +25,14 @@ public class LostItemController {
     private final LostItemCreatorValidator lostItemCreatorValidator;
 
     @PostMapping("/lostItems")
-    public IdResult<Long> createLostItem(
+    public IdResult<LostItemId> createLostItem(
             @RequestBody @Validated LostItemCreate lostItemCreate, @LoginMemberId MemberId memberId
     ) {
         if (!imageService.isOwnedByMember(memberId.getId(), lostItemCreate.getImageId())) {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemCreate.getImageId());
         }
-        return lostItemService.create(lostItemCreate);
+        return new IdResult<>(lostItemService.create(lostItemCreate));
     }
 
     @DeleteMapping("/lostItems/{lostItemId}")
