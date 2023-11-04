@@ -33,10 +33,10 @@ operation::showreview-get-list[snippets='http-request,request-headers,path-param
 operation::showreview-get-my-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
-[[show-review-delete-review]]
+[[showreview-delete]]
 == 공연 리뷰 삭제
 
-operation::showreview-delete-review[snippets='http-request,request-headers,path-parameters,http-response']
+operation::showreview-delete[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[show-review-edit-review]]
