@@ -6,6 +6,7 @@ import org.cmc.curtaincall.domain.review.*;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,20 @@ public class ShowReviewService {
     private final ShowReviewGradeApplyService showReviewGradeApplyService;
 
     @Transactional
-    public ShowReviewId create(ShowId showId, ShowReviewCreate showReviewCreate) {
+    public ShowReviewId create(final ShowReviewCreate showReviewCreate) {
+        ShowId showId = new ShowId(showReviewCreate.getShowId());
+        ShowReview showReview = showReviewRepository.save(ShowReview.builder()
+                .showId(showId)
+                .grade(showReviewCreate.getGrade())
+                .content(showReviewCreate.getContent())
+                .build());
+        showReviewGradeApplyService.apply(showReview);
+        return new ShowReviewId(showReview.getId());
+    }
+
+    @Deprecated(since = "2023-11-04", forRemoval = true)
+    @Transactional
+    public ShowReviewId create(ShowId showId, ShowReviewCreateDepr showReviewCreate) {
         ShowReview showReview = showReviewRepository.save(ShowReview.builder()
                 .showId(showId)
                 .grade(showReviewCreate.getGrade())

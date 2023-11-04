@@ -7,6 +7,7 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
+import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
@@ -18,9 +19,14 @@ public class ShowReviewController {
 
     private final ShowReviewService showReviewService;
 
+    @PostMapping("/review")
+    public IdResult<Long> create(@Validated @RequestBody ShowReviewCreate showReviewCreate) {
+        return new IdResult<>(showReviewService.create(showReviewCreate).getId());
+    }
+
     @PostMapping("/shows/{showId}/reviews")
     public IdResult<Long> createShowReview(
-            @PathVariable String showId, @Validated @RequestBody ShowReviewCreate showReviewCreate) {
+            @PathVariable String showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
         ShowReviewId showReviewId = showReviewService.create(new ShowId(showId), showReviewCreate);
         return new IdResult<>(showReviewId.getId());
     }
