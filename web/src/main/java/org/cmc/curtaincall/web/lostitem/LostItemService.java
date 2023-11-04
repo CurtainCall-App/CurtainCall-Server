@@ -29,7 +29,7 @@ public class LostItemService {
 
     @Transactional
     public LostItemId create(final LostItemCreate lostItemCreate) {
-        FacilityId facilityId = new FacilityId(lostItemCreate.getFacilityId());
+        FacilityId facilityId = lostItemCreate.getFacilityId();
         lostItemFacilityValidator.validate(facilityId);
         Image image = getImageById(lostItemCreate.getImageId());
         LostItem lostItem = lostItemRepository.save(LostItem.builder()

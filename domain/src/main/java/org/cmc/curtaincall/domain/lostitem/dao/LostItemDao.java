@@ -35,7 +35,7 @@ public class LostItemDao {
         JPAQuery<LostItemResponse> contentQuery = query
                 .select(new QLostItemResponse(
                         lostItem.id,
-                        facility.id,
+                        lostItem.facilityId,
                         facility.name,
                         lostItem.title,
                         lostItem.type,
@@ -92,7 +92,7 @@ public class LostItemDao {
         return Optional.ofNullable(query
                 .select(new QLostItemDetailResponse(
                         lostItem.id,
-                        facility.id,
+                        lostItem.facilityId,
                         facility.name,
                         facility.phone,
                         lostItem.title,
@@ -119,8 +119,8 @@ public class LostItemDao {
     public List<LostItemMyResponse> getMyList(final Pageable pageable, final CreatorId createdBy) {
         return query
                 .select(new QLostItemMyResponse(
-                    lostItem.id,
-                        facility.id,
+                        lostItem.id,
+                        lostItem.facilityId,
                         facility.name,
                         lostItem.title,
                         lostItem.type,

@@ -5,6 +5,7 @@ import org.cmc.curtaincall.domain.lostitem.dao.LostItemDao;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemResponse;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,7 +43,7 @@ class LostItemQueryControllerTest extends AbstractWebTest {
         // given
         LostItemResponse lostItemResponse = LostItemResponse.builder()
                 .id(10L)
-                .facilityId("FC001298")
+                .facilityId(new FacilityId("FC001298"))
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
                 .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .title("아이패드 핑크")
@@ -103,7 +104,7 @@ class LostItemQueryControllerTest extends AbstractWebTest {
         var responseList = List.of(
                 LostItemMyResponse.builder()
                         .id(10L)
-                        .facilityId("FC001298")
+                        .facilityId(new FacilityId("FC001298"))
                         .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
                         .type(LostItemType.ELECTRONIC_EQUIPMENT)
                         .title("아이패드 핑크")
@@ -155,7 +156,7 @@ class LostItemQueryControllerTest extends AbstractWebTest {
         // given
         LostItemDetailResponse lostItemDetailResponse = LostItemDetailResponse.builder()
                 .id(10L)
-                .facilityId("FC001298")
+                .facilityId(new FacilityId("FC001298"))
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
                 .facilityPhone("01-234-5678")
                 .title("아이패드 핑크")

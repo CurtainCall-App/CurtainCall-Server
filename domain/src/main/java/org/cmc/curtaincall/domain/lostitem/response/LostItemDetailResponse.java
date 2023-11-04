@@ -3,6 +3,7 @@ package org.cmc.curtaincall.domain.lostitem.response;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
+import org.cmc.curtaincall.domain.show.FacilityId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 public class LostItemDetailResponse {
 
     private Long id;
-    private String facilityId;
+    private FacilityId facilityId;
     private String facilityName;
     private String facilityPhone;
     private String title;
@@ -29,8 +30,8 @@ public class LostItemDetailResponse {
     @Builder
     @QueryProjection
     public LostItemDetailResponse(
-            long id,
-            String facilityId,
+            Long id,
+            FacilityId facilityId,
             String facilityName,
             String facilityPhone,
             String title,
@@ -39,7 +40,7 @@ public class LostItemDetailResponse {
             LocalDate foundDate,
             LocalTime foundTime,
             String particulars,
-            long imageId,
+            Long imageId,
             String imageUrl,
             LocalDateTime createdAt
     ) {

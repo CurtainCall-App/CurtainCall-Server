@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
+import org.cmc.curtaincall.domain.show.FacilityId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,8 +15,8 @@ import java.time.LocalTime;
 @Getter
 @ToString
 public class LostItemResponse {
-    private long id;
-    private String facilityId;
+    private Long id;
+    private FacilityId facilityId;
     private String facilityName;
     private String title;
     private LostItemType type;
@@ -29,7 +30,7 @@ public class LostItemResponse {
     @QueryProjection
     public LostItemResponse(
             Long id,
-            String facilityId,
+            FacilityId facilityId,
             String facilityName,
             String title,
             LostItemType type,
