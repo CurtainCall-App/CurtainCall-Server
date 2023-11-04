@@ -27,29 +27,29 @@ public class ShowReviewLikeService {
 
     @OptimisticLock
     @Transactional
-    public void like(Long memberId, Long reviewId) {
+    public void like(final MemberId memberId, final Long reviewId) {
         ShowReview showReview = getShowReviewWithLockById(reviewId);
-        if (showReviewLikeRepository.existsByMemberIdAndShowReview(new MemberId(memberId), showReview)) {
+        if (showReviewLikeRepository.existsByMemberIdAndShowReview(memberId, showReview)) {
             return;
         }
-        showReviewLikeRepository.save(new ShowReviewLike(showReview, new MemberId(memberId)));
+        showReviewLikeRepository.save(new ShowReviewLike(showReview, memberId));
         showReview.plusLikeCount();
     }
 
     @OptimisticLock
     @Transactional
-    public void cancelLike(Long memberId, Long reviewId) {
+    public void cancelLike(final MemberId memberId, final Long reviewId) {
         ShowReview showReview = getShowReviewById(reviewId);
-        showReviewLikeRepository.findByMemberIdAndShowReview(new MemberId(memberId), showReview)
+        showReviewLikeRepository.findByMemberIdAndShowReview(memberId, showReview)
                 .ifPresent(showReviewLikeRepository::delete);
         showReview.minusLikeCount();
     }
 
-    public List<ShowReviewLikedResponse> areLiked(Long memberId, List<Long> reviewIds) {
+    public List<ShowReviewLikedResponse> areLiked(final MemberId memberId, final List<Long> reviewIds) {
         List<ShowReview> reviews = reviewIds.stream()
                 .map(showReviewRepository::getReferenceById)
                 .toList();
-        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberIdAndShowReviewIn(new MemberId(memberId), reviews).stream()
+        Set<Long> likedReviewIds = showReviewLikeRepository.findAllByMemberIdAndShowReviewIn(memberId, reviews).stream()
                 .map(showReviewLike -> showReviewLike.getShowReview().getId())
                 .collect(Collectors.toSet());
         return reviewIds.stream()
@@ -57,13 +57,13 @@ public class ShowReviewLikeService {
                 .toList();
     }
 
-    private ShowReview getShowReviewById(Long id) {
+    private ShowReview getShowReviewById(final Long id) {
         return showReviewRepository.findById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));
     }
 
-    private ShowReview getShowReviewWithLockById(Long id) {
+    private ShowReview getShowReviewWithLockById(final Long id) {
         return showReviewRepository.findWithLockById(id)
                 .filter(ShowReview::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("ShowReview id=" + id));

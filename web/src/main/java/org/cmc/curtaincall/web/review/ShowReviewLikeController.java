@@ -20,18 +20,18 @@ public class ShowReviewLikeController {
 
     @PutMapping("/reviews/{reviewId}/like")
     public void likeReview(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        showReviewLikeService.like(memberId.getId(), reviewId);
+        showReviewLikeService.like(memberId, reviewId);
     }
 
     @DeleteMapping("/reviews/{reviewId}/like")
     public void cancelLike(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        showReviewLikeService.cancelLike(memberId.getId(), reviewId);
+        showReviewLikeService.cancelLike(memberId, reviewId);
     }
 
     @GetMapping("/member/like")
     public Slice<ShowReviewLikedResponse> getLiked(
             @RequestParam @Validated @Size(max = 100) List<Long> reviewIds, @LoginMemberId MemberId memberId) {
-        List<ShowReviewLikedResponse> showReviewLikedResponses = showReviewLikeService.areLiked(memberId.getId(), reviewIds);
+        List<ShowReviewLikedResponse> showReviewLikedResponses = showReviewLikeService.areLiked(memberId, reviewIds);
         return new SliceImpl<>(showReviewLikedResponses);
     }
 }
