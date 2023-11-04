@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.review;
 
+import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,9 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -26,6 +28,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ShowReviewLikeController.class)
@@ -49,6 +52,8 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("reviewId").description("공연 리뷰 ID")
                         )
                 ));
+        then(showReviewLikeService).should(times(1)).like(
+                LOGIN_MEMBER_ID, new ShowReviewId(10L));
     }
 
     @Test
@@ -66,17 +71,20 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("reviewId").description("공연 리뷰 ID")
                         )
                 ));
+        then(showReviewLikeService).should(times(1)).cancelLike(
+                LOGIN_MEMBER_ID, new ShowReviewId(10L));
     }
 
     @Test
     void getLiked_Docs() throws Exception {
         // given
-        given(showReviewLikeService.areLiked(any(), any())).willReturn(
-                List.of(
-                        new ShowReviewLikedResponse(4L, true),
-                        new ShowReviewLikedResponse(12L, false)
-                )
-        );
+
+        given(showReviewLikeService.areLiked(LOGIN_MEMBER_ID, List.of(new ShowReviewId(4L), new ShowReviewId(12L))))
+                .willReturn(List.of(
+                                new ShowReviewLikedResponse(4L, true),
+                                new ShowReviewLikedResponse(12L, false)
+                        )
+                );
 
         // expected
         mockMvc.perform(get("/member/like")
@@ -87,6 +95,10 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].showReviewId").value(4L))
+                .andExpect(jsonPath("$.content[0].liked").value(true))
+                .andExpect(jsonPath("$.content[1].showReviewId").value(12L))
+                .andExpect(jsonPath("$.content[1].liked").value(false))
                 .andDo(document("show-review-like-get-liked",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
