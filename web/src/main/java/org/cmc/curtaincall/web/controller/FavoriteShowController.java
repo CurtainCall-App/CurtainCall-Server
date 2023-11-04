@@ -41,7 +41,7 @@ public class FavoriteShowController {
 
     @GetMapping("/members/{memberId}/favorite")
     public Slice<FavoriteShowResponse> getFavoriteShowList(
-            @PathVariable Long memberId, Pageable pageable) {
-        return favoriteShowService.getFavoriteShowList(pageable, memberId);
+            @PathVariable MemberId memberId, Pageable pageable) {
+        return favoriteShowService.getFavoriteShowList(pageable, memberId.getId());
     }
 }

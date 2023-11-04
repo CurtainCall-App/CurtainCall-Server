@@ -45,17 +45,17 @@ public class PartyQueryController {
     @GetMapping("/members/{memberId}/recruitments")
     public ListResult<PartyRecruitmentResponse> getRecruitmentList(
             @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
+            @RequestParam(required = false) PartyCategory category, @PathVariable MemberId memberId
     ) {
-        return new ListResult<>(partyDao.getRecruitmentList(pageable, new MemberId(memberId), category));
+        return new ListResult<>(partyDao.getRecruitmentList(pageable, memberId, category));
     }
 
     @GetMapping("/members/{memberId}/participations")
     public ListResult<PartyParticipationResponse> getParticipationList(
             Pageable pageable,
-            @RequestParam(required = false) PartyCategory category, @PathVariable Long memberId
+            @RequestParam(required = false) PartyCategory category, @PathVariable MemberId memberId
     ) {
-        return new ListResult<>(partyDao.getParticipationList(pageable, new MemberId(memberId), category));
+        return new ListResult<>(partyDao.getParticipationList(pageable, memberId, category));
     }
 
     @GetMapping("/member/participated")
