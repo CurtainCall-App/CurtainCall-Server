@@ -35,7 +35,7 @@ class AccountControllerTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(loginMemberId))
+                .andExpect(jsonPath("$.id").value(AbstractWebTest.LOGIN_MEMBER_ID.getId()))
         ;
     }
 
