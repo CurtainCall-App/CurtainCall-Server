@@ -1,12 +1,15 @@
 package org.cmc.curtaincall.web.party;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.inOrder;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -104,6 +108,11 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
+        PartyId partyId = new PartyId(10L);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        inOrder.verify(partyCreatorValidator).validate(
+                partyId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(partyService).delete(partyId);
     }
 
     @Test
