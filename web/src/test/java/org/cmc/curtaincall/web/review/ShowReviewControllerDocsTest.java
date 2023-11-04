@@ -142,14 +142,12 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
     }
 
     @Test
-    void editShowReview_Docs() throws Exception {
+    void edit_Docs() throws Exception {
         // given
-        ShowReviewEdit showReviewEdit = ShowReviewEdit.builder()
+        var showReviewEdit = ShowReviewEdit.builder()
                 .content("수정된 내용")
                 .grade(4)
                 .build();
-
-        given(showReviewService.isOwnedByMember(any(), any())).willReturn(true);
 
         // expected
         mockMvc.perform(patch("/reviews/{reviewId}", "10")
@@ -160,7 +158,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("showreview-edit-review",
+                .andDo(document("showreview-edit",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
@@ -174,5 +172,10 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                                         .attributes(constraint("max=200"))
                         )
                 ));
+
+        InOrder inOrder = inOrder(showReviewCreatorValidator, showReviewService);
+        ShowReviewId showReviewId = new ShowReviewId(10L);
+        inOrder.verify(showReviewCreatorValidator).validate(showReviewId, new CreatorId(LOGIN_MEMBER_ID));
+        inOrder.verify(showReviewService).edit(showReviewId, showReviewEdit);
     }
 }

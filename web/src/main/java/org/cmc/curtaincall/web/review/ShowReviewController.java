@@ -7,13 +7,17 @@ import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.domain.review.validation.ShowReviewCreatorValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,13 +47,11 @@ public class ShowReviewController {
     }
 
     @PatchMapping("/reviews/{reviewId}")
-    public void editReview(
+    public void edit(
             @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
         ShowReviewId id = new ShowReviewId(reviewId);
-        if (!showReviewService.isOwnedByMember(id, memberId)) {
-            throw new EntityAccessDeniedException("reviewId=" + reviewId + "memberId=" + memberId);
-        }
+        showReviewCreatorValidator.validate(id, new CreatorId(memberId));
         showReviewService.edit(id, showReviewEdit);
     }
 }

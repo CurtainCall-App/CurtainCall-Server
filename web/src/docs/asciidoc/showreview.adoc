@@ -39,7 +39,7 @@ operation::showreview-get-my-list[snippets='http-request,request-headers,query-p
 operation::showreview-delete[snippets='http-request,request-headers,path-parameters,http-response']
 
 
-[[show-review-edit-review]]
+[[show-review-edit]]
 == 공연 리뷰 수정
 
-operation::showreview-edit-review[snippets='http-request,request-headers,path-parameters,request-fields,http-response']
+operation::showreview-edit[snippets='http-request,request-headers,path-parameters,request-fields,http-response']
