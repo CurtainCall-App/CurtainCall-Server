@@ -19,15 +19,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
@@ -135,7 +138,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .particulars("기스 많음")
                 .imageId(1L)
                 .build();
-        given(imageService.isOwnedByMember(any(), any())).willReturn(true);
+        given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
 
         // expected
         mockMvc.perform(patch("/lostItems/{lostItemId}", 10L)
@@ -168,5 +171,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("imageId").description("이미지 ID")
                         )
                 ));
+        LostItemId lostItemId = new LostItemId(10L);
+        then(lostItemCreatorValidator).should(times(1))
+                .validate(lostItemId, new CreatorId(LOGIN_MEMBER_ID));
+        then(lostItemService).should(times(1)).edit(lostItemId, lostItemEdit);
     }
 }
