@@ -1,5 +1,7 @@
 package org.cmc.curtaincall.web.lostitem;
 
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.validation.LostItemCreatorValidator;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
@@ -19,6 +21,8 @@ import java.time.LocalTime;
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -112,6 +116,11 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("lostItemId").description("분실물 ID")
                         )
                 ));
+
+        LostItemId lostItemId = new LostItemId(10L);
+        then(lostItemCreatorValidator).should(times(1))
+                .validate(lostItemId, new CreatorId(LOGIN_MEMBER_ID));
+        then(lostItemService).should(times(1)).delete(lostItemId);
     }
 
     @Test
