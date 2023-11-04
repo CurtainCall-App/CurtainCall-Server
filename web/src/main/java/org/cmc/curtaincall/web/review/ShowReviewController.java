@@ -40,18 +40,16 @@ public class ShowReviewController {
     }
 
     @DeleteMapping("/reviews/{reviewId}")
-    public void delete(@PathVariable Long reviewId, @LoginMemberId MemberId memberId) {
-        ShowReviewId id = new ShowReviewId(reviewId);
-        showReviewCreatorValidator.validate(id, new CreatorId(memberId));
-        showReviewService.delete(id);
+    public void delete(@PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId) {
+        showReviewCreatorValidator.validate(reviewId, new CreatorId(memberId));
+        showReviewService.delete(reviewId);
     }
 
     @PatchMapping("/reviews/{reviewId}")
     public void edit(
-            @PathVariable Long reviewId, @LoginMemberId MemberId memberId,
+            @PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId,
             @RequestBody @Validated ShowReviewEdit showReviewEdit) {
-        ShowReviewId id = new ShowReviewId(reviewId);
-        showReviewCreatorValidator.validate(id, new CreatorId(memberId));
-        showReviewService.edit(id, showReviewEdit);
+        showReviewCreatorValidator.validate(reviewId, new CreatorId(memberId));
+        showReviewService.edit(reviewId, showReviewEdit);
     }
 }
