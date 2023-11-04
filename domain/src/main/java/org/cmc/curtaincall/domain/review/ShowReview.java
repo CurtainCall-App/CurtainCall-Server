@@ -62,7 +62,7 @@ public class ShowReview extends BaseEntity {
         this.likeCount = 0;
     }
 
-    private static boolean isInGradeRange(int grade) {
+    private boolean isInGradeRange(int grade) {
         return IntStream.rangeClosed(0, 5).noneMatch(i -> i == grade);
     }
 
@@ -82,7 +82,7 @@ public class ShowReview extends BaseEntity {
         plusLikeCount();
     }
 
-    public void plusLikeCount() {
+    private void plusLikeCount() {
         this.likeCount += 1;
     }
 
@@ -92,7 +92,7 @@ public class ShowReview extends BaseEntity {
         minusLikeCount();
     }
 
-    public void minusLikeCount() {
+    private void minusLikeCount() {
         if (this.likeCount == 0) {
             throw new IllegalStateException("좋아요 개수는 음수가 될 수 없음");
         }
