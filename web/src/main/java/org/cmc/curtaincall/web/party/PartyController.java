@@ -32,22 +32,22 @@ public class PartyController {
     }
 
     @DeleteMapping("/parties/{partyId}")
-    public void deleteParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        partyCreatorValidator.validate(new PartyId(partyId), new CreatorId(memberId));
-        partyService.delete(new PartyId(partyId));
+    public void deleteParty(@PathVariable PartyId partyId, @LoginMemberId MemberId memberId) {
+        partyCreatorValidator.validate(partyId, new CreatorId(memberId));
+        partyService.delete(partyId);
     }
 
     @PatchMapping("/parties/{partyId}")
     public void editParty(
-            @PathVariable Long partyId, @RequestBody @Validated PartyEdit partyEdit,
+            @PathVariable PartyId partyId, @RequestBody @Validated PartyEdit partyEdit,
             @LoginMemberId MemberId memberId) {
-        partyCreatorValidator.validate(new PartyId(partyId), new CreatorId(memberId));
-        partyService.edit(new PartyId(partyId), partyEdit);
+        partyCreatorValidator.validate(partyId, new CreatorId(memberId));
+        partyService.edit(partyId, partyEdit);
     }
 
     @PutMapping("/member/parties/{partyId}")
-    public void participateParty(@PathVariable Long partyId, @LoginMemberId MemberId memberId) {
-        partyService.participate(new PartyId(partyId), memberId);
+    public void participateParty(@PathVariable PartyId partyId, @LoginMemberId MemberId memberId) {
+        partyService.participate(partyId, memberId);
     }
 
 }

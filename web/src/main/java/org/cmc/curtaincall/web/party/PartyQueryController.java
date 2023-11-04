@@ -38,8 +38,8 @@ public class PartyQueryController {
     }
 
     @GetMapping("/parties/{partyId}")
-    public PartyDetailResponse getPartyDetail(@PathVariable Long partyId) {
-        return partyDao.getDetail(new PartyId(partyId));
+    public PartyDetailResponse getPartyDetail(@PathVariable PartyId partyId) {
+        return partyDao.getDetail(partyId);
     }
 
     @GetMapping("/members/{memberId}/recruitments")
@@ -60,10 +60,10 @@ public class PartyQueryController {
 
     @GetMapping("/member/participated")
     public ListResult<PartyParticipatedResponse> getParticipated(
-            @RequestParam @Validated @Size(max = 100) List<Long> partyIds, @LoginMemberId MemberId memberId
+            @RequestParam @Validated @Size(max = 100) List<PartyId> partyIds, @LoginMemberId MemberId memberId
     ) {
         List<PartyParticipatedResponse> partyParticipatedResponses = partyDao.areParticipated(
-                partyIds.stream().map(PartyId::new).toList(), memberId);
+                partyIds, memberId);
         return new ListResult<>(partyParticipatedResponses);
     }
 }
