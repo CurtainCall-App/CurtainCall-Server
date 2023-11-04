@@ -56,7 +56,7 @@ public class ShowReviewLikeService {
                 .map(showReviewLike -> new ShowReviewId(showReviewLike.getShowReview().getId()))
                 .collect(Collectors.toSet());
         return reviewIds.stream()
-                .map(reviewId -> new ShowReviewLikedResponse(reviewId.getId(), likedReviewIds.contains(reviewId)))
+                .map(reviewId -> new ShowReviewLikedResponse(reviewId, likedReviewIds.contains(reviewId)))
                 .toList();
     }
 

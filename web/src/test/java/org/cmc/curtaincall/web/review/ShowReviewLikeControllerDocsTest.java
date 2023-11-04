@@ -81,8 +81,8 @@ class ShowReviewLikeControllerDocsTest extends AbstractWebTest {
 
         given(showReviewLikeService.areLiked(LOGIN_MEMBER_ID, List.of(new ShowReviewId(4L), new ShowReviewId(12L))))
                 .willReturn(List.of(
-                                new ShowReviewLikedResponse(4L, true),
-                                new ShowReviewLikedResponse(12L, false)
+                                new ShowReviewLikedResponse(new ShowReviewId(4L), true),
+                                new ShowReviewLikedResponse(new ShowReviewId(12L), false)
                         )
                 );
 

@@ -28,15 +28,15 @@ public class ShowReviewController {
     private final ShowReviewCreatorValidator showReviewCreatorValidator;
 
     @PostMapping("/review")
-    public IdResult<Long> create(@Validated @RequestBody ShowReviewCreate showReviewCreate) {
-        return new IdResult<>(showReviewService.create(showReviewCreate).getId());
+    public IdResult<ShowReviewId> create(@Validated @RequestBody ShowReviewCreate showReviewCreate) {
+        return new IdResult<>(showReviewService.create(showReviewCreate));
     }
 
     @PostMapping("/shows/{showId}/reviews")
-    public IdResult<Long> createShowReview(
+    public IdResult<ShowReviewId> createShowReview(
             @PathVariable ShowId showId, @Validated @RequestBody ShowReviewCreateDepr showReviewCreate) {
         ShowReviewId showReviewId = showReviewService.create(showId, showReviewCreate);
-        return new IdResult<>(showReviewId.getId());
+        return new IdResult<>(showReviewId);
     }
 
     @DeleteMapping("/reviews/{reviewId}")
