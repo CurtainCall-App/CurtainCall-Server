@@ -20,6 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Configuration
 @Slf4j
@@ -52,14 +53,14 @@ public class ShowCompleteUpdateJobConfig {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
                 .tasklet((contribution, chunkContext) -> {
-                    LocalDateTime now = LocalDateTime.now();
                     em.createQuery("""
                                     update Show show
                                     set show.state = :state, show.lastModifiedAt = :lastModifiedAt
-                                    where show.endDate = :date
+                                    where show.state in :prevStates and show.endDate < :date
                                     """)
                             .setParameter("state", ShowState.COMPLETE)
-                            .setParameter("lastModifiedAt", now)
+                            .setParameter("prevStates", List.of(ShowState.PERFORMING, ShowState.TO_PERFORM))
+                            .setParameter("lastModifiedAt", LocalDateTime.now())
                             .setParameter("date", LocalDate.parse(date, formatter))
                             .executeUpdate();
 
