@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.Lock;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface ShowRepository extends JpaRepository<Show, String>, ShowRepositoryCustom {
+public interface ShowRepository extends JpaRepository<Show, String> {
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(Pageable pageable, ShowGenre genre, ShowState state);
