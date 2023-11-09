@@ -37,10 +37,10 @@ operation::get-show-list-to-end[snippets='http-request,query-parameters,http-res
 operation::show-get-show-detail[snippets='http-request,path-parameters,http-response,response-fields']
 
 
-[[box-office-get-box-office]]
+[[box-office-get-list]]
 == 인기 순위
 
-operation::box-office-get-box-office[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::box-office-get-list[snippets='http-request,query-parameters,http-response,response-fields-content']
 
 
 [[show-get-show-time-list]]
