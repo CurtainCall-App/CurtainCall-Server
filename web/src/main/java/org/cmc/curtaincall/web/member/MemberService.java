@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.member;
+package org.cmc.curtaincall.web.member;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.AlreadyNicknameExistsException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.member.request.MemberCreate;
-import org.cmc.curtaincall.web.service.member.request.MemberDelete;
-import org.cmc.curtaincall.web.service.member.request.MemberEdit;
-import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.member.request.MemberDelete;
+import org.cmc.curtaincall.web.member.request.MemberEdit;
+import org.cmc.curtaincall.web.member.request.MemberCreate;
+import org.cmc.curtaincall.web.member.response.MemberDetailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

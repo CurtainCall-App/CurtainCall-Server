@@ -1,18 +1,19 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.member;
 
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.member.MemberController;
 import org.cmc.curtaincall.web.review.ShowReviewService;
 import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.service.member.MemberService;
-import org.cmc.curtaincall.web.service.member.request.MemberCreate;
-import org.cmc.curtaincall.web.service.member.request.MemberDelete;
-import org.cmc.curtaincall.web.service.member.request.MemberEdit;
-import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.member.MemberService;
+import org.cmc.curtaincall.web.member.request.MemberCreate;
+import org.cmc.curtaincall.web.member.request.MemberDelete;
+import org.cmc.curtaincall.web.member.request.MemberEdit;
+import org.cmc.curtaincall.web.member.response.MemberDetailResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

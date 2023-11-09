@@ -1,9 +1,9 @@
-package org.cmc.curtaincall.web.service.member;
+package org.cmc.curtaincall.web.member;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.web.service.member.request.MemberDelete;
+import org.cmc.curtaincall.web.member.request.MemberDelete;
 import org.springframework.stereotype.Service;
 
 @Service

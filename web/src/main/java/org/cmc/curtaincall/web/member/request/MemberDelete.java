@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.member.request;
+package org.cmc.curtaincall.web.member.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

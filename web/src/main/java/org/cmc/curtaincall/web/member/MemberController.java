@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.member;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -11,11 +11,11 @@ import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.security.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.service.member.MemberService;
-import org.cmc.curtaincall.web.service.member.request.MemberCreate;
-import org.cmc.curtaincall.web.service.member.request.MemberDelete;
-import org.cmc.curtaincall.web.service.member.request.MemberEdit;
-import org.cmc.curtaincall.web.service.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.member.MemberService;
+import org.cmc.curtaincall.web.member.request.MemberCreate;
+import org.cmc.curtaincall.web.member.request.MemberDelete;
+import org.cmc.curtaincall.web.member.request.MemberEdit;
+import org.cmc.curtaincall.web.member.response.MemberDetailResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
