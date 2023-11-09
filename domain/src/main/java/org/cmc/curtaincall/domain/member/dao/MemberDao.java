@@ -24,7 +24,7 @@ public class MemberDao {
     public MemberDetailResponse getDetail(final MemberId id) {
         final Member memberEntity = Optional.ofNullable(query
                 .selectFrom(member)
-                .join(member.image).fetchJoin()
+                .leftJoin(member.image).fetchJoin()
                 .where(member.id.eq(id.getId()))
                 .fetchOne()
         ).orElseThrow(() -> new MemberNotFoundException(id));
