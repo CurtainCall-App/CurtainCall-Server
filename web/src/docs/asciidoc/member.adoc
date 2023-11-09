@@ -21,7 +21,7 @@ operation::member-signup[snippets='http-request,request-headers,request-fields,h
 [[member-get-member-detail]]
 == 회원 상세 조회
 
-operation::member-get-member-detail[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
+operation::member-get-detail[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
 
 [[member-edit-member]]

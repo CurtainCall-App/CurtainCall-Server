@@ -8,21 +8,18 @@ import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
-import org.cmc.curtaincall.web.security.AccountService;
-import org.cmc.curtaincall.web.security.LoginMemberId;
-import org.cmc.curtaincall.web.service.image.ImageService;
-import org.cmc.curtaincall.web.member.MemberService;
 import org.cmc.curtaincall.web.member.request.MemberCreate;
 import org.cmc.curtaincall.web.member.request.MemberDelete;
 import org.cmc.curtaincall.web.member.request.MemberEdit;
-import org.cmc.curtaincall.web.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.web.security.AccountService;
+import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,11 +46,6 @@ public class MemberController {
         IdResult<Long> memberCreateResult = memberService.create(memberCreate);
         accountService.signupMember(username, memberCreateResult.getId());
         return memberCreateResult;
-    }
-
-    @GetMapping("/members/{memberId}")
-    public MemberDetailResponse getMemberDetail(@PathVariable MemberId memberId) {
-        return memberService.getDetail(memberId.getId());
     }
 
     @PatchMapping("/member")
