@@ -1,12 +1,20 @@
 package org.cmc.curtaincall.domain.account;
 
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.springframework.data.domain.Persistable;
 
 import java.util.Objects;
 
@@ -14,13 +22,20 @@ import java.util.Objects;
 @Table(name = "account",
         indexes = {
                 @Index(name = "IX_account__member", columnList = "member_id")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UK_account__username", columnNames = "username")
         }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account extends BaseTimeEntity implements Persistable<String> {
+public class Account extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
+    private Long id;
+
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -40,13 +55,4 @@ public class Account extends BaseTimeEntity implements Persistable<String> {
         this.memberId = Objects.requireNonNull(memberId);
     }
 
-    @Override
-    public String getId() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getCreatedAt() == null;
-    }
 }
