@@ -2,23 +2,18 @@ package org.cmc.curtaincall.web.member;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberEditor;
-import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
-import org.cmc.curtaincall.domain.party.repository.PartyMemberRepository;
-import org.cmc.curtaincall.domain.party.repository.PartyRepository;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.AlreadyNicknameExistsException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
+import org.cmc.curtaincall.web.member.request.MemberCreate;
 import org.cmc.curtaincall.web.member.request.MemberDelete;
 import org.cmc.curtaincall.web.member.request.MemberEdit;
-import org.cmc.curtaincall.web.member.request.MemberCreate;
-import org.cmc.curtaincall.web.member.response.MemberDetailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +26,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
-    private final PartyRepository partyRepository;
-
-    private final PartyMemberRepository partyMemberRepository;
 
     private final ImageRepository imageRepository;
 
@@ -52,20 +43,6 @@ public class MemberService {
                 .nickname(nickname)
                 .build());
         return new IdResult<>(member.getId());
-    }
-
-    public MemberDetailResponse getDetail(Long memberId) {
-        Member member = getMemberById(memberId);
-        long recruitingNum = partyRepository.countByCreatedByAndUseYnIsTrue(new CreatorId(new MemberId(member.getId())));
-        long participationNum = partyMemberRepository.countByMemberId(new MemberId(member.getId()));
-        return MemberDetailResponse.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
-                .imageId(getImageId(member.getImage()))
-                .imageUrl(getImageUrl(member.getImage()))
-                .recruitingNum(recruitingNum)
-                .participationNum(participationNum)
-                .build();
     }
 
     @Transactional
