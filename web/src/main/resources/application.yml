@@ -70,6 +70,7 @@ app:
   s3:
     bucket-name: ${AWS_S3_BUCKET}
   kopis:
+    base-url: "http://www.kopis.or.kr"
     service-key: ${KOPIS_SERVICE_KEY}
   jwt:
     secret: ${JWT_SECRET}
