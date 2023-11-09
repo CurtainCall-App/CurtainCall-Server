@@ -10,8 +10,7 @@ public enum BoxOfficeGenre implements EnumMapperType {
 
     PLAY("AAAA", "연극"),
     MUSICAL("GGGA", "뮤지컬"),
-    ALL(null, "뮤지컬"),
-
+    ALL(null, "전체"),
     ;
 
     private final String code;
