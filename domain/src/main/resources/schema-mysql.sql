@@ -21,9 +21,6 @@ create table account
     account_id               bigint       not null auto_increment,
     member_id                bigint,
     username                 varchar(255) not null,
-    password                 varchar(255),
-    refresh_token            varchar(255) not null,
-    refresh_token_expires_at datetime(6) not null,
     created_at               datetime(6) not null,
     last_modified_at         datetime(6) not null,
     use_yn                   bit          not null,
@@ -156,7 +153,7 @@ create table party
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
     closed           bit           not null,
     show_id          varchar(25),
-    show_at          datetime(6),
+    party_at         datetime(6),
     use_yn           bit           not null,
     created_at       datetime(6) not null,
     created_by       bigint        not null,
@@ -179,9 +176,9 @@ create index IX_party__created_by_category_created_at
 
 create table party_member
 (
-    member_id    bigint not null,
-    party_id     bigint not null,
-    party_member bigint not null auto_increment,
+    member_id       bigint not null,
+    party_id        bigint not null,
+    party_member_id bigint not null auto_increment,
     primary key (party_member)
 ) engine=InnoDB;
 
@@ -242,7 +239,7 @@ create table shows
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
     story            varchar(4000)                               not null,
     age              varchar(255)                                not null,
-    cast             varchar(255)                                not null,
+    casts             varchar(255)                                not null,
     crew             varchar(255)                                not null,
     enterprise       varchar(255)                                not null,
     name             varchar(255)                                not null,

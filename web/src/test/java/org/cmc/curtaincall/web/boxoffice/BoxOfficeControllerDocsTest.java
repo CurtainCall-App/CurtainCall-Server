@@ -1,11 +1,11 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.boxoffice;
 
-import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeRequest;
+import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeResponse;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.service.show.BoxOfficeService;
-import org.cmc.curtaincall.web.service.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,11 +14,12 @@ import org.springframework.http.MediaType;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
@@ -35,8 +36,8 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
     @Test
     void getBoxOffice_Docs() throws Exception {
         // given
-        BoxOfficeResponse boxOfficeResponse = BoxOfficeResponse.builder()
-                .id("PF223822")
+        var boxOfficeResponse = BoxOfficeResponse.builder()
+                .id(new ShowId("PF223822"))
                 .name("그날밤, 너랑 나 [대학로]")
                 .startDate(LocalDate.of(2023, 8, 14))
                 .endDate(LocalDate.of(2023, 8, 31))
@@ -46,24 +47,23 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                 .reviewCount(2)
                 .rank(1)
                 .build();
-        given(boxOfficeService.getBoxOffice(any())).willReturn(List.of(boxOfficeResponse));
+        given(boxOfficeService.getList(new BoxOfficeRequest(
+                BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), null, null))
+        ).willReturn(List.of(boxOfficeResponse));
 
         // expected
         mockMvc.perform(get("/box-office")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("type", BoxOfficeType.WEEK.name())
-                        .param("genre", BoxOfficeGenre.PLAY.name())
                         .param("baseDate", "2023-08-17")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("box-office-get-box-office",
+                .andDo(document("box-office-get-list",
                         queryParameters(
                                 parameterWithName("type").description("일, 주, 월")
                                         .attributes(key("type").value(BoxOfficeType.class.getSimpleName())),
-                                parameterWithName("genre").description("장르")
-                                        .attributes(key("type").value(BoxOfficeGenre.class.getSimpleName())),
                                 parameterWithName("baseDate").description("기준일")
                         ),
                         responseFields(

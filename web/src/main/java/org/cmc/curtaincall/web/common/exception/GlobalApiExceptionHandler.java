@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.error;
+package org.cmc.curtaincall.web.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.domain.common.DomainException;

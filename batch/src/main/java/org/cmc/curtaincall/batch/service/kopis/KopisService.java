@@ -2,28 +2,32 @@ package org.cmc.curtaincall.batch.service.kopis;
 
 import org.cmc.curtaincall.batch.config.ClientLog;
 import org.cmc.curtaincall.batch.exception.RequestErrorException;
-import org.cmc.curtaincall.batch.service.kopis.request.BoxOfficeRequest;
 import org.cmc.curtaincall.batch.service.kopis.request.FacilityListRequest;
 import org.cmc.curtaincall.batch.service.kopis.request.ShowListRequest;
-import org.cmc.curtaincall.batch.service.kopis.response.*;
+import org.cmc.curtaincall.batch.service.kopis.response.FacilityDetailResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
+import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,52 +176,6 @@ public class KopisService {
                 .introductionImages(introductionImages)
                 .build();
     }
-
-
-    public List<BoxOfficeResponse> getBoxOfficeList(BoxOfficeRequest request) {
-        URI uri = URI.create(
-                baseUrl + "/openApi/restful/boxoffice"
-                        + "?" + "service=" + serviceKey
-                        + "&" + "date=" + request.baseDate().format(requestFormatter)
-                        + "&" + "ststype=" + request.type().name().toLowerCase()
-                        + Optional.ofNullable(request.genre().getCode())
-                        .map(genreCode -> "&" + "catecode=" + genreCode)
-                        .orElse("")
-        );
-        HttpRequest httpRequest = HttpRequest.newBuilder(uri)
-                .GET()
-                .build();
-
-        List<BoxOfficeResponse> result = new ArrayList<>();
-        try {
-            String response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
-            InputSource is = new InputSource(new StringReader(response));
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-            NodeList nodes = document.getElementsByTagName("boxof");
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                Map<String, String> tagToValue = convertXmlNodeToMap(node);
-                BoxOfficeResponse boxOfficeResponse = BoxOfficeResponse.builder()
-                        .showId(tagToValue.get("mt20id").trim())
-                        .showName(tagToValue.get("prfnm").trim())
-                        .facilityName(tagToValue.get("prfplcnm").trim())
-                        .rank(Integer.parseInt(tagToValue.get("rnum").trim()))
-                        .seatNum(Integer.parseInt(tagToValue.get("seatcnt").trim()))
-                        .showPeriod(tagToValue.get("prfpd").trim())
-                        .poster(tagToValue.get("poster").trim())
-                        .genreName(tagToValue.get("cate").trim())
-                        .showCount(Integer.parseInt(tagToValue.get("prfdtcnt").trim()))
-                        .area(tagToValue.getOrDefault("area", "").trim())
-                        .build();
-                result.add(boxOfficeResponse);
-            }
-
-        } catch (Exception e) {
-            throw new RequestErrorException(e);
-        }
-        return result;
-    }
-
 
     private Map<String, String> convertXmlNodeToMap(Node node) {
         Map<String, String> tagToValue = new HashMap<>();

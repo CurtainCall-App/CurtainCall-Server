@@ -26,7 +26,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -66,10 +66,15 @@ spring:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
 
+  cache:
+    type: SIMPLE
+    cache-names: boxOffices
+
 app:
   s3:
     bucket-name: ${AWS_S3_BUCKET}
   kopis:
+    base-url: "http://www.kopis.or.kr"
     service-key: ${KOPIS_SERVICE_KEY}
   jwt:
     secret: ${JWT_SECRET}
@@ -101,7 +106,9 @@ logging:
         SQL: debug
         orm.jdbc.bind: trace
       apache.coyote.http11: debug
-      springframework.security: trace
+      springframework:
+        security: trace
+        cache: trace
 
 ---
 spring:
