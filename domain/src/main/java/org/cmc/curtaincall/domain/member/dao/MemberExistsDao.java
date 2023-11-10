@@ -17,7 +17,10 @@ public class MemberExistsDao {
         return query
                 .selectOne()
                 .from(member)
-                .where(member.id.eq(memberId.getId()))
+                .where(
+                        member.id.eq(memberId.getId()),
+                        member.useYn.isTrue()
+                )
                 .fetchFirst() != null;
     }
 }

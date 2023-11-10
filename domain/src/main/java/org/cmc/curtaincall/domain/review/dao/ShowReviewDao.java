@@ -43,7 +43,10 @@ public class ShowReviewDao {
                 .from(showReview)
                 .innerJoin(member).on(showReview.createdBy.memberId.id.eq(member.id))
                 .leftJoin(member.image)
-                .where(showReview.showId.eq(showId))
+                .where(
+                        showReview.showId.eq(showId),
+                        showReview.useYn.isTrue()
+                )
                 .orderBy(
                         QuerydslHelper.filterNullOrderByArr(
                                 getLikeCountOrder(pageable),
@@ -85,7 +88,10 @@ public class ShowReviewDao {
                 ))
                 .from(showReview)
                 .join(show).on(showReview.showId.id.eq(show.id))
-                .where(showReview.createdBy.memberId.id.eq(creatorId.getId()))
+                .where(
+                        showReview.createdBy.memberId.id.eq(creatorId.getId()),
+                        showReview.useYn.isTrue()
+                )
                 .orderBy(
                         QuerydslHelper.filterNullOrderByArr(
                                 getCreatedAtOrder(pageable)

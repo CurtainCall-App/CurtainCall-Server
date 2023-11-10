@@ -20,7 +20,8 @@ public class LostItemExistsDao {
                 .from(lostItem)
                 .where(
                         lostItem.id.eq(id.getId()),
-                        lostItem.createdBy.eq(createdBy)
+                        lostItem.createdBy.eq(createdBy),
+                        lostItem.useYn.isTrue()
                 )
                 .fetchFirst() != null;
     }

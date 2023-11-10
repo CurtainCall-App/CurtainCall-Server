@@ -60,7 +60,10 @@ public class PartyDao {
                 .join(member.image)
                 .join(show).on(party.showId.id.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
-                .where(party.id.eq(partyId.getId()))
+                .where(
+                        party.id.eq(partyId.getId()),
+                        party.useYn.isTrue()
+                )
                 .fetchOne()
         ).orElseThrow(() -> new PartyNotFoundException(partyId));
     }
