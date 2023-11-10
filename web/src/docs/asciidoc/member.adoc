@@ -7,17 +7,6 @@
 :sectlinks:
 
 
-[[member-get-nickname-duplicate]]
-== 회원 닉네임 중복 확인
-
-operation::member-get-nickname-duplicate[snippets='http-request,request-headers,request-headers,query-parameters,http-response,response-fields']
-
-[[member-signup]]
-== 회원 생성
-
-operation::member-signup[snippets='http-request,request-headers,request-fields,http-response,response-fields']
-
-
 [[member-get-member-detail]]
 == 회원 상세 조회
 

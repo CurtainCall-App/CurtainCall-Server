@@ -30,15 +30,11 @@ public class Member extends BaseTimeEntity {
     private Image image;
 
     @Builder
-    private Member(
+    public Member(
             String nickname,
             @Nullable Image image) {
         this.nickname = nickname;
         this.image = image;
-    }
-
-    public Member(Long id) {
-        this.id = id;
     }
 
     public MemberEditor.MemberEditorBuilder toEditor() {

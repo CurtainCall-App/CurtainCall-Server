@@ -27,3 +27,14 @@ operation::security-issue-access-token[snippets='http-request,request-headers,ht
 == 로그인된 유저 회원 ID 조회
 
 operation::account-get-user-member[snippets='http-request,request-headers,response-fields']
+
+
+[[account-get-nickname-duplicate]]
+== 회원 닉네임 중복 확인
+
+operation::account-get-nickname-duplicate[snippets='http-request,request-headers,request-headers,query-parameters,http-response,response-fields']
+
+[[account-signup]]
+== 회원 가입
+
+operation::account-signup[snippets='http-request,request-headers,request-fields,http-response']

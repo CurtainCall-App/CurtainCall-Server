@@ -3,12 +3,8 @@ package org.cmc.curtaincall.web.member;
 import org.cmc.curtaincall.domain.member.MemberDeleteReason;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
-import org.cmc.curtaincall.web.common.response.BooleanResult;
-import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.member.request.MemberCreate;
 import org.cmc.curtaincall.web.member.request.MemberDelete;
 import org.cmc.curtaincall.web.member.request.MemberEdit;
-import org.cmc.curtaincall.web.security.AccountService;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,22 +13,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,70 +32,7 @@ class MemberControllerDocsTest extends AbstractWebTest {
     private MemberService memberService;
 
     @MockBean
-    private AccountService accountService;
-
-    @MockBean
     private ImageService imageService;
-
-    @Test
-    void getNicknameDuplicate_Docs() throws Exception {
-        // given
-        BooleanResult duplicateResult = new BooleanResult(false);
-        given(memberService.checkNicknameDuplicate("테스트닉네임")).willReturn(duplicateResult);
-
-        // expected
-        mockMvc.perform(get("/members/duplicate/nickname")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .param("nickname", "테스트닉네임"))
-                .andDo(print())
-                .andDo(document("member-get-nickname-duplicate",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        queryParameters(
-                                parameterWithName("nickname").description("중복 확인 하려는 닉네임.")
-                        ),
-                        responseFields(
-                                fieldWithPath("result").description("중복 여부. 중복이면 true.")
-                        )
-                ))
-        ;
-    }
-
-    @Test
-    void signup_Docs() throws Exception {
-        // given
-        MemberCreate memberCreate = MemberCreate.builder()
-                .nickname("연뮤더쿠znzn")
-                .build();
-
-        given(memberService.create(any())).willReturn(new IdResult<>(1L));
-
-        // expected
-        mockMvc.perform(post("/signup")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberCreate))
-                )
-                .andDo(print())
-                .andDo(document("member-signup",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        requestFields(
-                                fieldWithPath("nickname").description("회원 닉네임")
-                                        .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
-                        ),
-                        responseFields(
-                                fieldWithPath("id").description("생성된 회원 ID (memberId)")
-                        )
-                ))
-        ;
-        then(accountService).should().signupMember(anyString(), eq(1L));
-    }
 
     @Test
     void editMember_Docs() throws Exception {

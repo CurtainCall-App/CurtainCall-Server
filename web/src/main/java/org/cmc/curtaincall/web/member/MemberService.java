@@ -7,12 +7,7 @@ import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberEditor;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
-import org.cmc.curtaincall.web.common.response.BooleanResult;
-import org.cmc.curtaincall.web.common.response.IdResult;
-import org.cmc.curtaincall.web.exception.AlreadyNicknameExistsException;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.member.request.MemberCreate;
-import org.cmc.curtaincall.web.member.request.MemberDelete;
 import org.cmc.curtaincall.web.member.request.MemberEdit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,22 +24,6 @@ public class MemberService {
 
     private final ImageRepository imageRepository;
 
-    public BooleanResult checkNicknameDuplicate(String nickname) {
-        return new BooleanResult(memberRepository.existsByNickname(nickname));
-    }
-
-    @Transactional
-    public IdResult<Long> create(MemberCreate memberCreate) {
-        String nickname = memberCreate.getNickname();
-        if (memberRepository.existsByNickname(nickname)) {
-            throw new AlreadyNicknameExistsException("nickname=" + nickname);
-        }
-        Member member = memberRepository.save(Member.builder()
-                .nickname(nickname)
-                .build());
-        return new IdResult<>(member.getId());
-    }
-
     @Transactional
     public void edit(Long memberId, MemberEdit memberEdit) {
         Member member = getMemberById(memberId);
@@ -60,11 +39,6 @@ public class MemberService {
         }
 
         member.edit(editorBuilder.build());
-    }
-
-    @Transactional
-    public void delete(Long memberId, MemberDelete memberDelete) {
-        getMemberById(memberId).delete();
     }
 
     private boolean isImageIdEqual(@Nullable Image image, @Nullable Long imageId) {
@@ -86,17 +60,4 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("Image id=" + id));
     }
 
-    private Long getImageId(Image image) {
-        return Optional.ofNullable(image)
-                .filter(Image::getUseYn)
-                .map(Image::getId)
-                .orElse(null);
-    }
-
-    private String getImageUrl(Image image) {
-        return Optional.ofNullable(image)
-                .filter(Image::getUseYn)
-                .map(Image::getUrl)
-                .orElse(null);
-    }
 }
