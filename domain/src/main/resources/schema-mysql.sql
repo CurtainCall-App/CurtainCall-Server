@@ -19,12 +19,12 @@ drop table if exists box_office;
 
 create table account
 (
-    account_id               bigint       not null auto_increment,
-    member_id                bigint,
-    username                 varchar(255) not null,
-    created_at               datetime(6) not null,
-    last_modified_at         datetime(6) not null,
-    use_yn                   bit          not null,
+    account_id       bigint       not null auto_increment,
+    member_id        bigint       not null,
+    username         varchar(255) not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
+    use_yn           bit          not null,
     primary key (account_id)
 ) engine=InnoDB;
 
