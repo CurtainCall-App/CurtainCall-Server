@@ -22,6 +22,7 @@ public class ShowReviewEventHandler {
         log.debug("handleShowCreatedEvent={}", event);
         final ShowCreatedEvent.Source source = event.getSource();
         showReviewStatsRepository.save(new ShowReviewStats(
-                source.id(), source.genre(), source.state()));
+                source.id(), source.genre(), source.state(), source.startDate(), source.endDate()
+        ));
     }
 }

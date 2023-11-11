@@ -18,6 +18,8 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.springframework.data.domain.Persistable;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "show_review_stats",
         indexes = {
@@ -55,10 +57,23 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
     @Column(name = "genre", length = 25, nullable = false)
     private ShowGenre genre;
 
-    public ShowReviewStats(final ShowId id, final ShowGenre genre, final ShowState state) {
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
+
+    public ShowReviewStats(
+            final ShowId id,
+            final ShowGenre genre,
+            final ShowState state,
+            final LocalDate startDate,
+            final LocalDate endDate) {
         this.id = id;
         this.genre = genre;
         this.state = state;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     @Override

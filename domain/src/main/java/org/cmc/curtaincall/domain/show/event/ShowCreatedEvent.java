@@ -5,6 +5,8 @@ import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 
+import java.time.LocalDate;
+
 public class ShowCreatedEvent extends AbstractDomainEvent<ShowCreatedEvent.Source> {
 
     public ShowCreatedEvent(final ShowCreatedEvent.Source source) {
@@ -14,7 +16,9 @@ public class ShowCreatedEvent extends AbstractDomainEvent<ShowCreatedEvent.Sourc
     public record Source(
           ShowId id,
           ShowGenre genre,
-          ShowState state
+          ShowState state,
+          LocalDate startDate,
+          LocalDate endDate
     ) {
     }
 

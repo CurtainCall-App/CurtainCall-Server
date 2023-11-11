@@ -237,6 +237,8 @@ create table show_review_stats
     review_grade_sum bigint                                      not null,
     genre            enum ('MUSICAL','PLAY')                     not null,
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
+    start_date       date                                        not null,
+    end_date         date                                        not null,
     version          bigint                                      not null,
     use_yn           boolean                                     not null,
     created_at       timestamp(6)                                not null,

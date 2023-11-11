@@ -21,7 +21,9 @@ public class ShowCreateItemWriteListener implements ItemWriteListener<Show> {
                 .map(item -> new ShowCreatedEvent(new ShowCreatedEvent.Source(
                         new ShowId(item.getId()),
                         item.getGenre(),
-                        item.getState()
+                        item.getState(),
+                        item.getStartDate(),
+                        item.getEndDate()
                 )))
                 .forEach(event -> {
                     eventPublisher.publishEvent(event);
