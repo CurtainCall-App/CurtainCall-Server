@@ -8,6 +8,7 @@ drop table if exists party;
 drop table if exists party_member;
 drop table if exists show_review;
 drop table if exists show_review_like;
+drop table if exists show_review_stats;
 drop table if exists show_time;
 drop table if exists shows;
 drop table if exists shows_introduction_images;
@@ -228,6 +229,29 @@ alter table show_review_like
     add constraint UK_show_review_like__member_show_review unique (member_id, show_review_id);
 
 
+create table show_review_stats
+(
+    show_id          varchar(25)                                 not null,
+    review_count     integer                                     not null,
+    review_grade_avg double                                      not null,
+    review_grade_sum bigint                                      not null,
+    genre            enum ('MUSICAL','PLAY')                     not null,
+    state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
+    version          bigint                                      not null,
+    use_yn           boolean                                     not null,
+    created_at       timestamp(6)                                not null,
+    last_modified_at timestamp(6)                                not null,
+    primary key (show_id)
+) engine = InnoDB;
+
+
+create index IX_show_review_stats__genre_review_grade_avg
+    on show_review_stats (genre, review_grade_avg desc);
+
+create index IX_show_review_stats__genre_state_review_grade_avg
+    on show_review_stats (genre, state, review_grade_avg desc);
+
+
 create table shows
 (
     show_id          varchar(25)                                 not null,
@@ -274,17 +298,8 @@ create index IX_show__genre_end_date
 create index IX_show__genre_name
     on shows (genre, name);
 
-create index IX_show__genre_review_grade_sum
-    on shows (genre, review_grade_sum desc);
-
-create index IX_show__genre_review_grade_avg
-    on shows (genre, review_grade_avg desc);
-
 create index IX_show__genre_state_name
     on shows (genre, state, name);
-
-create index IX_show__genre_state_review_grade_avg
-    on shows (genre, state, review_grade_avg desc);
 
 
 create table show_time
@@ -300,9 +315,9 @@ create index IX_show_time__show
 
 create table shows_introduction_images
 (
-    show_id             varchar(25) not null,
-    introduction_images varchar(255)
-) engine=InnoDB;
+    show_id   varchar(25)  not null,
+    image_url varchar(1000) not null
+) engine = InnoDB;
 
 create index IX_shows_introduction_images__show
     on shows_introduction_images (show_id);
