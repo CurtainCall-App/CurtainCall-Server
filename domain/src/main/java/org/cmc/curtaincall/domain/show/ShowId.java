@@ -13,7 +13,7 @@ import java.io.Serializable;
 @ToString
 public class ShowId implements Serializable {
 
-    @Column(name = "show_id", nullable = false)
+    @Column(name = "show_id", length = 25, nullable = false)
     private String id;
 
     public ShowId(final String id) {
