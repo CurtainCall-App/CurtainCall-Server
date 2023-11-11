@@ -11,8 +11,6 @@ import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.net.URI;
@@ -177,15 +175,6 @@ public class KopisService {
                 .build();
     }
 
-    private Map<String, String> convertXmlNodeToMap(Node node) {
-        Map<String, String> tagToValue = new HashMap<>();
-        NodeList nodeValues = node.getChildNodes();
-        for (int i = 0; i < nodeValues.getLength(); i++) {
-            Node nodeValue = nodeValues.item(i);
-            tagToValue.put(nodeValue.getNodeName(), nodeValue.getTextContent());
-        }
-        return tagToValue;
-    }
     private String request(final String path) {
         return request(path, Collections.emptyMap());
     }

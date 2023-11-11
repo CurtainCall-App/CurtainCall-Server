@@ -19,6 +19,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -47,6 +48,8 @@ public class ShowCreateJobConfig {
 
     private final PlatformTransactionManager txManager;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Bean
     public Job showCreateJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
@@ -65,6 +68,7 @@ public class ShowCreateJobConfig {
                 .reader(showKopisPagingItemReader(null, null))
                 .processor(showKopisItemProcessor())
                 .writer(showItemWriter())
+                .listener(showCreateItemWriteListener())
                 .build();
     }
 
@@ -99,5 +103,11 @@ public class ShowCreateJobConfig {
                 .entityManagerFactory(emf)
                 .usePersist(true)
                 .build();
+    }
+
+    @Bean
+    @StepScope
+    public ShowCreateItemWriteListener showCreateItemWriteListener() {
+        return new ShowCreateItemWriteListener(eventPublisher);
     }
 }
