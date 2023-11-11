@@ -63,6 +63,16 @@ public class ShowPerformingUpdateJobConfig {
                             .setParameter("date", LocalDate.parse(date, formatter))
                             .executeUpdate();
 
+                    em.createQuery("""
+                                    update ShowReviewStats stats
+                                    set stats.state = :state, stats.lastModifiedAt = :lastModifiedAt
+                                    where stats.state = :prevState and stats.startDate <= :date
+                                    """)
+                            .setParameter("state", ShowState.PERFORMING)
+                            .setParameter("prevState", ShowState.TO_PERFORM)
+                            .setParameter("lastModifiedAt", LocalDateTime.now())
+                            .setParameter("date", LocalDate.parse(date, formatter))
+                            .executeUpdate();
                     return RepeatStatus.FINISHED;
                 }, txManager)
                 .build();
