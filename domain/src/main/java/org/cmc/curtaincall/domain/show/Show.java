@@ -110,6 +110,7 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
             name = "shows_introduction_images",
             joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
+    @Column(name = "image_url", length = 500, nullable = false)
     private List<String> introductionImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
