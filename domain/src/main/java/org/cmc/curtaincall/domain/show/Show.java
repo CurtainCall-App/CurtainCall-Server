@@ -1,13 +1,27 @@
 package org.cmc.curtaincall.domain.show;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
-import org.cmc.curtaincall.domain.review.ShowReview;
-import org.cmc.curtaincall.domain.show.exception.ShowUnableToCancelReviewException;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
@@ -87,15 +101,6 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "openrun", length = 25, nullable = false)
     private String openRun;
 
-    @Column(name = "review_count", nullable = false)
-    private Integer reviewCount = 0;
-
-    @Column(name = "review_grade_sum", nullable = false)
-    private Long reviewGradeSum = 0L;
-
-    @Column(name = "review_grade_avg", nullable = false)
-    private Double reviewGradeAvg = 0D;
-
     @ElementCollection
     @CollectionTable(
             name = "show_time",
@@ -156,44 +161,15 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
         return getCreatedAt() == null;
     }
 
-    public void applyReview(ShowReview review) {
-        reviewCount += 1;
-        reviewGradeSum += review.getGrade();
-        calculateReviewGradeAvg();
-    }
-
-    public void applyReviewGrade(int grade) {
-        reviewCount += 1;
-        reviewGradeSum += grade;
-        calculateReviewGradeAvg();
-    }
-
-    public void cancelReview(ShowReview review) {
-        reviewCount -= 1;
-        reviewGradeSum -= review.getGrade();
-        calculateReviewGradeAvg();
-    }
-
-    public void cancelReviewGrade(int grade) {
-        if (reviewCount == 0) {
-            throw new ShowUnableToCancelReviewException(this);
-        }
-        reviewCount -= 1;
-        reviewGradeSum -= grade;
-        calculateReviewGradeAvg();
-    }
-
-    public void applyReviewEdit(ShowReview review, int prevReviewGrade) {
-        reviewGradeSum -= prevReviewGrade;
-        reviewGradeSum += review.getGrade();
-        calculateReviewGradeAvg();
-    }
-
-    private void calculateReviewGradeAvg() {
-        reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
-    }
-
     public void addShowDateTime(LocalDateTime showAt) {
         showDateTimes.add(new ShowDateTime(this, showAt));
+    }
+
+    public Integer getReviewCount() {
+        return 0;
+    }
+
+    public Long getReviewGradeSum() {
+        return 0L;
     }
 }

@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.ShowReviewGradeApplyService;
-import org.cmc.curtaincall.domain.show.Show;
-import org.cmc.curtaincall.domain.show.ShowHelper;
-import org.cmc.curtaincall.domain.show.repository.ShowRepository;
+import org.cmc.curtaincall.domain.review.ShowReviewStats;
+import org.cmc.curtaincall.domain.review.ShowReviewStatsHelper;
+import org.cmc.curtaincall.domain.review.repository.ShowReviewStatsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,21 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ShowReviewGradeApplyServiceImpl implements ShowReviewGradeApplyService {
 
-    private final ShowRepository showRepository;
+    private final ShowReviewStatsRepository showReviewStatsRepository;
 
     @Transactional
     @OptimisticLock
     @Override
     public void apply(final ShowReview showReview) {
-        Show show = ShowHelper.getWithOptimisticLock(showReview.getShowId(), showRepository);
-        show.applyReviewGrade(showReview.getGrade());
+        final ShowReviewStats reviewStats = ShowReviewStatsHelper.getWithOptimisticLock(
+                showReview.getShowId(), showReviewStatsRepository);
+        reviewStats.applyReviewGrade(showReview.getGrade());
     }
 
     @Transactional
     @OptimisticLock
     @Override
     public void cancel(ShowReview showReview) {
-        Show show = ShowHelper.getWithOptimisticLock(showReview.getShowId(), showRepository);
-        show.cancelReviewGrade(showReview.getGrade());
+        final ShowReviewStats reviewStats = ShowReviewStatsHelper.getWithOptimisticLock(
+                showReview.getShowId(), showReviewStatsRepository);
+        reviewStats.cancelReviewGrade(showReview.getGrade());
     }
 }

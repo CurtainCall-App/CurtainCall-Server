@@ -81,6 +81,7 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
         return getCreatedAt() == null;
     }
 
+    // TODO ReviewStats 분리한거 반영
     public void applyReviewGrade(final int grade) {
         reviewCount += 1;
         reviewGradeSum += grade;
