@@ -2,9 +2,12 @@ package org.cmc.curtaincall.web.service.show;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.review.ShowReviewStats;
+import org.cmc.curtaincall.domain.review.repository.ShowReviewStatsRepository;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
@@ -22,7 +25,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -35,6 +41,8 @@ public class ShowService {
     private final FacilityRepository facilityRepository;
 
     private final ShowDateTimeRepository showDateTimeRepository;
+
+    private final ShowReviewStatsRepository showReviewStatsRepository;
 
     public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
         return showRepository.findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(
@@ -65,9 +73,14 @@ public class ShowService {
 
     public Slice<ShowResponse> getListOfFacility(Pageable pageable, String facilityId, @Nullable ShowGenre genre) {
         Facility facility = getFacilityById(facilityId);
-        return Optional.ofNullable(genre)
+        final Slice<Show> shows = Optional.ofNullable(genre)
                 .map(g -> showRepository.findSliceWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
-                .orElseGet(() -> showRepository.findSliceWithByFacilityAndUseYnIsTrue(pageable, facility))
+                .orElseGet(() -> showRepository.findSliceWithByFacilityAndUseYnIsTrue(pageable, facility));
+        final Map<ShowId, ShowReviewStats> showIdToReviewStats = showReviewStatsRepository.findAllById(
+                        shows.stream().map(Show::getId).map(ShowId::new).toList())
+                .stream()
+                .collect(Collectors.toUnmodifiableMap(ShowReviewStats::getId, Function.identity()));
+        return shows
                 .map(show -> ShowResponse.builder()
                         .id(show.getId())
                         .name(show.getName())
@@ -77,8 +90,8 @@ public class ShowService {
                         .poster(show.getPoster())
                         .genre(show.getGenre())
                         .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .reviewCount(show.getReviewCount())
-                        .reviewGradeSum(show.getReviewGradeSum())
+                        .reviewCount(showIdToReviewStats.get(new ShowId(show.getId())).getReviewCount())
+                        .reviewGradeSum(showIdToReviewStats.get(new ShowId(show.getId())).getReviewGradeSum())
                         .runtime(show.getRuntime())
                         .build());
     }

@@ -64,6 +64,17 @@ public class ShowCompleteUpdateJobConfig {
                             .setParameter("date", LocalDate.parse(date, formatter))
                             .executeUpdate();
 
+                    em.createQuery("""
+                                    update ShowReviewStats stats
+                                    set stats.state = :state, stats.lastModifiedAt = :lastModifiedAt
+                                    where stats.state in :prevStates and stats.endDate < :date
+                                    """)
+                            .setParameter("state", ShowState.COMPLETE)
+                            .setParameter("prevStates", List.of(ShowState.PERFORMING, ShowState.TO_PERFORM))
+                            .setParameter("lastModifiedAt", LocalDateTime.now())
+                            .setParameter("date", LocalDate.parse(date, formatter))
+                            .executeUpdate();
+
                     return RepeatStatus.FINISHED;
                 }, txManager)
                 .build();
