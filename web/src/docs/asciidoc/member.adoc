@@ -19,7 +19,7 @@ operation::member-get-detail[snippets='http-request,request-headers,path-paramet
 operation::member-edit-member[snippets='http-request,request-headers,request-fields,http-response']
 
 
-[[member-delete-member]]
+[[member-withdraw]]
 == 회원 탈퇴
 
-operation::member-delete-member[snippets='http-request,request-headers,request-fields,http-response']
+operation::member-withdraw[snippets='http-request,request-headers,request-fields,http-response']

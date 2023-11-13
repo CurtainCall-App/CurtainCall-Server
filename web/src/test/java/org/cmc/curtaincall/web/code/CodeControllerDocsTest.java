@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.core.EnumMapperType;
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
-import org.cmc.curtaincall.domain.member.MemberDeleteReason;
+import org.cmc.curtaincall.domain.member.MemberWithdrawReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
@@ -120,7 +120,7 @@ class CodeControllerDocsTest {
                                 subsectionWithPath("ShowGenre").description("공연 장르: "
                                         + Arrays.toString(ShowGenre.values())),
                                 subsectionWithPath("MemberDeleteReason").description("회원 탈퇴 사유: "
-                                        + Arrays.toString(MemberDeleteReason.values())),
+                                        + Arrays.toString(MemberWithdrawReason.values())),
                                 subsectionWithPath(ShowState.class.getSimpleName()).description("공연 상태: "
                                         + Arrays.toString(ShowState.values())),
                                 subsectionWithPath(ReportType.class.getSimpleName()).description("신고 타입: "

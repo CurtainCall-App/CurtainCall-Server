@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.EnumMapperType;
 
 @RequiredArgsConstructor
-public enum MemberDeleteReason implements EnumMapperType {
+public enum MemberWithdrawReason implements EnumMapperType {
     RECORD_DELETION("기록을 삭제하기 위해"),
     INCONVENIENCE_FREQUENT_ERROR("이용이 불편하고 장애가 잦아서"),
     BETTER_OTHER_SERVICE("타 서비스가 더 좋아서"),

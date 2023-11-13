@@ -144,6 +144,24 @@ alter table member
     add constraint UK_member__nickname unique (nickname);
 
 
+create table member_withdrawal
+(
+    member_withdrawal_id bigint       not null auto_increment,
+    member_id            bigint       not null,
+    reason               enum ('RECORD_DELETION', 'INCONVENIENCE_FREQUENT_ERROR',
+        'BETTER_OTHER_SERVICE', 'LOW_USAGE_FREQUENCY',
+        'NOT_USEFUL', 'ETC'),
+    content              varchar(500) not null,
+    use_yn               boolean      not null,
+    created_at           timestamp(6) not null,
+    last_modified_at     timestamp(6) not null,
+    primary key (member_withdrawal_id)
+) engine = InnoDB;
+
+create index IX_member_withdrawal__use_yn_created_at
+    on member_withdrawal (use_yn, created_at);
+
+
 create table party
 (
     party_id         bigint        not null auto_increment,
