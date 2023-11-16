@@ -67,7 +67,7 @@ public class Party extends BaseEntity {
     private PartyCategory category;
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<PartyMember> partyMembers = new ArrayList<>();
+    private List<PartyMember> partyMembers = new ArrayList<>();
 
     @Builder
     public Party(
@@ -105,6 +105,10 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
+    public void open() {
+        closed = false;
+    }
+
     public void participate(final MemberId memberId) {
         if (Boolean.TRUE.equals(closed) || !partyAt.isBefore(LocalDateTime.now())) {
             throw new PartyAlreadyClosedException(new PartyId(id));
@@ -118,6 +122,15 @@ public class Party extends BaseEntity {
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {
             close();
         }
+    }
+
+    public void cancelParticipate(final MemberId memberId) {
+        partyMembers = partyMembers.stream()
+                .filter(partyMember -> !partyMember.getMemberId().equals(memberId))
+                .toList();
+
+        curMemberNum -= 1;
+        open();
     }
 
     public boolean isParticipated(final MemberId memberId) {
