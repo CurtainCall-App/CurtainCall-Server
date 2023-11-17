@@ -8,7 +8,11 @@ import org.cmc.curtaincall.domain.member.MemberWithdrawReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
-import org.cmc.curtaincall.domain.show.*;
+import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
+import org.cmc.curtaincall.domain.show.BoxOfficeType;
+import org.cmc.curtaincall.domain.show.ShowDay;
+import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowState;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +28,12 @@ import java.util.Arrays;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -90,14 +98,14 @@ class CodeControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.EnumCodeExample").isNotEmpty())  // 등록된 EnumMapperType
-                .andExpect(jsonPath("$.LostItemType").isNotEmpty())
-                .andExpect(jsonPath("$.PartyCategory").isNotEmpty())
-                .andExpect(jsonPath("$.ReportReason").isNotEmpty())
-                .andExpect(jsonPath("$.BoxOfficeGenre").isNotEmpty())
-                .andExpect(jsonPath("$.BoxOfficeType").isNotEmpty())
-                .andExpect(jsonPath("$.ShowDay").isNotEmpty())
-                .andExpect(jsonPath("$.ShowGenre").isNotEmpty())
-                .andExpect(jsonPath("$.MemberDeleteReason").isNotEmpty())
+                .andExpect(jsonPath("$." + LostItemType.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + PartyCategory.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + ReportReason.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + BoxOfficeGenre.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + BoxOfficeType.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + ShowDay.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + ShowGenre.class.getSimpleName()).isNotEmpty())
+                .andExpect(jsonPath("$." + MemberWithdrawReason.class.getSimpleName()).isNotEmpty())
                 .andExpect(jsonPath("$." + ShowState.class.getSimpleName()).isNotEmpty())
                 .andExpect(jsonPath("$." + ReportType.class.getSimpleName()).isNotEmpty())
                 .andDo(document("code-api-get-all",
@@ -105,21 +113,21 @@ class CodeControllerDocsTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 //subsectionWithPath("FieldCategory").description("분야 카테고리")    // RestDocs 등록
-                                subsectionWithPath("LostItemType").description("분실물 타입: "
+                                subsectionWithPath(LostItemType.class.getSimpleName()).description("분실물 타입: "
                                         + Arrays.toString(LostItemType.values())),
-                                subsectionWithPath("PartyCategory").description("파티 카테고리: "
+                                subsectionWithPath(PartyCategory.class.getSimpleName()).description("파티 카테고리: "
                                         + Arrays.toString(PartyCategory.values())),
-                                subsectionWithPath("ReportReason").description("신고사유: "
+                                subsectionWithPath(ReportReason.class.getSimpleName()).description("신고사유: "
                                         + Arrays.toString(ReportReason.values())),
-                                subsectionWithPath("BoxOfficeGenre").description("인기 순위 장르: "
+                                subsectionWithPath(BoxOfficeGenre.class.getSimpleName()).description("인기 순위 장르: "
                                         + Arrays.toString(BoxOfficeGenre.values())),
-                                subsectionWithPath("BoxOfficeType").description("인기 순위 타입: "
+                                subsectionWithPath(BoxOfficeType.class.getSimpleName()).description("인기 순위 타입: "
                                         + Arrays.toString(BoxOfficeType.values())),
-                                subsectionWithPath("ShowDay").description("공연 요일: "
+                                subsectionWithPath(ShowDay.class.getSimpleName()).description("공연 요일: "
                                         + Arrays.toString(ShowDay.values())),
-                                subsectionWithPath("ShowGenre").description("공연 장르: "
+                                subsectionWithPath(ShowGenre.class.getSimpleName()).description("공연 장르: "
                                         + Arrays.toString(ShowGenre.values())),
-                                subsectionWithPath("MemberDeleteReason").description("회원 탈퇴 사유: "
+                                subsectionWithPath(MemberWithdrawReason.class.getSimpleName()).description("회원 탈퇴 사유: "
                                         + Arrays.toString(MemberWithdrawReason.values())),
                                 subsectionWithPath(ShowState.class.getSimpleName()).description("공연 상태: "
                                         + Arrays.toString(ShowState.values())),
