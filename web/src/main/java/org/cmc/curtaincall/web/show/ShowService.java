@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.show;
+package org.cmc.curtaincall.web.show;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,10 @@ import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.show.request.ShowListRequest;
-import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.request.ShowListRequest;
+import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
+import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
+import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

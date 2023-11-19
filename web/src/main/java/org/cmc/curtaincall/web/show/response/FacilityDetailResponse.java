@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.facility.response;
+package org.cmc.curtaincall.web.show.response;
 
 import lombok.*;
 

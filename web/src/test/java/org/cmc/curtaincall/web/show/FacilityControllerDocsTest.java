@@ -1,13 +1,14 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.show;
 
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.service.facility.FacilityService;
-import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
-import org.cmc.curtaincall.web.service.show.ShowService;
-import org.cmc.curtaincall.web.service.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.FacilityController;
+import org.cmc.curtaincall.web.show.FacilityService;
+import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
+import org.cmc.curtaincall.web.show.ShowService;
+import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

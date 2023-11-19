@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.show;
+package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +9,8 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.repository.FavoriteShowRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
+import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;

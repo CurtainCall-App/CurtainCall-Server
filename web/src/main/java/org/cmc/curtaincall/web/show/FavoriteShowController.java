@@ -1,13 +1,13 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.show;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.security.LoginMemberId;
-import org.cmc.curtaincall.web.service.show.FavoriteShowService;
-import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
+import org.cmc.curtaincall.web.show.FavoriteShowService;
+import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;

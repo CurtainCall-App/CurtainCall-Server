@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.show.request;
+package org.cmc.curtaincall.web.show.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

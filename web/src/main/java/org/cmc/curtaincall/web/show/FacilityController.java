@@ -1,11 +1,11 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.ShowGenre;
-import org.cmc.curtaincall.web.service.facility.FacilityService;
-import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
-import org.cmc.curtaincall.web.service.show.ShowService;
-import org.cmc.curtaincall.web.service.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.FacilityService;
+import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
+import org.cmc.curtaincall.web.show.ShowService;
+import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;

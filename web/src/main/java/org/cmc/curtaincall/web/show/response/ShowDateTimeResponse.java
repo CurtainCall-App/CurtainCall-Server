@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.show.response;
+package org.cmc.curtaincall.web.show.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.show.Facility;
