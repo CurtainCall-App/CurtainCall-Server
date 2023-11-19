@@ -1,10 +1,9 @@
 package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowGenre;
-import org.cmc.curtaincall.web.show.FacilityService;
 import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
-import org.cmc.curtaincall.web.show.ShowService;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,9 +20,9 @@ public class FacilityController {
 
     private final ShowService showService;
 
-    @GetMapping("/facilities/{facilityId}")
-    public FacilityDetailResponse getFacilityDetail(@PathVariable String facilityId) {
-        return facilityService.getDetail(facilityId);
+    @GetMapping("/facilities/{id}")
+    public FacilityDetailResponse getFacilityDetail(@PathVariable final FacilityId id) {
+        return facilityService.getDetail(id);
     }
 
     @GetMapping("/facilities/{facilityId}/shows")
