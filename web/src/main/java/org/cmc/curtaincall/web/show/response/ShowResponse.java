@@ -39,7 +39,7 @@ public class ShowResponse {
 
     public static ShowResponse of(Show show) {
         return ShowResponse.builder()
-                .id(show.getId())
+                .id(show.getId().getId())
                 .name(show.getName())
                 .startDate(show.getStartDate())
                 .endDate(show.getEndDate())

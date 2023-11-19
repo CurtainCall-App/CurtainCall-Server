@@ -5,12 +5,12 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -43,11 +43,10 @@ import java.util.List;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Show extends BaseTimeEntity implements Persistable<String> {
+public class Show extends BaseTimeEntity implements Persistable<ShowId> {
 
-    @Id
-    @Column(name = "show_id", length = 25)
-    private String id;
+    @EmbeddedId
+    private ShowId id;
 
     @Version
     @Column(nullable = false)
@@ -120,23 +119,23 @@ public class Show extends BaseTimeEntity implements Persistable<String> {
     private List<ShowDateTime> showDateTimes = new ArrayList<>();
 
     @Builder
-    private Show(
-            String id,
-            Facility facility,
-            String name,
-            LocalDate startDate,
-            LocalDate endDate,
-            String crew,
-            String cast,
-            String runtime,
-            String age,
-            String enterprise,
-            String ticketPrice,
-            String poster,
-            String story,
-            ShowGenre genre,
-            ShowState state,
-            String openRun
+    public Show(
+            final ShowId id,
+            final Facility facility,
+            final String name,
+            final LocalDate startDate,
+            final LocalDate endDate,
+            final String crew,
+            final String cast,
+            final String runtime,
+            final String age,
+            final String enterprise,
+            final String ticketPrice,
+            final String poster,
+            final String story,
+            final ShowGenre genre,
+            final ShowState state,
+            final String openRun
     ) {
         this.id = id;
         this.facility = facility;

@@ -24,7 +24,7 @@ public record ShowDateTimeResponse(
         Show show = showDateTime.getShow();
         Facility facility = show.getFacility();
         return ShowDateTimeResponse.builder()
-                .id(show.getId())
+                .id(show.getId().getId())
                 .name(show.getName())
                 .facilityId(facility.getId())
                 .facilityName(facility.getName())

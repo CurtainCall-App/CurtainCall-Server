@@ -55,7 +55,7 @@ public class ShowDetailResponse {
 
     public static ShowDetailResponse of(Show show) {
         return ShowDetailResponse.builder()
-                .id(show.getId())
+                .id(show.getId().getId())
                 .name(show.getName())
                 .startDate(show.getStartDate())
                 .endDate(show.getEndDate())

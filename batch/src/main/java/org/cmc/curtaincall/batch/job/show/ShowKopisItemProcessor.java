@@ -65,7 +65,7 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
         List<LocalDateTime> showDateTimes = getShowDateTimes(startDate, endDate, showTimes);
 
         Show show = Show.builder()
-                .id(showDetail.id())
+                .id(new ShowId(showDetail.id()))
                 .facility(new Facility(showDetail.facilityId()))
                 .name(showDetail.name())
                 .startDate(startDate)

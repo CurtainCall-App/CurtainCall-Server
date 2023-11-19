@@ -87,7 +87,7 @@ public class ShowReviewDao {
                         showReview.likeCount
                 ))
                 .from(showReview)
-                .join(show).on(showReview.showId.id.eq(show.id))
+                .join(show).on(showReview.showId.eq(show.id))
                 .where(
                         showReview.createdBy.memberId.id.eq(creatorId.getId()),
                         showReview.useYn.isTrue()

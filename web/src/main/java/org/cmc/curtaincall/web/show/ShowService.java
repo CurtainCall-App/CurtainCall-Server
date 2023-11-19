@@ -77,12 +77,12 @@ public class ShowService {
                 .map(g -> showRepository.findSliceWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
                 .orElseGet(() -> showRepository.findSliceWithByFacilityAndUseYnIsTrue(pageable, facility));
         final Map<ShowId, ShowReviewStats> showIdToReviewStats = showReviewStatsRepository.findAllById(
-                        shows.stream().map(Show::getId).map(ShowId::new).toList())
+                        shows.stream().map(Show::getId).toList())
                 .stream()
                 .collect(Collectors.toUnmodifiableMap(ShowReviewStats::getId, Function.identity()));
         return shows
                 .map(show -> ShowResponse.builder()
-                        .id(show.getId())
+                        .id(show.getId().getId())
                         .name(show.getName())
                         .startDate(show.getStartDate())
                         .endDate(show.getEndDate())
@@ -90,8 +90,8 @@ public class ShowService {
                         .poster(show.getPoster())
                         .genre(show.getGenre())
                         .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .reviewCount(showIdToReviewStats.get(new ShowId(show.getId())).getReviewCount())
-                        .reviewGradeSum(showIdToReviewStats.get(new ShowId(show.getId())).getReviewGradeSum())
+                        .reviewCount(showIdToReviewStats.get(show.getId()).getReviewCount())
+                        .reviewGradeSum(showIdToReviewStats.get(show.getId()).getReviewGradeSum())
                         .runtime(show.getRuntime())
                         .build());
     }
@@ -118,7 +118,7 @@ public class ShowService {
     }
 
     private Show getShowById(String id) {
-        return showRepository.findById(id)
+        return showRepository.findById(new ShowId(id))
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
     }

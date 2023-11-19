@@ -4,6 +4,7 @@ import jakarta.persistence.LockModeType;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -14,7 +15,7 @@ import org.springframework.data.jpa.repository.Lock;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface ShowRepository extends JpaRepository<Show, String> {
+public interface ShowRepository extends JpaRepository<Show, ShowId> {
 
     @EntityGraph(attributePaths = {"facility"})
     Slice<Show> findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(Pageable pageable, ShowGenre genre, ShowState state);
@@ -37,5 +38,5 @@ public interface ShowRepository extends JpaRepository<Show, String> {
     Slice<Show> findSliceWithByFacilityAndGenreAndUseYnIsTrue(Pageable pageable, Facility facility, ShowGenre genre);
 
     @Lock(LockModeType.OPTIMISTIC)
-    Optional<Show> findWithLockById(String id);
+    Optional<Show> findWithLockById(ShowId id);
 }

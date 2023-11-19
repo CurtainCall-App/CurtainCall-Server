@@ -6,6 +6,7 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.show.FavoriteShow;
 import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.FavoriteShowRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
@@ -55,11 +56,12 @@ public class FavoriteShowService {
     public List<ShowFavoriteResponse> areFavorite(Long memberId, List<String> showIds) {
         Member member = memberRepository.getReferenceById(memberId);
         List<Show> shows = showIds.stream()
+                .map(ShowId::new)
                 .map(showRepository::getReferenceById)
                 .toList();
         List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllByMemberAndShowIn(member, shows);
         Set<String> favoriteShowIds = favoriteShows.stream()
-                .map(favoriteShow -> favoriteShow.getShow().getId())
+                .map(favoriteShow -> favoriteShow.getShow().getId().getId())
                 .collect(Collectors.toSet());
         return showIds.stream()
                 .map(showId -> new ShowFavoriteResponse(showId, favoriteShowIds.contains(showId)))
@@ -73,7 +75,7 @@ public class FavoriteShowService {
                 .map(FavoriteShow::getShow)
                 .filter(Show::getUseYn)
                 .map(show -> FavoriteShowResponse.builder()
-                        .id(show.getId())
+                        .id(show.getId().getId())
                         .name(show.getName())
                         .startDate(show.getStartDate())
                         .endDate(show.getEndDate())
@@ -90,7 +92,7 @@ public class FavoriteShowService {
     }
 
     private Show getShowById(String id) {
-        return showRepository.findById(id)
+        return showRepository.findById(new ShowId(id))
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
     }

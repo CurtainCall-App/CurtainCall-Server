@@ -18,7 +18,7 @@ public class ShowExistsDao {
                 .selectOne()
                 .from(show)
                 .where(
-                        show.id.eq(showId.getId()),
+                        show.id.eq(showId),
                         show.useYn.isTrue()
                 )
                 .fetchFirst() != null;
