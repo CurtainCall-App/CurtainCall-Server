@@ -29,11 +29,11 @@ import static org.cmc.curtaincall.domain.review.QShowReviewLike.showReviewLike;
 
 @Configuration
 @RequiredArgsConstructor
-public class MemberReviewLikeRemoveJobConfig {
+public class WithdrawalReviewLikeRemoveJobConfig {
 
-    private static final String JOB_NAME = "MemberShowReviewLikeRemoveJob";
+    private static final String JOB_NAME = "WithdrawalShowReviewLikeRemoveJob";
 
-    private static final String STEP_NAME = "MemberShowReviewLikeRemoveStep";
+    private static final String STEP_NAME = "WithdrawalShowReviewLikeRemoveStep";
 
     private static final int CHUNK_SIZE = 100;
 
@@ -46,28 +46,28 @@ public class MemberReviewLikeRemoveJobConfig {
     private final ShowReviewLikeRepository showReviewLikeRepository;
 
     @Bean
-    public Job memberShowReviewLikeRemoveJob() {
+    public Job withdrawalShowReviewLikeRemoveJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
         return jobBuilder
-                .start(memberShowReviewLikeRemoveStep())
+                .start(withdrawalShowReviewLikeRemoveStep())
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step memberShowReviewLikeRemoveStep() {
+    public Step withdrawalShowReviewLikeRemoveStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
                 .<ShowReviewLike, ShowReviewLike>chunk(CHUNK_SIZE, txManager)
-                .reader(memberShowReviewLikeRemoveItemReader(null))
-                .writer(memberShowReviewLikeRemoveItemWriter())
+                .reader(withdrawalShowReviewLikeRemoveItemReader(null))
+                .writer(withdrawalShowReviewLikeRemoveItemWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public QuerydslPagingItemReader<ShowReviewLike> memberShowReviewLikeRemoveItemReader(
+    public QuerydslPagingItemReader<ShowReviewLike> withdrawalShowReviewLikeRemoveItemReader(
             @Value("#{jobParameters[date]}") String dateParam
     ) {
         final LocalDate date = LocalDate.parse(dateParam, DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -83,7 +83,7 @@ public class MemberReviewLikeRemoveJobConfig {
 
     @Bean
     @StepScope
-    public JpaQueryUpdateItemWriter<ShowReviewLike, ShowReview> memberShowReviewLikeRemoveItemWriter() {
+    public JpaQueryUpdateItemWriter<ShowReviewLike, ShowReview> withdrawalShowReviewLikeRemoveItemWriter() {
         return new JpaQueryUpdateItemWriter<>(emf,
                 (em, like) -> em.find(ShowReview.class,
                         like.getShowReview().getId(), LockModeType.PESSIMISTIC_FORCE_INCREMENT
