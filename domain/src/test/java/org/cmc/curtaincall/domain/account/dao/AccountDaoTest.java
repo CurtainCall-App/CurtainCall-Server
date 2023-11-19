@@ -21,8 +21,10 @@ class AccountDaoTest extends AbstractDataJpaTest {
     @Test
     void findMemberIdByUsername_Success() {
         // given
-        Account account = new Account("test-username");
-        account.registerMember(new MemberId(10L));
+        Account account = Account.builder()
+                .username("test-username")
+                .memberId(new MemberId(10L))
+                .build();
         accountRepository.save(account);
 
         em.flush();
@@ -32,20 +34,6 @@ class AccountDaoTest extends AbstractDataJpaTest {
         Assertions.assertThat(accountDao.findMemberIdByUsername("test-username"))
                 .isNotEmpty()
                 .contains(new MemberId(10L));
-    }
-
-    @Test
-    void findMemberIdByUsername_when_member_id_null() {
-        // given
-        Account account = new Account("test-username");
-        accountRepository.save(account);
-
-        em.flush();
-        em.clear();
-
-        // expected
-        Assertions.assertThat(accountDao.findMemberIdByUsername("test-username"))
-                .isEmpty();
     }
 
 }

@@ -17,7 +17,10 @@ public class ShowExistsDao {
         return query
                 .selectOne()
                 .from(show)
-                .where(show.id.eq(showId.getId()))
+                .where(
+                        show.id.eq(showId.getId()),
+                        show.useYn.isTrue()
+                )
                 .fetchFirst() != null;
     }
 }

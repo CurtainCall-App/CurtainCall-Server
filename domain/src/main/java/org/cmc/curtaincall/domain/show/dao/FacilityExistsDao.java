@@ -17,7 +17,10 @@ public class FacilityExistsDao {
         return query
                 .selectOne()
                 .from(facility)
-                .where(facility.id.eq(facilityId.getId()))
+                .where(
+                        facility.id.eq(facilityId.getId()),
+                        facility.useYn.isTrue()
+                )
                 .fetchFirst() != null;
     }
 }

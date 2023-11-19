@@ -20,7 +20,8 @@ public class ShowReviewExistsDao {
                 .from(showReview)
                 .where(
                         showReview.id.eq(id.getId()),
-                        showReview.createdBy.eq(creatorId)
+                        showReview.createdBy.eq(creatorId),
+                        showReview.useYn.isTrue()
                 )
                 .fetchFirst() != null;
     }

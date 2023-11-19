@@ -20,7 +20,8 @@ public class PartyExistsDao {
                 .from(party)
                 .where(
                         party.id.eq(partyId.getId()),
-                        party.createdBy.eq(creatorId)
+                        party.createdBy.eq(creatorId),
+                        party.useYn.isTrue()
                 )
                 .fetchFirst() != null;
     }

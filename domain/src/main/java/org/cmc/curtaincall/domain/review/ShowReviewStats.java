@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.review.exception.ShowReviewUnableToCancelReviewException;
+import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
@@ -81,11 +82,15 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
         return getCreatedAt() == null;
     }
 
-    // TODO ReviewStats 분리한거 반영
     public void applyReviewGrade(final int grade) {
         reviewCount += 1;
         reviewGradeSum += grade;
         calculateReviewGradeAvg();
+    }
+
+    public void removeReview(final ShowReview review, final ShowReviewRepository showReviewRepository) {
+        showReviewRepository.delete(review);
+        cancelReviewGrade(review.getGrade());
     }
 
     public void cancelReviewGrade(final int grade) {

@@ -1,6 +1,5 @@
 package org.cmc.curtaincall.domain.account;
 
-import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -11,12 +10,11 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "account",
@@ -40,19 +38,12 @@ public class Account extends BaseTimeEntity {
     private String username;
 
     @Embedded
-    @AttributeOverride(
-            name = "id",
-            column = @Column(name = "member_id")
-    )
     private MemberId memberId;
 
-    public Account(final String username) {
+    @Builder
+    public Account(final String username, final MemberId memberId) {
         this.username = username;
-        this.memberId = null;
-    }
-
-    public void registerMember(final MemberId memberId) {
-        this.memberId = Objects.requireNonNull(memberId);
+        this.memberId = memberId;
     }
 
 }

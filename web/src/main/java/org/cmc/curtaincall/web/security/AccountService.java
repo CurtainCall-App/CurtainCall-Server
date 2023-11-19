@@ -5,7 +5,6 @@ import org.cmc.curtaincall.domain.account.Account;
 import org.cmc.curtaincall.domain.account.exception.AccountNotFoundException;
 import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.exception.AlreadySignupAccountException;
 import org.cmc.curtaincall.web.security.response.AccountDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +19,6 @@ public class AccountService {
     public AccountDto get(String username) {
         Account account = getAccountByUsername(username);
         return AccountDto.of(account);
-    }
-
-    @Transactional
-    public void signupMember(String username, Long memberId) {
-        Account account = getAccountByUsername(username);
-        if (account.getMemberId() != null) {
-            throw new AlreadySignupAccountException("username=" + username);
-        }
-        account.registerMember(new MemberId(memberId));
     }
 
     @Transactional
