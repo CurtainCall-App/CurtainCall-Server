@@ -3,6 +3,7 @@ package org.cmc.curtaincall.web.show;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
@@ -10,6 +11,7 @@ import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,6 +45,9 @@ class ShowControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private ShowService showService;
+
+    @MockBean
+    private ShowReviewStatsQueryService showReviewStatsQueryService;
 
     @Test
     void getShows_Docs() throws Exception {
@@ -318,7 +323,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
     void getShowDetail_Docs() throws Exception {
         // given
         ShowDetailResponse response = ShowDetailResponse.builder()
-                .id("PF220846")
+                .id(new ShowId("PF220846"))
                 .name("잘자요, 엄마 [청주]")
                 .startDate(LocalDate.of(2023, 4, 28))
                 .endDate(LocalDate.of(2023, 5, 12))
@@ -343,10 +348,16 @@ class ShowControllerDocsTest extends AbstractWebTest {
                         new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
                         new ShowTime(ShowDay.SUNDAY, LocalTime.of(16, 0))
                 ))
-                .reviewCount(10)
-                .reviewGradeSum(48L)
                 .build();
         given(showService.getDetail(any())).willReturn(response);
+
+        final ShowReviewStatsDto showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.get(new ShowId("PF220846"))).willReturn(showReviewStatsDto);
 
         // expected
         mockMvc.perform(get("/shows/{showId}", "PF220846")
@@ -381,7 +392,8 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                         .type(ShowDay.class.getSimpleName()),
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
-                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균")
                         )
                 ));
     }

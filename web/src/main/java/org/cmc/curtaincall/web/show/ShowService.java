@@ -9,6 +9,7 @@ import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.domain.show.exception.ShowNotFoundException;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
@@ -32,6 +33,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// TODO ShowReviewStats 적용
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -97,8 +99,8 @@ public class ShowService {
                         .build());
     }
 
-    public ShowDetailResponse getDetail(String id) {
-        Show show = getShowById(id);
+    public ShowDetailResponse getDetail(final ShowId id) {
+        final Show show = getShowById(id);
         return ShowDetailResponse.of(show);
     }
 
@@ -118,10 +120,10 @@ public class ShowService {
                 .toList();
     }
 
-    private Show getShowById(String id) {
-        return showRepository.findById(new ShowId(id))
+    private Show getShowById(final ShowId id) {
+        return showRepository.findById(id)
                 .filter(Show::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
+                .orElseThrow(() -> new ShowNotFoundException(id));
     }
 
     private Facility getFacilityById(String id) {
