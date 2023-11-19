@@ -7,6 +7,7 @@ import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.springframework.batch.item.ItemProcessor;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class FacilityItemProcessor implements ItemProcessor<FacilityResponse, Fa
         }
         FacilityDetailResponse facilityDetail = kopisService.getFacilityDetail(item.id());
         return Facility.builder()
-                .id(facilityDetail.id())
+                .id(new FacilityId(facilityDetail.id()))
                 .name(facilityDetail.name())
                 .hallNum(facilityDetail.hallNum())
                 .characteristics(facilityDetail.characteristics())

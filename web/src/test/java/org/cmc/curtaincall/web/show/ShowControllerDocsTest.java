@@ -1,13 +1,12 @@
 package org.cmc.curtaincall.web.show;
 
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
-import org.cmc.curtaincall.web.show.ShowController;
-import org.cmc.curtaincall.web.show.ShowService;
 import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
@@ -30,8 +29,12 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -319,7 +322,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                 .name("잘자요, 엄마 [청주]")
                 .startDate(LocalDate.of(2023, 4, 28))
                 .endDate(LocalDate.of(2023, 5, 12))
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .crew("이봉규")
                 .cast("이채윤, 정아름")
@@ -390,7 +393,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                 ShowDateTimeResponse.builder()
                         .id("PF220846")
                         .name("잘자요, 엄마 [청주]")
-                        .facilityId("FC000182")
+                        .facilityId(new FacilityId("FC000182"))
                         .facilityName("예술나눔 터")
                         .genre(ShowGenre.PLAY)
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")

@@ -46,7 +46,7 @@ public class LostItemDao {
                         lostItem.createdAt
                 ))
                 .from(lostItem)
-                .join(facility).on(lostItem.facilityId.id.eq(facility.id))
+                .join(facility).on(lostItem.facilityId.eq(facility.id))
                 .join(lostItem.image)
                 .where(
                         facilityIdEq(queryParam.getFacilityId()),
@@ -107,7 +107,7 @@ public class LostItemDao {
                         lostItem.createdAt
                 ))
                 .from(lostItem)
-                .join(facility).on(lostItem.facilityId.id.eq(facility.id))
+                .join(facility).on(lostItem.facilityId.eq(facility.id))
                 .join(lostItem.image).fetchJoin()
                 .where(
                         lostItem.id.eq(lostItemId.getId()),
@@ -131,7 +131,7 @@ public class LostItemDao {
                         lostItem.createdAt
                 ))
                 .from(lostItem)
-                .join(facility).on(lostItem.facilityId.id.eq(facility.id))
+                .join(facility).on(lostItem.facilityId.eq(facility.id))
                 .join(lostItem.image).fetchJoin()
                 .where(
                         lostItem.createdBy.eq(createdBy),

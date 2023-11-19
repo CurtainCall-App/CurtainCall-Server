@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
@@ -33,7 +34,7 @@ public class FacilityService {
     }
 
     private Facility getFacilityById(String id) {
-        return facilityRepository.findById(id)
+        return facilityRepository.findById(new FacilityId(id))
                 .filter(Facility::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
     }

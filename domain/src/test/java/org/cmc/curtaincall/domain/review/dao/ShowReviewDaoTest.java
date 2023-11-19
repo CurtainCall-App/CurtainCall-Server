@@ -118,7 +118,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
         // given
         em.persist(Show.builder()
                 .id(new ShowId("show-id"))
-                .facility(em.getReference(Facility.class, "facility-id"))
+                .facility(em.getReference(Facility.class, new FacilityId("facility-id")))
                 .name("show-name")
                 .startDate(LocalDate.of(2023, 10, 10))
                 .endDate(LocalDate.of(2023, 10, 10))

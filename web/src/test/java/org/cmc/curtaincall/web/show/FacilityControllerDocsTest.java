@@ -1,13 +1,11 @@
 package org.cmc.curtaincall.web.show;
 
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.show.FacilityController;
-import org.cmc.curtaincall.web.show.FacilityService;
 import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
-import org.cmc.curtaincall.web.show.ShowService;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,8 +25,12 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +47,7 @@ class FacilityControllerDocsTest extends AbstractWebTest {
     void getFacilityDetail_Docs() throws Exception {
         // given
         FacilityDetailResponse response = FacilityDetailResponse.builder()
-                .id("FC001298")
+                .id(new FacilityId("FC001298"))
                 .name("시온아트홀 (구. JK아트홀, 샘아트홀)")
                 .hallNum(1)
                 .characteristic("민간(대학로)")

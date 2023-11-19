@@ -6,6 +6,7 @@ import jakarta.annotation.Nullable;
 import lombok.*;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class PartyResponse {
     private LocalDateTime showAt;
 
     @Nullable
-    private String facilityId;
+    private FacilityId facilityId;
 
     @Nullable
     private String facilityName;
@@ -54,21 +55,21 @@ public class PartyResponse {
     @Builder
     @QueryProjection
     public PartyResponse(
-            Long id,
-            String title,
-            Integer curMemberNum,
-            Integer maxMemberNum,
-            LocalDateTime createdAt,
-            PartyCategory category,
-            CreatorId creatorId,
-            String creatorNickname,
-            @Nullable String creatorImageUrl,
-            @Nullable ShowId showId,
-            @Nullable String showName,
-            @Nullable String showPoster,
-            @Nullable LocalDateTime showAt,
-            @Nullable String facilityId,
-            @Nullable String facilityName
+            final Long id,
+            final String title,
+            final Integer curMemberNum,
+            final Integer maxMemberNum,
+            final LocalDateTime createdAt,
+            final PartyCategory category,
+            final CreatorId creatorId,
+            final String creatorNickname,
+            @Nullable final String creatorImageUrl,
+            @Nullable final ShowId showId,
+            @Nullable final String showName,
+            @Nullable final String showPoster,
+            @Nullable final LocalDateTime showAt,
+            @Nullable final FacilityId facilityId,
+            @Nullable final String facilityName
     ) {
         this.id = id;
         this.title = title;

@@ -66,7 +66,7 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
 
         Show show = Show.builder()
                 .id(new ShowId(showDetail.id()))
-                .facility(new Facility(showDetail.facilityId()))
+                .facility(new Facility(new FacilityId(showDetail.facilityId())))
                 .name(showDetail.name())
                 .startDate(startDate)
                 .endDate(endDate)

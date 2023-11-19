@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.review.ShowReviewStats;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewStatsRepository;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
@@ -124,7 +125,7 @@ public class ShowService {
     }
 
     private Facility getFacilityById(String id) {
-        return facilityRepository.findById(id)
+        return facilityRepository.findById(new FacilityId(id))
                 .filter(Facility::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
     }

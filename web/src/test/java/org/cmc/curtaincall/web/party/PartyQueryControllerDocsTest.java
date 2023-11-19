@@ -5,6 +5,7 @@ import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.response.*;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
@@ -52,7 +53,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
         given(partyDao.getList(any(), any())).willReturn(List.of(partyResponse));
@@ -116,7 +117,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
         given(partyDao.search(any(), any())).willReturn(List.of(partyResponse));
@@ -183,7 +184,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .creatorImageUrl("creator-image-url")
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
         given(partyDao.getDetail(any())).willReturn(partyDetailResponse);
@@ -239,7 +240,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
         given(partyDao.getRecruitmentList(any(), any(), any()))
@@ -307,7 +308,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
         given(partyDao.getParticipationList(any(), any(), any()))

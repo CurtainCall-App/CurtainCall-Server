@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
@@ -36,29 +37,29 @@ public class PartyParticipationResponse {
     @Nullable
     private String showPoster;
     @Nullable
-    private String facilityId;
+    private FacilityId facilityId;
     @Nullable
     private String facilityName;
 
     @Builder
     @QueryProjection
     public PartyParticipationResponse(
-            Long id,
-            String title,
-            String content,
-            Integer curMemberNum,
-            Integer maxMemberNum,
-            LocalDateTime createdAt,
-            PartyCategory category,
-            CreatorId creatorId,
-            String creatorNickname,
-            String creatorImageUrl,
-            @Nullable ShowId showId,
-            @Nullable String showName,
-            @Nullable String showPoster,
-            @Nullable LocalDateTime showAt,
-            @Nullable String facilityId,
-            @Nullable String facilityName
+            final Long id,
+            final String title,
+            final String content,
+            final Integer curMemberNum,
+            final Integer maxMemberNum,
+            final LocalDateTime createdAt,
+            final PartyCategory category,
+            final CreatorId creatorId,
+            final String creatorNickname,
+            final String creatorImageUrl,
+            @Nullable final ShowId showId,
+            @Nullable final String showName,
+            @Nullable final String showPoster,
+            @Nullable final LocalDateTime showAt,
+            @Nullable final FacilityId facilityId,
+            @Nullable final String facilityName
     ) {
         this.id = id;
         this.title = title;

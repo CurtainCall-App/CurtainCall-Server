@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.show.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowDateTime;
 import org.cmc.curtaincall.domain.show.ShowGenre;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public record ShowDateTimeResponse(
         String id,
         String name,
-        String facilityId,
+        FacilityId facilityId,
         String facilityName,
         String poster,
         ShowGenre genre,

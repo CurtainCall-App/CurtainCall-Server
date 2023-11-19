@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.show.response;
 
 import lombok.*;
+import org.cmc.curtaincall.domain.show.FacilityId;
 
 @Getter
 @Builder
@@ -8,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FacilityDetailResponse {
 
-    private String id;
+    private FacilityId id;
 
     private String name;
 

@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.show.response;
 
 import lombok.*;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowTime;
@@ -23,7 +24,7 @@ public class ShowDetailResponse {
 
     private LocalDate endDate;          // 공연 종료일
 
-    private String facilityId;          // 공연 시설 ID
+    private FacilityId facilityId;          // 공연 시설 ID
 
     private String facilityName;            // 공연 시설명 (공연장명)
 
