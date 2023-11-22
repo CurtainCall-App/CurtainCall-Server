@@ -27,7 +27,7 @@ public class FacilityController {
 
     @GetMapping("/facilities/{facilityId}/shows")
     public Slice<ShowResponse> getShowListOfFacility(
-            Pageable pageable, @PathVariable String facilityId, @RequestParam(required = false) ShowGenre genre
+            Pageable pageable, @PathVariable FacilityId facilityId, @RequestParam(required = false) ShowGenre genre
     ) {
         return showService.getListOfFacility(pageable, facilityId, genre);
     }

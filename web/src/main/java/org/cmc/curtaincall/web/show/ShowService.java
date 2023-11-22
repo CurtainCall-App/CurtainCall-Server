@@ -9,11 +9,11 @@ import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.domain.show.exception.FacilityNotFoundException;
 import org.cmc.curtaincall.domain.show.exception.ShowNotFoundException;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
 import org.cmc.curtaincall.web.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
@@ -74,7 +74,8 @@ public class ShowService {
                 .map(ShowResponse::of);
     }
 
-    public Slice<ShowResponse> getListOfFacility(Pageable pageable, String facilityId, @Nullable ShowGenre genre) {
+    public Slice<ShowResponse> getListOfFacility(
+            final Pageable pageable, final FacilityId facilityId, @Nullable final ShowGenre genre) {
         Facility facility = getFacilityById(facilityId);
         final Slice<Show> shows = Optional.ofNullable(genre)
                 .map(g -> showRepository.findSliceWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
@@ -126,9 +127,9 @@ public class ShowService {
                 .orElseThrow(() -> new ShowNotFoundException(id));
     }
 
-    private Facility getFacilityById(String id) {
-        return facilityRepository.findById(new FacilityId(id))
+    private Facility getFacilityById(final FacilityId id) {
+        return facilityRepository.findById(id)
                 .filter(Facility::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
+                .orElseThrow(() -> new FacilityNotFoundException(id));
     }
 }
