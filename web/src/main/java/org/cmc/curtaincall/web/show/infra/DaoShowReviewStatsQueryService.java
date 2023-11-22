@@ -7,6 +7,8 @@ import org.cmc.curtaincall.web.show.ShowReviewStatsQueryService;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DaoShowReviewStatsQueryService implements ShowReviewStatsQueryService {
@@ -18,5 +20,12 @@ public class DaoShowReviewStatsQueryService implements ShowReviewStatsQueryServi
         return showReviewStatsRepository.findById(showId)
                 .map(ShowReviewStatsDto::of)
                 .orElse(new ShowReviewStatsDto(showId, 0, 0L, 0D));
+    }
+
+    @Override
+    public List<ShowReviewStatsDto> getList(final List<ShowId> showIds) {
+        return showReviewStatsRepository.findAllById(showIds).stream()
+                .map(ShowReviewStatsDto::of)
+                .toList();
     }
 }

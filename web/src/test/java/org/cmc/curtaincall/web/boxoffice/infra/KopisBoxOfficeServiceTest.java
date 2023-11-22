@@ -92,8 +92,6 @@ class KopisBoxOfficeServiceTest {
         given(show.getEndDate()).willReturn(LocalDate.of(2023, 11, 10));
         given(show.getPoster()).willReturn("poster");
         given(show.getGenre()).willReturn(ShowGenre.MUSICAL);
-        given(show.getReviewCount()).willReturn(10);
-        given(show.getReviewGradeSum()).willReturn(45L);
         given(showRepository.findAllById(List.of(new ShowId("PF227565")))).willReturn(List.of(show));
 
         // when
@@ -111,8 +109,6 @@ class KopisBoxOfficeServiceTest {
         assertThat(boxOfficeResponse.endDate()).isEqualTo(LocalDate.of(2023, 11, 10));
         assertThat(boxOfficeResponse.poster()).isEqualTo("poster");
         assertThat(boxOfficeResponse.genre()).isEqualTo(ShowGenre.MUSICAL);
-        assertThat(boxOfficeResponse.reviewGradeSum()).isEqualTo(45L);
-        assertThat(boxOfficeResponse.reviewCount()).isEqualTo(10);
         assertThat(boxOfficeResponse.rank()).isEqualTo(4);
 
         final RecordedRequest recordedRequest = mockWebServer.takeRequest();

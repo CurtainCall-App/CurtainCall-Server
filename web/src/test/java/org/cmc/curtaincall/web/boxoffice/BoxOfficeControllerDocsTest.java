@@ -6,6 +6,8 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeRequest;
 import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeResponse;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
+import org.cmc.curtaincall.web.show.ShowReviewStatsQueryService;
+import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +35,9 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
     @MockBean
     private BoxOfficeService boxOfficeService;
 
+    @MockBean
+    private ShowReviewStatsQueryService showReviewStatsQueryService;
+
     @Test
     void getBoxOffice_Docs() throws Exception {
         // given
@@ -43,13 +48,20 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                 .endDate(LocalDate.of(2023, 8, 31))
                 .poster("poster-url")
                 .genre(ShowGenre.PLAY)
-                .reviewGradeSum(10)
-                .reviewCount(2)
                 .rank(1)
                 .build();
         given(boxOfficeService.getList(new BoxOfficeRequest(
                 BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), null, null))
         ).willReturn(List.of(boxOfficeResponse));
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF223822")))).willReturn(
+                List.of(showReviewStatsDto));
 
         // expected
         mockMvc.perform(get("/box-office")
@@ -76,6 +88,7 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("genre").type(ShowGenre.class.getSimpleName()).description("공연 장르명"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
                                 fieldWithPath("rank").description("순위")
                         )
                 ));

@@ -2,8 +2,6 @@ package org.cmc.curtaincall.web.show;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.review.ShowReviewStats;
-import org.cmc.curtaincall.domain.review.repository.ShowReviewStatsRepository;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
@@ -19,7 +17,6 @@ import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +24,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// TODO ShowReviewStats 적용
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -45,48 +38,44 @@ public class ShowService {
 
     private final ShowDateTimeRepository showDateTimeRepository;
 
-    private final ShowReviewStatsRepository showReviewStatsRepository;
-
-    public Slice<ShowResponse> getList(ShowListRequest request, Pageable pageable) {
-        return showRepository.findSliceWithFacilityByGenreAndStateAndUseYnIsTrue(
+    public List<ShowResponse> getList(final ShowListRequest request, final Pageable pageable) {
+        return showRepository.findAllWithFacilityByGenreAndStateAndUseYnIsTrue(
                 pageable, request.getGenre(), request.getState()
-        ).map(ShowResponse::of);
+        ).stream().map(ShowResponse::of).toList();
     }
 
-    public Slice<ShowResponse> search(Pageable pageable, String keyword) {
-        return showRepository.findSliceWithByNameStartsWithAndUseYnIsTrue(pageable, keyword)
-                .map(ShowResponse::of);
+    public List<ShowResponse> search(final Pageable pageable, final String keyword) {
+        return showRepository.findAllWithByNameStartsWithAndUseYnIsTrue(pageable, keyword)
+                .stream().map(ShowResponse::of).toList();
     }
 
-    public Slice<ShowResponse> getListToOpen(Pageable pageable, LocalDate startDate) {
-        return showRepository.findSliceWithByStartDateGreaterThanEqualAndUseYnIsTrue(pageable, startDate)
-                .map(ShowResponse::of);
+    public List<ShowResponse> getListToOpen(final Pageable pageable, final LocalDate startDate) {
+        return showRepository.findAllWithByStartDateGreaterThanEqualAndUseYnIsTrue(pageable, startDate)
+                .stream().map(ShowResponse::of).toList();
     }
 
-    public Slice<ShowResponse> getListToEnd(Pageable pageable, LocalDate endDate, @Nullable ShowGenre genre) {
+    public List<ShowResponse> getListToEnd(
+            final Pageable pageable, final LocalDate endDate, @Nullable final ShowGenre genre
+    ) {
         return Optional.ofNullable(genre)
-                .map(g -> showRepository.findSliceWithByGenreAndEndDateGreaterThanEqualAndUseYnIsTrue(
+                .map(g -> showRepository.findAllWithByGenreAndEndDateGreaterThanEqualAndUseYnIsTrue(
                         pageable, g, endDate
                 ))
-                .orElseGet(() -> showRepository.findSliceWithByEndDateGreaterThanEqualAndUseYnIsTrue(
+                .orElseGet(() -> showRepository.findAllWithByEndDateGreaterThanEqualAndUseYnIsTrue(
                         pageable, endDate
                 ))
-                .map(ShowResponse::of);
+                .stream().map(ShowResponse::of).toList();
     }
 
-    public Slice<ShowResponse> getListOfFacility(
+    public List<ShowResponse> getListOfFacility(
             final Pageable pageable, final FacilityId facilityId, @Nullable final ShowGenre genre) {
         Facility facility = getFacilityById(facilityId);
-        final Slice<Show> shows = Optional.ofNullable(genre)
-                .map(g -> showRepository.findSliceWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
-                .orElseGet(() -> showRepository.findSliceWithByFacilityAndUseYnIsTrue(pageable, facility));
-        final Map<ShowId, ShowReviewStats> showIdToReviewStats = showReviewStatsRepository.findAllById(
-                        shows.stream().map(Show::getId).toList())
-                .stream()
-                .collect(Collectors.toUnmodifiableMap(ShowReviewStats::getId, Function.identity()));
-        return shows
+        final List<Show> shows = Optional.ofNullable(genre)
+                .map(g -> showRepository.findAllWithByFacilityAndGenreAndUseYnIsTrue(pageable, facility, genre))
+                .orElseGet(() -> showRepository.findAllWithByFacilityAndUseYnIsTrue(pageable, facility));
+        return shows.stream()
                 .map(show -> ShowResponse.builder()
-                        .id(show.getId().getId())
+                        .id(show.getId())
                         .name(show.getName())
                         .startDate(show.getStartDate())
                         .endDate(show.getEndDate())
@@ -94,10 +83,9 @@ public class ShowService {
                         .poster(show.getPoster())
                         .genre(show.getGenre())
                         .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .reviewCount(showIdToReviewStats.get(show.getId()).getReviewCount())
-                        .reviewGradeSum(showIdToReviewStats.get(show.getId()).getReviewGradeSum())
                         .runtime(show.getRuntime())
-                        .build());
+                        .build()
+                ).toList();
     }
 
     public ShowDetailResponse getDetail(final ShowId id) {

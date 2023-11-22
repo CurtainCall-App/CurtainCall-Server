@@ -3,8 +3,10 @@ package org.cmc.curtaincall.web.show;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.common.response.With;
 import org.cmc.curtaincall.web.show.request.ShowListRequest;
 import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
@@ -25,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,37 +40,48 @@ public class ShowController {
     private final ShowReviewStatsQueryService showReviewStatsQueryService;
 
     @GetMapping("/shows")
-    public Slice<ShowResponse> getShows(@Validated @ModelAttribute ShowListRequest showListRequest, Pageable pageable) {
-        return showService.getList(showListRequest, pageable);
+    public ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShows(
+            @Validated @ModelAttribute final ShowListRequest showListRequest,
+            final Pageable pageable
+    ) {
+        return getShowWithReviewStatsListResult(showService.getList(showListRequest, pageable));
     }
 
     @GetMapping("/shows/{showId}")
-    public With<ShowDetailResponse, ShowReviewStatsResponse> getShowDetail(@PathVariable ShowId showId) {
+    public With<ShowDetailResponse, ShowReviewStatsResponse> getShowDetail(@PathVariable final ShowId showId) {
         final ShowDetailResponse showDetailResponse = showService.getDetail(showId);
         final ShowReviewStatsDto showReviewStatsDto = showReviewStatsQueryService.get(showId);
         return new With<>(showDetailResponse, ShowReviewStatsResponse.of(showReviewStatsDto));
     }
 
     @GetMapping("/shows-to-open")
-    public Slice<ShowResponse> getShowListToOpen(
-            @SortDefault(sort = "startDate") Pageable pageable,
-            @RequestParam LocalDate startDate) {
-        return showService.getListToOpen(pageable, startDate);
+    public ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShowListToOpen(
+            @SortDefault(sort = "startDate") final Pageable pageable,
+            @RequestParam final LocalDate startDate) {
+        return getShowWithReviewStatsListResult(showService.getListToOpen(pageable, startDate));
     }
 
     @GetMapping("/shows-to-end")
-    public Slice<ShowResponse> getShowListToEnd(
-            @SortDefault(sort = "endDate") Pageable pageable,
-            @RequestParam LocalDate endDate,
-            @RequestParam(required = false) ShowGenre genre
+    public ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShowListToEnd(
+            @SortDefault(sort = "endDate") final Pageable pageable,
+            @RequestParam final LocalDate endDate,
+            @RequestParam(required = false) final ShowGenre genre
     ) {
-        return showService.getListToEnd(pageable, endDate, genre);
+        return getShowWithReviewStatsListResult(showService.getListToEnd(pageable, endDate, genre));
     }
 
     @GetMapping("/search/shows")
-    public Slice<ShowResponse> searchShows(
-            Pageable pageable, @RequestParam @Validated @Size(max = 100) @NotBlank String keyword) {
-        return showService.search(pageable, keyword);
+    public ListResult<With<ShowResponse, ShowReviewStatsResponse>> searchShows(
+            final Pageable pageable, @RequestParam @Validated @Size(max = 100) @NotBlank final String keyword
+    ) {
+        return getShowWithReviewStatsListResult(showService.search(pageable, keyword));
+    }
+
+    @GetMapping("/facilities/{facilityId}/shows")
+    public ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShowListOfFacility(
+            Pageable pageable, @PathVariable FacilityId facilityId, @RequestParam(required = false) ShowGenre genre
+    ) {
+        return getShowWithReviewStatsListResult(showService.getListOfFacility(pageable, facilityId, genre));
     }
 
     @GetMapping("/livetalk-show-times")
@@ -73,4 +89,17 @@ public class ShowController {
         return new SliceImpl<>(showService.getLiveTalkShowTimeList(baseDateTime));
     }
 
+    private ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShowWithReviewStatsListResult(
+            final List<ShowResponse> showResponses
+    ) {
+        final List<ShowId> showIds = showResponses.stream().map(ShowResponse::id).toList();
+        final Map<ShowId, ShowReviewStatsResponse> showIdToStats = showReviewStatsQueryService.getList(showIds)
+                .stream()
+                .collect(Collectors.toMap(ShowReviewStatsDto::showId, ShowReviewStatsResponse::of));
+        return new ListResult<>(showResponses.stream()
+                .map(show -> new With<>(
+                        show, showIdToStats.getOrDefault(show.id(), new ShowReviewStatsResponse(0, 0L, 0D)
+                ))).toList()
+        );
+    }
 }

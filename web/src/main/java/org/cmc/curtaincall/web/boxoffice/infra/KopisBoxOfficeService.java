@@ -75,8 +75,6 @@ public class KopisBoxOfficeService implements BoxOfficeService {
                         .endDate(showIdToShow.get(boxOffice.getShowId()).getEndDate())
                         .poster(showIdToShow.get(boxOffice.getShowId()).getPoster())
                         .genre(showIdToShow.get(boxOffice.getShowId()).getGenre())
-                        .reviewCount(showIdToShow.get(boxOffice.getShowId()).getReviewCount())
-                        .reviewGradeSum(showIdToShow.get(boxOffice.getShowId()).getReviewGradeSum())
                         .rank(boxOffice.getRank())
                         .build()
                 ).toList();

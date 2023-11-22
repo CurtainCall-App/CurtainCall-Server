@@ -14,8 +14,6 @@ public record BoxOfficeResponse(
         LocalDate endDate,          // 공연 종료일
         String poster,              // 공연 포스터 경로
         ShowGenre genre,               // 공연 장르명
-        long reviewGradeSum,
-        int reviewCount,
         int rank
 ) {
 }

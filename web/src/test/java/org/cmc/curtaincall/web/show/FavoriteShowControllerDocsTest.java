@@ -2,10 +2,9 @@ package org.cmc.curtaincall.web.show;
 
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.show.FavoriteShowController;
-import org.cmc.curtaincall.web.show.FavoriteShowService;
 import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.junit.jupiter.api.Test;
@@ -25,9 +24,15 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,7 +114,7 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     void getFavoriteShowList_Docs() throws Exception {
         List<FavoriteShowResponse> favoriteShowResponseList = List.of(
                 FavoriteShowResponse.builder()
-                        .id("PF220846")
+                        .id(new ShowId("PF220846"))
                         .name("잘자요, 엄마 [청주]")
                         .startDate(LocalDate.of(2023, 4, 28))
                         .endDate(LocalDate.of(2023, 5, 12))

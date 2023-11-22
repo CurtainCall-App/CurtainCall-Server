@@ -163,12 +163,4 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
     public void addShowDateTime(LocalDateTime showAt) {
         showDateTimes.add(new ShowDateTime(this, showAt));
     }
-
-    public Integer getReviewCount() {
-        return 0;
-    }
-
-    public Long getReviewGradeSum() {
-        return 0L;
-    }
 }

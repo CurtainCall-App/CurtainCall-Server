@@ -75,7 +75,7 @@ public class FavoriteShowService {
                 .map(FavoriteShow::getShow)
                 .filter(Show::getUseYn)
                 .map(show -> FavoriteShowResponse.builder()
-                        .id(show.getId().getId())
+                        .id(show.getId())
                         .name(show.getName())
                         .startDate(show.getStartDate())
                         .endDate(show.getEndDate())
@@ -83,8 +83,6 @@ public class FavoriteShowService {
                         .poster(show.getPoster())
                         .genre(show.getGenre())
                         .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .reviewCount(show.getReviewCount())
-                        .reviewGradeSum(show.getReviewGradeSum())
                         .runtime(show.getRuntime())
                         .build()
                 ).toList();
