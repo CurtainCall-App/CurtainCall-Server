@@ -2,24 +2,40 @@ package org.cmc.curtaincall.batch.job.show;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
-import org.cmc.curtaincall.domain.show.*;
+import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
+import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowDay;
+import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.domain.show.ShowState;
+import org.cmc.curtaincall.domain.show.ShowTime;
+import org.cmc.curtaincall.domain.show.dao.ShowExistsDao;
 import org.springframework.batch.item.ItemProcessor;
 
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowResponse>, Show> {
+public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show> {
 
     private final KopisService kopisService;
+
+    private final ShowExistsDao showExistsDao;
 
     private final Set<String> allowedGenreNames = Arrays.stream(ShowGenre.values())
             .map(ShowGenre::getTitle)
@@ -46,19 +62,19 @@ public class ShowKopisItemProcessor implements ItemProcessor<WithPresent<ShowRes
     );
 
     @Override
-    public Show process(WithPresent<ShowResponse> item) throws Exception {
-        if (item.present()) {
-            log.debug("공연({})은 존재하는 데이터입니다.", item.value().id());
+    public Show process(ShowResponse item) throws Exception {
+        final ShowId showId = new ShowId(item.id());
+        if (showExistsDao.exists(showId)) {
+            log.debug("공연({})은 존재하는 데이터입니다.", showId);
             return null;
         }
-        ShowResponse showResponse = item.value();
-        if (!allowedGenreNames.contains(showResponse.genreName())) {
-            log.debug("공연({})은 다루지 않는 장르({})입니다.", showResponse.id(), showResponse.genreName());
+        if (!allowedGenreNames.contains(item.genreName())) {
+            log.debug("공연({})은 다루지 않는 장르({})입니다.", item.id(), item.genreName());
             return null;
         }
 
-        ShowGenre showGenre = genreNameToValue.get(showResponse.genreName());
-        ShowDetailResponse showDetail = kopisService.getShowDetail(showResponse.id());
+        ShowGenre showGenre = genreNameToValue.get(item.genreName());
+        ShowDetailResponse showDetail = kopisService.getShowDetail(item.id());
         List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
         LocalDate startDate = LocalDate.parse(showDetail.startDate(), showDateFormatter);
         LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
