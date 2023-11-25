@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class WithdrawalJob {
+public class WithdrawalJobConfig {
 
     private static final String JOB_NAME = "WithdrawalJob";
 
