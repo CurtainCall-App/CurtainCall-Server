@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -88,15 +86,13 @@ class KopisBoxOfficeServiceTest {
         );
 
         final Show show = mock(Show.class);
-        given(show.getId()).willReturn("PF227565");
+        given(show.getId()).willReturn(new ShowId("PF227565"));
         given(show.getName()).willReturn("name");
         given(show.getStartDate()).willReturn(LocalDate.of(2023, 11, 9));
         given(show.getEndDate()).willReturn(LocalDate.of(2023, 11, 10));
         given(show.getPoster()).willReturn("poster");
         given(show.getGenre()).willReturn(ShowGenre.MUSICAL);
-        given(show.getReviewCount()).willReturn(10);
-        given(show.getReviewGradeSum()).willReturn(45L);
-        given(showRepository.findAllById(List.of("PF227565"))).willReturn(List.of(show));
+        given(showRepository.findAllById(List.of(new ShowId("PF227565")))).willReturn(List.of(show));
 
         // when
         final BoxOfficeRequest request = new BoxOfficeRequest(
@@ -113,8 +109,6 @@ class KopisBoxOfficeServiceTest {
         assertThat(boxOfficeResponse.endDate()).isEqualTo(LocalDate.of(2023, 11, 10));
         assertThat(boxOfficeResponse.poster()).isEqualTo("poster");
         assertThat(boxOfficeResponse.genre()).isEqualTo(ShowGenre.MUSICAL);
-        assertThat(boxOfficeResponse.reviewGradeSum()).isEqualTo(45L);
-        assertThat(boxOfficeResponse.reviewCount()).isEqualTo(10);
         assertThat(boxOfficeResponse.rank()).isEqualTo(4);
 
         final RecordedRequest recordedRequest = mockWebServer.takeRequest();
@@ -151,7 +145,7 @@ class KopisBoxOfficeServiceTest {
                         """)
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE)
         );
-        given(showRepository.findAllById(List.of("PF227565"))).willReturn(Collections.emptyList());
+        given(showRepository.findAllById(List.of(new ShowId("PF227565")))).willReturn(Collections.emptyList());
 
         // when
         final BoxOfficeRequest request = new BoxOfficeRequest(

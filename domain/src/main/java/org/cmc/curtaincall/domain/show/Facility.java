@@ -14,11 +14,10 @@ import org.springframework.data.domain.Persistable;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Facility extends BaseTimeEntity implements Persistable<String> {
+public class Facility extends BaseTimeEntity implements Persistable<FacilityId> {
 
-    @Id
-    @Column(name = "facility_id", length = 25)
-    private String id;
+    @EmbeddedId
+    private FacilityId id;
 
     @Column(name = "name", length = 105, nullable = false)
     private String name;
@@ -56,25 +55,25 @@ public class Facility extends BaseTimeEntity implements Persistable<String> {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
-    public Facility(String id) {
+    public Facility(final FacilityId id) {
         this.id = id;
     }
 
     @Builder
     private Facility(
-            String id,
-            String name,
-            Integer hallNum,
-            String characteristics,
-            Integer openingYear,
-            Integer seatNum,
-            String phone,
-            String homepage,
-            String address,
-            String sido,
-            String gugun,
-            Double latitude,
-            Double longitude) {
+            final FacilityId id,
+            final String name,
+            final Integer hallNum,
+            final String characteristics,
+            final Integer openingYear,
+            final Integer seatNum,
+            final String phone,
+            final String homepage,
+            final String address,
+            final String sido,
+            final String gugun,
+            final Double latitude,
+            final Double longitude) {
         this.id = id;
         this.name = name;
         this.hallNum = hallNum;

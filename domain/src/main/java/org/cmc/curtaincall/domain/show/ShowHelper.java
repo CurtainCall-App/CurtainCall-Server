@@ -10,13 +10,13 @@ public final class ShowHelper {
     }
 
     public static Show get(ShowId showId, ShowRepository showRepository) {
-        return showRepository.findById(showId.getId())
+        return showRepository.findById(showId)
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new ShowNotFoundException(showId));
     }
 
     public static Show getWithOptimisticLock(ShowId showId, ShowRepository showRepository) {
-        return showRepository.findWithLockById(showId.getId())
+        return showRepository.findWithLockById(showId)
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new ShowNotFoundException(showId));
     }

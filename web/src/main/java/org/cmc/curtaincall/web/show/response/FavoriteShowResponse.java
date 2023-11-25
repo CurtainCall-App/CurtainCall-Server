@@ -1,7 +1,8 @@
-package org.cmc.curtaincall.web.service.show.response;
+package org.cmc.curtaincall.web.show.response;
 
 import lombok.*;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowTime;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FavoriteShowResponse {
 
-    private String id;
+    private ShowId id;
 
     private String name;
 

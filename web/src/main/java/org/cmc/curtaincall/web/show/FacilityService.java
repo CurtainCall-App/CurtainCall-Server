@@ -1,10 +1,11 @@
-package org.cmc.curtaincall.web.service.facility;
+package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
+import org.cmc.curtaincall.domain.show.exception.FacilityNotFoundException;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
-import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.facility.response.FacilityDetailResponse;
+import org.cmc.curtaincall.web.show.response.FacilityDetailResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ public class FacilityService {
 
     private final FacilityRepository facilityRepository;
 
-    public FacilityDetailResponse getDetail(String id) {
+    public FacilityDetailResponse getDetail(final FacilityId id) {
         Facility facility = getFacilityById(id);
         return FacilityDetailResponse.builder()
                 .id(facility.getId())
@@ -32,9 +33,9 @@ public class FacilityService {
                 .build();
     }
 
-    private Facility getFacilityById(String id) {
+    private Facility getFacilityById(final FacilityId id) {
         return facilityRepository.findById(id)
                 .filter(Facility::getUseYn)
-                .orElseThrow(() -> new EntityNotFoundException("Facility id=" + id));
+                .orElseThrow(() -> new FacilityNotFoundException(id));
     }
 }

@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.service.show;
+package org.cmc.curtaincall.web.show;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,11 +6,12 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.domain.show.FavoriteShow;
 import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.FavoriteShowRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.show.response.FavoriteShowResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowFavoriteResponse;
+import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -55,11 +56,12 @@ public class FavoriteShowService {
     public List<ShowFavoriteResponse> areFavorite(Long memberId, List<String> showIds) {
         Member member = memberRepository.getReferenceById(memberId);
         List<Show> shows = showIds.stream()
+                .map(ShowId::new)
                 .map(showRepository::getReferenceById)
                 .toList();
         List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllByMemberAndShowIn(member, shows);
         Set<String> favoriteShowIds = favoriteShows.stream()
-                .map(favoriteShow -> favoriteShow.getShow().getId())
+                .map(favoriteShow -> favoriteShow.getShow().getId().getId())
                 .collect(Collectors.toSet());
         return showIds.stream()
                 .map(showId -> new ShowFavoriteResponse(showId, favoriteShowIds.contains(showId)))
@@ -81,8 +83,6 @@ public class FavoriteShowService {
                         .poster(show.getPoster())
                         .genre(show.getGenre())
                         .showTimes(new ArrayList<>(show.getShowTimes()))
-                        .reviewCount(show.getReviewCount())
-                        .reviewGradeSum(show.getReviewGradeSum())
                         .runtime(show.getRuntime())
                         .build()
                 ).toList();
@@ -90,7 +90,7 @@ public class FavoriteShowService {
     }
 
     private Show getShowById(String id) {
-        return showRepository.findById(id)
+        return showRepository.findById(new ShowId(id))
                 .filter(Show::getUseYn)
                 .orElseThrow(() -> new EntityNotFoundException("Show id=" + id));
     }

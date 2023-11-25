@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
@@ -50,7 +51,7 @@ public class PartyDetailResponse {
     private LocalDateTime showAt;
 
     @Nullable
-    private String facilityId;
+    private FacilityId facilityId;
 
     @Nullable
     private String facilityName;
@@ -72,7 +73,7 @@ public class PartyDetailResponse {
             @Nullable String showName,
             @Nullable String showPoster,
             @Nullable LocalDateTime showAt,
-            @Nullable String facilityId,
+            @Nullable FacilityId facilityId,
             @Nullable String facilityName
     ) {
         this.id = id;

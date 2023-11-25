@@ -18,7 +18,7 @@ public class FacilityExistsDao {
                 .selectOne()
                 .from(facility)
                 .where(
-                        facility.id.eq(facilityId.getId()),
+                        facility.id.eq(facilityId),
                         facility.useYn.isTrue()
                 )
                 .fetchFirst() != null;

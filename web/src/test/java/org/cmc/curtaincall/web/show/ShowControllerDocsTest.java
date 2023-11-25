@@ -1,19 +1,20 @@
-package org.cmc.curtaincall.web.controller;
+package org.cmc.curtaincall.web.show;
 
+import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowDay;
 import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.cmc.curtaincall.domain.show.ShowTime;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
-import org.cmc.curtaincall.web.service.show.ShowService;
-import org.cmc.curtaincall.web.service.show.response.ShowDateTimeResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowDetailResponse;
-import org.cmc.curtaincall.web.service.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
+import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
+import org.cmc.curtaincall.web.show.response.ShowResponse;
+import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -29,8 +30,12 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,12 +45,15 @@ class ShowControllerDocsTest extends AbstractWebTest {
     @MockBean
     private ShowService showService;
 
+    @MockBean
+    private ShowReviewStatsQueryService showReviewStatsQueryService;
+
     @Test
     void getShows_Docs() throws Exception {
         // given
         List<ShowResponse> showResponses = List.of(
                 ShowResponse.builder()
-                        .id("PF220846")
+                        .id(new ShowId("PF220846"))
                         .name("잘자요, 엄마 [청주]")
                         .startDate(LocalDate.of(2023, 4, 28))
                         .endDate(LocalDate.of(2023, 5, 12))
@@ -60,13 +68,20 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
-                        .reviewCount(10)
-                        .reviewGradeSum(48L)
                         .runtime("1시간 40분")
                         .build()
         );
 
-        given(showService.getList(any(), any())).willReturn(new SliceImpl<>(showResponses));
+        given(showService.getList(any(), any())).willReturn(showResponses);
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF220846")))).willReturn(
+                List.of(showReviewStatsDto));
 
         // expected
         mockMvc.perform(get("/shows")
@@ -109,6 +124,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
                                 fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
@@ -119,7 +135,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
         // given
         List<ShowResponse> showResponses = List.of(
                 ShowResponse.builder()
-                        .id("PF220846")
+                        .id(new ShowId("PF220846"))
                         .name("잘자요, 엄마 [청주]")
                         .startDate(LocalDate.of(2023, 4, 28))
                         .endDate(LocalDate.of(2023, 5, 12))
@@ -134,13 +150,20 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
-                        .reviewCount(10)
-                        .reviewGradeSum(48L)
                         .runtime("1시간 40분")
                         .build()
         );
 
-        given(showService.search(any(), any())).willReturn(new SliceImpl<>(showResponses));
+        given(showService.search(any(), any())).willReturn(showResponses);
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF220846")))).willReturn(
+                List.of(showReviewStatsDto));
 
         // expected
         mockMvc.perform(get("/search/shows")
@@ -173,6 +196,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
                                 fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
@@ -183,7 +207,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
         // given
         List<ShowResponse> showResponses = List.of(
                 ShowResponse.builder()
-                        .id("PF220846")
+                        .id(new ShowId("PF220846"))
                         .name("잘자요, 엄마 [청주]")
                         .startDate(LocalDate.of(2023, 4, 28))
                         .endDate(LocalDate.of(2023, 5, 12))
@@ -198,13 +222,20 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
-                        .reviewCount(10)
-                        .reviewGradeSum(48L)
                         .runtime("1시간 40분")
                         .build()
         );
 
-        given(showService.getListToOpen(any(), any())).willReturn(new SliceImpl<>(showResponses));
+        given(showService.getListToOpen(any(), any())).willReturn(showResponses);
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF220846")))).willReturn(
+                List.of(showReviewStatsDto));
 
         // expected
         mockMvc.perform(get("/shows-to-open")
@@ -237,6 +268,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
                                 fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
@@ -247,7 +279,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
         // given
         List<ShowResponse> showResponses = List.of(
                 ShowResponse.builder()
-                        .id("PF220846")
+                        .id(new ShowId("PF220846"))
                         .name("잘자요, 엄마 [청주]")
                         .startDate(LocalDate.of(2023, 4, 28))
                         .endDate(LocalDate.of(2023, 5, 12))
@@ -262,13 +294,20 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
                                 new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
                         ))
-                        .reviewCount(10)
-                        .reviewGradeSum(48L)
                         .runtime("1시간 40분")
                         .build()
         );
 
-        given(showService.getListToEnd(any(), any(), any())).willReturn(new SliceImpl<>(showResponses));
+        given(showService.getListToEnd(any(), any(), any())).willReturn(showResponses);
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF220846")))).willReturn(
+                List.of(showReviewStatsDto));
 
         // expected
         mockMvc.perform(get("/shows-to-end")
@@ -305,6 +344,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
                                 fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
@@ -314,11 +354,11 @@ class ShowControllerDocsTest extends AbstractWebTest {
     void getShowDetail_Docs() throws Exception {
         // given
         ShowDetailResponse response = ShowDetailResponse.builder()
-                .id("PF220846")
+                .id(new ShowId("PF220846"))
                 .name("잘자요, 엄마 [청주]")
                 .startDate(LocalDate.of(2023, 4, 28))
                 .endDate(LocalDate.of(2023, 5, 12))
-                .facilityId("FC000182")
+                .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .crew("이봉규")
                 .cast("이채윤, 정아름")
@@ -339,10 +379,16 @@ class ShowControllerDocsTest extends AbstractWebTest {
                         new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
                         new ShowTime(ShowDay.SUNDAY, LocalTime.of(16, 0))
                 ))
-                .reviewCount(10)
-                .reviewGradeSum(48L)
                 .build();
         given(showService.getDetail(any())).willReturn(response);
+
+        final ShowReviewStatsDto showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.get(new ShowId("PF220846"))).willReturn(showReviewStatsDto);
 
         // expected
         mockMvc.perform(get("/shows/{showId}", "PF220846")
@@ -377,7 +423,89 @@ class ShowControllerDocsTest extends AbstractWebTest {
                                         .type(ShowDay.class.getSimpleName()),
                                 fieldWithPath("showTimes[].time").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
-                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합")
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균")
+                        )
+                ));
+    }
+
+    @Test
+    void getShowListOfFacility_Docs() throws Exception {
+        // given
+        var response = ShowResponse.builder()
+                .id(new ShowId("PF220846"))
+                .name("잘자요, 엄마 [청주]")
+                .startDate(LocalDate.of(2023, 4, 28))
+                .endDate(LocalDate.of(2023, 5, 12))
+                .facilityName("예술나눔 터")
+                .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
+                .genre(ShowGenre.PLAY)
+                .showTimes(List.of(
+                        new ShowTime(ShowDay.WEDNESDAY, LocalTime.of(13, 30)),
+                        new ShowTime(ShowDay.THURSDAY, LocalTime.of(13, 30)),
+                        new ShowTime(ShowDay.SATURDAY, LocalTime.of(13, 30)),
+                        new ShowTime(ShowDay.SATURDAY, LocalTime.of(19, 30)),
+                        new ShowTime(ShowDay.SUNDAY, LocalTime.of(13, 30)),
+                        new ShowTime(ShowDay.SUNDAY, LocalTime.of(19, 30))
+                ))
+                .runtime("1시간 40분")
+                .build();
+
+        given(showService.getListOfFacility(any(), any(), any()))
+                .willReturn(List.of(response));
+
+        final var showReviewStatsDto = ShowReviewStatsDto.builder()
+                .showId(new ShowId("PF220846"))
+                .reviewCount(10)
+                .reviewGradeSum(48L)
+                .reviewGradeAvg(((double) 10) / 48)
+                .build();
+        given(showReviewStatsQueryService.getList(List.of(new ShowId("PF220846")))).willReturn(
+                List.of(showReviewStatsDto));
+
+        // expected
+        mockMvc.perform(get("/facilities/{facilityId}/shows", "FC001298")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("genre", ShowGenre.PLAY.name())
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("facility-get-show-list-of-facility",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        pathParameters(
+                                parameterWithName("facilityId").description("공연장 ID")
+                        ),
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("genre").description("공연 장르")
+                                        .attributes(type(ShowGenre.class))
+                                        .optional()
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("name").description("공연명"),
+                                fieldWithPath("startDate").description("공연 시작일"),
+                                fieldWithPath("endDate").description("공연 종료일"),
+                                fieldWithPath("facilityName").description("공연 시설명"),
+                                fieldWithPath("poster").description("공연 포스터 경로"),
+                                fieldWithPath("genre").description("공연 장르명")
+                                        .type(ShowGenre.class.getSimpleName()),
+                                fieldWithPath("showTimes[].dayOfWeek").description("공연 요일")
+                                        .type(ShowDay.class.getSimpleName()),
+                                fieldWithPath("showTimes[].time").description("공연 시간"),
+                                fieldWithPath("reviewCount").description("리뷰 수"),
+                                fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
+                                fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
+                                fieldWithPath("runtime").description("공연 런타임")
                         )
                 ));
     }
@@ -389,7 +517,7 @@ class ShowControllerDocsTest extends AbstractWebTest {
                 ShowDateTimeResponse.builder()
                         .id("PF220846")
                         .name("잘자요, 엄마 [청주]")
-                        .facilityId("FC000182")
+                        .facilityId(new FacilityId("FC000182"))
                         .facilityName("예술나눔 터")
                         .genre(ShowGenre.PLAY)
                         .poster("http://www.kopis.or.kr/upload/pfmPoster/PF_PF220846_230704_164730.jpg")
