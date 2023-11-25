@@ -28,9 +28,5 @@ public class PartyCreateValidator implements Validator {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "showAt", "required",
                     "기타 파티가 아닌 경우 공연 일시가 필요합니다.");
         }
-        if (partyCreate.getMaxMemberNum() > 10) {
-            errors.rejectValue("maxMemberNum", "range", new Integer[] {partyCreate.getMaxMemberNum()},
-                    "기타 파티인 경우 최대 파티원은 10 이하여야 합니다.");
-        }
     }
 }
