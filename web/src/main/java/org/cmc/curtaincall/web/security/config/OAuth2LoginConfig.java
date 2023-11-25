@@ -44,6 +44,7 @@ public class OAuth2LoginConfig {
     }
 
     @Bean
+    @Profile("local")
     public OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler(
             final ObjectMapper objectMapper,
             final CurtainCallJwtEncoderService jwtEncoderService,
