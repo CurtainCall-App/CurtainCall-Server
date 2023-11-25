@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.security;
 
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.security.controller.AccessTokenController;
+import org.cmc.curtaincall.web.security.controller.LoginController;
 import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.junit.jupiter.api.Test;
@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AccessTokenController.class)
-class AccessTokenControllerDocsTest extends AbstractWebTest {
+@WebMvcTest(LoginController.class)
+class LoginControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private UsernameService usernameService;
@@ -39,7 +39,7 @@ class AccessTokenControllerDocsTest extends AbstractWebTest {
 
     @Test
     @WithMockUser
-    void issueAccessToken_Docs() throws Exception {
+    void login_Docs() throws Exception {
         // given
         given(usernameService.getUsername(any())).willReturn("test-username");
         Jwt jwt = mock(Jwt.class);
@@ -47,7 +47,7 @@ class AccessTokenControllerDocsTest extends AbstractWebTest {
         given(jwt.getExpiresAt()).willReturn(Instant.now());
         given(jwtEncoderService.encode("test-username")).willReturn(jwt);
         given(accountDao.getMemberId("test-username")).willReturn(new MemberId(123L));
-        mockMvc.perform(post("/v1/token")
+        mockMvc.perform(post("/login")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -56,7 +56,7 @@ class AccessTokenControllerDocsTest extends AbstractWebTest {
                 .andExpect(jsonPath("$.memberId").isNotEmpty())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty())
                 .andExpect(jsonPath("$.accessTokenExpiresAt").isNotEmpty())
-                .andDo(document("security-issue-access-token",
+                .andDo(document("security-login",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("OAuth2 Open ID 토큰 (id_token)")
                         ),

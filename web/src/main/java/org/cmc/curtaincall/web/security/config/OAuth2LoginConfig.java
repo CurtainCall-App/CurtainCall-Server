@@ -60,7 +60,7 @@ public class OAuth2LoginConfig {
             HttpSecurity http,
             JwtIssuerAuthenticationManagerResolver authenticationManagerResolver
     ) throws Exception {
-        return http.securityMatcher("/v1/token", "/signup")
+        return http.securityMatcher("/login", "/signup")
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())

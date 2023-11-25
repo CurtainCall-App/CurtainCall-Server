@@ -16,7 +16,7 @@ import java.time.ZoneId;
 
 @RestController
 @RequiredArgsConstructor
-public class AccessTokenController {
+public class LoginController {
 
     private final UsernameService usernameService;
 
@@ -24,8 +24,8 @@ public class AccessTokenController {
 
     private final AccountDao accountDao;
 
-    @PostMapping("/v1/token")
-    public LoginResponse issueAccessToken(Authentication authentication) {
+    @PostMapping("/login")
+    public LoginResponse login(Authentication authentication) {
         String username = usernameService.getUsername(authentication);
         Jwt jwt = jwtEncoderService.encode(username);
         final MemberId memberId = accountDao.getMemberId(username);

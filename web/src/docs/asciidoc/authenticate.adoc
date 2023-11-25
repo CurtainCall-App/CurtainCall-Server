@@ -17,10 +17,10 @@ operation::auth-login-page[snippets='http-request,path-parameters']
 소셜 로그인 별 로그인 웹 페이지 응답
 
 
-[[security-issue-access-token]]
-== 커튼콜 액세스 토큰 발급
+[[security-login]]
+== 커튼콜 로그인
 
-operation::security-issue-access-token[snippets='http-request,request-headers,http-response,response-fields']
+operation::security-login[snippets='http-request,request-headers,http-response,response-fields']
 
 
 [[account-get-user-member]]
