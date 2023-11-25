@@ -6,7 +6,7 @@ import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
 import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.review.response.ShowReviewLikedResponse;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

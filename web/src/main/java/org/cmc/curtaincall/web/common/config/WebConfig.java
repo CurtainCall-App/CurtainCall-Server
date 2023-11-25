@@ -8,7 +8,7 @@ import org.cmc.curtaincall.domain.party.convert.StringToPartyIdConverter;
 import org.cmc.curtaincall.domain.review.convert.StringToShowReviewIdConverter;
 import org.cmc.curtaincall.domain.show.convert.StringToFacilityIdConverter;
 import org.cmc.curtaincall.domain.show.convert.StringToShowIdConverter;
-import org.cmc.curtaincall.web.security.LoginMemberIdArgumentResolver;
+import org.cmc.curtaincall.web.security.config.LoginMemberIdArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

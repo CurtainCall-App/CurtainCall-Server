@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.service;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.security.core.Authentication;

@@ -198,7 +198,7 @@ create table party_member
     member_id       bigint not null,
     party_id        bigint not null,
     party_member_id bigint not null auto_increment,
-    primary key (party_member)
+    primary key (party_member_id)
 ) engine=InnoDB;
 
 alter table party_member

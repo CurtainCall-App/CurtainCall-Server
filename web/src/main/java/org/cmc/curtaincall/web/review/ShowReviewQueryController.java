@@ -8,7 +8,7 @@ import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.ListResult;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;

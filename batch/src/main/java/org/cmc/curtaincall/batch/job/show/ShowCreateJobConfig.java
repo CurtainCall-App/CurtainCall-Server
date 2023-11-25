@@ -4,10 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.batch.job.common.WithPresent;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.dao.ShowExistsDao;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -50,6 +50,8 @@ public class ShowCreateJobConfig {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private final ShowExistsDao showExistsDao;
+
     @Bean
     public Job showCreateJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
@@ -64,7 +66,7 @@ public class ShowCreateJobConfig {
     public Step showCreateStep() {
         StepBuilder stepBuilder = new StepBuilder(STEP_NAME, jobRepository);
         return stepBuilder
-                .<WithPresent<ShowResponse>, Show>chunk(CHUNK_SIZE, txManager)
+                .<ShowResponse, Show>chunk(CHUNK_SIZE, txManager)
                 .reader(showKopisPagingItemReader(null, null))
                 .processor(showKopisItemProcessor())
                 .writer(showItemWriter())
@@ -83,8 +85,7 @@ public class ShowCreateJobConfig {
         ShowKopisPagingItemReader itemReader = new ShowKopisPagingItemReader(
                 kopisService,
                 LocalDate.parse(startDate, formatter),
-                LocalDate.parse(endDate, formatter),
-                em
+                LocalDate.parse(endDate, formatter)
         );
         itemReader.setPageSize(CHUNK_SIZE);
         return itemReader;
@@ -93,7 +94,7 @@ public class ShowCreateJobConfig {
     @Bean
     @StepScope
     public ShowKopisItemProcessor showKopisItemProcessor() {
-        return new ShowKopisItemProcessor(kopisService);
+        return new ShowKopisItemProcessor(kopisService, showExistsDao);
     }
 
     @Bean

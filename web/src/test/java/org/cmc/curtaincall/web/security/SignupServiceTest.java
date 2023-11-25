@@ -7,6 +7,7 @@ import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.exception.MemberNicknameAlreadyExistsException;
 import org.cmc.curtaincall.domain.member.repository.MemberRepository;
 import org.cmc.curtaincall.web.security.request.SignupRequest;
+import org.cmc.curtaincall.web.security.service.SignupService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

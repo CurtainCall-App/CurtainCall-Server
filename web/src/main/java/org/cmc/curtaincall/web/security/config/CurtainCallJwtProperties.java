@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

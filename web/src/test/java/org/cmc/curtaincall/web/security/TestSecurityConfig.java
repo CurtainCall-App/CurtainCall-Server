@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.security;
 
+import org.cmc.curtaincall.web.security.config.SecurityConfig;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

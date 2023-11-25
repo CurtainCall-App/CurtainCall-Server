@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.controller;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,6 +7,8 @@ import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.BooleanResult;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.security.service.SignupService;
+import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.cmc.curtaincall.web.security.request.SignupRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;

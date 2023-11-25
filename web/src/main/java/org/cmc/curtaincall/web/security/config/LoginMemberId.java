@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

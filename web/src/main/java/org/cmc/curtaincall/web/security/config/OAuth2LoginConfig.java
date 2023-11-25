@@ -1,18 +1,22 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.cmc.curtaincall.domain.account.dao.AccountDao;
+import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
+import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
@@ -20,6 +24,7 @@ public class OAuth2LoginConfig {
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Profile("local")
     public SecurityFilterChain oauth2LoginSecurityFilterChain(
             HttpSecurity http,
             OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler
@@ -39,11 +44,14 @@ public class OAuth2LoginConfig {
     }
 
     @Bean
+    @Profile("local")
     public OAuth2LoginAuthenticationSuccessHandler oAuth2LoginAuthenticationSuccessHandler(
             final ObjectMapper objectMapper,
             final CurtainCallJwtEncoderService jwtEncoderService,
-            final UsernameService usernameService) {
-        return new OAuth2LoginAuthenticationSuccessHandler(objectMapper, jwtEncoderService, usernameService);
+            final UsernameService usernameService,
+            final AccountDao accountDao) {
+        return new OAuth2LoginAuthenticationSuccessHandler(
+                objectMapper, jwtEncoderService, usernameService, accountDao);
     }
 
     @Bean
@@ -52,7 +60,7 @@ public class OAuth2LoginConfig {
             HttpSecurity http,
             JwtIssuerAuthenticationManagerResolver authenticationManagerResolver
     ) throws Exception {
-        return http.securityMatcher(new AntPathRequestMatcher("/v1/token", HttpMethod.POST.name()))
+        return http.securityMatcher("/login", "/signup")
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
@@ -69,11 +77,11 @@ public class OAuth2LoginConfig {
     @Bean
     public JwtIssuerAuthenticationManagerResolver authenticationManagerResolver(
             OAuth2ClientProperties properties) {
-        return new JwtIssuerAuthenticationManagerResolver(properties.getProvider()
+        final List<String> trustedIssuers = properties.getProvider()
                 .values().stream()
                 .map(OAuth2ClientProperties.Provider::getIssuerUri)
-                .toList()
-        );
+                .toList();
+        return new JwtIssuerAuthenticationManagerResolver(trustedIssuers);
     }
 
 }

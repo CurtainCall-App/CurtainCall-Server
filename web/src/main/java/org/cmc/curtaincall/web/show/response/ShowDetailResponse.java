@@ -8,6 +8,7 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowTime;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -48,8 +49,8 @@ public record ShowDetailResponse (
                 .poster(show.getPoster())
                 .story(show.getStory())
                 .genre(show.getGenre())
-                .introductionImages(show.getIntroductionImages())
-                .showTimes(show.getShowTimes())
+                .introductionImages(new ArrayList<>(show.getIntroductionImages()))
+                .showTimes(new ArrayList<>(show.getShowTimes()))
                 .build();
     }
 }

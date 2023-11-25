@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.member.request.MemberEdit;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
