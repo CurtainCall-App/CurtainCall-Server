@@ -9,7 +9,7 @@ import org.cmc.curtaincall.domain.party.dao.PartyDao;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.domain.party.response.*;
 import org.cmc.curtaincall.web.common.response.ListResult;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;

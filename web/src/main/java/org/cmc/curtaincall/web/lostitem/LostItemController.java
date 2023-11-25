@@ -9,7 +9,7 @@ import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.exception.EntityAccessDeniedException;
 import org.cmc.curtaincall.web.lostitem.request.LostItemCreate;
 import org.cmc.curtaincall.web.lostitem.request.LostItemEdit;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

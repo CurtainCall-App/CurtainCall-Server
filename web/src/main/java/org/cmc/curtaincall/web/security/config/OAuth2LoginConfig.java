@@ -1,7 +1,9 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
+import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
+import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

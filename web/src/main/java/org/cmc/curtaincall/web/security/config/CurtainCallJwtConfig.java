@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -7,6 +7,8 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
+import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

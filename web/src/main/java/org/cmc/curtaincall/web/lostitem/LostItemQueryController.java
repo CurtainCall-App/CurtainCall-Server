@@ -10,7 +10,7 @@ import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemResponse;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.response.ListResult;
-import org.cmc.curtaincall.web.security.LoginMemberId;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;

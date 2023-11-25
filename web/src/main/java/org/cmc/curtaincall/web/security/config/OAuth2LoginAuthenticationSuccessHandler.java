@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security;
+package org.cmc.curtaincall.web.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
+import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.cmc.curtaincall.web.security.response.LoginResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
