@@ -24,7 +24,6 @@ public class AccountDao {
                 .where(
                         account.username.eq(username),
                         member.useYn
-
                 )
                 .fetchOne());
     }
