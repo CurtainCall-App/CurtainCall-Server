@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.security;
 
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.time.Instant;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -38,21 +41,26 @@ class AccessTokenControllerDocsTest extends AbstractWebTest {
         given(usernameService.getUsername(any())).willReturn("test-username");
         Jwt jwt = mock(Jwt.class);
         given(jwt.getTokenValue()).willReturn("test-jwt");
+        given(jwt.getExpiresAt()).willReturn(Instant.now());
         given(jwtEncoderService.encode("test-username")).willReturn(jwt);
-
+        given(accountDao.getMemberId("test-username")).willReturn(new MemberId(123L));
         mockMvc.perform(post("/v1/token")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").value("test-jwt"))
+                .andExpect(jsonPath("$.memberId").isNotEmpty())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andExpect(jsonPath("$.accessTokenExpiresAt").isNotEmpty())
                 .andDo(document("security-issue-access-token",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("OAuth2 Open ID 토큰 (id_token)")
                         ),
                         responseFields(
-                                fieldWithPath("accessToken").description("커튼콜 액세스 토큰")
+                                fieldWithPath("memberId").description("회원 ID"),
+                                fieldWithPath("accessToken").description("커튼콜 액세스 토큰"),
+                                fieldWithPath("accessTokenExpiresAt").description("커튼콜 액세스 토큰 만료 일시")
                         )
                 ));
     }
