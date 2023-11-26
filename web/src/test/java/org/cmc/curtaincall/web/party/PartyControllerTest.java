@@ -81,7 +81,7 @@ class PartyControllerTest extends AbstractWebTest {
     }
 
     @Test
-    @DisplayName("파티 생성 - 기타 파티 아닌 경우 최대 파티원 수 10")
+    @DisplayName("파티 생성 - 기타 파티 아닌 경우 최대 파티원 수 100")
     void createParty_when_NotEtcCategory_then_maxMemberNumLessOrEqual10() throws Exception {
         // given
         PartyCreate partyCreate = PartyCreate.builder()
@@ -89,7 +89,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
-                .maxMemberNum(11)
+                .maxMemberNum(101)
                 .category(PartyCategory.WATCHING)
                 .build();
         given(partyService.create(any())).willReturn(new PartyId(10L));
