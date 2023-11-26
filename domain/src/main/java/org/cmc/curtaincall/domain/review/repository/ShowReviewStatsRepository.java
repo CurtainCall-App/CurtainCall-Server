@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Lock;
 
 import java.util.Optional;
 
-public interface ShowReviewStatsRepository extends JpaRepository<ShowReviewStats, ShowId> {
+public interface ShowReviewStatsRepository extends JpaRepository<ShowReviewStats, ShowId>, ShowReviewStatsRepositoryCustom{
 
     @Lock(LockModeType.OPTIMISTIC)
     Optional<ShowReviewStats> findWithLockById(ShowId id);
