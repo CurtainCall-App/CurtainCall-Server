@@ -27,7 +27,8 @@ public class SecurityConfig {
             "/box-office",
             "/shows/{showId}/reviews",
             "/notices",
-            "/notices/{noticeId}"
+            "/notices/{noticeId}",
+            "/members/duplicate/nickname"
     };
 
     @Bean
