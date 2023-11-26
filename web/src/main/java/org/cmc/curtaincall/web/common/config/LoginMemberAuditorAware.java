@@ -22,12 +22,18 @@ public class LoginMemberAuditorAware implements AuditorAware<CreatorId> {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName)
-                .map(username -> jdbcTemplate.queryForObject("""
-                        select a.member_id
-                        from account a
-                        join member m on m.member_id = a.member_id
-                        where a.username = ? and m.use_yn
-                        """, Long.class, username))
+                .map(username -> {
+                    try {
+                        return jdbcTemplate.queryForObject("""
+                                select a.member_id
+                                from account a
+                                join member m on m.member_id = a.member_id
+                                where a.username = ? and m.use_yn
+                                """, Long.class, username);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
                 .map(MemberId::new)
                 .map(CreatorId::new);
     }
