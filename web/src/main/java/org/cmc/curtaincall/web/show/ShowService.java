@@ -2,6 +2,8 @@ package org.cmc.curtaincall.web.show;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.review.ShowReviewStats;
+import org.cmc.curtaincall.domain.review.repository.ShowReviewStatsRepository;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.Show;
@@ -38,7 +40,15 @@ public class ShowService {
 
     private final ShowDateTimeRepository showDateTimeRepository;
 
+    private final ShowReviewStatsRepository showReviewStatsRepository;
+
     public List<ShowResponse> getList(final ShowListRequest request, final Pageable pageable) {
+        if (Optional.ofNullable(pageable.getSort().getOrderFor("reviewGradeAvg")).isPresent()) {
+            final List<ShowId> showIds = showReviewStatsRepository.findAllByGenreAndStateAndUseYnIsTrue(
+                    pageable, request.getGenre(), request.getState()
+            ).stream().map(ShowReviewStats::getId).toList();
+            return showRepository.findAllById(showIds).stream().map(ShowResponse::of).toList();
+        }
         return showRepository.findAllWithFacilityByGenreAndStateAndUseYnIsTrue(
                 pageable, request.getGenre(), request.getState()
         ).stream().map(ShowResponse::of).toList();
