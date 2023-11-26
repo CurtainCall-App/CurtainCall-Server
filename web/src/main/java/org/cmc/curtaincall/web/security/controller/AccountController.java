@@ -40,11 +40,11 @@ public class AccountController {
     }
 
     @PostMapping("/signup")
-    public void signup(
+    public IdResult<MemberId> signup(
             @Validated @RequestBody SignupRequest signupRequest,
             Authentication authentication
     ) {
         final String username = usernameService.getUsername(authentication);
-        signupService.signup(username, signupRequest);
+        return new IdResult<>(signupService.signup(username, signupRequest));
     }
 }

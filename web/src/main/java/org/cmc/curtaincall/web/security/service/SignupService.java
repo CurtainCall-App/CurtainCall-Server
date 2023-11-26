@@ -24,7 +24,7 @@ public class SignupService {
     }
 
     @Transactional
-    public void signup(final String username, final SignupRequest request) {
+    public MemberId signup(final String username, final SignupRequest request) {
         validateNickname(request.getNickname());
         final Member member = memberRepository.save(Member.builder()
                 .nickname(request.getNickname())
@@ -33,6 +33,7 @@ public class SignupService {
                         .username(username)
                         .memberId(new MemberId(member.getId()))
                 .build());
+        return new MemberId(member.getId());
     }
 
     private void validateNickname(final String nickname) {

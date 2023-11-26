@@ -113,6 +113,9 @@ class AccountControllerDocsTest extends AbstractWebTest {
                         requestFields(
                                 fieldWithPath("nickname").description("회원 닉네임")
                                         .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID")
                         )
                 ))
         ;
