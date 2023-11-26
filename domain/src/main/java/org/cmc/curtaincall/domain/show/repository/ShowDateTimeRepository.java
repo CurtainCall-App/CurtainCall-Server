@@ -10,10 +10,6 @@ import java.util.List;
 public interface ShowDateTimeRepository extends JpaRepository<ShowDateTime, Long> {
 
     @EntityGraph(attributePaths = {"show", "show.facility"})
-    List<ShowDateTime> findAllByShowAtAfterAndShowEndAtBefore(
-            LocalDateTime showAt, LocalDateTime showEndAt);
-
-    @EntityGraph(attributePaths = {"show", "show.facility"})
     List<ShowDateTime> findAllByShowAtLessThanEqualAndShowAtGreaterThan(
             LocalDateTime showAtLoe, LocalDateTime showAtGt);
 

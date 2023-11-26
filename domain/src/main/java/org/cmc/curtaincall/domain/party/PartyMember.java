@@ -2,10 +2,9 @@ package org.cmc.curtaincall.domain.party;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cmc.curtaincall.domain.member.Member;
+import org.cmc.curtaincall.domain.member.MemberId;
 
 @Entity
 @Table(name = "party_member",
@@ -25,20 +24,18 @@ public class PartyMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "party_member")
+    @Column(name = "party_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "party_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Party party;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Member member;
+    @Embedded
+    private MemberId memberId;
 
-    @Builder
-    public PartyMember(Party party, Member member) {
+    public PartyMember(final Party party, final MemberId memberId) {
         this.party = party;
-        this.member = member;
+        this.memberId = memberId;
     }
 }

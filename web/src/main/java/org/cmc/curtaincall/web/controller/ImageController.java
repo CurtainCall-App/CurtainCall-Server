@@ -2,7 +2,7 @@ package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.web.exception.InvalidImageException;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PostMapping;

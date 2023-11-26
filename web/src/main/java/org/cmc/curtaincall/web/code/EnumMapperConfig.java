@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.code;
 
 import org.cmc.curtaincall.domain.lostitem.LostItemType;
-import org.cmc.curtaincall.domain.member.MemberDeleteReason;
+import org.cmc.curtaincall.domain.member.MemberWithdrawReason;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
@@ -26,7 +26,7 @@ public class EnumMapperConfig {
         enumMapperFactory.put(BoxOfficeType.class.getSimpleName(), BoxOfficeType.class);
         enumMapperFactory.put(ShowDay.class.getSimpleName(), ShowDay.class);
         enumMapperFactory.put(ShowGenre.class.getSimpleName(), ShowGenre.class);
-        enumMapperFactory.put(MemberDeleteReason.class.getSimpleName(), MemberDeleteReason.class);
+        enumMapperFactory.put(MemberWithdrawReason.class.getSimpleName(), MemberWithdrawReason.class);
         enumMapperFactory.put(ShowState.class.getSimpleName(), ShowState.class);
         enumMapperFactory.put(ReportType.class.getSimpleName(), ReportType.class);
         return enumMapperFactory;

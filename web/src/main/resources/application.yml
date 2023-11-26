@@ -49,13 +49,14 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             client-name: Kakao
-            scope: ~
+            scope: openid
         provider:
           kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
+            issuer-uri: https://kauth.kakao.com
+            user-name-attribute: sub
+          apple:
+            issuer-uri: https://appleid.apple.com
+            user-name-attribute: sub
 
   cloud:
     aws:
@@ -65,15 +66,19 @@ spring:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
 
+  cache:
+    type: SIMPLE
+    cache-names: boxOffices
+
 app:
   s3:
     bucket-name: ${AWS_S3_BUCKET}
   kopis:
+    base-url: "http://www.kopis.or.kr"
     service-key: ${KOPIS_SERVICE_KEY}
   jwt:
     secret: ${JWT_SECRET}
     access-token-validity: ${JWT_ACCESS_TOKEN_VALIDITY}
-    refresh-token-validity: ${JWT_REFRESH_TOKEN_VALIDITY}
 
 ---
 spring:
@@ -86,6 +91,10 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
   security:
     oauth2:
@@ -101,6 +110,9 @@ logging:
         SQL: debug
         orm.jdbc.bind: trace
       apache.coyote.http11: debug
+      springframework:
+        security: trace
+        cache: trace
 
 ---
 spring:
@@ -119,4 +131,3 @@ spring:
         registration:
           kakao:
             redirect-uri: http://curtaincall.ap-northeast-2.elasticbeanstalk.com:8080/login/oauth2/code/kakao
-

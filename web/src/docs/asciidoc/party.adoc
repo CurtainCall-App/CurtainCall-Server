@@ -10,46 +10,62 @@
 [[party-get-party-list]]
 == 파티 리스트 조회
 
-operation::party-get-party-list[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::party-get-party-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[party-search]]
 == 파티 검색
 
-operation::party-search[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::party-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[party-get-party-detail]]
 == 파티 상세 조회
 
-operation::party-get-party-detail[snippets='http-request,path-parameters,http-response,response-fields']
+operation::party-get-party-detail[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
 
 [[party-create-party]]
 == 파티 생성
 
-operation::party-create-party[snippets='http-request,request-fields,http-response,response-fields']
+operation::party-create-party[snippets='http-request,request-headers,request-fields,http-response,response-fields']
+
+- 기타 파티일 시 showId, showAt 값은 null 이어야함
+- 기타 파티가 아닐 경우 showId, showAt 은 not null 이고, maxMemberNum 최대 10
+- 기타 파티가 아닐 경우 showId, showAt 은 무시됨
 
 
 [[party-delete-party]]
 == 파티 삭제
 
-operation::party-delete-party[snippets='http-request,path-parameters,http-response']
+operation::party-delete-party[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[party-edit-party]]
 == 파티 수정
 
-operation::party-edit-party[snippets='http-request,request-fields,http-response']
+operation::party-edit-party[snippets='http-request,request-headers,request-fields,http-response']
 
 
 [[party-participate-party]]
 == 파티 참여
 
-operation::party-participate-party[snippets='http-request,path-parameters,http-response']
+operation::party-participate-party[snippets='http-request,request-headers,path-parameters,http-response']
 
 
 [[party-get-participated]]
 == 파티 참여 여부
 
-operation::party-get-participated[snippets='http-request,query-parameters,http-response,response-fields-content']
+operation::party-get-participated[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-recruitment-list]]
+== My 모집 리스트 조회
+
+operation::party-get-recruitment-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
+
+
+[[party-get-participation-list]]
+== My 참여 리스트 조회
+
+operation::party-get-participation-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']

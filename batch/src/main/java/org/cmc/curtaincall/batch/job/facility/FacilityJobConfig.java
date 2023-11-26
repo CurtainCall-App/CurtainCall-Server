@@ -1,12 +1,12 @@
 package org.cmc.curtaincall.batch.job.facility;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
 import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.dao.FacilityExistsDao;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -40,6 +40,8 @@ public class FacilityJobConfig {
 
     private final PlatformTransactionManager txManager;
 
+    private final FacilityExistsDao facilityExistsDao;
+
     @Bean
     public Job facilityJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
@@ -72,7 +74,7 @@ public class FacilityJobConfig {
     @Bean
     @StepScope
     public FacilityItemProcessor facilityItemProcessor() {
-        return new FacilityItemProcessor(kopisService, emf.createEntityManager());
+        return new FacilityItemProcessor(kopisService, facilityExistsDao);
     }
 
     @Bean

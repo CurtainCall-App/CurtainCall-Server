@@ -12,4 +12,4 @@
 
 반환해주는 ID 값을 이미지 ID 를 사용해야 되는 곳에 사용
 
-operation::image-save-image[snippets='http-request,request-parts,http-response,response-fields']
+operation::image-save-image[snippets='http-request,request-headers,request-parts,http-response,response-fields']

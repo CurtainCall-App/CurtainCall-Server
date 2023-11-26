@@ -6,12 +6,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
-import org.cmc.curtaincall.domain.member.Member;
-import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.member.MemberId;
+import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
+import org.cmc.curtaincall.domain.party.exception.PartyAlreadyParticipatedException;
+import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "party",
@@ -33,15 +37,15 @@ public class Party extends BaseEntity {
     private Long id;
 
     @Version
-    @Column(nullable = false)
+    @Column(name = "version", nullable = false)
     private Long version;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Show show;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "show_id"))
+    private ShowId showId;
 
-    @Column(name = "show_at")
-    private LocalDateTime showAt;
+    @Column(name = "party_at")
+    private LocalDateTime partyAt;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -67,18 +71,23 @@ public class Party extends BaseEntity {
 
     @Builder
     public Party(
-            Show show,
-            LocalDateTime showAt,
+            ShowId showId,
+            LocalDateTime partyAt,
             String title,
             String content,
             Integer maxMemberNum,
             PartyCategory category) {
-        this.show = show;
-        this.showAt = showAt;
+        this.showId = showId;
+        this.partyAt = partyAt;
         this.title = title;
         this.content = content;
         this.maxMemberNum = maxMemberNum;
         this.category = category;
+
+        if (category == PartyCategory.ETC) {
+            this.showId = null;
+            this.partyAt = null;
+        }
     }
 
     public PartyEditor.PartyEditorBuilder toEditor() {
@@ -96,13 +105,43 @@ public class Party extends BaseEntity {
         closed = true;
     }
 
-    public void participate(Member member) {
-        partyMembers.add(new PartyMember(this, member));
+    public void open() {
+        closed = false;
+    }
+
+    public void participate(final MemberId memberId) {
+        if (Boolean.TRUE.equals(closed) || !partyAt.isBefore(LocalDateTime.now())) {
+            throw new PartyAlreadyClosedException(new PartyId(id));
+        }
+        if (isParticipated(memberId)) {
+            throw new PartyAlreadyParticipatedException(new PartyId(id), memberId);
+        }
+        partyMembers.add(new PartyMember(this, memberId));
         curMemberNum += 1;
 
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {
             close();
         }
+    }
+
+    public void cancelParticipate(final MemberId memberId) {
+        partyMembers = partyMembers.stream()
+                .filter(partyMember -> !partyMember.getMemberId().equals(memberId))
+                .toList();
+
+        curMemberNum -= 1;
+        open();
+    }
+
+    public boolean isParticipated(final MemberId memberId) {
+        boolean isCreator = Objects.equals(getCreatedBy().getMemberId(), memberId);
+        boolean isParticipant = getPartyMembers().stream()
+                .anyMatch(partyMember -> Objects.equals(partyMember.getMemberId(), memberId));
+        return isCreator || isParticipant;
+    }
+
+    public List<PartyMember> getPartyMembers() {
+        return Collections.unmodifiableList(this.partyMembers);
     }
 
 }

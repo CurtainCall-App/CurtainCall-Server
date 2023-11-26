@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
-import org.cmc.curtaincall.web.service.common.response.IdResult;
+import org.cmc.curtaincall.web.common.response.IdResult;
 import org.cmc.curtaincall.web.service.image.store.ImageStore;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

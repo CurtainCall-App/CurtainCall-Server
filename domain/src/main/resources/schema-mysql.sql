@@ -8,6 +8,7 @@ drop table if exists party;
 drop table if exists party_member;
 drop table if exists show_review;
 drop table if exists show_review_like;
+drop table if exists show_review_stats;
 drop table if exists show_time;
 drop table if exists shows;
 drop table if exists shows_introduction_images;
@@ -18,15 +19,12 @@ drop table if exists box_office;
 
 create table account
 (
-    account_id               bigint       not null auto_increment,
-    member_id                bigint,
-    username                 varchar(255) not null,
-    password                 varchar(255),
-    refresh_token            varchar(255) not null,
-    refresh_token_expires_at datetime(6) not null,
-    created_at               datetime(6) not null,
-    last_modified_at         datetime(6) not null,
-    use_yn                   bit          not null,
+    account_id       bigint       not null auto_increment,
+    member_id        bigint       not null,
+    username         varchar(255) not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
+    use_yn           bit          not null,
     primary key (account_id)
 ) engine=InnoDB;
 
@@ -146,6 +144,24 @@ alter table member
     add constraint UK_member__nickname unique (nickname);
 
 
+create table member_withdrawal
+(
+    member_withdrawal_id bigint       not null auto_increment,
+    member_id            bigint       not null,
+    reason               enum ('RECORD_DELETION', 'INCONVENIENCE_FREQUENT_ERROR',
+        'BETTER_OTHER_SERVICE', 'LOW_USAGE_FREQUENCY',
+        'NOT_USEFUL', 'ETC'),
+    content              varchar(500) not null,
+    use_yn               boolean      not null,
+    created_at           timestamp(6) not null,
+    last_modified_at     timestamp(6) not null,
+    primary key (member_withdrawal_id)
+) engine = InnoDB;
+
+create index IX_member_withdrawal__use_yn_created_at
+    on member_withdrawal (use_yn, created_at);
+
+
 create table party
 (
     party_id         bigint        not null auto_increment,
@@ -156,7 +172,7 @@ create table party
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
     closed           bit           not null,
     show_id          varchar(25),
-    show_at          datetime(6),
+    party_at         datetime(6),
     use_yn           bit           not null,
     created_at       datetime(6) not null,
     created_by       bigint        not null,
@@ -179,10 +195,10 @@ create index IX_party__created_by_category_created_at
 
 create table party_member
 (
-    member_id    bigint not null,
-    party_id     bigint not null,
-    party_member bigint not null auto_increment,
-    primary key (party_member)
+    member_id       bigint not null,
+    party_id        bigint not null,
+    party_member_id bigint not null auto_increment,
+    primary key (party_member_id)
 ) engine=InnoDB;
 
 alter table party_member
@@ -231,6 +247,31 @@ alter table show_review_like
     add constraint UK_show_review_like__member_show_review unique (member_id, show_review_id);
 
 
+create table show_review_stats
+(
+    show_id          varchar(25)                                 not null,
+    review_count     integer                                     not null,
+    review_grade_avg double                                      not null,
+    review_grade_sum bigint                                      not null,
+    genre            enum ('MUSICAL','PLAY')                     not null,
+    state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
+    start_date       date                                        not null,
+    end_date         date                                        not null,
+    version          bigint                                      not null,
+    use_yn           boolean                                     not null,
+    created_at       timestamp(6)                                not null,
+    last_modified_at timestamp(6)                                not null,
+    primary key (show_id)
+) engine = InnoDB;
+
+
+create index IX_show_review_stats__genre_review_grade_avg
+    on show_review_stats (genre, review_grade_avg desc);
+
+create index IX_show_review_stats__genre_state_review_grade_avg
+    on show_review_stats (genre, state, review_grade_avg desc);
+
+
 create table shows
 (
     show_id          varchar(25)                                 not null,
@@ -242,7 +283,7 @@ create table shows
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
     story            varchar(4000)                               not null,
     age              varchar(255)                                not null,
-    cast             varchar(255)                                not null,
+    casts             varchar(255)                                not null,
     crew             varchar(255)                                not null,
     enterprise       varchar(255)                                not null,
     name             varchar(255)                                not null,
@@ -277,17 +318,8 @@ create index IX_show__genre_end_date
 create index IX_show__genre_name
     on shows (genre, name);
 
-create index IX_show__genre_review_grade_sum
-    on shows (genre, review_grade_sum desc);
-
-create index IX_show__genre_review_grade_avg
-    on shows (genre, review_grade_avg desc);
-
 create index IX_show__genre_state_name
     on shows (genre, state, name);
-
-create index IX_show__genre_state_review_grade_avg
-    on shows (genre, state, review_grade_avg desc);
 
 
 create table show_time
@@ -303,9 +335,9 @@ create index IX_show_time__show
 
 create table shows_introduction_images
 (
-    show_id             varchar(25) not null,
-    introduction_images varchar(255)
-) engine=InnoDB;
+    show_id   varchar(25)  not null,
+    image_url varchar(1000) not null
+) engine = InnoDB;
 
 create index IX_shows_introduction_images__show
     on shows_introduction_images (show_id);

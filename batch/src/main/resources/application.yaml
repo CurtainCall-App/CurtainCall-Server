@@ -25,8 +25,9 @@ spring:
       initialize-schema: never
       isolation-level-for-create: default
 
-#logging:
-#  level:
+logging:
+  level:
+    org.cmc.curtaincall: debug
 #    org:
 #      hibernate:
 #        SQL: debug
