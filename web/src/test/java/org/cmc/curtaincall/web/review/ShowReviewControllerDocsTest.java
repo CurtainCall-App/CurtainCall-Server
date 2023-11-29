@@ -50,7 +50,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 .grade(5)
                 .content("조아유~~")
                 .build();
-        given(showReviewService.create(any(), any())).willReturn(new ShowReviewId(10L));
+        given(showReviewService.create(any(ShowId.class), any())).willReturn(new ShowReviewId(10L));
 
         // expected
         mockMvc.perform(post("/shows/{showId}/reviews", "PF220846")
@@ -88,7 +88,7 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                 .grade(5)
                 .content("조아유~~")
                 .build();
-        given(showReviewService.create(showReviewCreate)).willReturn(new ShowReviewId(10L));
+        given(showReviewService.create(showReviewCreate, new CreatorId(LOGIN_MEMBER_ID))).willReturn(new ShowReviewId(10L));
 
         // expected
         mockMvc.perform(post("/review")
