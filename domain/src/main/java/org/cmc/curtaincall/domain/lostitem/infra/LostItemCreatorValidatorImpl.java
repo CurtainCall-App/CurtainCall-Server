@@ -17,8 +17,7 @@ public class LostItemCreatorValidatorImpl implements LostItemCreatorValidator {
     @Override
     public void validate(final LostItemId lostItemId, final CreatorId creatorId) {
         if (!lostItemExistsDao.existsByIdAndCreatedBy(lostItemId, creatorId)) {
-            throw new LostItemAccessDeniedException(lostItemId, creatorId.getMemberId(),
-                    "작성자에게만 허용된 기능입니다.");
+            throw new LostItemAccessDeniedException(lostItemId, creatorId.getMemberId());
         }
     }
 }

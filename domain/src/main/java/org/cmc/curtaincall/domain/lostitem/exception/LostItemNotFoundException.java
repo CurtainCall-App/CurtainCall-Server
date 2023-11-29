@@ -1,17 +1,12 @@
 package org.cmc.curtaincall.domain.lostitem.exception;
 
-import org.cmc.curtaincall.domain.core.DomainErrorCode;
-import org.cmc.curtaincall.domain.core.DomainException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 
-public class LostItemNotFoundException extends DomainException {
+public class LostItemNotFoundException extends AbstractDomainException {
 
     public LostItemNotFoundException(final LostItemId lostItemId) {
-        super(DomainErrorCode.NOT_FOUND, "LostItemId=" + lostItemId);
+        super(LostItemErrorCode.NOT_FOUND, "LostItem.id=" + lostItemId);
     }
 
-    @Override
-    public String getExternalMessage() {
-        return "존재하지 않는 분실물입니다.";
-    }
 }
