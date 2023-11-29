@@ -1,18 +1,13 @@
 package org.cmc.curtaincall.domain.review.exception;
 
-import org.cmc.curtaincall.domain.core.DomainErrorCode;
-import org.cmc.curtaincall.domain.core.DomainException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.ShowReviewId;
 
-public class ShowReviewAccessDeniedException extends DomainException {
+public class ShowReviewAccessDeniedException extends AbstractDomainException {
 
-    public ShowReviewAccessDeniedException(final ShowReviewId id, final MemberId memberId, final String message) {
-        super(DomainErrorCode.FORBIDDEN, message + " " + id + ", " + memberId);
+    public ShowReviewAccessDeniedException(final ShowReviewId id, final MemberId memberId) {
+        super(ReviewErrorCode.ACCESS_DENIED, "showReviewId=" + id + ", memberId=" + memberId);
     }
 
-    @Override
-    public String getExternalMessage() {
-        return getMessage();
-    }
 }
