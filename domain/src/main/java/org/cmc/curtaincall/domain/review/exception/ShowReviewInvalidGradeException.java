@@ -1,16 +1,11 @@
 package org.cmc.curtaincall.domain.review.exception;
 
-import org.cmc.curtaincall.domain.common.DomainErrorCode;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
 
-public class ShowReviewInvalidGradeException extends DomainException {
+public class ShowReviewInvalidGradeException extends AbstractDomainException {
 
-    public ShowReviewInvalidGradeException(Integer grade) {
-        super(DomainErrorCode.BAD_REQUEST, "invalid ShowReview.grade=" + grade);
+    public ShowReviewInvalidGradeException(final Integer grade) {
+        super(ReviewErrorCode.INVALID_GRADE, "invalid ShowReview.grade=" + grade);
     }
 
-    @Override
-    public String getExternalMessage() {
-        return "리뷰 별점은 0~5 의 값";
-    }
 }

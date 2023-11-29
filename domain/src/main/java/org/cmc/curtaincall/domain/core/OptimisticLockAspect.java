@@ -23,7 +23,7 @@ public class OptimisticLockAspect {
                 return joinPoint.proceed();
             } catch (OptimisticLockingFailureException e) {
                 if (i == 20) {
-                    throw e;
+                    throw new OptimisticLockUpdateFailureException(e);
                 }
                 Thread.sleep(50);
             }

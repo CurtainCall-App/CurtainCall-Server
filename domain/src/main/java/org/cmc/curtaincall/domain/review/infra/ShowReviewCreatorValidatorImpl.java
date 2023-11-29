@@ -17,8 +17,7 @@ public class ShowReviewCreatorValidatorImpl implements ShowReviewCreatorValidato
     @Override
     public void validate(final ShowReviewId id, final CreatorId creatorId) {
         if (!showReviewExistsDao.existsByIdAndCreatedBy(id, creatorId)) {
-            throw new ShowReviewAccessDeniedException(id, creatorId.getMemberId(),
-                    "작성자에게만 허용된 기능입니다.");
+            throw new ShowReviewAccessDeniedException(id, creatorId.getMemberId());
         }
     }
 }

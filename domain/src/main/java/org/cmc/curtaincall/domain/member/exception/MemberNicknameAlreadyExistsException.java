@@ -1,16 +1,11 @@
 package org.cmc.curtaincall.domain.member.exception;
 
-import org.cmc.curtaincall.domain.common.DomainErrorCode;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
 
-public class MemberNicknameAlreadyExistsException extends DomainException {
+public class MemberNicknameAlreadyExistsException extends AbstractDomainException {
 
     public MemberNicknameAlreadyExistsException(final String nickname) {
-        super(DomainErrorCode.CONFLICT, "nickname=" + nickname);
+        super(MemberErrorCode.NICKNAME_ALREADY_EXISTS, "nickname=" + nickname);
     }
 
-    @Override
-    public String getExternalMessage() {
-        return "이미 존재하는 닉네임입니다.";
-    }
 }

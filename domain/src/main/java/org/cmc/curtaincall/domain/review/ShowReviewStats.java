@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
-import org.cmc.curtaincall.domain.review.exception.ShowReviewUnableToCancelReviewException;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewRepository;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
@@ -94,9 +93,6 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
     }
 
     public void cancelReviewGrade(final int grade) {
-        if (reviewCount == 0) {
-            throw new ShowReviewUnableToCancelReviewException(id);
-        }
         reviewCount -= 1;
         reviewGradeSum -= grade;
         calculateReviewGradeAvg();
