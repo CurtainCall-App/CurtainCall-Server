@@ -17,8 +17,7 @@ public class PartyCreatorValidatorImpl implements PartyCreatorValidator {
     @Override
     public void validate(final PartyId partyId, final CreatorId creatorId) {
         if (!partyExistsDao.existsByIdAndCreatedBy(partyId, creatorId)) {
-            throw new PartyAccessDeniedException(partyId, creatorId.getMemberId(),
-                    "작성자에게만 허용된 기능입니다.");
+            throw new PartyAccessDeniedException(partyId, creatorId.getMemberId());
         }
     }
 }
