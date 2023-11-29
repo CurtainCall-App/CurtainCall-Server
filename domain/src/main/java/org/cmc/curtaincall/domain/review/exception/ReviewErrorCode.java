@@ -15,6 +15,7 @@ public enum ReviewErrorCode implements ErrorCodeType {
      * INTERNAL_SERVER_ERROR
      */
     STATS_NOT_FOUND("REVIEW-004", "리뷰통계가 존재하지 않습니다.", 500),
+    ALREADY_REVIEWED("REVIEW-005", "해당 공연에 이미 리뷰가 등록되었습니다.", 409),
     ;
 
     private final String code;
