@@ -1,17 +1,12 @@
 package org.cmc.curtaincall.domain.show.exception;
 
-import org.cmc.curtaincall.domain.core.DomainErrorCode;
-import org.cmc.curtaincall.domain.core.DomainException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
 import org.cmc.curtaincall.domain.show.ShowId;
 
-public class ShowNotFoundException extends DomainException {
+public class ShowNotFoundException extends AbstractDomainException {
 
-    public ShowNotFoundException(ShowId showId) {
-        super(DomainErrorCode.NOT_FOUND, "Show.id=" + showId);
+    public ShowNotFoundException(final ShowId showId) {
+        super(ShowErrorCode.NOT_FOUND, "Show.id=" + showId);
     }
 
-    @Override
-    public String getExternalMessage() {
-        return "존재하지 않는 공연";
-    }
 }
