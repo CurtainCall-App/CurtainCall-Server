@@ -1,14 +1,18 @@
 package org.cmc.curtaincall.web.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.domain.core.DomainException;
-import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.*;
-import org.springframework.security.access.AccessDeniedException;
+import org.cmc.curtaincall.domain.core.AbstractDomainException;
+import org.cmc.curtaincall.domain.core.ErrorCodeType;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
@@ -16,67 +20,43 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-    @ExceptionHandler({
-            MaxUploadSizeExceededException.class,
-            AccessDeniedException.class,
-            OptimisticLockingFailureException.class,
-            DomainException.class,
-            Exception.class
-    })
-    public final ResponseEntity<Object> handleUnhandledException(Exception ex, WebRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        if (ex instanceof MaxUploadSizeExceededException subEx) {
-            return handleMaxUploadSizeExceededException(subEx, headers, HttpStatus.FORBIDDEN, request);
-        } else if (ex instanceof AccessDeniedException subEx) {
-            return handleAccessDeniedException(subEx, headers, HttpStatus.FORBIDDEN, request);
-        } else if (ex instanceof OptimisticLockingFailureException subEx) {
-            return handleOptimisticLockingFailureException(subEx, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
-        } else if (ex instanceof DomainException subEx) {
-            return handleDomainException(subEx, headers, request);
-        } else {
-            return handleRootException(ex, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
-        }
-    }
-
-    /**
-     * 파일 업로드 용량 초과시 발생
-     */
-    protected ResponseEntity<Object> handleMaxUploadSizeExceededException(
-            MaxUploadSizeExceededException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ProblemDetail body = createProblemDetail(
-                ex, status, "이미지 용량이 초과되었습니다.", null, null, request);
-        return handleExceptionInternal(ex, body, headers, status, request);
-    }
-
-    protected ResponseEntity<Object> handleAccessDeniedException(
-            AccessDeniedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ProblemDetail body = createProblemDetail(
-                ex, status, "접근이 허용되지 않습니다.", null, null, request);
-        return handleExceptionInternal(ex, body, headers, status, request);
-    }
-
-    protected ResponseEntity<Object> handleOptimisticLockingFailureException(
-            OptimisticLockingFailureException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ProblemDetail body = createProblemDetail(
-                ex, status, "업데이트에 실패했습니다. 다시 시도해주세요",
-                null, null, request);
-        return handleExceptionInternal(ex, body, headers, status, request);
-    }
-
+    @ExceptionHandler(AbstractDomainException.class)
     private ResponseEntity<Object> handleDomainException(
-            DomainException ex, HttpHeaders headers, WebRequest request
-    ) {
-        HttpStatusCode status = HttpStatusCode.valueOf(ex.getCode().getStatus());
-        ProblemDetail body = createProblemDetail(
-                ex, status, ex.getExternalMessage(), null, null, request);
+            final AbstractDomainException ex, final WebRequest request) {
+        final HttpHeaders headers = new HttpHeaders();
+        final ErrorCodeType errorCode = ex.getErrorCode();
+        final HttpStatusCode status = HttpStatusCode.valueOf(errorCode.getStatus());
+        final ProblemDetail body = createProblemDetail(
+                ex, status, errorCode.getMessage(), null, null, request);
+        body.setProperty("errorCode", errorCode);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
-
+    @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleRootException(
-            Exception ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+            final Exception ex, final WebRequest request) {
+        final HttpHeaders headers = new HttpHeaders();
+        final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemDetail body = createProblemDetail(
                 ex, status, "서버에 문제가 발생했습니다.", null, null, request);
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            final MethodArgumentNotValidException ex,
+            final HttpHeaders headers,
+            final HttpStatusCode status,
+            final WebRequest request
+    ) {
+        final ProblemDetail body = ex.updateAndGetBody(getMessageSource(), LocaleContextHolder.getLocale());
+        body.setProperty("fields", ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> new FieldErrorResponse(
+                        fieldError.getField(),
+                        fieldError.getRejectedValue(),
+                        fieldError.getDefaultMessage()
+                )).toList()
+        );
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
