@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.domain.member.exception;
 
-import org.cmc.curtaincall.domain.common.DomainErrorCode;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.DomainErrorCode;
+import org.cmc.curtaincall.domain.core.DomainException;
 
 public class MemberNicknameAlreadyExistsException extends DomainException {
 

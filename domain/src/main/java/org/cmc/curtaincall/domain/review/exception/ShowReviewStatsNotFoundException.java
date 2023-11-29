@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.domain.review.exception;
 
-import org.cmc.curtaincall.domain.common.DomainErrorCode;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.DomainErrorCode;
+import org.cmc.curtaincall.domain.core.DomainException;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 public class ShowReviewStatsNotFoundException extends DomainException {

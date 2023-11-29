@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.domain.common;
+package org.cmc.curtaincall.domain.core;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

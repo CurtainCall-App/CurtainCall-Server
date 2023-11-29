@@ -1,8 +1,8 @@
 package org.cmc.curtaincall.domain.party.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.domain.common.DomainErrorCode;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.DomainErrorCode;
+import org.cmc.curtaincall.domain.core.DomainException;
 import org.cmc.curtaincall.domain.party.PartyId;
 
 @Slf4j

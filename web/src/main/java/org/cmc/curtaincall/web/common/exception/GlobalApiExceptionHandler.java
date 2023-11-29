@@ -1,7 +1,7 @@
 package org.cmc.curtaincall.web.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cmc.curtaincall.domain.common.DomainException;
+import org.cmc.curtaincall.domain.core.DomainException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
