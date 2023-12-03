@@ -7,7 +7,9 @@ import org.cmc.curtaincall.domain.core.ErrorCodeType;
 @Getter
 @RequiredArgsConstructor
 public enum AccountErrorCode implements ErrorCodeType {
-    NOT_FOUND("ACCOUNT-001", "존재하지 않는 계정입니다.", 404)
+
+    NOT_FOUND("ACCOUNT-001", "존재하지 않는 계정입니다.", 404),
+    ALREADY_SIGNUP("ACCOUNT-002", "이미 가입된 계정입니다.", 409),
     ;
 
     private final String code;

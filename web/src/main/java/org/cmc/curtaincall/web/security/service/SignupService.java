@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.security.service;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.Account;
+import org.cmc.curtaincall.domain.account.exception.AccountAlreadySignupException;
 import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberId;
@@ -26,6 +27,7 @@ public class SignupService {
     @Transactional
     public MemberId signup(final String username, final SignupRequest request) {
         validateNickname(request.getNickname());
+
         final Member member = memberRepository.save(Member.builder()
                 .nickname(request.getNickname())
                 .build());
@@ -39,6 +41,12 @@ public class SignupService {
     private void validateNickname(final String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
             throw new MemberNicknameAlreadyExistsException(nickname);
+        }
+    }
+
+    private void validateUsername(final String username) {
+        if (accountRepository.existsByUsernameAndUseYnIsTrue(username)) {
+            throw new AccountAlreadySignupException(username);
         }
     }
 }
