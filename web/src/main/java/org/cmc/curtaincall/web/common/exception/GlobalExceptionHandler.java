@@ -28,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final HttpStatusCode status = HttpStatusCode.valueOf(errorCode.getStatus());
         final ProblemDetail body = createProblemDetail(
                 ex, status, errorCode.getMessage(), null, null, request);
-        body.setProperty("errorCode", errorCode);
+        body.setProperty("errorCode", errorCode.getCode());
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
