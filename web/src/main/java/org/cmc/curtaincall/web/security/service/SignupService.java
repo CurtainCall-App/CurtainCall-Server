@@ -27,7 +27,7 @@ public class SignupService {
     @Transactional
     public MemberId signup(final String username, final SignupRequest request) {
         validateNickname(request.getNickname());
-
+        validateUsername(username);
         final Member member = memberRepository.save(Member.builder()
                 .nickname(request.getNickname())
                 .build());
