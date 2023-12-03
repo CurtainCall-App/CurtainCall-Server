@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Collections;
 import java.util.List;
 
 @XmlRootElement(name = "boxofs")
@@ -19,4 +20,10 @@ public class KopisBoxOfficeResponseList {
 
     @XmlElement(name = "boxof")
     private List<KopisBoxOfficeResponse> content;
+
+    public static KopisBoxOfficeResponseList empty() {
+        final KopisBoxOfficeResponseList response = new KopisBoxOfficeResponseList();
+        response.content = Collections.emptyList();
+        return response;
+    }
 }

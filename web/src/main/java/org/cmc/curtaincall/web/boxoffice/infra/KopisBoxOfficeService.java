@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -92,7 +91,16 @@ public class KopisBoxOfficeService implements BoxOfficeService {
                 .toUriString();
         final ResponseEntity<KopisBoxOfficeResponseList> response = restTemplate.getForEntity(
                 uri, KopisBoxOfficeResponseList.class);
-        return Objects.requireNonNull(response.getBody());
+        if (response.getStatusCode().is5xxServerError()) {
+            return KopisBoxOfficeResponseList.empty();
+        }
+        final boolean emptyResponse = Optional.ofNullable(response.getBody())
+                .map(KopisBoxOfficeResponseList::getContent)
+                .isEmpty();
+        if (emptyResponse) {
+            return KopisBoxOfficeResponseList.empty();
+        }
+        return response.getBody();
     }
 
     @CacheEvict(value = "boxOffices", allEntries = true)

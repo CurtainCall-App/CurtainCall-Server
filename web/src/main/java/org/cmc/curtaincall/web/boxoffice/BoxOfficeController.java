@@ -27,7 +27,9 @@ public class BoxOfficeController {
     private final ShowReviewStatsQueryService showReviewStatsQueryService;
 
     @GetMapping("/box-office")
-    public ListResult<With<BoxOfficeResponse, ShowReviewStatsResponse>> getList(@ModelAttribute @Validated BoxOfficeRequest request) {
+    public ListResult<With<BoxOfficeResponse, ShowReviewStatsResponse>> getList(
+            @ModelAttribute @Validated BoxOfficeRequest request
+    ) {
         final List<BoxOfficeResponse> boxOfficeResponses = boxOfficeService.getList(request);
         final List<ShowId> showIds = boxOfficeResponses.stream().map(BoxOfficeResponse::id).toList();
         final Map<ShowId, ShowReviewStatsResponse> showIdToStats = showReviewStatsQueryService.getList(showIds)
