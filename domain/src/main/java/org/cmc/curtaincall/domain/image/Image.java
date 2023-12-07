@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.core.CreatorId;
 
 @Entity
 @Table(name = "images")
@@ -28,12 +29,15 @@ public class Image extends BaseEntity {
     private String url;
 
     @Builder
-    private Image(
-            String originName,
-            String storedName,
-            String url) {
+    public Image(
+            final String originName,
+            final String storedName,
+            final String url,
+            final CreatorId createdBy
+    ) {
         this.originName = originName;
         this.storedName = storedName;
         this.url = url;
+        this.createdBy = createdBy;
     }
 }

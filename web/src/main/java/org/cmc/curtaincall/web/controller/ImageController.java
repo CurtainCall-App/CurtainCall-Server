@@ -1,8 +1,11 @@
 package org.cmc.curtaincall.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.web.exception.InvalidImageException;
 import org.cmc.curtaincall.web.common.response.IdResult;
+import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.cmc.curtaincall.web.service.image.ImageService;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +22,10 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping("/images")
-    public IdResult<Long> saveImage(@RequestPart MultipartFile image) {
+    public IdResult<Long> saveImage(@RequestPart MultipartFile image, @LoginMemberId MemberId memberId) {
         validateMultipartFileImage(image);
         Resource imageResource = image.getResource();
-        IdResult<Long> idResult = imageService.saveImage(imageResource);
-        return idResult;
+        return imageService.saveImage(imageResource, new CreatorId(memberId));
     }
 
     private void validateMultipartFileImage(MultipartFile image) {

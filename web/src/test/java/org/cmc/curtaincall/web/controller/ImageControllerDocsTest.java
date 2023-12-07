@@ -33,7 +33,7 @@ class ImageControllerDocsTest extends AbstractWebTest {
         // given
         MockMultipartFile image = new MockMultipartFile("image", "test-image1.jpg",
                 MediaType.IMAGE_JPEG_VALUE, "test-image1-content".getBytes());
-        given(imageService.saveImage(any())).willReturn(new IdResult<>(10L));
+        given(imageService.saveImage(any(), any())).willReturn(new IdResult<>(10L));
 
         // expected
         mockMvc.perform(multipart("/images")

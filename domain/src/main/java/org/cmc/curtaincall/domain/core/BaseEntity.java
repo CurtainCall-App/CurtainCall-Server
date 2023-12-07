@@ -1,16 +1,15 @@
 package org.cmc.curtaincall.domain.core;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy
     @Embedded
-    private CreatorId createdBy;
+    protected CreatorId createdBy;
 }
