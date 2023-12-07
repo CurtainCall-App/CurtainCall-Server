@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
@@ -28,7 +29,7 @@ public class LostItemService {
     private final LostItemFacilityValidator lostItemFacilityValidator;
 
     @Transactional
-    public LostItemId create(final LostItemCreate lostItemCreate) {
+    public LostItemId create(final LostItemCreate lostItemCreate, final CreatorId createdBy) {
         FacilityId facilityId = lostItemCreate.getFacilityId();
         lostItemFacilityValidator.validate(facilityId);
         Image image = getImageById(lostItemCreate.getImageId());
@@ -41,6 +42,7 @@ public class LostItemService {
                 .foundDate(lostItemCreate.getFoundDate())
                 .foundTime(lostItemCreate.getFoundTime())
                 .particulars(lostItemCreate.getParticulars())
+                .createdBy(createdBy)
                 .build()
         );
         return new LostItemId(lostItem.getId());

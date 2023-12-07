@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.show.FacilityId;
 
@@ -67,14 +68,16 @@ public class LostItem extends BaseEntity {
 
     @Builder
     public LostItem(
-            FacilityId facilityId,
-            Image image,
-            String title,
-            LostItemType type,
-            String foundPlaceDetail,
-            LocalDate foundDate,
-            @Nullable LocalTime foundTime,
-            String particulars) {
+            final FacilityId facilityId,
+            final Image image,
+            final String title,
+            final LostItemType type,
+            final String foundPlaceDetail,
+            final LocalDate foundDate,
+            final @Nullable LocalTime foundTime,
+            final String particulars,
+            final CreatorId createdBy
+    ) {
         this.facilityId = facilityId;
         this.image = image;
         this.title = title;
@@ -83,6 +86,7 @@ public class LostItem extends BaseEntity {
         this.foundDate = foundDate;
         this.foundTime = foundTime;
         this.particulars = particulars;
+        this.createdBy = createdBy;
     }
 
     public LostItemEditor.LostItemEditorBuilder toEditor() {
