@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @Import(ShowReviewExistsDao.class)
 class ShowReviewExistsDaoTest extends AbstractDataJpaTest {
@@ -24,10 +21,7 @@ class ShowReviewExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy() {
         // given
-        given(auditorProvider.getCurrentAuditor())
-                .willReturn(Optional.of(new CreatorId(new MemberId(10L))));
-
-        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content");
+        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content", new CreatorId(new MemberId(10L)));
         em.persist(showReview);
 
         em.flush();
@@ -42,10 +36,7 @@ class ShowReviewExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy_ShowReviewIdDifferent_False() {
         // given
-        given(auditorProvider.getCurrentAuditor())
-                .willReturn(Optional.of(new CreatorId(new MemberId(10L))));
-
-        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content");
+        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content", new CreatorId(new MemberId(10L)));
         em.persist(showReview);
 
         em.flush();
@@ -60,10 +51,7 @@ class ShowReviewExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy_CreatorIdDifferent_False() {
         // given
-        given(auditorProvider.getCurrentAuditor())
-                .willReturn(Optional.of(new CreatorId(new MemberId(10L))));
-
-        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content");
+        ShowReview showReview = new ShowReview(new ShowId("show-id"), 5, "content", new CreatorId(new MemberId(10L)));
         em.persist(showReview);
 
         em.flush();
