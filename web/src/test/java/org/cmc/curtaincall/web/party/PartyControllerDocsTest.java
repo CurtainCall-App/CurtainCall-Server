@@ -58,7 +58,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(partyCreate)).willReturn(new PartyId(10L));
+        given(partyService.create(partyCreate, new CreatorId(LOGIN_MEMBER_ID))).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")

@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.party;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.core.OptimisticLock;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.Party;
@@ -28,7 +29,7 @@ public class PartyService {
     private final PartyShowIdValidator showIdValidator;
 
     @Transactional
-    public PartyId create(PartyCreate partyCreate) {
+    public PartyId create(final PartyCreate partyCreate, final CreatorId createdBy) {
         ShowId showId = partyCreate.getShowId();
         showIdValidator.validate(showId);
         Party party = partyRepository.save(Party.builder()
@@ -38,6 +39,7 @@ public class PartyService {
                 .content(partyCreate.getContent())
                 .maxMemberNum(partyCreate.getMaxMemberNum())
                 .category(partyCreate.getCategory())
+                .createdBy(createdBy)
                 .build()
         );
 

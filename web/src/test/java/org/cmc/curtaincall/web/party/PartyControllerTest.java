@@ -42,7 +42,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new PartyId(10L));
+        given(partyService.create(any(), any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -67,7 +67,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new PartyId(10L));
+        given(partyService.create(any(), any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -92,7 +92,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(101)
                 .category(PartyCategory.WATCHING)
                 .build();
-        given(partyService.create(any())).willReturn(new PartyId(10L));
+        given(partyService.create(any(), any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
@@ -117,7 +117,7 @@ class PartyControllerTest extends AbstractWebTest {
                 .maxMemberNum(11)
                 .category(PartyCategory.ETC)
                 .build();
-        given(partyService.create(any())).willReturn(new PartyId(10L));
+        given(partyService.create(any(), any())).willReturn(new PartyId(10L));
 
         // expected
         mockMvc.perform(post("/parties")
