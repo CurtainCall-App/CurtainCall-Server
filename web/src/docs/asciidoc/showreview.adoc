@@ -13,14 +13,6 @@
 operation::showreview-create[snippets='http-request,request-headers,http-response,response-fields']
 
 
-[[show-review-create-show-review]]
-== 공연 리뷰 생성 (Deprecated)
-
-위의 공연 리뷰 생성 API 로 모두 이전 후 삭제 예정
-
-operation::showreview-create-show-review[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
-
-
 [[showreview-get-list]]
 == 공연 리뷰 리스트 조회
 

@@ -22,8 +22,10 @@ public class PartyController {
     private final PartyCreatorValidator partyCreatorValidator;
 
     @PostMapping("/parties")
-    public IdResult<PartyId> createParty(@RequestBody @Validated PartyCreate partyCreate) {
-        return new IdResult<>(partyService.create(partyCreate));
+    public IdResult<PartyId> createParty(
+            @RequestBody @Validated PartyCreate partyCreate, @LoginMemberId MemberId memberId
+    ) {
+        return new IdResult<>(partyService.create(partyCreate, new CreatorId(memberId)));
     }
 
     @InitBinder("partyCreate")

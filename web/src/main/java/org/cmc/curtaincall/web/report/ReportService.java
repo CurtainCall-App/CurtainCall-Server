@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.report;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.report.Report;
 import org.cmc.curtaincall.domain.report.repository.ReportRepository;
 import org.cmc.curtaincall.web.common.response.IdResult;
@@ -16,12 +17,13 @@ public class ReportService {
     private final ReportRepository reportRepository;
 
     @Transactional
-    public IdResult<Long> create(ReportCreate reportCreate) {
+    public IdResult<Long> create(ReportCreate reportCreate, CreatorId createdBy) {
         Report report = reportRepository.save(Report.builder()
                 .content(reportCreate.getContent())
                 .reportedId(reportCreate.getIdToReport())
                 .type(reportCreate.getType())
                 .reason(reportCreate.getReason())
+                .createdBy(createdBy)
                 .build());
         return new IdResult<>(report.getId());
     }

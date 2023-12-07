@@ -13,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 
 @Import(MemberDao.class)
 class MemberDaoTest extends AbstractDataJpaTest {
@@ -40,9 +37,8 @@ class MemberDaoTest extends AbstractDataJpaTest {
                 .content("content")
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
+                .createdBy(new CreatorId(new MemberId(member.getId())))
                 .build();
-        given(auditorProvider.getCurrentAuditor())
-                .willReturn(Optional.of(new CreatorId(new MemberId(member.getId()))));
         em.persist(party);
 
         // when
@@ -72,9 +68,8 @@ class MemberDaoTest extends AbstractDataJpaTest {
                 .content("content")
                 .maxMemberNum(5)
                 .category(PartyCategory.WATCHING)
+                .createdBy(new CreatorId(new MemberId(member.getId())))
                 .build();
-        given(auditorProvider.getCurrentAuditor())
-                .willReturn(Optional.of(new CreatorId(new MemberId(member.getId()))));
         em.persist(party);
         party.delete();
 

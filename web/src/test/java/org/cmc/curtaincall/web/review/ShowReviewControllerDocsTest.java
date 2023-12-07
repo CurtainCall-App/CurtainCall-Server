@@ -6,7 +6,6 @@ import org.cmc.curtaincall.domain.review.validation.ShowReviewCreatorValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.review.request.ShowReviewCreate;
-import org.cmc.curtaincall.web.review.request.ShowReviewCreateDepr;
 import org.cmc.curtaincall.web.review.request.ShowReviewEdit;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import static org.cmc.curtaincall.web.common.RestDocsAttribute.constraint;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.inOrder;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -42,43 +40,6 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private ShowReviewCreatorValidator showReviewCreatorValidator;
-
-    @Test
-    void createShowReview_Docs() throws Exception {
-        // given
-        ShowReviewCreateDepr showReviewCreate = ShowReviewCreateDepr.builder()
-                .grade(5)
-                .content("조아유~~")
-                .build();
-        given(showReviewService.create(any(ShowId.class), any())).willReturn(new ShowReviewId(10L));
-
-        // expected
-        mockMvc.perform(post("/shows/{showId}/reviews", "PF220846")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(showReviewCreate))
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("showreview-create-show-review",
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
-                        ),
-                        pathParameters(
-                                parameterWithName("showId").description("공연 아이디")
-                        ),
-                        requestFields(
-                                fieldWithPath("grade").description("평점")
-                                        .attributes(constraint("PositiveOrZero, max=5")),
-                                fieldWithPath("content").description("내용")
-                                        .attributes(constraint("max=200"))
-                        ),
-                        responseFields(
-                                fieldWithPath("id").description("공연 리뷰 ID")
-                        )
-                ));
-    }
 
     @Test
     void create_Docs() throws Exception {

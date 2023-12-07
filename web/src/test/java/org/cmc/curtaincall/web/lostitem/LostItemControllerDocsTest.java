@@ -63,7 +63,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
                 .imageId(1L)
                 .build();
         given(imageService.isOwnedByMember(LOGIN_MEMBER_ID.getId(), 1L)).willReturn(true);
-        given(lostItemService.create(lostItemCreate)).willReturn(new LostItemId(10L));
+        given(lostItemService.create(lostItemCreate, new CreatorId(LOGIN_MEMBER_ID))).willReturn(new LostItemId(10L));
 
         // expected
         mockMvc.perform(post("/lostItems")

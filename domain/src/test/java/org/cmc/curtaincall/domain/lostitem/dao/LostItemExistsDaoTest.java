@@ -14,10 +14,8 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @Import(LostItemExistsDao.class)
 class LostItemExistsDaoTest extends AbstractDataJpaTest {
@@ -28,9 +26,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy() {
         // given
-        given(auditorProvider.getCurrentAuditor()).willReturn(
-                Optional.of(new CreatorId(new MemberId(20L))));
-
         LostItem lostItem = LostItem.builder()
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
@@ -40,6 +35,7 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))
                 .particulars("particulars")
+                .createdBy(new CreatorId(new MemberId(20L)))
                 .build();
         em.persist(lostItem);
 
@@ -55,9 +51,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy_IdDifferent() {
         // given
-        given(auditorProvider.getCurrentAuditor()).willReturn(
-                Optional.of(new CreatorId(new MemberId(20L))));
-
         LostItem lostItem = LostItem.builder()
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
@@ -67,6 +60,7 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))
                 .particulars("particulars")
+                .createdBy(new CreatorId(new MemberId(20L)))
                 .build();
         em.persist(lostItem);
 
@@ -82,9 +76,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
     @Test
     void existsByIdAndCreatedBy_CreatedByDifferent() {
         // given
-        given(auditorProvider.getCurrentAuditor()).willReturn(
-                Optional.of(new CreatorId(new MemberId(20L))));
-
         LostItem lostItem = LostItem.builder()
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
@@ -94,6 +85,7 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))
                 .particulars("particulars")
+                .createdBy(new CreatorId(new MemberId(20L)))
                 .build();
         em.persist(lostItem);
 

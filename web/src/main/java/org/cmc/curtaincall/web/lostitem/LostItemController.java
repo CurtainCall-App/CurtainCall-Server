@@ -32,7 +32,7 @@ public class LostItemController {
             throw new EntityAccessDeniedException(
                     "Member ID=" + memberId + ", Image ID=" + lostItemCreate.getImageId());
         }
-        return new IdResult<>(lostItemService.create(lostItemCreate));
+        return new IdResult<>(lostItemService.create(lostItemCreate, new CreatorId(memberId)));
     }
 
     @DeleteMapping("/lostItems/{lostItemId}")

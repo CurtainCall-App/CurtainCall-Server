@@ -1,6 +1,7 @@
 package org.cmc.curtaincall.web.service.image;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.image.repository.ImageRepository;
 import org.cmc.curtaincall.web.exception.EntityNotFoundException;
@@ -27,7 +28,7 @@ public class ImageService {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMddHHmmss");
 
     @Transactional
-    public IdResult<Long> saveImage(Resource imageResource) {
+    public IdResult<Long> saveImage(Resource imageResource, CreatorId createdBy) {
         String originName = imageResource.getFilename();
         String storedName = createStoredName(originName);
         String url = imageStore.store(imageResource, storedName);
@@ -36,6 +37,7 @@ public class ImageService {
                         .originName(originName)
                         .storedName(storedName)
                         .url(url)
+                        .createdBy(createdBy)
                         .build()
         );
 

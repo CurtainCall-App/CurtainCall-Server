@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.core.CreatorId;
 
 @Entity
 @Table(name = "report")
@@ -33,10 +34,11 @@ public class Report extends BaseEntity {
     private ReportType type;
 
     @Builder
-    private Report(String content, Long reportedId, ReportReason reason, ReportType type) {
+    private Report(String content, Long reportedId, ReportReason reason, ReportType type, CreatorId createdBy) {
         this.content = content;
         this.reportedId = reportedId;
         this.reason = reason;
         this.type = type;
+        this.createdBy = createdBy;
     }
 }

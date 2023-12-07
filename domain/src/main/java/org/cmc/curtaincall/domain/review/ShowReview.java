@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.exception.ShowReviewInvalidGradeException;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
@@ -52,7 +53,7 @@ public class ShowReview extends BaseEntity {
     private Integer likeCount;
 
     @Builder
-    public ShowReview(final ShowId showId, final int grade, final String content) {
+    public ShowReview(final ShowId showId, final int grade, final String content, final CreatorId createdBy) {
         if (isInGradeRange(grade)) {
             throw new ShowReviewInvalidGradeException(grade);
         }
@@ -60,6 +61,7 @@ public class ShowReview extends BaseEntity {
         this.grade = grade;
         this.content = content;
         this.likeCount = 0;
+        this.createdBy = createdBy;
     }
 
     private boolean isInGradeRange(int grade) {

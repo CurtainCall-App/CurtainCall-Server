@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseEntity;
+import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyParticipatedException;
@@ -71,18 +72,21 @@ public class Party extends BaseEntity {
 
     @Builder
     public Party(
-            ShowId showId,
-            LocalDateTime partyAt,
-            String title,
-            String content,
-            Integer maxMemberNum,
-            PartyCategory category) {
+            final ShowId showId,
+            final LocalDateTime partyAt,
+            final String title,
+            final String content,
+            final Integer maxMemberNum,
+            final PartyCategory category,
+            final CreatorId createdBy
+    ) {
         this.showId = showId;
         this.partyAt = partyAt;
         this.title = title;
         this.content = content;
         this.maxMemberNum = maxMemberNum;
         this.category = category;
+        this.createdBy = createdBy;
 
         if (category == PartyCategory.ETC) {
             this.showId = null;

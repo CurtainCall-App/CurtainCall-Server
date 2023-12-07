@@ -8,7 +8,12 @@ import org.cmc.curtaincall.domain.review.ShowReview;
 import org.cmc.curtaincall.domain.review.repository.ShowReviewLikeRepository;
 import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
-import org.cmc.curtaincall.domain.show.*;
+import org.cmc.curtaincall.domain.show.Facility;
+import org.cmc.curtaincall.domain.show.FacilityId;
+import org.cmc.curtaincall.domain.show.Show;
+import org.cmc.curtaincall.domain.show.ShowGenre;
+import org.cmc.curtaincall.domain.show.ShowId;
+import org.cmc.curtaincall.domain.show.ShowState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -17,10 +22,8 @@ import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @Import(ShowReviewDao.class)
 class ShowReviewDaoTest extends AbstractDataJpaTest {
@@ -38,24 +41,24 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .nickname("test-nickname")
                 .build();
         em.persist(member);
-        given(auditorProvider.getCurrentAuditor()).willReturn(
-                Optional.of(new CreatorId(new MemberId(member.getId()))));
-
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(1)
                         .content("test-content-1")
+                        .createdBy(new CreatorId(new MemberId(member.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(2)
                         .content("test-content-2")
+                        .createdBy(new CreatorId(new MemberId(member.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("different"))
                         .grade(3)
                         .content("test-content-3")
+                        .createdBy(new CreatorId(new MemberId(member.getId())))
                         .build()
         );
         showReviews.forEach(em::persist);
@@ -81,19 +84,18 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .nickname("test-nickname")
                 .build();
         em.persist(member);
-        given(auditorProvider.getCurrentAuditor()).willReturn(
-                Optional.of(new CreatorId(new MemberId(member.getId()))));
-
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(1)
                         .content("test-content-1")
+                        .createdBy(new CreatorId(new MemberId(member.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(2)
                         .content("test-content-2")
+                        .createdBy(new CreatorId(new MemberId(member.getId())))
                         .build()
         );
         showReviews.forEach(em::persist);
@@ -135,21 +137,19 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .genre(ShowGenre.MUSICAL)
                 .build()
         );
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(new CreatorId(new MemberId(10L))));
-
         ShowReview showReview1 = ShowReview.builder()
                 .showId(new ShowId("show-id"))
                 .grade(1)
                 .content("test-content-1")
+                .createdBy(new CreatorId(new MemberId(10L)))
                 .build();
         em.persist(showReview1);
-
-        given(auditorProvider.getCurrentAuditor()).willReturn(Optional.of(new CreatorId(new MemberId(20L))));
 
         ShowReview showReview2 = ShowReview.builder()
                 .showId(new ShowId("test-show-id"))
                 .grade(2)
                 .content("test-content-2")
+                .createdBy(new CreatorId(new MemberId(20L)))
                 .build();
         em.persist(showReview2);
 
