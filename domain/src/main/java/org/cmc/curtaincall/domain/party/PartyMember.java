@@ -38,7 +38,7 @@ public class PartyMember {
     @Embedded
     private MemberId memberId;
 
-    public PartyMember(final Party party, final PartyMemberRole role, final MemberId memberId) {
+    PartyMember(final Party party, final PartyMemberRole role, final MemberId memberId) {
         this.party = party;
         this.role = role;
         this.memberId = memberId;
