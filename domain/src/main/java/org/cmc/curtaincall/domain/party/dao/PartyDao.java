@@ -7,13 +7,21 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
-import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
+import org.cmc.curtaincall.domain.party.PartyMemberRole;
 import org.cmc.curtaincall.domain.party.exception.PartyNotFoundException;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
-import org.cmc.curtaincall.domain.party.response.*;
+import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
+import org.cmc.curtaincall.domain.party.response.PartyResponse;
+import org.cmc.curtaincall.domain.party.response.QPartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.QPartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.QPartyRecruitmentResponse;
+import org.cmc.curtaincall.domain.party.response.QPartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -123,11 +131,13 @@ public class PartyDao {
                         facility.id,
                         facility.name
                 ))
-                .from(party)
+                .from(partyMember)
+                .join(partyMember.party, party)
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
                         partyCategoryEq(category),
+                        partyMember.role.eq(PartyMemberRole.RECRUITER),
                         party.createdBy.memberId.eq(memberId),
                         party.useYn.isTrue()
                 )
@@ -165,6 +175,7 @@ public class PartyDao {
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
+                        partyMember.role.eq(PartyMemberRole.PARTICIPANT),
                         partyMember.memberId.eq(memberId),
                         partyCategoryEq(category),
                         party.useYn.isTrue()
@@ -235,14 +246,6 @@ public class PartyDao {
                 .stream()
                 .map(PartyId::new)
                 .collect(Collectors.toSet());
-        participating.addAll(query.select(party.id)
-                .from(party)
-                .where(party.createdBy.eq(new CreatorId(memberId)))
-                .fetch()
-                .stream()
-                .map(PartyId::new)
-                .collect(Collectors.toSet())
-        );
         return partyIds.stream()
                 .map(partyId -> new PartyParticipatedResponse(partyId, participating.contains(partyId)))
                 .toList();

@@ -15,7 +15,8 @@ import org.cmc.curtaincall.domain.member.MemberId;
                 )
         },
         indexes = {
-                @Index(name = "IX_party_member__member_party", columnList = "member_id, party_id desc")
+                @Index(name = "IX_party_member__member_party", columnList = "member_id, party_id desc"),
+                @Index(name = "IX_party_member__role_member", columnList = "role, member_id"),
         }
 )
 @Getter
@@ -31,11 +32,16 @@ public class PartyMember {
     @JoinColumn(name = "party_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Party party;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", length = 25, nullable = false)
+    private PartyMemberRole role;
+
     @Embedded
     private MemberId memberId;
 
-    public PartyMember(final Party party, final MemberId memberId) {
+    PartyMember(final Party party, final PartyMemberRole role, final MemberId memberId) {
         this.party = party;
+        this.role = role;
         this.memberId = memberId;
     }
 }
