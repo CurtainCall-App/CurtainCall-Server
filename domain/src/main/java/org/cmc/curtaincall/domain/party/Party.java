@@ -134,10 +134,8 @@ public class Party extends BaseEntity {
     }
 
     public boolean isParticipated(final MemberId memberId) {
-        boolean isCreator = Objects.equals(getCreatedBy().getMemberId(), memberId);
-        boolean isParticipant = getPartyMembers().stream()
+        return getPartyMembers().stream()
                 .anyMatch(partyMember -> Objects.equals(partyMember.getMemberId(), memberId));
-        return isCreator || isParticipant;
     }
 
     public List<PartyMember> getPartyMembers() {
