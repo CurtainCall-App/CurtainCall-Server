@@ -87,11 +87,7 @@ public class Party extends BaseEntity {
         this.maxMemberNum = maxMemberNum;
         this.category = category;
         this.createdBy = createdBy;
-
-        if (category == PartyCategory.ETC) {
-            this.showId = null;
-            this.partyAt = null;
-        }
+        this.partyMembers.add(new PartyMember(this, PartyMemberRole.RECRUITER, createdBy.getMemberId()));
     }
 
     public PartyEditor.PartyEditorBuilder toEditor() {
@@ -120,7 +116,7 @@ public class Party extends BaseEntity {
         if (isParticipated(memberId)) {
             throw new PartyAlreadyParticipatedException(new PartyId(id), memberId);
         }
-        partyMembers.add(new PartyMember(this, memberId));
+        partyMembers.add(new PartyMember(this, PartyMemberRole.PARTICIPANT, memberId));
         curMemberNum += 1;
 
         if (curMemberNum.intValue() == maxMemberNum.intValue()) {

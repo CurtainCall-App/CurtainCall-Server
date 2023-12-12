@@ -22,11 +22,11 @@ create table account
     account_id       bigint       not null auto_increment,
     member_id        bigint       not null,
     username         varchar(255) not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
+    created_at       datetime(6)  not null,
+    last_modified_at datetime(6)  not null,
     use_yn           bit          not null,
     primary key (account_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_account__member
     on account (member_id);
@@ -66,7 +66,7 @@ create table favorite_show
     member_id        bigint      not null,
     show_id          varchar(25) not null,
     primary key (favorite_show_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 create index IX_favorite_show__show
     on favorite_show (show_id);
@@ -82,11 +82,11 @@ create table images
     stored_name      varchar(255) not null,
     url              varchar(255) not null,
     use_yn           bit          not null,
-    created_at       datetime(6) not null,
-    last_modified_at datetime(6) not null,
+    created_at       datetime(6)  not null,
+    last_modified_at datetime(6)  not null,
     created_by       bigint       not null,
     primary key (images_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 
 create table lost_item
@@ -138,7 +138,7 @@ create table member
     created_at       datetime(6) not null,
     last_modified_at datetime(6) not null,
     primary key (member_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 alter table member
     add constraint UK_member__nickname unique (nickname);
@@ -164,20 +164,20 @@ create index IX_member_withdrawal__use_yn_created_at
 
 create table party
 (
-    party_id         bigint        not null auto_increment,
-    title            varchar(255)  not null,
-    content          varchar(2000) not null,
-    cur_member_num   integer       not null,
-    max_member_num   integer       not null,
+    party_id         bigint                              not null auto_increment,
+    title            varchar(255)                        not null,
+    content          varchar(2000)                       not null,
+    cur_member_num   integer                             not null,
+    max_member_num   integer                             not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
-    closed           bit           not null,
+    closed           bit                                 not null,
     show_id          varchar(25),
     party_at         datetime(6),
-    use_yn           bit           not null,
-    created_at       datetime(6) not null,
-    created_by       bigint        not null,
-    last_modified_at datetime(6) not null,
-    version          bigint        not null,
+    use_yn           bit                                 not null,
+    created_at       datetime(6)                         not null,
+    created_by       bigint                              not null,
+    last_modified_at datetime(6)                         not null,
+    version          bigint                              not null,
     primary key (party_id)
 ) engine = InnoDB;
 
@@ -195,11 +195,12 @@ create index IX_party__created_by_category_created_at
 
 create table party_member
 (
-    member_id       bigint not null,
-    party_id        bigint not null,
-    party_member_id bigint not null auto_increment,
+    party_member_id bigint                           not null auto_increment,
+    party_id        bigint                           not null,
+    role            enum ('RECRUITER','PARTICIPANT') not null,
+    member_id       bigint                           not null,
     primary key (party_member_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 alter table party_member
     add constraint UK_party_member__party_member unique (party_id, member_id);
@@ -241,7 +242,7 @@ create table show_review_like
     show_review_id      bigint not null,
     show_review_like_id bigint not null auto_increment,
     primary key (show_review_like_id)
-) engine=InnoDB;
+) engine = InnoDB;
 
 alter table show_review_like
     add constraint UK_show_review_like__member_show_review unique (member_id, show_review_id);
@@ -283,7 +284,7 @@ create table shows
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
     story            varchar(4000)                               not null,
     age              varchar(255)                                not null,
-    casts             varchar(255)                                not null,
+    casts            varchar(255)                                not null,
     crew             varchar(255)                                not null,
     enterprise       varchar(255)                                not null,
     name             varchar(255)                                not null,
@@ -324,10 +325,10 @@ create index IX_show__genre_state_name
 
 create table show_time
 (
-    time        time(6)     not null,
+    time        time(6)                                                                              not null,
     day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY', 'HOL') not null,
-    show_id     varchar(25) not null
-) engine=InnoDB;
+    show_id     varchar(25)                                                                          not null
+) engine = InnoDB;
 
 create index IX_show_time__show
     on show_time (show_id);
@@ -335,7 +336,7 @@ create index IX_show_time__show
 
 create table shows_introduction_images
 (
-    show_id   varchar(25)  not null,
+    show_id   varchar(25)   not null,
     image_url varchar(1000) not null
 ) engine = InnoDB;
 
