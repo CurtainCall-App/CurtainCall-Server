@@ -208,6 +208,9 @@ alter table party_member
 create index IX_party_member__member_party
     on party_member (member_id, party_id desc);
 
+create index IX_party_member__role_member
+    on party_member (role, member_id);
+
 create table show_review
 (
     show_review_id   bigint       not null auto_increment,

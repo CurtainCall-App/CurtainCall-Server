@@ -7,12 +7,12 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.exception.MemberNotFoundException;
 import org.cmc.curtaincall.domain.member.response.MemberDetailResponse;
+import org.cmc.curtaincall.domain.party.PartyMemberRole;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 import static org.cmc.curtaincall.domain.member.QMember.member;
-import static org.cmc.curtaincall.domain.party.QParty.party;
 import static org.cmc.curtaincall.domain.party.QPartyMember.partyMember;
 
 @Repository
@@ -32,15 +32,22 @@ public class MemberDao {
                 .fetchOne()
         ).orElseThrow(() -> new MemberNotFoundException(id));
 
-        Long recruitingNum = query.select(party.count())
-                .from(party)
+        Long recruitingNum = query.select(partyMember.count())
+                .from(partyMember)
+                .join(partyMember.party)
                 .where(
-                        party.createdBy.memberId.eq(id),
-                        party.useYn
-                ).fetchOne();
+                        partyMember.role.eq(PartyMemberRole.RECRUITER),
+                        partyMember.memberId.eq(id),
+                        partyMember.party.useYn.isTrue()
+                )
+                .fetchOne();
         Long participationNum = query.select(partyMember.count())
                 .from(partyMember)
-                .where(partyMember.memberId.eq(id))
+                .where(
+                        partyMember.role.eq(PartyMemberRole.PARTICIPANT),
+                        partyMember.memberId.eq(id),
+                        partyMember.party.useYn.isTrue()
+                )
                 .fetchOne();
 
         return MemberDetailResponse.builder()
