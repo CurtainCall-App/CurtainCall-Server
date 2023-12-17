@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.common.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.domain.core.AbstractDomainException;
 import org.cmc.curtaincall.domain.core.ErrorCodeType;
@@ -32,12 +33,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    private ResponseEntity<Object> handleConstraintViolationException(
+            final ConstraintViolationException ex, final WebRequest request
+    ) {
+        final HttpHeaders headers = new HttpHeaders();
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final ProblemDetail body = createProblemDetail(
+                ex, status, ex.getMessage(), null, null, request);
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleRootException(
             final Exception ex, final WebRequest request) {
         final HttpHeaders headers = new HttpHeaders();
         final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ProblemDetail body = createProblemDetail(
+        final ProblemDetail body = createProblemDetail(
                 ex, status, "서버에 문제가 발생했습니다.", null, null, request);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
