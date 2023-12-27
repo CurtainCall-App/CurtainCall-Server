@@ -23,12 +23,12 @@ public class FavoriteShowController {
 
     @PutMapping("/shows/{showId}/favorite")
     public void favoriteShow(@PathVariable ShowId showId, @LoginMemberId MemberId memberId) {
-        favoriteShowService.favorite(memberId.getId(), showId.getId());
+        favoriteShowService.favorite(memberId, showId);
     }
 
     @DeleteMapping("/shows/{showId}/favorite")
     public void cancelFavorite(@PathVariable ShowId showId, @LoginMemberId MemberId memberId) {
-        favoriteShowService.cancelFavorite(memberId.getId(), showId.getId());
+        favoriteShowService.cancelFavorite(memberId, showId);
     }
 
     @GetMapping("/member/favorite")
