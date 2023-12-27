@@ -2,6 +2,7 @@ package org.cmc.curtaincall.web.show;
 
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.AllowedSort;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.ListResult;
@@ -9,7 +10,6 @@ import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,8 +45,10 @@ public class FavoriteShowController {
     }
 
     @GetMapping("/members/{memberId}/favorite")
-    public Slice<FavoriteShowResponse> getFavoriteShowList(
-            @PathVariable MemberId memberId, Pageable pageable) {
-        return favoriteShowService.getFavoriteShowList(pageable, memberId.getId());
+    public ListResult<FavoriteShowResponse> getFavoriteShowList(
+            @PathVariable final MemberId memberId,
+            @AllowedSort final Pageable pageable
+    ) {
+        return new ListResult<>(favoriteShowService.getFavoriteShowList(pageable, memberId));
     }
 }

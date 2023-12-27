@@ -13,8 +13,6 @@ import org.cmc.curtaincall.domain.show.validation.ShowFavoriteMemberValidator;
 import org.cmc.curtaincall.web.show.response.FavoriteShowResponse;
 import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,9 +63,9 @@ public class FavoriteShowService {
                 .toList();
     }
 
-    public Slice<FavoriteShowResponse> getFavoriteShowList(Pageable pageable, Long memberId) {
-        Slice<FavoriteShow> favoriteShows = favoriteShowRepository.findSliceWithShowByMemberId(pageable, new MemberId(memberId));
-        List<FavoriteShowResponse> shows = favoriteShows.stream()
+    public List<FavoriteShowResponse> getFavoriteShowList(final Pageable pageable, final MemberId memberId) {
+        final List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllWithShowByMemberId(pageable, memberId);
+        return favoriteShows.stream()
                 .map(FavoriteShow::getShow)
                 .filter(Show::getUseYn)
                 .map(show -> FavoriteShowResponse.builder()
@@ -82,6 +80,5 @@ public class FavoriteShowService {
                         .runtime(show.getRuntime())
                         .build()
                 ).toList();
-        return new SliceImpl<>(shows, pageable, favoriteShows.hasNext());
     }
 }
