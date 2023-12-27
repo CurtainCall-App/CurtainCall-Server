@@ -12,4 +12,7 @@ public interface ShowReviewStatsRepository extends JpaRepository<ShowReviewStats
 
     @Lock(LockModeType.OPTIMISTIC)
     Optional<ShowReviewStats> findWithLockById(ShowId id);
+
+    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+    Optional<ShowReviewStats> findWithPessimisticLockById(ShowId id);
 }

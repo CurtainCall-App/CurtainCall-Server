@@ -1,6 +1,5 @@
 package org.cmc.curtaincall.domain.show;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
@@ -14,19 +13,16 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
-import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -43,14 +39,10 @@ import java.util.List;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Show extends BaseTimeEntity implements Persistable<ShowId> {
+public class Show extends BaseTimeEntity {
 
     @EmbeddedId
     private ShowId id;
-
-    @Version
-    @Column(nullable = false)
-    private Long version;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -105,7 +97,7 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
             name = "show_time",
             joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
-    private List<ShowTime> showTimes = new ArrayList<>();
+    private List<ShowTime> showTimes;
 
     @ElementCollection
     @CollectionTable(
@@ -114,9 +106,6 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
     )
     @Column(name = "image_url", length = 500, nullable = false)
     private List<String> introductionImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShowDateTime> showDateTimes = new ArrayList<>();
 
     @Builder
     public Show(
@@ -135,7 +124,9 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
             final String story,
             final ShowGenre genre,
             final ShowState state,
-            final String openRun
+            final String openRun,
+            final List<ShowTime> showTimes,
+            final List<String> introductionImages
     ) {
         this.id = id;
         this.facility = facility;
@@ -153,14 +144,15 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
         this.genre = genre;
         this.state = state;
         this.openRun = openRun;
+        this.showTimes = showTimes;
+        this.introductionImages = introductionImages;
     }
 
-    @Override
-    public boolean isNew() {
-        return getCreatedAt() == null;
+    public List<ShowTime> getShowTimes() {
+        return Collections.unmodifiableList(showTimes);
     }
 
-    public void addShowDateTime(LocalDateTime showAt) {
-        showDateTimes.add(new ShowDateTime(this, showAt));
+    public List<String> getIntroductionImages() {
+        return Collections.unmodifiableList(introductionImages);
     }
 }

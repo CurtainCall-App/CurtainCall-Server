@@ -101,4 +101,13 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
     private void calculateReviewGradeAvg() {
         reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
     }
+
+    public void update(
+            final ShowGenre genre, final ShowState state, final LocalDate startDate, final LocalDate endDate
+    ) {
+        this.genre = genre;
+        this.state = state;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

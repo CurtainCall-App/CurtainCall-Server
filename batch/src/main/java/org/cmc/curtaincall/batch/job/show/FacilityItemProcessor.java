@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.batch.job.facility;
+package org.cmc.curtaincall.batch.job.show;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

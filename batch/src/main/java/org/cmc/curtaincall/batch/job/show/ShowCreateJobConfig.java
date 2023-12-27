@@ -94,7 +94,7 @@ public class ShowCreateJobConfig {
     @Bean
     @StepScope
     public ShowKopisItemProcessor showKopisItemProcessor() {
-        return new ShowKopisItemProcessor(kopisService, showExistsDao);
+        return new ShowKopisItemProcessor(kopisService);
     }
 
     @Bean
@@ -102,7 +102,6 @@ public class ShowCreateJobConfig {
     public JpaItemWriter<Show> showItemWriter() {
         return new JpaItemWriterBuilder<Show>()
                 .entityManagerFactory(emf)
-                .usePersist(true)
                 .build();
     }
 

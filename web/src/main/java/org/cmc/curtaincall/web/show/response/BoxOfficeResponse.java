@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.dto;
+package org.cmc.curtaincall.web.show.response;
 
 import lombok.Builder;
 import org.cmc.curtaincall.domain.show.ShowGenre;

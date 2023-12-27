@@ -10,7 +10,6 @@ import org.cmc.curtaincall.web.show.response.ShowFavoriteResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -80,8 +79,8 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     void getFavorite_Docs() throws Exception {
         given(favoriteShowService.areFavorite(any(), any())).willReturn(
                 List.of(
-                        new ShowFavoriteResponse("PF220846", true),
-                        new ShowFavoriteResponse("PF189549", false)
+                        new ShowFavoriteResponse(new ShowId("PF220846"), true),
+                        new ShowFavoriteResponse(new ShowId("PF189549"), false)
                 )
         );
 
@@ -135,7 +134,7 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
                         .build()
         );
         given(favoriteShowService.getFavoriteShowList(any(), any())).willReturn(
-                new SliceImpl<>(favoriteShowResponseList)
+                favoriteShowResponseList
         );
 
         // expected

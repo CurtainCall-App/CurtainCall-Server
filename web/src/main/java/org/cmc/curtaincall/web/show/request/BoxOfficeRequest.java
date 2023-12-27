@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.dto;
+package org.cmc.curtaincall.web.show.request;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
