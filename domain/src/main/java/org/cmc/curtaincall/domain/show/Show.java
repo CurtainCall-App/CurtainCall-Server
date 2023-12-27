@@ -1,6 +1,5 @@
 package org.cmc.curtaincall.domain.show;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
@@ -14,7 +13,6 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
@@ -25,7 +23,6 @@ import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,9 +112,6 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
     @Column(name = "image_url", length = 500, nullable = false)
     private List<String> introductionImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShowDateTime> showDateTimes = new ArrayList<>();
-
     @Builder
     public Show(
             final ShowId id,
@@ -160,7 +154,4 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
         return getCreatedAt() == null;
     }
 
-    public void addShowDateTime(LocalDateTime showAt) {
-        showDateTimes.add(new ShowDateTime(this, showAt));
-    }
 }

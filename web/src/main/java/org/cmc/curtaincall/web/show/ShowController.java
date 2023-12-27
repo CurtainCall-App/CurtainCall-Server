@@ -9,14 +9,11 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.common.response.With;
 import org.cmc.curtaincall.web.show.request.ShowListRequest;
-import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,11 +78,6 @@ public class ShowController {
             Pageable pageable, @PathVariable FacilityId facilityId, @RequestParam(required = false) ShowGenre genre
     ) {
         return getShowWithReviewStatsListResult(showService.getListOfFacility(pageable, facilityId, genre));
-    }
-
-    @GetMapping("/livetalk-show-times")
-    public Slice<ShowDateTimeResponse> getLiveTalkShowTimeList(@RequestParam LocalDateTime baseDateTime) {
-        return new SliceImpl<>(showService.getLiveTalkShowTimeList(baseDateTime));
     }
 
     private ListResult<With<ShowResponse, ShowReviewStatsResponse>> getShowWithReviewStatsListResult(

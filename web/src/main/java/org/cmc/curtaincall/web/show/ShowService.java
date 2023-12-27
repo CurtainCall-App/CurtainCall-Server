@@ -12,10 +12,8 @@ import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.exception.FacilityNotFoundException;
 import org.cmc.curtaincall.domain.show.exception.ShowNotFoundException;
 import org.cmc.curtaincall.domain.show.repository.FacilityRepository;
-import org.cmc.curtaincall.domain.show.repository.ShowDateTimeRepository;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.show.request.ShowListRequest;
-import org.cmc.curtaincall.web.show.response.ShowDateTimeResponse;
 import org.cmc.curtaincall.web.show.response.ShowDetailResponse;
 import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +33,6 @@ public class ShowService {
     private final ShowRepository showRepository;
 
     private final FacilityRepository facilityRepository;
-
-    private final ShowDateTimeRepository showDateTimeRepository;
 
     private final ShowReviewStatsRepository showReviewStatsRepository;
 
@@ -101,22 +95,6 @@ public class ShowService {
     public ShowDetailResponse getDetail(final ShowId id) {
         final Show show = getShowById(id);
         return ShowDetailResponse.of(show);
-    }
-
-    public List<ShowDateTimeResponse> getLiveTalkShowTimeList(LocalDateTime baseDateTime) {
-        return Stream.of(
-                        showDateTimeRepository.findAllByShowAtLessThanEqualAndShowAtGreaterThan(
-                                baseDateTime.plusHours(2L), baseDateTime),
-                        showDateTimeRepository.findAllByShowAtLessThanEqualAndShowEndAtGreaterThanEqual(
-                                baseDateTime, baseDateTime),
-                        showDateTimeRepository.findAllByShowEndAtLessThanEqualAndShowEndAtGreaterThan(
-                                baseDateTime, baseDateTime.minusHours(2)
-                        )
-                )
-                .flatMap(List::stream)
-                .distinct()
-                .map(ShowDateTimeResponse::of)
-                .toList();
     }
 
     private Show getShowById(final ShowId id) {
