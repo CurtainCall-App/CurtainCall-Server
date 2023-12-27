@@ -52,17 +52,16 @@ public class FavoriteShowService {
                 .ifPresent(favoriteShowRepository::delete);
     }
 
-    public List<ShowFavoriteResponse> areFavorite(Long memberId, List<String> showIds) {
-        List<Show> shows = showIds.stream()
-                .map(ShowId::new)
+    public List<ShowFavoriteResponse> areFavorite(final MemberId memberId, final List<ShowId> showIds) {
+        final List<Show> shows = showIds.stream()
                 .map(showRepository::getReferenceById)
                 .toList();
-        List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllByMemberIdAndShowIn(new MemberId(memberId), shows);
-        Set<String> favoriteShowIds = favoriteShows.stream()
-                .map(favoriteShow -> favoriteShow.getShow().getId().getId())
+        final List<FavoriteShow> favoriteShows = favoriteShowRepository.findAllByMemberIdAndShowIn(memberId, shows);
+        final Set<ShowId> favoriteShowIds = favoriteShows.stream()
+                .map(favoriteShow -> favoriteShow.getShow().getId())
                 .collect(Collectors.toSet());
         return showIds.stream()
-                .map(showId -> new ShowFavoriteResponse(new ShowId(showId), favoriteShowIds.contains(showId)))
+                .map(showId -> new ShowFavoriteResponse(showId, favoriteShowIds.contains(showId)))
                 .toList();
     }
 

@@ -80,8 +80,8 @@ class FavoriteShowControllerDocsTest extends AbstractWebTest {
     void getFavorite_Docs() throws Exception {
         given(favoriteShowService.areFavorite(any(), any())).willReturn(
                 List.of(
-                        new ShowFavoriteResponse("PF220846", true),
-                        new ShowFavoriteResponse("PF189549", false)
+                        new ShowFavoriteResponse(new ShowId("PF220846"), true),
+                        new ShowFavoriteResponse(new ShowId("PF189549"), false)
                 )
         );
 
