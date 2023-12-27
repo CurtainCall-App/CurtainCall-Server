@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.infra;
+package org.cmc.curtaincall.web.show.infra;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import org.cmc.curtaincall.domain.show.ShowId;

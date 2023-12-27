@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.infra;
+package org.cmc.curtaincall.web.show.infra;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;

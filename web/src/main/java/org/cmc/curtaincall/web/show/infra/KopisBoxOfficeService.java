@@ -1,13 +1,13 @@
-package org.cmc.curtaincall.web.boxoffice.infra;
+package org.cmc.curtaincall.web.show.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
 import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
-import org.cmc.curtaincall.web.boxoffice.BoxOfficeService;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeRequest;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeResponse;
+import org.cmc.curtaincall.web.show.BoxOfficeService;
+import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
+import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;

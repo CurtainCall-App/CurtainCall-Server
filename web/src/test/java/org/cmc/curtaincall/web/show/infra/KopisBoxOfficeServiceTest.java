@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.infra;
+package org.cmc.curtaincall.web.show.infra;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -8,8 +8,9 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeRequest;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeResponse;
+import org.cmc.curtaincall.web.show.infra.KopisBoxOfficeService;
+import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
+import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,10 +1,12 @@
-package org.cmc.curtaincall.web.boxoffice;
+package org.cmc.curtaincall.web.show;
 
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeRequest;
-import org.cmc.curtaincall.web.boxoffice.dto.BoxOfficeResponse;
+import org.cmc.curtaincall.web.show.BoxOfficeController;
+import org.cmc.curtaincall.web.show.BoxOfficeService;
+import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
+import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.show.ShowReviewStatsQueryService;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;

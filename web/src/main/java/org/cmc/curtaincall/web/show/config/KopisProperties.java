@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.boxoffice.config;
+package org.cmc.curtaincall.web.show.config;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
