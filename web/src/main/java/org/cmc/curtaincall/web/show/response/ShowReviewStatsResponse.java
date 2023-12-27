@@ -8,6 +8,8 @@ public record ShowReviewStatsResponse(
         Long reviewGradeSum,
         Double reviewGradeAvg
 ) {
+    public static ShowReviewStatsResponse EMPTY = new ShowReviewStatsResponse(0, 0L, 0D);
+
     public static ShowReviewStatsResponse of(final ShowReviewStatsDto stats) {
         return ShowReviewStatsResponse.builder()
                 .reviewCount(stats.reviewCount())

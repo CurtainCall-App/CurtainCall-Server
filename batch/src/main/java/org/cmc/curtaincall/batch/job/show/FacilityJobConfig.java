@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.batch.job.facility;
+package org.cmc.curtaincall.batch.job.show;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
