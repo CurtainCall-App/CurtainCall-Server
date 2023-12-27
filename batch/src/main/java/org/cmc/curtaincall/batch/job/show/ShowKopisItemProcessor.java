@@ -64,7 +64,7 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
         LocalDate startDate = LocalDate.parse(showDetail.startDate(), showDateFormatter);
         LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
 
-        Show show = Show.builder()
+        return Show.builder()
                 .id(new ShowId(showDetail.id()))
                 .facility(new Facility(new FacilityId(showDetail.facilityId())))
                 .name(showDetail.name())
@@ -81,10 +81,9 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
                 .genre(showGenre)
                 .state(stateMapper.get(showDetail.state()))
                 .openRun(showDetail.openRun())
+                .showTimes(showTimes)
+                .introductionImages(showDetail.introductionImages())
                 .build();
-        show.getShowTimes().addAll(showTimes);
-        show.getIntroductionImages().addAll(showDetail.introductionImages());
-        return show;
     }
 
 }

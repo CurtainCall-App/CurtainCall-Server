@@ -24,6 +24,7 @@ import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -102,7 +103,7 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
             name = "show_time",
             joinColumns = @JoinColumn(name = "show_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     )
-    private List<ShowTime> showTimes = new ArrayList<>();
+    private List<ShowTime> showTimes;
 
     @ElementCollection
     @CollectionTable(
@@ -129,7 +130,9 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
             final String story,
             final ShowGenre genre,
             final ShowState state,
-            final String openRun
+            final String openRun,
+            final List<ShowTime> showTimes,
+            final List<String> introductionImages
     ) {
         this.id = id;
         this.facility = facility;
@@ -147,6 +150,8 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
         this.genre = genre;
         this.state = state;
         this.openRun = openRun;
+        this.showTimes = showTimes;
+        this.introductionImages = introductionImages;
     }
 
     @Override
@@ -154,4 +159,11 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
         return getCreatedAt() == null;
     }
 
+    public List<ShowTime> getShowTimes() {
+        return Collections.unmodifiableList(showTimes);
+    }
+
+    public List<String> getIntroductionImages() {
+        return Collections.unmodifiableList(introductionImages);
+    }
 }
