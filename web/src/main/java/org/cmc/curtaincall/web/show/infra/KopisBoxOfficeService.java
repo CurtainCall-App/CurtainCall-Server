@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -104,7 +103,7 @@ public class KopisBoxOfficeService implements BoxOfficeService {
     }
 
     @CacheEvict(value = "boxOffices", allEntries = true)
-    @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 1L)
+    @Scheduled(cron = "0 0 12 * * ?")
     public void emptyBoxOfficesCache() {
         log.info("emptying BoxOffices cache");
     }
