@@ -12,7 +12,6 @@ import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.ShowState;
 import org.cmc.curtaincall.domain.show.ShowTime;
-import org.cmc.curtaincall.domain.show.dao.ShowExistsDao;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.time.LocalDate;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show> {
 
     private final KopisService kopisService;
-
-    private final ShowExistsDao showExistsDao;
 
     private final Set<String> allowedGenreNames = Arrays.stream(ShowGenre.values())
             .map(ShowGenre::getTitle)
@@ -49,10 +46,6 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
     @Override
     public Show process(ShowResponse item) throws Exception {
         final ShowId showId = new ShowId(item.id());
-        if (showExistsDao.exists(showId)) {
-            log.debug("공연({})은 존재하는 데이터입니다.", showId);
-            return null;
-        }
         if (!allowedGenreNames.contains(item.genreName())) {
             log.debug("공연({})은 다루지 않는 장르({})입니다.", item.id(), item.genreName());
             return null;
@@ -65,7 +58,7 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
         LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
 
         return Show.builder()
-                .id(new ShowId(showDetail.id()))
+                .id(showId)
                 .facility(new Facility(new FacilityId(showDetail.facilityId())))
                 .name(showDetail.name())
                 .startDate(startDate)

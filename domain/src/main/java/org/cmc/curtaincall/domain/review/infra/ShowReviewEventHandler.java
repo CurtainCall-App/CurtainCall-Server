@@ -29,9 +29,13 @@ public class ShowReviewEventHandler {
     public void handleShowCreatedEvent(final ShowCreatedEvent event) {
         log.debug("handleShowCreatedEvent={}", event);
         final ShowCreatedEvent.Source source = event.getSource();
-        showReviewStatsRepository.save(new ShowReviewStats(
-                source.id(), source.genre(), source.state(), source.startDate(), source.endDate()
-        ));
+        showReviewStatsRepository.findWithPessimisticLockById(source.id()).ifPresentOrElse(
+                showReviewStats -> showReviewStats.update(
+                        source.genre(), source.state(), source.startDate(), source.endDate()
+                ), () -> showReviewStatsRepository.save(new ShowReviewStats(
+                        source.id(), source.genre(), source.state(), source.startDate(), source.endDate()
+                ))
+        );
     }
 
     @EventListener

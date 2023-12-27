@@ -14,13 +14,11 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
-import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,14 +39,10 @@ import java.util.List;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Show extends BaseTimeEntity implements Persistable<ShowId> {
+public class Show extends BaseTimeEntity {
 
     @EmbeddedId
     private ShowId id;
-
-    @Version
-    @Column(nullable = false)
-    private Long version;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "facility_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -152,11 +146,6 @@ public class Show extends BaseTimeEntity implements Persistable<ShowId> {
         this.openRun = openRun;
         this.showTimes = showTimes;
         this.introductionImages = introductionImages;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getCreatedAt() == null;
     }
 
     public List<ShowTime> getShowTimes() {
