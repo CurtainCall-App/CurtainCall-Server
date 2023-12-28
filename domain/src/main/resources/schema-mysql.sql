@@ -99,7 +99,6 @@ create table lost_item
     facility_id        varchar(25)                                                                                  not null,
     found_place_detail varchar(255)                                                                                 not null,
     particulars        varchar(255)                                                                                 not null,
-    type               enum ('BAG','BOOK','CARD','CASH','CLOTHING','ELECTRONIC_EQUIPMENT','ETC','JEWELRY','WALLET') not null,
     use_yn             bit                                                                                          not null,
     created_at         datetime(6)                                                                                  not null,
     created_by         bigint                                                                                       not null,
@@ -107,23 +106,11 @@ create table lost_item
     primary key (lost_item_id)
 ) engine = InnoDB;
 
-create index IX_lost_item__found_date_found_time
-    on lost_item (found_date desc, found_time desc);
+create index IX_lost_item__facility_found_date_found_time
+    on lost_item (facility_id, created_at desc);
 
 create index IX_lost_item__facility_found_date_found_time
-    on lost_item (facility_id, found_date desc, found_time desc);
-
-create index IX_lost_item__facility_type_found_date_found_time
-    on lost_item (facility_id, type, found_date desc, found_time desc);
-
-create index IX_lost_item__found_date_title
-    on lost_item (found_date, title);
-
-create index IX_lost_item__facility_found_date_title
-    on lost_item (facility_id, found_date, title);
-
-create index IX_lost_item__facility_type_found_date_title
-    on lost_item (facility_id, type, found_date, title);
+    on lost_item (facility_id, found_date, found_time);
 
 create index IX_lost_item__created_by_created_at
     on lost_item (created_by, created_at desc);

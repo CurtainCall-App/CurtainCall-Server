@@ -13,10 +13,10 @@
 operation::lostitem-create-lostitem[snippets='http-request,request-headers,request-fields,http-response,response-fields']
 
 
-[[lostitem-search]]
-== 분실물 리스트 조회(검색)
+[[lostitem-get-list]]
+== 분실물 목록 조회
 
-operation::lostitem-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+operation::lostitem-get-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
 
 [[lostitem-get-my-list]]

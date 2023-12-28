@@ -1,10 +1,13 @@
 package org.cmc.curtaincall.web.lostitem;
 
 import lombok.RequiredArgsConstructor;
+import org.cmc.curtaincall.domain.core.AllowedSort;
 import org.cmc.curtaincall.domain.core.CreatorId;
+import org.cmc.curtaincall.domain.core.OrderParam;
+import org.cmc.curtaincall.domain.core.SortParam;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.dao.LostItemDao;
-import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
+import org.cmc.curtaincall.domain.lostitem.request.LostItemListQueryParam;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemResponse;
@@ -14,6 +17,7 @@ import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +30,11 @@ public class LostItemQueryController {
     private final LostItemDao lostItemDao;
 
     @GetMapping("/lostItems")
-    public ListResult<LostItemResponse> search(
-            Pageable pageable, @ModelAttribute LostItemQueryParam queryParam) {
-        return new ListResult<>(lostItemDao.search(pageable, queryParam));
+    public ListResult<LostItemResponse> getList(
+            @AllowedSort(@SortParam(@OrderParam(property = "createdAt", direction = Sort.Direction.DESC)))
+            final Pageable pageable,
+            @ModelAttribute @Validated final LostItemListQueryParam queryParam) {
+        return new ListResult<>(lostItemDao.getList(pageable, queryParam));
     }
 
     @GetMapping("/member/lostItems")

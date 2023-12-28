@@ -39,7 +39,7 @@ class LostItemQueryControllerTest extends AbstractWebTest {
     private LostItemDao lostItemDao;
 
     @Test
-    void getLostItemList_Docs() throws Exception {
+    void getList_Docs() throws Exception {
         // given
         LostItemResponse lostItemResponse = LostItemResponse.builder()
                 .id(10L)
@@ -51,7 +51,7 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                 .imageUrl("image-url")
                 .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
                 .build();
-        given(lostItemDao.search(any(), any())).willReturn(List.of(lostItemResponse));
+        given(lostItemDao.getList(any(), any())).willReturn(List.of(lostItemResponse));
 
         // expected
         mockMvc.perform(get("/lostItems")
@@ -61,21 +61,21 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                         .param("page", "0")
                         .param("size", "20")
                         .param("facilityId", "FC001298")
-                        .param("foundDate", LocalDate.of(2023, 3, 4).toString())
-                        .param("title", "아이패드")
+                        .param("foundDateStart", LocalDate.of(2023, 3, 4).toString())
+                        .param("foundDateEnd", LocalDate.of(2023, 12, 28).toString())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("lostitem-search",
+                .andDo(document("lostitem-get-list",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("facilityId").description("공연시설 ID").optional(),
-                                parameterWithName("foundDate").description("습득일자").optional(),
-                                parameterWithName("title").description("제목").optional()
+                                parameterWithName("facilityId").description("공연시설 ID"),
+                                parameterWithName("foundDateStart").description("습득일자 시작일").optional(),
+                                parameterWithName("foundDateEnd").description("습득일자 종료일").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
