@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.exception.LostItemNotFoundException;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
 import org.cmc.curtaincall.domain.lostitem.response.*;
@@ -39,7 +38,6 @@ public class LostItemDao {
                         lostItem.facilityId,
                         facility.name,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundDate,
                         lostItem.foundTime,
                         lostItem.image.url,
@@ -50,7 +48,6 @@ public class LostItemDao {
                 .join(lostItem.image)
                 .where(
                         facilityIdEq(queryParam.getFacilityId()),
-                        typeEq(queryParam.getType()),
                         foundDateEq(queryParam.getFoundDate()),
                         titleStartsWith(queryParam.getTitle()),
                         lostItem.useYn.isTrue()
@@ -77,12 +74,6 @@ public class LostItemDao {
                 .orElse(null);
     }
 
-    private BooleanExpression typeEq(LostItemType type) {
-        return Optional.ofNullable(type)
-                .map(lostItem.type::eq)
-                .orElse(null);
-    }
-
     private BooleanExpression foundDateEq(LocalDate foundDate) {
         return Optional.ofNullable(foundDate)
                 .map(lostItem.foundDate::eq)
@@ -97,7 +88,6 @@ public class LostItemDao {
                         facility.name,
                         facility.phone,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundPlaceDetail,
                         lostItem.foundDate,
                         lostItem.foundTime,
@@ -124,7 +114,6 @@ public class LostItemDao {
                         lostItem.facilityId,
                         facility.name,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundDate,
                         lostItem.foundTime,
                         lostItem.image.url,

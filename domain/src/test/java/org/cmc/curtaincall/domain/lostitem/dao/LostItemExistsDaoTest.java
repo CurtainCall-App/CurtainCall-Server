@@ -5,7 +5,6 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.junit.jupiter.api.Test;

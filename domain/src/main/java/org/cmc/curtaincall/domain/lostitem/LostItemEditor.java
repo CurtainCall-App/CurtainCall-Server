@@ -10,7 +10,6 @@ import java.time.LocalTime;
 public record LostItemEditor(
         Image image,
         String title,
-        LostItemType type,
         String foundPlaceDetail,
         LocalDate foundDate,
         LocalTime foundTime,

@@ -1,6 +1,5 @@
 package org.cmc.curtaincall.web.lostitem;
 
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.dao.LostItemDao;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
@@ -18,17 +17,18 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.cmc.curtaincall.web.common.RestDocsAttribute.type;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +45,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                 .id(10L)
                 .facilityId(new FacilityId("FC001298"))
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
-                .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .title("아이패드 핑크")
                 .foundDate(LocalDate.of(2023, 3, 4))
                 .foundTime(LocalTime.of(11, 23))
@@ -62,7 +61,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                         .param("page", "0")
                         .param("size", "20")
                         .param("facilityId", "FC001298")
-                        .param("type", LostItemType.ELECTRONIC_EQUIPMENT.name())
                         .param("foundDate", LocalDate.of(2023, 3, 4).toString())
                         .param("title", "아이패드")
                 )
@@ -76,9 +74,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
                                 parameterWithName("facilityId").description("공연시설 ID").optional(),
-                                parameterWithName("type").description("분류")
-                                        .attributes(type(LostItemType.class))
-                                        .optional(),
                                 parameterWithName("foundDate").description("습득일자").optional(),
                                 parameterWithName("title").description("제목").optional()
                         ),
@@ -90,8 +85,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
-                                fieldWithPath("type").description("분실물 타입")
-                                        .type(LostItemType.class.getSimpleName()),
                                 fieldWithPath("imageUrl").description("이미지"),
                                 fieldWithPath("createdAt").description("생성일시")
                         )
@@ -106,7 +99,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                         .id(10L)
                         .facilityId(new FacilityId("FC001298"))
                         .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
-                        .type(LostItemType.ELECTRONIC_EQUIPMENT)
                         .title("아이패드 핑크")
                         .foundDate(LocalDate.of(2023, 3, 4))
                         .foundTime(LocalTime.of(11, 23))
@@ -143,8 +135,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
-                                fieldWithPath("type").description("분실물 타입")
-                                        .type(LostItemType.class.getSimpleName()),
                                 fieldWithPath("imageUrl").description("이미지"),
                                 fieldWithPath("createdAt").description("생성일시")
                         )
@@ -160,7 +150,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                 .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
                 .facilityPhone("01-234-5678")
                 .title("아이패드 핑크")
-                .type(LostItemType.ELECTRONIC_EQUIPMENT)
                 .foundPlaceDetail("2열")
                 .foundDate(LocalDate.of(2023, 3, 4))
                 .foundTime(LocalTime.of(11, 23))
@@ -193,7 +182,6 @@ class LostItemQueryControllerTest extends AbstractWebTest {
                                 fieldWithPath("facilityName").description("공연시설 이름"),
                                 fieldWithPath("facilityPhone").description("공연시설 전화번호"),
                                 fieldWithPath("title").description("제목"),
-                                fieldWithPath("type").type(LostItemType.class.getSimpleName()).description("분류"),
                                 fieldWithPath("foundPlaceDetail").description("세부장소"),
                                 fieldWithPath("foundDate").description("습득일자"),
                                 fieldWithPath("foundTime").description("습득시간").optional(),
