@@ -11,6 +11,7 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.exception.LostItemNotFoundException;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemListQueryParam;
+import org.cmc.curtaincall.domain.lostitem.request.LostItemSearchParam;
 import org.cmc.curtaincall.domain.lostitem.response.*;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.springframework.data.domain.Pageable;
@@ -60,7 +61,7 @@ public class LostItemDao {
                     .orElse(null);
             contentQuery.orderBy(QuerydslHelper.filterNullOrderByArr(createdAtOrderSpecifier));
         }
-        
+
         return contentQuery
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -82,6 +83,39 @@ public class LostItemDao {
     private BooleanExpression foundDateLoe(final LocalDate date) {
         return Optional.ofNullable(date)
                 .map(lostItem.foundDate::loe)
+                .orElse(null);
+    }
+
+    public List<LostItemResponse> search(final Pageable pageable, final LostItemSearchParam searchParam) {
+        JPAQuery<LostItemResponse> contentQuery = query
+                .select(new QLostItemResponse(
+                        lostItem.id,
+                        lostItem.facilityId,
+                        facility.name,
+                        lostItem.title,
+                        lostItem.foundDate,
+                        lostItem.foundTime,
+                        lostItem.image.url,
+                        lostItem.createdAt
+                ))
+                .from(lostItem)
+                .join(facility).on(lostItem.facilityId.eq(facility.id))
+                .join(lostItem.image)
+                .where(
+                        facilityIdEq(searchParam.facilityId()),
+                        titleStartsWith(searchParam.title()),
+                        lostItem.useYn.isTrue()
+                );
+
+        return contentQuery
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    private BooleanExpression titleStartsWith(final String title) {
+        return Optional.ofNullable(title)
+                .map(lostItem.title::startsWith)
                 .orElse(null);
     }
 

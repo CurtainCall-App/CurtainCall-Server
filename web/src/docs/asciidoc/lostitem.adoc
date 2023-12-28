@@ -18,6 +18,11 @@ operation::lostitem-create-lostitem[snippets='http-request,request-headers,reque
 
 operation::lostitem-get-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 
+[[lostitem-search]]
+== 분실물 검색
+
+operation::lostitem-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
 
 [[lostitem-get-my-list]]
 == 내가 쓴 글 (분실물)

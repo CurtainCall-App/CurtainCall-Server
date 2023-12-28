@@ -8,6 +8,7 @@ import org.cmc.curtaincall.domain.core.SortParam;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
 import org.cmc.curtaincall.domain.lostitem.dao.LostItemDao;
 import org.cmc.curtaincall.domain.lostitem.request.LostItemListQueryParam;
+import org.cmc.curtaincall.domain.lostitem.request.LostItemSearchParam;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemDetailResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemMyResponse;
 import org.cmc.curtaincall.domain.lostitem.response.LostItemResponse;
@@ -33,8 +34,17 @@ public class LostItemQueryController {
     public ListResult<LostItemResponse> getList(
             @AllowedSort(@SortParam(@OrderParam(property = "createdAt", direction = Sort.Direction.DESC)))
             final Pageable pageable,
-            @ModelAttribute @Validated final LostItemListQueryParam queryParam) {
+            @ModelAttribute @Validated final LostItemListQueryParam queryParam
+    ) {
         return new ListResult<>(lostItemDao.getList(pageable, queryParam));
+    }
+
+    @GetMapping("/search-lostItems")
+    public ListResult<LostItemResponse> search(
+            @AllowedSort final Pageable pageable,
+            @ModelAttribute @Validated final LostItemSearchParam searchParam
+    ) {
+        return new ListResult<>(lostItemDao.search(pageable, searchParam));
     }
 
     @GetMapping("/member/lostItems")

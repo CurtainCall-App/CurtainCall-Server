@@ -92,6 +92,57 @@ class LostItemQueryControllerTest extends AbstractWebTest {
     }
 
     @Test
+    void search_Docs() throws Exception {
+        // given
+        LostItemResponse lostItemResponse = LostItemResponse.builder()
+                .id(10L)
+                .facilityId(new FacilityId("FC001298"))
+                .facilityName("시온아트홀 (구. JK아트홀, 샘아트홀)")
+                .title("아이패드 핑크")
+                .foundDate(LocalDate.of(2023, 3, 4))
+                .foundTime(LocalTime.of(11, 23))
+                .imageUrl("image-url")
+                .createdAt(LocalDateTime.of(2023, 8, 31, 10, 50))
+                .build();
+        given(lostItemDao.search(any(), any())).willReturn(List.of(lostItemResponse));
+
+        // expected
+        mockMvc.perform(get("/search-lostItems")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "20")
+                        .param("facilityId", "FC001298")
+                        .param("title", "아이패드")
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("lostitem-search",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("facilityId").description("공연시설 ID"),
+                                parameterWithName("title").description("제목")
+                        ),
+                        responseFields(
+                                beneathPath("content[]").withSubsectionId("content"),
+                                fieldWithPath("id").description("공연 아이디"),
+                                fieldWithPath("facilityId").description("공연시설 ID"),
+                                fieldWithPath("facilityName").description("공연시설 이름"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("foundDate").description("습득일자"),
+                                fieldWithPath("foundTime").description("습득시간").optional(),
+                                fieldWithPath("imageUrl").description("이미지"),
+                                fieldWithPath("createdAt").description("생성일시")
+                        )
+                ));
+    }
+
+    @Test
     void getMyList_Docs() throws Exception {
         // given
         var responseList = List.of(
