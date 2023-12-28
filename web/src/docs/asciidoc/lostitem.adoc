@@ -13,8 +13,13 @@
 operation::lostitem-create-lostitem[snippets='http-request,request-headers,request-fields,http-response,response-fields']
 
 
+[[lostitem-get-list]]
+== 분실물 목록 조회
+
+operation::lostitem-get-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
 [[lostitem-search]]
-== 분실물 리스트 조회(검색)
+== 분실물 검색
 
 operation::lostitem-search[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
 

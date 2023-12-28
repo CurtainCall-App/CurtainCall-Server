@@ -18,16 +18,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "lost_item",
         indexes = {
-                @Index(name = "IX_lost_item__found_date_found_time",
-                        columnList = "found_date desc, found_time desc"),
+                @Index(name = "IX_lost_item__facility",
+                        columnList = "facility_id, created_at desc"),
                 @Index(name = "IX_lost_item__facility_found_date_found_time",
-                        columnList = "facility_id, found_date desc, found_time desc"),
-                @Index(name = "IX_lost_item__facility_type_found_date_found_time",
-                        columnList = "facility_id, type, found_date desc, found_time desc"),
-                @Index(name = "IX_lost_item__found_date_title", columnList = "found_date, title"),
-                @Index(name = "IX_lost_item__facility_found_date_title", columnList = "facility_id, found_date, title"),
-                @Index(name = "IX_lost_item__facility_type_found_date_title",
-                        columnList = "facility_id, type, found_date, title"),
+                        columnList = "facility_id, found_date, found_time"),
+                @Index(name = "IX_lost_item__facility_title",
+                        columnList = "facility_id, title"),
                 @Index(name = "IX_lost_item__created_by_created_at", columnList = "created_by, created_at desc")
         }
 )
@@ -50,10 +46,6 @@ public class LostItem extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private LostItemType type;
-
     @Column(name = "found_place_detail", nullable = false)
     private String foundPlaceDetail;
 
@@ -71,7 +63,6 @@ public class LostItem extends BaseEntity {
             final FacilityId facilityId,
             final Image image,
             final String title,
-            final LostItemType type,
             final String foundPlaceDetail,
             final LocalDate foundDate,
             final @Nullable LocalTime foundTime,
@@ -81,7 +72,6 @@ public class LostItem extends BaseEntity {
         this.facilityId = facilityId;
         this.image = image;
         this.title = title;
-        this.type = type;
         this.foundPlaceDetail = foundPlaceDetail;
         this.foundDate = foundDate;
         this.foundTime = foundTime;
@@ -93,7 +83,6 @@ public class LostItem extends BaseEntity {
         return LostItemEditor.builder()
                 .image(image)
                 .title(title)
-                .type(type)
                 .foundPlaceDetail(foundPlaceDetail)
                 .foundDate(foundDate)
                 .foundTime(foundTime)
@@ -107,7 +96,6 @@ public class LostItem extends BaseEntity {
 
         image = editor.image();
         title = editor.title();
-        type = editor.type();
         foundPlaceDetail = editor.foundPlaceDetail();
         foundDate = editor.foundDate();
         foundTime = editor.foundTime();

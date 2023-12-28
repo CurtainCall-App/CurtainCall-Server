@@ -5,7 +5,6 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.show.FacilityId;
 
 import java.time.LocalDate;
@@ -19,7 +18,6 @@ public class LostItemResponse {
     private FacilityId facilityId;
     private String facilityName;
     private String title;
-    private LostItemType type;
     private LocalDate foundDate;
     @Nullable
     private LocalTime foundTime;
@@ -33,7 +31,6 @@ public class LostItemResponse {
             FacilityId facilityId,
             String facilityName,
             String title,
-            LostItemType type,
             LocalDate foundDate,
             @Nullable LocalTime foundTime,
             String imageUrl,
@@ -43,7 +40,6 @@ public class LostItemResponse {
         this.facilityId = facilityId;
         this.facilityName = facilityName;
         this.title = title;
-        this.type = type;
         this.foundDate = foundDate;
         this.foundTime = foundTime;
         this.imageUrl = imageUrl;

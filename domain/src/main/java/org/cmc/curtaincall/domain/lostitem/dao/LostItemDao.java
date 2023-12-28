@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.lostitem.exception.LostItemNotFoundException;
-import org.cmc.curtaincall.domain.lostitem.request.LostItemQueryParam;
+import org.cmc.curtaincall.domain.lostitem.request.LostItemListQueryParam;
+import org.cmc.curtaincall.domain.lostitem.request.LostItemSearchParam;
 import org.cmc.curtaincall.domain.lostitem.response.*;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +32,13 @@ public class LostItemDao {
 
     private final JPAQueryFactory query;
 
-    public List<LostItemResponse> search(final Pageable pageable, final LostItemQueryParam queryParam) {
+    public List<LostItemResponse> getList(final Pageable pageable, final LostItemListQueryParam queryParam) {
         JPAQuery<LostItemResponse> contentQuery = query
                 .select(new QLostItemResponse(
                         lostItem.id,
                         lostItem.facilityId,
                         facility.name,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundDate,
                         lostItem.foundTime,
                         lostItem.image.url,
@@ -49,43 +48,74 @@ public class LostItemDao {
                 .join(facility).on(lostItem.facilityId.eq(facility.id))
                 .join(lostItem.image)
                 .where(
-                        facilityIdEq(queryParam.getFacilityId()),
-                        typeEq(queryParam.getType()),
-                        foundDateEq(queryParam.getFoundDate()),
-                        titleStartsWith(queryParam.getTitle()),
+                        facilityIdEq(queryParam.facilityId()),
+                        foundDateGoe(queryParam.foundDateStart()),
+                        foundDateLoe(queryParam.foundDateEnd()),
                         lostItem.useYn.isTrue()
                 );
 
-        if (queryParam.getTitle() != null) {
-            contentQuery.orderBy(lostItem.foundDate.desc(), lostItem.foundTime.desc());
+        if (queryParam.foundDateStart() == null && queryParam.foundDateEnd() == null) {
+            final OrderSpecifier<LocalDateTime> createdAtOrderSpecifier = Optional.ofNullable(pageable.getSort().getOrderFor("createdAt"))
+                    .map(order -> Order.valueOf(order.getDirection().name()))
+                    .map(order -> new OrderSpecifier<>(order, lostItem.createdAt))
+                    .orElse(null);
+            contentQuery.orderBy(QuerydslHelper.filterNullOrderByArr(createdAtOrderSpecifier));
         }
+
         return contentQuery
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
-    private BooleanExpression titleStartsWith(String title) {
-        return Optional.ofNullable(title)
-                .map(lostItem.title::startsWith)
-                .orElse(null);
-    }
-
-    private BooleanExpression facilityIdEq(FacilityId facilityId) {
+    private BooleanExpression facilityIdEq(final FacilityId facilityId) {
         return Optional.ofNullable(facilityId)
                 .map(lostItem.facilityId::eq)
                 .orElse(null);
     }
 
-    private BooleanExpression typeEq(LostItemType type) {
-        return Optional.ofNullable(type)
-                .map(lostItem.type::eq)
+    private BooleanExpression foundDateGoe(final LocalDate date) {
+        return Optional.ofNullable(date)
+                .map(lostItem.foundDate::goe)
                 .orElse(null);
     }
 
-    private BooleanExpression foundDateEq(LocalDate foundDate) {
-        return Optional.ofNullable(foundDate)
-                .map(lostItem.foundDate::eq)
+    private BooleanExpression foundDateLoe(final LocalDate date) {
+        return Optional.ofNullable(date)
+                .map(lostItem.foundDate::loe)
+                .orElse(null);
+    }
+
+    public List<LostItemResponse> search(final Pageable pageable, final LostItemSearchParam searchParam) {
+        JPAQuery<LostItemResponse> contentQuery = query
+                .select(new QLostItemResponse(
+                        lostItem.id,
+                        lostItem.facilityId,
+                        facility.name,
+                        lostItem.title,
+                        lostItem.foundDate,
+                        lostItem.foundTime,
+                        lostItem.image.url,
+                        lostItem.createdAt
+                ))
+                .from(lostItem)
+                .join(facility).on(lostItem.facilityId.eq(facility.id))
+                .join(lostItem.image)
+                .where(
+                        facilityIdEq(searchParam.facilityId()),
+                        titleStartsWith(searchParam.title()),
+                        lostItem.useYn.isTrue()
+                );
+
+        return contentQuery
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    private BooleanExpression titleStartsWith(final String title) {
+        return Optional.ofNullable(title)
+                .map(lostItem.title::startsWith)
                 .orElse(null);
     }
 
@@ -97,7 +127,6 @@ public class LostItemDao {
                         facility.name,
                         facility.phone,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundPlaceDetail,
                         lostItem.foundDate,
                         lostItem.foundTime,
@@ -124,7 +153,6 @@ public class LostItemDao {
                         lostItem.facilityId,
                         facility.name,
                         lostItem.title,
-                        lostItem.type,
                         lostItem.foundDate,
                         lostItem.foundTime,
                         lostItem.image.url,

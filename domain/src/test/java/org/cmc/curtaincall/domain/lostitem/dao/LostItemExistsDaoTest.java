@@ -5,7 +5,6 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.image.Image;
 import org.cmc.curtaincall.domain.lostitem.LostItem;
 import org.cmc.curtaincall.domain.lostitem.LostItemId;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
                 .title("title")
-                .type(LostItemType.BAG)
                 .foundPlaceDetail("detail")
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))
@@ -55,7 +53,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
                 .title("title")
-                .type(LostItemType.BAG)
                 .foundPlaceDetail("detail")
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))
@@ -80,7 +77,6 @@ class LostItemExistsDaoTest extends AbstractDataJpaTest {
                 .facilityId(new FacilityId("facility-id"))
                 .image(em.getReference(Image.class, 10L))
                 .title("title")
-                .type(LostItemType.BAG)
                 .foundPlaceDetail("detail")
                 .foundDate(LocalDate.of(2023, 11, 4))
                 .foundTime(LocalTime.of(0, 37))

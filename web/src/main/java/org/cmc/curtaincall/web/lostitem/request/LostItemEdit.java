@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.cmc.curtaincall.domain.lostitem.LostItemType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,9 +20,6 @@ public class LostItemEdit {
     @NotBlank
     @Size(max = 20)
     private String title;
-
-    @NotNull
-    private LostItemType type;
 
     @NotNull
     @Size(max = 30)

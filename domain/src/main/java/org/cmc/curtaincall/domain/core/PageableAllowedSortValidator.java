@@ -28,6 +28,6 @@ public class PageableAllowedSortValidator implements ConstraintValidator<Allowed
 
     @Override
     public boolean isValid(final Pageable pageable, final ConstraintValidatorContext context) {
-        return allowedSorts.contains(pageable.getSort());
+        return pageable.getSort().isEmpty() || allowedSorts.contains(pageable.getSort());
     }
 }
