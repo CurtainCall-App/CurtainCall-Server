@@ -6,7 +6,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class UsernameService {
@@ -14,10 +13,11 @@ public class UsernameService {
     private final Map<String, String> issuerUriToProviderName;
 
     public UsernameService(OAuth2ClientProperties properties) {
-        this.issuerUriToProviderName = properties.getProvider().keySet().stream()
+        this.issuerUriToProviderName = properties.getProvider().entrySet().stream()
+                .filter(entry -> entry.getValue().getIssuerUri() != null)
                 .collect(Collectors.toUnmodifiableMap(
-                        name -> properties.getProvider().get(name).getIssuerUri(),
-                        Function.identity()
+                        entry -> entry.getValue().getIssuerUri(),
+                        Map.Entry::getKey
                 ));
     }
 
