@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
 import org.cmc.curtaincall.domain.core.EnumMapperType;
 import org.cmc.curtaincall.domain.member.MemberWithdrawReason;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.report.ReportReason;
 import org.cmc.curtaincall.domain.report.ReportType;
 import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
@@ -97,7 +96,6 @@ class CodeControllerDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.EnumCodeExample").isNotEmpty())  // 등록된 EnumMapperType
-                .andExpect(jsonPath("$." + PartyCategory.class.getSimpleName()).isNotEmpty())
                 .andExpect(jsonPath("$." + ReportReason.class.getSimpleName()).isNotEmpty())
                 .andExpect(jsonPath("$." + BoxOfficeGenre.class.getSimpleName()).isNotEmpty())
                 .andExpect(jsonPath("$." + BoxOfficeType.class.getSimpleName()).isNotEmpty())
@@ -111,8 +109,6 @@ class CodeControllerDocsTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 //subsectionWithPath("FieldCategory").description("분야 카테고리")    // RestDocs 등록
-                                subsectionWithPath(PartyCategory.class.getSimpleName()).description("파티 카테고리: "
-                                        + Arrays.toString(PartyCategory.values())),
                                 subsectionWithPath(ReportReason.class.getSimpleName()).description("신고사유: "
                                         + Arrays.toString(ReportReason.values())),
                                 subsectionWithPath(BoxOfficeGenre.class.getSimpleName()).description("인기 순위 장르: "

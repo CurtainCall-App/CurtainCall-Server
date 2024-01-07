@@ -10,8 +10,13 @@ import org.cmc.curtaincall.web.party.request.PartyCreate;
 import org.cmc.curtaincall.web.party.request.PartyEdit;
 import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +31,6 @@ public class PartyController {
             @RequestBody @Validated PartyCreate partyCreate, @LoginMemberId MemberId memberId
     ) {
         return new IdResult<>(partyService.create(partyCreate, new CreatorId(memberId)));
-    }
-
-    @InitBinder("partyCreate")
-    public void init(WebDataBinder dataBinder) {
-        dataBinder.addValidators(new PartyCreateValidator());
     }
 
     @DeleteMapping("/parties/{partyId}")

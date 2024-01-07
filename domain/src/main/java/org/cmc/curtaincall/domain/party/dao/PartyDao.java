@@ -4,14 +4,13 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.PartyMemberRole;
 import org.cmc.curtaincall.domain.party.exception.PartyNotFoundException;
+import org.cmc.curtaincall.domain.party.request.PartyListParam;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.domain.party.response.PartyParticipatedResponse;
@@ -24,9 +23,12 @@ import org.cmc.curtaincall.domain.party.response.QPartyRecruitmentResponse;
 import org.cmc.curtaincall.domain.party.response.QPartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,7 +51,6 @@ public class PartyDao {
                         party.id,
                         party.title,
                         party.content,
-                        party.category,
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
@@ -76,7 +77,7 @@ public class PartyDao {
         ).orElseThrow(() -> new PartyNotFoundException(partyId));
     }
 
-    public List<PartyResponse> getList(Pageable pageable, PartyCategory category) {
+    public List<PartyResponse> getList(final Pageable pageable, final PartyListParam param) {
         return query
                 .select(new QPartyResponse(
                         party.id,
@@ -84,7 +85,6 @@ public class PartyDao {
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
-                        party.category,
                         party.createdBy,
                         member.nickname,
                         member.image.url,
@@ -101,7 +101,7 @@ public class PartyDao {
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
-                        party.category.eq(category),
+                        partyDateEq(param.date()),
                         party.useYn.isTrue()
                 )
                 .orderBy(QuerydslHelper.filterNullOrderByArr(
@@ -112,8 +112,17 @@ public class PartyDao {
                 .fetch();
     }
 
+    @Nullable
+    private BooleanExpression partyDateEq(@Nullable LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return party.partyAt.goe(date.atStartOfDay())
+                .and(party.partyAt.loe(date.atTime(LocalTime.MAX)));
+    }
+
     public List<PartyRecruitmentResponse> getRecruitmentList(
-            Pageable pageable, MemberId memberId, @Nullable PartyCategory category
+            final Pageable pageable, final MemberId memberId
     ) {
         return query
                 .select(new QPartyRecruitmentResponse(
@@ -123,7 +132,6 @@ public class PartyDao {
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
-                        party.category,
                         party.showId,
                         show.name,
                         show.poster,
@@ -136,7 +144,6 @@ public class PartyDao {
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
-                        partyCategoryEq(category),
                         partyMember.role.eq(PartyMemberRole.RECRUITER),
                         party.createdBy.memberId.eq(memberId),
                         party.useYn.isTrue()
@@ -147,7 +154,7 @@ public class PartyDao {
     }
 
     public List<PartyParticipationResponse> getParticipationList(
-            Pageable pageable, MemberId memberId, @Nullable PartyCategory category
+            final Pageable pageable, final MemberId memberId
     ) {
         return query
                 .select(new QPartyParticipationResponse(
@@ -157,7 +164,6 @@ public class PartyDao {
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
-                        party.category,
                         party.createdBy,
                         member.nickname,
                         member.image.url,
@@ -177,7 +183,6 @@ public class PartyDao {
                 .where(
                         partyMember.role.eq(PartyMemberRole.PARTICIPANT),
                         partyMember.memberId.eq(memberId),
-                        partyCategoryEq(category),
                         party.useYn.isTrue()
                 )
                 .offset(pageable.getOffset())
@@ -194,13 +199,7 @@ public class PartyDao {
         return new OrderSpecifier<>(order, party.createdAt);
     }
 
-    private BooleanExpression partyCategoryEq(@Nullable PartyCategory category) {
-        return Optional.ofNullable(category)
-                .map(party.category::eq)
-                .orElse(null);
-    }
-
-    public List<PartyResponse> search(Pageable pageable, PartySearchParam searchParam) {
+    public List<PartyResponse> search(final Pageable pageable, final PartySearchParam searchParam) {
         return query
                 .select(new QPartyResponse(
                         party.id,
@@ -208,7 +207,6 @@ public class PartyDao {
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
-                        party.category,
                         party.createdBy,
                         member.nickname,
                         member.image.url,
@@ -227,7 +225,6 @@ public class PartyDao {
                 .where(
                         show.name.startsWith(searchParam.getKeyword())
                                 .or(facility.name.startsWith(searchParam.getKeyword())),
-                        party.category.eq(searchParam.getCategory()),
                         party.useYn.isTrue()
                 )
                 .offset(pageable.getOffset())

@@ -6,7 +6,6 @@ import org.cmc.curtaincall.domain.member.Member;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.member.response.MemberDetailResponse;
 import org.cmc.curtaincall.domain.party.Party;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,6 @@ class MemberDaoTest extends AbstractDataJpaTest {
                 .title("title")
                 .content("content")
                 .maxMemberNum(5)
-                .category(PartyCategory.WATCHING)
                 .createdBy(new CreatorId(new MemberId(member.getId())))
                 .build();
         em.persist(party);
@@ -67,7 +65,6 @@ class MemberDaoTest extends AbstractDataJpaTest {
                 .title("title")
                 .content("content")
                 .maxMemberNum(5)
-                .category(PartyCategory.WATCHING)
                 .createdBy(new CreatorId(new MemberId(member.getId())))
                 .build();
         em.persist(party);

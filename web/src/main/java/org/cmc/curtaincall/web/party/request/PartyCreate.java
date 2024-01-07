@@ -1,9 +1,17 @@
 package org.cmc.curtaincall.web.party.request;
 
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.*;
-import lombok.*;
-import org.cmc.curtaincall.domain.party.PartyCategory;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
@@ -16,10 +24,10 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class PartyCreate {
 
-    @Nullable
+    @NotNull
     private ShowId showId;
 
-    @Nullable
+    @NotNull
     private LocalDateTime showAt;
 
     @NotBlank
@@ -34,6 +42,4 @@ public class PartyCreate {
     @Max(100L)
     private Integer maxMemberNum;
 
-    @NotNull
-    private PartyCategory category;
 }

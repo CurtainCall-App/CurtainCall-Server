@@ -1,7 +1,6 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.validation.PartyCreatorValidator;
 import org.cmc.curtaincall.domain.show.ShowId;
@@ -56,7 +55,6 @@ class PartyControllerDocsTest extends AbstractWebTest {
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
                 .maxMemberNum(5)
-                .category(PartyCategory.WATCHING)
                 .build();
         given(partyService.create(partyCreate, new CreatorId(LOGIN_MEMBER_ID))).willReturn(new PartyId(10L));
 
@@ -82,9 +80,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("content").description("내용")
                                         .attributes(constraint("max = 400")),
                                 fieldWithPath("maxMemberNum").description("최대 인원")
-                                        .attributes(constraint("min = 2, max = 100")),
-                                fieldWithPath("category").description("분류")
-                                        .type(PartyCategory.class.getSimpleName())
+                                        .attributes(constraint("min = 2, max = 100"))
                         ),
                         responseFields(
                                 fieldWithPath("id").description("파티 ID")

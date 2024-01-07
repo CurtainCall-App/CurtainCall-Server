@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
@@ -25,7 +24,6 @@ public class PartyParticipationResponse {
     @Nullable
     private LocalDateTime showAt;
     private LocalDateTime createdAt;
-    private PartyCategory category;
     private CreatorId creatorId;
     private String creatorNickname;
     @Nullable
@@ -50,7 +48,6 @@ public class PartyParticipationResponse {
             final Integer curMemberNum,
             final Integer maxMemberNum,
             final LocalDateTime createdAt,
-            final PartyCategory category,
             final CreatorId creatorId,
             final String creatorNickname,
             final String creatorImageUrl,
@@ -68,7 +65,6 @@ public class PartyParticipationResponse {
         this.maxMemberNum = maxMemberNum;
         this.showAt = showAt;
         this.createdAt = createdAt;
-        this.category = category;
         this.creatorId = creatorId;
         this.creatorNickname = creatorNickname;
         this.creatorImageUrl = creatorImageUrl;
