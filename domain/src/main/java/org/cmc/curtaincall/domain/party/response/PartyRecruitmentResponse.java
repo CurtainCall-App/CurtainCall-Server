@@ -6,7 +6,6 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
@@ -23,7 +22,6 @@ public class PartyRecruitmentResponse {
     @Nullable
     private LocalDateTime showAt;
     private LocalDateTime createdAt;
-    private PartyCategory category;
     @Nullable
     private ShowId showId;
     @Nullable
@@ -44,7 +42,6 @@ public class PartyRecruitmentResponse {
             final Integer curMemberNum,
             final Integer maxMemberNum,
             final LocalDateTime createdAt,
-            final PartyCategory category,
             @Nullable final ShowId showId,
             @Nullable final String showName,
             @Nullable final String showPoster,
@@ -59,7 +56,6 @@ public class PartyRecruitmentResponse {
         this.maxMemberNum = maxMemberNum;
         this.showAt = showAt;
         this.createdAt = createdAt;
-        this.category = category;
         this.showId = showId;
         this.showName = showName;
         this.showPoster = showPoster;

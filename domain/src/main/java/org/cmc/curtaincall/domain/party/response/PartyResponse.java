@@ -5,7 +5,6 @@ import com.querydsl.core.annotations.QueryProjection;
 import jakarta.annotation.Nullable;
 import lombok.*;
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 
@@ -24,8 +23,6 @@ public class PartyResponse {
     private Integer maxMemberNum;
 
     private LocalDateTime createdAt;
-
-    private PartyCategory category;
 
     private CreatorId creatorId;
 
@@ -60,7 +57,6 @@ public class PartyResponse {
             final Integer curMemberNum,
             final Integer maxMemberNum,
             final LocalDateTime createdAt,
-            final PartyCategory category,
             final CreatorId creatorId,
             final String creatorNickname,
             @Nullable final String creatorImageUrl,
@@ -76,7 +72,6 @@ public class PartyResponse {
         this.curMemberNum = curMemberNum;
         this.maxMemberNum = maxMemberNum;
         this.createdAt = createdAt;
-        this.category = category;
         this.creatorId = creatorId;
         this.creatorNickname = creatorNickname;
         this.creatorImageUrl = creatorImageUrl;

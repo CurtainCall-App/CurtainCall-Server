@@ -38,7 +38,6 @@ public class PartyService {
                 .title(partyCreate.getTitle())
                 .content(partyCreate.getContent())
                 .maxMemberNum(partyCreate.getMaxMemberNum())
-                .category(partyCreate.getCategory())
                 .createdBy(createdBy)
                 .build()
         );

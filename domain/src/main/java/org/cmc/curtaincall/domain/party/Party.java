@@ -21,11 +21,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "party",
         indexes = {
-                @Index(name = "IX_party__category_created_at", columnList = "category, created_at desc"),
-                @Index(name = "IX_party__show_category_created_at", columnList = "show_id, category, created_at desc"),
+                @Index(name = "IX_party__category_created_at", columnList = "created_at desc"),
+                @Index(name = "IX_party__show_category_created_at", columnList = "show_id, created_at desc"),
                 @Index(name = "IX_party__created_by_created_at", columnList = "created_by, created_at desc"),
-                @Index(name = "IX_party__created_by_category_created_at",
-                        columnList = "created_by, category, created_at desc")
         }
 )
 @Getter
@@ -63,10 +61,6 @@ public class Party extends BaseEntity {
     @Column(name = "closed", nullable = false)
     private Boolean closed = false;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category", length = 25, nullable = false)
-    private PartyCategory category;
-
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PartyMember> partyMembers = new ArrayList<>();
 
@@ -77,7 +71,6 @@ public class Party extends BaseEntity {
             final String title,
             final String content,
             final Integer maxMemberNum,
-            final PartyCategory category,
             final CreatorId createdBy
     ) {
         this.showId = showId;
@@ -85,7 +78,6 @@ public class Party extends BaseEntity {
         this.title = title;
         this.content = content;
         this.maxMemberNum = maxMemberNum;
-        this.category = category;
         this.createdBy = createdBy;
         this.partyMembers.add(new PartyMember(this, PartyMemberRole.RECRUITER, createdBy.getMemberId()));
     }

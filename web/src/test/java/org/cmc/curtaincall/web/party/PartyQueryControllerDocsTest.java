@@ -1,14 +1,16 @@
 package org.cmc.curtaincall.web.party;
 
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.party.PartyCategory;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
-import org.cmc.curtaincall.domain.party.response.*;
+import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
+import org.cmc.curtaincall.domain.party.response.PartyResponse;
 import org.cmc.curtaincall.domain.show.FacilityId;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,8 +27,12 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.beneathPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,7 +52,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .category(PartyCategory.WATCHING)
                 .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
@@ -56,7 +61,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyDao.getList(any(), any())).willReturn(List.of(partyResponse));
+        given(partyDao.getList(any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/parties")
@@ -64,7 +69,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("category", PartyCategory.WATCHING.name())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -74,8 +78,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
-                                parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리")
+                                parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -85,8 +88,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시").optional(),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
@@ -110,7 +111,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .category(PartyCategory.WATCHING)
                 .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
@@ -128,7 +128,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("category", PartyCategory.WATCHING.name())
                         .param("keyword", "잘자요")
                 )
                 .andExpect(status().isOk())
@@ -140,8 +139,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리")
-                                        .attributes(type(PartyCategory.class)),
                                 parameterWithName("keyword").description("검색 키워드")
                         ),
                         responseFields(
@@ -152,8 +149,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시").optional(),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
@@ -174,7 +169,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .id(10L)
                 .title("공연 같이 보실분~")
                 .content("저랑 같이 봐요~")
-                .category(PartyCategory.WATCHING)
                 .curMemberNum(2)
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
@@ -207,8 +201,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("id").description("파티 ID"),
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("content").description("내용"),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("카테고리"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시").optional(),
@@ -236,14 +228,13 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .category(PartyCategory.WATCHING)
                 .showId(new ShowId("PF220846"))
                 .showName("잘자요, 엄마 [청주]")
                 .showPoster("post-image-url")
                 .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyDao.getRecruitmentList(any(), any(), any()))
+        given(partyDao.getRecruitmentList(any(), any()))
                 .willReturn(List.of(partyResponse));
 
         // expected
@@ -252,7 +243,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("category", PartyCategory.WATCHING.name())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -265,10 +255,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
-                                parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리")
-                                        .attributes(RestDocsAttribute.type(PartyCategory.class))
-                                        .optional()
+                                parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -279,8 +266,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("카테고리"),
                                 fieldWithPath("showId").description("공연 ID"),
                                 fieldWithPath("showName").description("공연 이름"),
                                 fieldWithPath("showPoster").description("공연 포스터"),
@@ -301,7 +286,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .maxMemberNum(5)
                 .showAt(LocalDateTime.of(2023, 4, 28, 19, 30))
                 .createdAt(LocalDateTime.of(2023, 4, 28, 11, 12, 28))
-                .category(PartyCategory.WATCHING)
                 .creatorId(new CreatorId(2L))
                 .creatorNickname("고라파덕")
                 .creatorImageUrl("creator-image-url")
@@ -311,7 +295,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyDao.getParticipationList(any(), any(), any()))
+        given(partyDao.getParticipationList(any(), any()))
                 .willReturn(List.of(partyResponse));
 
         // expected
@@ -320,7 +304,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("category", PartyCategory.WATCHING.name())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -333,8 +316,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
-                                parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("category").description("카테고리").optional()
+                                parameterWithName("size").description("페이지 사이즈").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
@@ -345,8 +327,6 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시"),
                                 fieldWithPath("createdAt").description("작성 일시"),
-                                fieldWithPath("category").type(PartyCategory.class.getSimpleName())
-                                        .description("카테고리"),
                                 fieldWithPath("creatorId").description("작성자 ID"),
                                 fieldWithPath("creatorNickname").description("작성자 닉네임"),
                                 fieldWithPath("creatorImageUrl").description("작성자 이미지 URL").optional(),
