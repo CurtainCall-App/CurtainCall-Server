@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -61,7 +62,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                 .facilityId(new FacilityId("FC000182"))
                 .facilityName("예술나눔 터 (예술나눔 터)")
                 .build();
-        given(partyDao.getList(any())).willReturn(List.of(partyResponse));
+        given(partyDao.getList(any(), any())).willReturn(List.of(partyResponse));
 
         // expected
         mockMvc.perform(get("/parties")
@@ -69,6 +70,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
+                        .param("date", LocalDate.of(2023, 4, 28).toString())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -78,7 +80,8 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
-                                parameterWithName("size").description("페이지 사이즈").optional()
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("date").description("파티 날짜")
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),

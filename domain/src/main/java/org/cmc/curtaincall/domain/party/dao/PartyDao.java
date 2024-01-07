@@ -4,13 +4,13 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.PartyMemberRole;
 import org.cmc.curtaincall.domain.party.exception.PartyNotFoundException;
+import org.cmc.curtaincall.domain.party.request.PartyListParam;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
 import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
 import org.cmc.curtaincall.domain.party.response.PartyParticipatedResponse;
@@ -23,9 +23,12 @@ import org.cmc.curtaincall.domain.party.response.QPartyRecruitmentResponse;
 import org.cmc.curtaincall.domain.party.response.QPartyResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -74,7 +77,7 @@ public class PartyDao {
         ).orElseThrow(() -> new PartyNotFoundException(partyId));
     }
 
-    public List<PartyResponse> getList(final Pageable pageable) {
+    public List<PartyResponse> getList(final Pageable pageable, final PartyListParam param) {
         return query
                 .select(new QPartyResponse(
                         party.id,
@@ -98,6 +101,7 @@ public class PartyDao {
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
+                        partyDateEq(param.date()),
                         party.useYn.isTrue()
                 )
                 .orderBy(QuerydslHelper.filterNullOrderByArr(
@@ -106,6 +110,15 @@ public class PartyDao {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Nullable
+    private BooleanExpression partyDateEq(@Nullable LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return party.partyAt.goe(date.atStartOfDay())
+                .and(party.partyAt.loe(date.atTime(LocalTime.MAX)));
     }
 
     public List<PartyRecruitmentResponse> getRecruitmentList(

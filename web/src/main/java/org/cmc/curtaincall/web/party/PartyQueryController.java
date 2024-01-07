@@ -5,15 +5,24 @@ import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.PartyId;
 import org.cmc.curtaincall.domain.party.dao.PartyDao;
+import org.cmc.curtaincall.domain.party.request.PartyListParam;
 import org.cmc.curtaincall.domain.party.request.PartySearchParam;
-import org.cmc.curtaincall.domain.party.response.*;
+import org.cmc.curtaincall.domain.party.response.PartyDetailResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipatedResponse;
+import org.cmc.curtaincall.domain.party.response.PartyParticipationResponse;
+import org.cmc.curtaincall.domain.party.response.PartyRecruitmentResponse;
+import org.cmc.curtaincall.domain.party.response.PartyResponse;
 import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -25,8 +34,10 @@ public class PartyQueryController {
 
     @GetMapping("/parties")
     public ListResult<PartyResponse> getPartyList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) final Pageable pageable) {
-        return new ListResult<>(partyDao.getList(pageable));
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) final Pageable pageable,
+            @ModelAttribute final PartyListParam param
+    ) {
+        return new ListResult<>(partyDao.getList(pageable, param));
     }
 
     @GetMapping("/search/party")
