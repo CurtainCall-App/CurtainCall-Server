@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.domain.account;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -38,6 +39,10 @@ public class Account extends BaseTimeEntity {
     private String username;
 
     @Embedded
+    @AttributeOverride(
+            name = "id",
+            column = @Column(name = "member_id")
+    )
     private MemberId memberId;
 
     @Builder
