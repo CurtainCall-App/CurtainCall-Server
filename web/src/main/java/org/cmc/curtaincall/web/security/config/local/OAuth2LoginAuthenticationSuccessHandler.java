@@ -1,4 +1,4 @@
-package org.cmc.curtaincall.web.security.config;
+package org.cmc.curtaincall.web.security.config.local;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
