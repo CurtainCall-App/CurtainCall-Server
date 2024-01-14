@@ -51,4 +51,8 @@ public class Account extends BaseTimeEntity {
         this.memberId = memberId;
     }
 
+    public Account(final String username) {
+        this.username = username;
+    }
+
 }
