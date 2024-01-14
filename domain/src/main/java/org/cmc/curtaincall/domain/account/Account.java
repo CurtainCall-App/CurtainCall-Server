@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.domain.account;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cmc.curtaincall.domain.account.exception.AccountAlreadySignupException;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
 
@@ -38,11 +40,26 @@ public class Account extends BaseTimeEntity {
     private String username;
 
     @Embedded
+    @AttributeOverride(
+            name = "id",
+            column = @Column(name = "member_id")
+    )
     private MemberId memberId;
 
     @Builder
     public Account(final String username, final MemberId memberId) {
         this.username = username;
+        this.memberId = memberId;
+    }
+
+    public Account(final String username) {
+        this.username = username;
+    }
+
+    public void signup(final MemberId memberId) {
+        if (getMemberId() != null) {
+            throw new AccountAlreadySignupException(getUsername());
+        }
         this.memberId = memberId;
     }
 

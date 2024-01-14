@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -43,6 +45,9 @@ class SignupServiceTest {
 
         given(member.getId()).willReturn(10L);
 
+        final Account account = mock(Account.class);
+        given(accountRepository.findByUsername("test-username")).willReturn(Optional.of(account));
+
         // when
         final SignupRequest request = SignupRequest.builder()
                 .nickname("test-nickname")
@@ -52,9 +57,7 @@ class SignupServiceTest {
         // then
         assertThat(memberCaptor.getValue().getNickname()).isEqualTo("test-nickname");
         final ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
-        then(accountRepository).should().save(accountCaptor.capture());
-        assertThat(accountCaptor.getValue().getUsername()).isEqualTo("test-username");
-        assertThat(accountCaptor.getValue().getMemberId()).isEqualTo(new MemberId(10L));
+        then(account).should().signup(new MemberId(10L));
     }
 
     @Test

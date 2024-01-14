@@ -8,7 +8,6 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
-import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -50,10 +49,5 @@ public class CurtainCallJwtConfig {
     public CurtainCallJwtEncoderService curtainCallJwtEncoderService(
             CurtainCallJwtProperties properties, JwtEncoder curtainCallJwtEncoder) {
         return new CurtainCallJwtEncoderService(curtainCallJwtEncoder, properties.getAccessTokenValidity());
-    }
-
-    @Bean
-    public UsernameService usernameService(OAuth2ClientProperties properties) {
-        return new UsernameService(properties);
     }
 }
