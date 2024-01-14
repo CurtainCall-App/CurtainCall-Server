@@ -287,7 +287,6 @@ create table shows
     use_yn           bit                                         not null,
     created_at       datetime(6)                                 not null,
     last_modified_at datetime(6)                                 not null,
-    version          bigint                                      not null,
     primary key (show_id)
 ) engine = InnoDB;
 
