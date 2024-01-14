@@ -13,15 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -106,13 +103,7 @@ class AccountControllerDocsTest extends AbstractWebTest {
                 .nickname("연뮤더쿠znzn")
                 .build();
 
-        given(usernameService.getUsername(any())).willReturn("test-username");
         given(signupService.signup(any(), any())).willReturn(new MemberId(123L));
-        Jwt jwt = mock(Jwt.class);
-        given(jwt.getTokenValue()).willReturn("test-jwt");
-        given(jwt.getExpiresAt()).willReturn(Instant.now());
-        given(jwtEncoderService.encode(any())).willReturn(jwt);
-        given(accountDao.getMemberId(any())).willReturn(new MemberId(123L));
 
         // expected
         mockMvc.perform(post("/signup")
@@ -123,9 +114,6 @@ class AccountControllerDocsTest extends AbstractWebTest {
                 )
                 .andDo(print())
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.memberId").isNotEmpty())
-                .andExpect(jsonPath("$.accessToken").isNotEmpty())
-                .andExpect(jsonPath("$.accessTokenExpiresAt").isNotEmpty())
                 .andDo(document("account-signup",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
@@ -135,10 +123,7 @@ class AccountControllerDocsTest extends AbstractWebTest {
                                         .attributes(RestDocsAttribute.constraint("min = 2, max = 15"))
                         ),
                         responseFields(
-                                fieldWithPath("id").description("회원 ID"),
-                                fieldWithPath("memberId").description("회원 ID"),
-                                fieldWithPath("accessToken").description("커튼콜 액세스 토큰"),
-                                fieldWithPath("accessTokenExpiresAt").description("커튼콜 액세스 토큰 만료 일시")
+                                fieldWithPath("id").description("회원 ID")
                         )
                 ))
         ;

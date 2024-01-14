@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cmc.curtaincall.domain.account.exception.AccountAlreadySignupException;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
 
@@ -53,6 +54,13 @@ public class Account extends BaseTimeEntity {
 
     public Account(final String username) {
         this.username = username;
+    }
+
+    public void signup(final MemberId memberId) {
+        if (getMemberId() != null) {
+            throw new AccountAlreadySignupException(getUsername());
+        }
+        this.memberId = memberId;
     }
 
 }
