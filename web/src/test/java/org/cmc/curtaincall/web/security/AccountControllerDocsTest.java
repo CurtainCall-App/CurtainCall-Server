@@ -5,9 +5,7 @@ import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.cmc.curtaincall.web.security.controller.AccountController;
 import org.cmc.curtaincall.web.security.request.SignupRequest;
-import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.cmc.curtaincall.web.security.service.SignupService;
-import org.cmc.curtaincall.web.security.service.UsernameService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,12 +36,6 @@ class AccountControllerDocsTest extends AbstractWebTest {
 
     @MockBean
     private SignupService signupService;
-
-    @MockBean
-    private UsernameService usernameService;
-
-    @MockBean
-    private CurtainCallJwtEncoderService jwtEncoderService;
 
     @Test
     void getUserMemberId() throws Exception {
