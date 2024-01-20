@@ -398,3 +398,18 @@ create table box_office
 
 create index IX_box_office__base_date_type_genre_rank_num
     on box_office (base_date desc, type, genre, rank_num);
+
+
+create table show_recommendation
+(
+    show_recommendation_id bigint       not null auto_increment,
+    show_id                varchar(25)  not null,
+    description            varchar(255) not null,
+    use_yn                 bit          not null,
+    created_at             datetime(6)  not null,
+    last_modified_at       datetime(6)  not null,
+    primary key (show_recommendation_id)
+) engine = InnoDB;
+
+create index IX_show_recommendation__show
+    on show_recommendation (show_id);
