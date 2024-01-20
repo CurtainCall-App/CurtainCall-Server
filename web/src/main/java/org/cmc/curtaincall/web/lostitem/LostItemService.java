@@ -48,13 +48,6 @@ public class LostItemService {
     }
 
     @Transactional
-    public void delete(final LostItemId id) {
-        LostItem lostItem = LostItemHelper.get(id, lostItemRepository);
-        lostItemRepository.delete(lostItem);
-        imageRepository.delete(lostItem.getImage());
-    }
-
-    @Transactional
     public void edit(final LostItemId id, final LostItemEdit lostItemEdit) {
         LostItem lostItem = LostItemHelper.get(id, lostItemRepository);
 
