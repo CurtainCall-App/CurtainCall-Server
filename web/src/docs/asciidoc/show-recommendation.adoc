@@ -1,0 +1,13 @@
+= ShowRecommendation(공연 추천)
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[get-list]]
+== 공연 추천 목록 조회
+
+operation::show-recommendation/get-list[snippets='http-request,http-response,response-fields-content']
