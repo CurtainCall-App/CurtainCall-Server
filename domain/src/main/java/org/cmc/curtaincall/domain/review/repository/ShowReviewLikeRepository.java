@@ -16,4 +16,6 @@ public interface ShowReviewLikeRepository extends JpaRepository<ShowReviewLike, 
     Optional<ShowReviewLike> findByMemberIdAndShowReview(MemberId memberId, ShowReview showReview);
 
     List<ShowReviewLike> findAllByMemberIdAndShowReviewIn(MemberId memberId, Collection<ShowReview> reviews);
+
+    long deleteAllByShowReview(ShowReview showReview);
 }

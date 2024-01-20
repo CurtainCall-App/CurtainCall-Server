@@ -45,13 +45,6 @@ public class ShowReviewService {
     }
 
     @Transactional
-    public void delete(final ShowReviewId showReviewId) {
-        ShowReview showReview = ShowReviewHelper.get(showReviewId, showReviewRepository);
-        showReviewGradeApplyService.cancel(showReview);
-        showReviewRepository.delete(showReview);
-    }
-
-    @Transactional
     public void edit(final ShowReviewId id, final ShowReviewEdit showReviewEdit) {
         ShowReview showReview = ShowReviewHelper.getWithOptimisticLock(id, showReviewRepository);
         showReviewGradeApplyService.cancel(showReview);
