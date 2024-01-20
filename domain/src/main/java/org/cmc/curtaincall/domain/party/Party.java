@@ -10,6 +10,7 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyClosedException;
 import org.cmc.curtaincall.domain.party.exception.PartyAlreadyParticipatedException;
+import org.cmc.curtaincall.domain.party.exception.PartyRecruiterNotAllowedLeaveException;
 import org.cmc.curtaincall.domain.show.ShowId;
 
 import java.time.LocalDateTime;
@@ -117,10 +118,15 @@ public class Party extends BaseEntity {
     }
 
     public void cancelParticipate(final MemberId memberId) {
-        partyMembers = partyMembers.stream()
-                .filter(partyMember -> !partyMember.getMemberId().equals(memberId))
-                .toList();
-
+        final PartyMember partyMember = partyMembers
+                .stream()
+                .filter(pm -> pm.getMemberId().equals(memberId))
+                .findAny()
+                .orElseThrow(() -> new PartyAlreadyParticipatedException(new PartyId(id), memberId));
+        if (partyMember.getRole() == PartyMemberRole.RECRUITER) {
+            throw new PartyRecruiterNotAllowedLeaveException(new PartyId(id), memberId);
+        }
+        partyMembers.remove(partyMember);
         curMemberNum -= 1;
         open();
     }
