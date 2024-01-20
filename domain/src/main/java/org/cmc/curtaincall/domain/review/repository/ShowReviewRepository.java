@@ -16,4 +16,7 @@ public interface ShowReviewRepository extends JpaRepository<ShowReview, Long> {
     @Lock(LockModeType.OPTIMISTIC)
     Optional<ShowReview> findWithLockById(Long id);
 
+    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+    Optional<ShowReview> findWithPessimisticLockById(Long id);
+
 }

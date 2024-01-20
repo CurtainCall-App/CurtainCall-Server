@@ -46,6 +46,12 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @MockBean
     private PartyCreatorValidator partyCreatorValidator;
 
+    @MockBean
+    private PartyDeleteService partyDeleteService;
+
+    @MockBean
+    private PartyParticipationService partyParticipationService;
+
     @Test
     void createParty_Docs() throws Exception {
         // given
@@ -107,9 +113,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                         )
                 ));
         PartyId partyId = new PartyId(10L);
-        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyDeleteService);
         inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
-        inOrder.verify(partyService).delete(partyId);
+        inOrder.verify(partyDeleteService).delete(partyId);
     }
 
     @Test
@@ -167,7 +173,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
-        then(partyService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
+        then(partyParticipationService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
     }
 
 }

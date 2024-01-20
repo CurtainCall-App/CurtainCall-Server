@@ -15,4 +15,7 @@ public interface PartyRepository extends JpaRepository<Party, Long>, PartyReposi
     @Lock(LockModeType.OPTIMISTIC)
     Optional<Party> findWithLockById(Long id);
 
+    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+    Optional<Party> findWithPessimisticLockById(Long id);
+
 }

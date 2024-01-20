@@ -20,6 +20,8 @@ public class LostItemController {
 
     private final LostItemService lostItemService;
 
+    private final LostItemDeleteService lostItemDeleteService;
+
     private final ImageService imageService;
 
     private final LostItemCreatorValidator lostItemCreatorValidator;
@@ -38,7 +40,7 @@ public class LostItemController {
     @DeleteMapping("/lostItems/{lostItemId}")
     public void deleteLostItem(@PathVariable LostItemId lostItemId, @LoginMemberId MemberId memberId) {
         lostItemCreatorValidator.validate(lostItemId, new CreatorId(memberId));
-        lostItemService.delete(lostItemId);
+        lostItemDeleteService.delete(lostItemId);
     }
 
     @PatchMapping("/lostItems/{lostItemId}")

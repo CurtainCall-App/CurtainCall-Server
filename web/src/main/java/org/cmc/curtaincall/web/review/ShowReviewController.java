@@ -23,6 +23,8 @@ public class ShowReviewController {
 
     private final ShowReviewService showReviewService;
 
+    private final ShowReviewDeleteService showReviewDeleteService;
+
     private final ShowReviewCreatorValidator showReviewCreatorValidator;
 
     @PostMapping("/review")
@@ -36,7 +38,7 @@ public class ShowReviewController {
     @DeleteMapping("/reviews/{reviewId}")
     public void delete(@PathVariable ShowReviewId reviewId, @LoginMemberId MemberId memberId) {
         showReviewCreatorValidator.validate(reviewId, new CreatorId(memberId));
-        showReviewService.delete(reviewId);
+        showReviewDeleteService.delete(reviewId);
     }
 
     @PatchMapping("/reviews/{reviewId}")
