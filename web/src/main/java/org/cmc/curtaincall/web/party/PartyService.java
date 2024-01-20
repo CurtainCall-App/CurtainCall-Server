@@ -65,11 +65,4 @@ public class PartyService {
         party.edit(editor);
     }
 
-    @Transactional
-    public void delete(PartyId partyId) {
-        Party party = PartyHelper.get(partyId, partyRepository);
-        party.getPartyMembers().clear();
-        partyRepository.delete(party);
-    }
-
 }

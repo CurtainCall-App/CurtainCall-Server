@@ -26,6 +26,8 @@ public class PartyController {
 
     private final PartyCreatorValidator partyCreatorValidator;
 
+    private final PartyDeleteService partyDeleteService;
+
     @PostMapping("/parties")
     public IdResult<PartyId> createParty(
             @RequestBody @Validated PartyCreate partyCreate, @LoginMemberId MemberId memberId
@@ -36,7 +38,7 @@ public class PartyController {
     @DeleteMapping("/parties/{partyId}")
     public void deleteParty(@PathVariable PartyId partyId, @LoginMemberId MemberId memberId) {
         partyCreatorValidator.validate(partyId, new CreatorId(memberId));
-        partyService.delete(partyId);
+        partyDeleteService.delete(partyId);
     }
 
     @PatchMapping("/parties/{partyId}")
