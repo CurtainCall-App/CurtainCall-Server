@@ -2,8 +2,6 @@ package org.cmc.curtaincall.web.party;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.core.OptimisticLock;
-import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.party.Party;
 import org.cmc.curtaincall.domain.party.PartyEditor;
 import org.cmc.curtaincall.domain.party.PartyHelper;
@@ -43,14 +41,6 @@ public class PartyService {
         );
 
         return new PartyId(party.getId());
-    }
-
-    @Transactional
-    @OptimisticLock
-    public void participate(final PartyId partyId, final MemberId memberId) {
-        memberIdValidator.validate(memberId);
-        Party party = PartyHelper.get(partyId, partyRepository);
-        party.participate(memberId);
     }
 
     @Transactional

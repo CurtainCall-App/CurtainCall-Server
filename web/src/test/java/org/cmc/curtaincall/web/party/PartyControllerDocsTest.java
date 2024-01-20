@@ -49,6 +49,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @MockBean
     private PartyDeleteService partyDeleteService;
 
+    @MockBean
+    private PartyParticipationService partyParticipationService;
+
     @Test
     void createParty_Docs() throws Exception {
         // given
@@ -170,7 +173,7 @@ class PartyControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("partyId").description("파티 ID")
                         )
                 ));
-        then(partyService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
+        then(partyParticipationService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
     }
 
 }

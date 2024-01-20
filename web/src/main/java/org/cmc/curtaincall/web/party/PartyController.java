@@ -28,6 +28,8 @@ public class PartyController {
 
     private final PartyDeleteService partyDeleteService;
 
+    private final PartyParticipationService partyParticipationService;
+
     @PostMapping("/parties")
     public IdResult<PartyId> createParty(
             @RequestBody @Validated PartyCreate partyCreate, @LoginMemberId MemberId memberId
@@ -51,7 +53,7 @@ public class PartyController {
 
     @PutMapping("/member/parties/{partyId}")
     public void participateParty(@PathVariable PartyId partyId, @LoginMemberId MemberId memberId) {
-        partyService.participate(partyId, memberId);
+        partyParticipationService.participate(partyId, memberId);
     }
 
 }

@@ -31,7 +31,7 @@ public class PartyEventHandler {
                 .where(partyMember.memberId.eq(memberId))
                 .setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
                 .fetch()
-                .forEach(item -> item.cancelParticipate(memberId));
+                .forEach(item -> item.leave(memberId));
 
         query.update(party)
                 .set(party.useYn, false)

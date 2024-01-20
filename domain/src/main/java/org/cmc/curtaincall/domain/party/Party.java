@@ -117,7 +117,7 @@ public class Party extends BaseEntity {
         }
     }
 
-    public void cancelParticipate(final MemberId memberId) {
+    public void leave(final MemberId memberId) {
         final PartyMember partyMember = partyMembers
                 .stream()
                 .filter(pm -> pm.getMemberId().equals(memberId))
