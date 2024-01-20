@@ -23,6 +23,7 @@
 - xref:notice.adoc[Notice(공지사항)]
 - xref:report.adoc[Report(신고)]
 - xref:chat.adoc[Chat(채팅)]
+- xref:show-recommendation.adoc[ShowRecommendation(공연추천)]
 
 == HTTP Method
 
