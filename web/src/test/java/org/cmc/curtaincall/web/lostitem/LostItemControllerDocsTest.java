@@ -44,6 +44,9 @@ class LostItemControllerDocsTest extends AbstractWebTest {
     private LostItemService lostItemService;
 
     @MockBean
+    private LostItemDeleteService lostItemDeleteService;
+
+    @MockBean
     private LostItemCreatorValidator lostItemCreatorValidator;
 
     @MockBean
@@ -120,7 +123,7 @@ class LostItemControllerDocsTest extends AbstractWebTest {
         LostItemId lostItemId = new LostItemId(10L);
         then(lostItemCreatorValidator).should(times(1))
                 .validate(lostItemId, new CreatorId(LOGIN_MEMBER_ID));
-        then(lostItemService).should(times(1)).delete(lostItemId);
+        then(lostItemDeleteService).should(times(1)).delete(lostItemId);
     }
 
     @Test

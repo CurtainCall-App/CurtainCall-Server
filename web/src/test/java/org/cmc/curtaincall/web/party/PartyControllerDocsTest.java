@@ -46,6 +46,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
     @MockBean
     private PartyCreatorValidator partyCreatorValidator;
 
+    @MockBean
+    private PartyDeleteService partyDeleteService;
+
     @Test
     void createParty_Docs() throws Exception {
         // given
@@ -107,9 +110,9 @@ class PartyControllerDocsTest extends AbstractWebTest {
                         )
                 ));
         PartyId partyId = new PartyId(10L);
-        InOrder inOrder = inOrder(partyCreatorValidator, partyService);
+        InOrder inOrder = inOrder(partyCreatorValidator, partyDeleteService);
         inOrder.verify(partyCreatorValidator).validate(partyId, new CreatorId(LOGIN_MEMBER_ID));
-        inOrder.verify(partyService).delete(partyId);
+        inOrder.verify(partyDeleteService).delete(partyId);
     }
 
     @Test

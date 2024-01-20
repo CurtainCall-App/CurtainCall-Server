@@ -39,6 +39,9 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
     private ShowReviewService showReviewService;
 
     @MockBean
+    private ShowReviewDeleteService showReviewDeleteService;
+
+    @MockBean
     private ShowReviewCreatorValidator showReviewCreatorValidator;
 
     @Test
@@ -97,10 +100,10 @@ class ShowReviewControllerDocsTest extends AbstractWebTest {
                         )
                 ));
 
-        InOrder inOrder = inOrder(showReviewCreatorValidator, showReviewService);
+        InOrder inOrder = inOrder(showReviewCreatorValidator, showReviewDeleteService);
         ShowReviewId showReviewId = new ShowReviewId(10L);
         inOrder.verify(showReviewCreatorValidator).validate(showReviewId, new CreatorId(LOGIN_MEMBER_ID));
-        inOrder.verify(showReviewService).delete(showReviewId);
+        inOrder.verify(showReviewDeleteService).delete(showReviewId);
     }
 
     @Test
