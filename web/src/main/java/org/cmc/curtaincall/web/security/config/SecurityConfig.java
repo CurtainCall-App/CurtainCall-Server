@@ -28,7 +28,8 @@ public class SecurityConfig {
             "/shows/{showId}/reviews",
             "/notices",
             "/notices/{noticeId}",
-            "/members/duplicate/nickname"
+            "/members/duplicate/nickname",
+            "/show-recommendations"
     };
 
     @Bean
