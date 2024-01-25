@@ -7,7 +7,6 @@ import org.cmc.curtaincall.batch.service.kopis.response.FacilityDetailResponse;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
 import org.cmc.curtaincall.domain.show.Facility;
 import org.cmc.curtaincall.domain.show.FacilityId;
-import org.cmc.curtaincall.domain.show.dao.FacilityExistsDao;
 import org.springframework.batch.item.ItemProcessor;
 
 @Slf4j
@@ -16,18 +15,11 @@ public class FacilityItemProcessor implements ItemProcessor<FacilityResponse, Fa
 
     private final KopisService kopisService;
 
-    private final FacilityExistsDao facilityExistsDao;
-
     @Override
     public Facility process(FacilityResponse item) throws Exception {
-        final FacilityId facilityId = new FacilityId(item.id());
-        if (isFacilityExisting(facilityId)) {
-            log.debug("공연시설({})은 존재하는 데이터입니다.", item.id());
-            return null;
-        }
-        FacilityDetailResponse facilityDetail = kopisService.getFacilityDetail(item.id());
+        final FacilityDetailResponse facilityDetail = kopisService.getFacilityDetail(item.id());
         return Facility.builder()
-                .id(facilityId)
+                .id(new FacilityId(item.id()))
                 .name(facilityDetail.name())
                 .hallNum(facilityDetail.hallNum())
                 .characteristics(facilityDetail.characteristics())
@@ -43,7 +35,4 @@ public class FacilityItemProcessor implements ItemProcessor<FacilityResponse, Fa
                 .build();
     }
 
-    private boolean isFacilityExisting(final FacilityId id) {
-        return facilityExistsDao.exists(id);
-    }
 }

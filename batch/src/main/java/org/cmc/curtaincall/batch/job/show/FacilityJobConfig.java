@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.FacilityResponse;
 import org.cmc.curtaincall.domain.show.Facility;
-import org.cmc.curtaincall.domain.show.dao.FacilityExistsDao;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -40,8 +39,6 @@ public class FacilityJobConfig {
 
     private final PlatformTransactionManager txManager;
 
-    private final FacilityExistsDao facilityExistsDao;
-
     @Bean
     public Job facilityJob() {
         JobBuilder jobBuilder = new JobBuilder(JOB_NAME, jobRepository);
@@ -74,7 +71,7 @@ public class FacilityJobConfig {
     @Bean
     @StepScope
     public FacilityItemProcessor facilityItemProcessor() {
-        return new FacilityItemProcessor(kopisService, facilityExistsDao);
+        return new FacilityItemProcessor(kopisService);
     }
 
     @Bean
@@ -82,6 +79,7 @@ public class FacilityJobConfig {
     public JpaItemWriter<Facility> facilityJpaItemWriter() {
         return new JpaItemWriterBuilder<Facility>()
                 .entityManagerFactory(emf)
+                .usePersist(false)
                 .build();
     }
 }
