@@ -58,7 +58,8 @@ class ShowRecommendationControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("name").description("공연 이름"),
                                 fieldWithPath("genre").description("공연 장르"),
                                 fieldWithPath("startDate").description("공연 시작일"),
-                                fieldWithPath("endDate").description("공연 종료일")
+                                fieldWithPath("endDate").description("공연 종료일"),
+                                fieldWithPath("poster").description("공연 포스터 경로")
                         )
                 ));
     }

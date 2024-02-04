@@ -24,6 +24,7 @@ public class ShowRecommendationService {
                         .genre(showRecommendation.getShow().getGenre())
                         .startDate(showRecommendation.getShow().getStartDate())
                         .endDate(showRecommendation.getShow().getEndDate())
+                        .poster(showRecommendation.getShow().getPoster())
                         .build()
                 ).toList();
     }

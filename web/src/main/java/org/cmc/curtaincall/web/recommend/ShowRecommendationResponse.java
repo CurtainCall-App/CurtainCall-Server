@@ -15,6 +15,7 @@ public record ShowRecommendationResponse(
         String name,
         ShowGenre genre,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        String poster
 ) {
 }
