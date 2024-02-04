@@ -8,7 +8,6 @@ import org.cmc.curtaincall.domain.show.Show;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.domain.show.repository.ShowRepository;
-import org.cmc.curtaincall.web.show.infra.KopisBoxOfficeService;
 import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
 import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
 import org.junit.jupiter.api.AfterAll;
@@ -97,7 +96,7 @@ class KopisBoxOfficeServiceTest {
 
         // when
         final BoxOfficeRequest request = new BoxOfficeRequest(
-                BoxOfficeType.WEEK, LocalDate.of(2023, 11, 9), null, null);
+                BoxOfficeType.WEEK, LocalDate.of(2023, 11, 9), null);
         final List<BoxOfficeResponse> result = kopisBoxOfficeService.getList(request);
 
         // then
@@ -150,7 +149,7 @@ class KopisBoxOfficeServiceTest {
 
         // when
         final BoxOfficeRequest request = new BoxOfficeRequest(
-                BoxOfficeType.WEEK, LocalDate.of(2023, 11, 9), null, null);
+                BoxOfficeType.WEEK, LocalDate.of(2023, 11, 9), null);
         final List<BoxOfficeResponse> result = kopisBoxOfficeService.getList(request);
 
         // then

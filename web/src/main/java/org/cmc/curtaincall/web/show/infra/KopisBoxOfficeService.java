@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 public class KopisBoxOfficeService implements BoxOfficeService {
 
     private final Set<String> handledGenreName = Arrays.stream(BoxOfficeGenre.values())
-            .filter(genre -> genre != BoxOfficeGenre.ALL)
             .map(BoxOfficeGenre::getTitle)
             .collect(Collectors.toSet());
     private final DateTimeFormatter requestDateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -71,8 +70,11 @@ public class KopisBoxOfficeService implements BoxOfficeService {
                         .name(showIdToShow.get(boxOffice.getShowId()).getName())
                         .startDate(showIdToShow.get(boxOffice.getShowId()).getStartDate())
                         .endDate(showIdToShow.get(boxOffice.getShowId()).getEndDate())
+                        .facilityName(boxOffice.getFacilityName())
                         .poster(showIdToShow.get(boxOffice.getShowId()).getPoster())
                         .genre(showIdToShow.get(boxOffice.getShowId()).getGenre())
+                        .showTimes(showIdToShow.get(boxOffice.getShowId()).getShowTimes())
+                        .runtime(showIdToShow.get(boxOffice.getShowId()).getRuntime())
                         .rank(boxOffice.getRank())
                         .build()
                 ).toList();
@@ -85,7 +87,6 @@ public class KopisBoxOfficeService implements BoxOfficeService {
                 .queryParam("date", request.baseDate().format(requestDateTimeFormatter))
                 .queryParamIfPresent("catecode", Optional.ofNullable(request.genre())
                         .map(BoxOfficeGenre::getCode))
-                .queryParamIfPresent("area", Optional.ofNullable(request.areaCode()))
                 .build()
                 .toUriString();
         final ResponseEntity<KopisBoxOfficeResponseList> response = restTemplate.getForEntity(

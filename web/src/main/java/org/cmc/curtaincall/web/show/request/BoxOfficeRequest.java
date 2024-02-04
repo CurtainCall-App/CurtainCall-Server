@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public record BoxOfficeRequest(
         @NotNull BoxOfficeType type,
         @NotNull LocalDate baseDate,
-        @Nullable BoxOfficeGenre genre,
-        @Nullable String areaCode
+        @Nullable BoxOfficeGenre genre
 ) {
 }

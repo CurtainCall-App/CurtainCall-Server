@@ -3,12 +3,9 @@ package org.cmc.curtaincall.web.show;
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
-import org.cmc.curtaincall.web.show.BoxOfficeController;
-import org.cmc.curtaincall.web.show.BoxOfficeService;
+import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
 import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
-import org.cmc.curtaincall.web.common.AbstractWebTest;
-import org.cmc.curtaincall.web.show.ShowReviewStatsQueryService;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,7 +50,7 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                 .rank(1)
                 .build();
         given(boxOfficeService.getList(new BoxOfficeRequest(
-                BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), null, null))
+                BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), null))
         ).willReturn(List.of(boxOfficeResponse));
 
         final var showReviewStatsDto = ShowReviewStatsDto.builder()
@@ -86,8 +83,11 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("name").description("공연명"),
                                 fieldWithPath("startDate").description("공연 시작일"),
                                 fieldWithPath("endDate").description("공연 종료일"),
+                                fieldWithPath("facilityName").description("공연 시설명(공연장명)"),
                                 fieldWithPath("poster").description("공연 포스터 경로"),
                                 fieldWithPath("genre").type(ShowGenre.class.getSimpleName()).description("공연 장르명"),
+                                fieldWithPath("showTimes").description("공연 시간"),
+                                fieldWithPath("runtime").description("공연 시간"),
                                 fieldWithPath("reviewCount").description("리뷰 수"),
                                 fieldWithPath("reviewGradeSum").description("리뷰 점수 합"),
                                 fieldWithPath("reviewGradeAvg").description("리뷰 점수 평균"),
