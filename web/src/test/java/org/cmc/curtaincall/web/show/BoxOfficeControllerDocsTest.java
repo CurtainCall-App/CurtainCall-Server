@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.show;
 
+import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
 import org.cmc.curtaincall.domain.show.BoxOfficeType;
 import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
@@ -50,7 +51,7 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                 .rank(1)
                 .build();
         given(boxOfficeService.getList(new BoxOfficeRequest(
-                BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), null))
+                BoxOfficeType.WEEK, LocalDate.of(2023, 8, 17), BoxOfficeGenre.PLAY))
         ).willReturn(List.of(boxOfficeResponse));
 
         final var showReviewStatsDto = ShowReviewStatsDto.builder()
@@ -67,6 +68,7 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .param("type", BoxOfficeType.WEEK.name())
+                        .param("genre", BoxOfficeGenre.PLAY.name())
                         .param("baseDate", "2023-08-17")
                 )
                 .andDo(print())
@@ -75,7 +77,9 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                         queryParameters(
                                 parameterWithName("type").description("일, 주, 월")
                                         .attributes(key("type").value(BoxOfficeType.class.getSimpleName())),
-                                parameterWithName("baseDate").description("기준일")
+                                parameterWithName("baseDate").description("기준일"),
+                                parameterWithName("genre").description("장르")
+                                        .attributes(key("type").value(BoxOfficeGenre.class.getSimpleName()))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
