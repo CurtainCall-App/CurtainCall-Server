@@ -107,6 +107,9 @@ public class Show extends BaseTimeEntity {
     @Column(name = "image_url", length = 500, nullable = false)
     private List<String> introductionImages = new ArrayList<>();
 
+    @Column(name = "kid_state", nullable = false)
+    private Boolean kidState;
+
     @Builder
     public Show(
             final ShowId id,
@@ -126,7 +129,8 @@ public class Show extends BaseTimeEntity {
             final ShowState state,
             final String openRun,
             final List<ShowTime> showTimes,
-            final List<String> introductionImages
+            final List<String> introductionImages,
+            final Boolean kidState
     ) {
         this.id = id;
         this.facility = facility;
@@ -146,6 +150,7 @@ public class Show extends BaseTimeEntity {
         this.openRun = openRun;
         this.showTimes = showTimes;
         this.introductionImages = introductionImages;
+        this.kidState = kidState == null ? false : kidState;
     }
 
     public List<ShowTime> getShowTimes() {
