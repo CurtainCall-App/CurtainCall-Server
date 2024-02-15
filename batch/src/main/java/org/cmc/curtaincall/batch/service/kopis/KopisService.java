@@ -116,6 +116,7 @@ public class KopisService {
         Optional.ofNullable(request.gugun()).ifPresent(item -> parameters.put("signgucodesub", item));
         Optional.ofNullable(request.state()).ifPresent(item -> parameters.put("prfstate", item));
         Optional.ofNullable(request.openRun()).ifPresent(item -> parameters.put("openrun", item));
+        Optional.ofNullable(request.kid()).ifPresent(item -> parameters.put("kidstate", item));
 
         final String xml = request("/openApi/restful/pblprfr", parameters);
         final List<Map<String, String>> objects = convertXmlToObject(xml, "db");

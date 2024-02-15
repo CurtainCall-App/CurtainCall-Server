@@ -1,13 +1,11 @@
 package org.cmc.curtaincall.batch.job.show;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.batch.service.kopis.KopisService;
 import org.cmc.curtaincall.batch.service.kopis.response.ShowResponse;
 import org.cmc.curtaincall.domain.show.Show;
-import org.cmc.curtaincall.domain.show.dao.ShowExistsDao;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -44,13 +42,9 @@ public class ShowCreateJobConfig {
 
     private final EntityManagerFactory emf;
 
-    private final EntityManager em;
-
     private final PlatformTransactionManager txManager;
 
     private final ApplicationEventPublisher eventPublisher;
-
-    private final ShowExistsDao showExistsDao;
 
     @Bean
     public Job showCreateJob() {
