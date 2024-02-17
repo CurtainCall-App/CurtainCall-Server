@@ -37,7 +37,7 @@ import java.util.List;
                 @Index(name = "IX_show__genre_state_name", columnList = "genre, state, name"),
                 @Index(
                         name = "IX_show__state_kid_state_genre_min_ticket_price",
-                        columnList = "state, kid_state, genre, min_ticket_price desc"
+                        columnList = "state, kid_state, genre, min_ticket_price"
                 ),
         }
 )

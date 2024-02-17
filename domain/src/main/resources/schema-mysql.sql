@@ -314,7 +314,7 @@ create index IX_show__genre_state_name
     on shows (genre, state, name);
 
 create index IX_show__state_kid_state_genre_min_ticket_price
-    on shows (state, kid_state, genre, min_ticket_price desc);
+    on shows (state, kid_state, genre, min_ticket_price);
 
 
 create table show_time
