@@ -35,6 +35,10 @@ import java.util.List;
                 @Index(name = "IX_show__genre_end_date", columnList = "genre, end_date"),
                 @Index(name = "IX_show__genre_name", columnList = "genre, name"),
                 @Index(name = "IX_show__genre_state_name", columnList = "genre, state, name"),
+                @Index(
+                        name = "IX_show__state_kid_state_genre_min_ticket_price",
+                        columnList = "state, kid_state, genre, min_ticket_price desc"
+                ),
         }
 )
 @Getter
@@ -110,6 +114,9 @@ public class Show extends BaseTimeEntity {
     @Column(name = "kid_state", nullable = false)
     private Boolean kidState;
 
+    @Column(name = "min_ticket_price", nullable = false)
+    private Integer minTicketPrice;
+
     @Builder
     public Show(
             final ShowId id,
@@ -130,7 +137,8 @@ public class Show extends BaseTimeEntity {
             final String openRun,
             final List<ShowTime> showTimes,
             final List<String> introductionImages,
-            final Boolean kidState
+            final Boolean kidState,
+            final Integer minTicketPrice
     ) {
         this.id = id;
         this.facility = facility;
@@ -151,6 +159,7 @@ public class Show extends BaseTimeEntity {
         this.showTimes = showTimes;
         this.introductionImages = introductionImages;
         this.kidState = kidState == null ? false : kidState;
+        this.minTicketPrice = minTicketPrice;
     }
 
     public List<ShowTime> getShowTimes() {

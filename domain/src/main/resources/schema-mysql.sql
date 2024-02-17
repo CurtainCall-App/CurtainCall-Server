@@ -284,7 +284,8 @@ create table shows
     review_count     integer                                     not null,
     review_grade_sum bigint                                      not null,
     review_grade_avg double                                      not null,
-    kid_state         bit                                         not null,
+    kid_state        bit                                         not null,
+    min_ticket_price integer                                     not null,
     use_yn           bit                                         not null,
     created_at       datetime(6)                                 not null,
     last_modified_at datetime(6)                                 not null,
@@ -311,6 +312,9 @@ create index IX_show__genre_name
 
 create index IX_show__genre_state_name
     on shows (genre, state, name);
+
+create index IX_show__state_kid_state_genre_min_ticket_price
+    on shows (state, kid_state, genre, min_ticket_price desc);
 
 
 create table show_time
