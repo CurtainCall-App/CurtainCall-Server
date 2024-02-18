@@ -41,3 +41,9 @@ operation::show-get-show-detail[snippets='http-request,path-parameters,http-resp
 == 인기 순위
 
 operation::box-office-get-list[snippets='http-request,query-parameters,http-response,response-fields-content']
+
+
+[[show-cost-effective-list]]
+== 가성비 공연 목록 조회
+
+operation::show-cost-effective-list[snippets='http-request,query-parameters,http-response,response-fields-content']

@@ -16,11 +16,14 @@ import org.springframework.batch.item.ItemProcessor;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,11 +54,13 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
             return null;
         }
 
-        ShowGenre showGenre = genreNameToValue.get(item.genreName());
-        ShowDetailResponse showDetail = kopisService.getShowDetail(item.id());
-        List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
-        LocalDate startDate = LocalDate.parse(showDetail.startDate(), showDateFormatter);
-        LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
+        final ShowGenre showGenre = genreNameToValue.get(item.genreName());
+        final ShowDetailResponse showDetail = kopisService.getShowDetail(item.id());
+        final List<ShowTime> showTimes = showTimeParser.parse(showDetail.showTimes());
+        final LocalDate startDate = LocalDate.parse(showDetail.startDate(), showDateFormatter);
+        final LocalDate endDate = LocalDate.parse(showDetail.endDate(), showDateFormatter);
+
+        final int minTicketPrice = extractMinTicketPrice(showDetail.price());
 
         return Show.builder()
                 .id(showId)
@@ -76,7 +81,22 @@ public class ShowKopisItemProcessor implements ItemProcessor<ShowResponse, Show>
                 .openRun(showDetail.openRun())
                 .showTimes(showTimes)
                 .introductionImages(showDetail.introductionImages())
+                .minTicketPrice(minTicketPrice)
                 .build();
+    }
+
+    private int extractMinTicketPrice(String ticketPrice) {
+        List<String> prices = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d{1,3}(,\\d{3})*원", Pattern.CANON_EQ);
+        Matcher matcher = pattern.matcher(ticketPrice);
+        while (matcher.find()) {
+            prices.add(matcher.group());
+        }
+        return prices.stream()
+                .map(s -> s.replaceAll("[^0-9]", ""))
+                .mapToInt(Integer::parseInt)
+                .min()
+                .orElse(0);
     }
 
 }

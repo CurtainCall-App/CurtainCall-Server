@@ -91,18 +91,18 @@ create table images
 
 create table lost_item
 (
-    lost_item_id       bigint                                                                                       not null auto_increment,
-    title              varchar(255)                                                                                 not null,
-    found_date         date                                                                                         not null,
+    lost_item_id       bigint       not null auto_increment,
+    title              varchar(255) not null,
+    found_date         date         not null,
     found_time         time(6),
-    image_id           bigint                                                                                       not null,
-    facility_id        varchar(25)                                                                                  not null,
-    found_place_detail varchar(255)                                                                                 not null,
-    particulars        varchar(255)                                                                                 not null,
-    use_yn             bit                                                                                          not null,
-    created_at         datetime(6)                                                                                  not null,
-    created_by         bigint                                                                                       not null,
-    last_modified_at   datetime(6)                                                                                  not null,
+    image_id           bigint       not null,
+    facility_id        varchar(25)  not null,
+    found_place_detail varchar(255) not null,
+    particulars        varchar(255) not null,
+    use_yn             bit          not null,
+    created_at         datetime(6)  not null,
+    created_by         bigint       not null,
+    last_modified_at   datetime(6)  not null,
     primary key (lost_item_id)
 ) engine = InnoDB;
 
@@ -284,6 +284,8 @@ create table shows
     review_count     integer                                     not null,
     review_grade_sum bigint                                      not null,
     review_grade_avg double                                      not null,
+    kid_state        bit                                         not null,
+    min_ticket_price integer                                     not null,
     use_yn           bit                                         not null,
     created_at       datetime(6)                                 not null,
     last_modified_at datetime(6)                                 not null,
@@ -310,6 +312,9 @@ create index IX_show__genre_name
 
 create index IX_show__genre_state_name
     on shows (genre, state, name);
+
+create index IX_show__state_kid_state_genre_min_ticket_price
+    on shows (state, kid_state, genre, min_ticket_price);
 
 
 create table show_time
