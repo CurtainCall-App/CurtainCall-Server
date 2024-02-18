@@ -135,6 +135,7 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
                 .state(ShowState.PERFORMING)
                 .openRun("openrun")
                 .genre(ShowGenre.MUSICAL)
+                .minTicketPrice(20000)
                 .build()
         );
         ShowReview showReview1 = ShowReview.builder()

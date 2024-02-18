@@ -29,7 +29,8 @@ public class SecurityConfig {
             "/notices",
             "/notices/{noticeId}",
             "/members/duplicate/nickname",
-            "/show-recommendations"
+            "/show-recommendations",
+            "/cost-effective-shows",
     };
 
     @Bean
