@@ -134,4 +134,49 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                         )
                 ));
     }
+
+    @Test
+    void getMyReview_Docs() throws Exception {
+        // given
+        ShowReviewResponse reviewResponse = ShowReviewResponse.builder()
+                .id(5L)
+                .showId(new ShowId("PF223355"))
+                .grade(4)
+                .content("좋아요")
+                .creatorId(new CreatorId(4L))
+                .creatorNickname("고라파덕")
+                .creatorImageUrl("http://image-url")
+                .createdAt(LocalDateTime.of(2023, 8, 31, 3, 28))
+                .likeCount(5)
+                .build();
+        given(showReviewDao.getMyReview(notNull(), notNull())).willReturn(reviewResponse);
+
+        // expected
+        mockMvc.perform(get("/shows/{showId}/member", "PF220846")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("showreview-get-my-review",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        pathParameters(
+                                parameterWithName("showId").description("공연 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("공연 리뷰 ID"),
+                                fieldWithPath("showId").description("공연 ID"),
+                                fieldWithPath("grade").description("평점"),
+                                fieldWithPath("content").description("리뷰 내용"),
+                                fieldWithPath("creatorId").description("작성자 ID"),
+                                fieldWithPath("creatorNickname").description("작성자 닉네임"),
+                                fieldWithPath("creatorImageUrl").description("작성자 프로필 이미지").optional(),
+                                fieldWithPath("createdAt").description("생성일시"),
+                                fieldWithPath("likeCount").description("좋아요 개수")
+                        )
+                ));
+    }
 }

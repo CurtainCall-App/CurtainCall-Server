@@ -37,28 +37,37 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
     @Test
     void getList() {
         // given
-        Member member = Member.builder()
-                .nickname("test-nickname")
+        Member member1 = Member.builder()
+                .nickname("test-nickname-1")
                 .build();
-        em.persist(member);
+        em.persist(member1);
+        Member member2 = Member.builder()
+                .nickname("test-nickname-2")
+                .build();
+        em.persist(member2);
+        Member member3 = Member.builder()
+                .nickname("test-nickname-3")
+                .build();
+        em.persist(member3);
+
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(1)
                         .content("test-content-1")
-                        .createdBy(new CreatorId(new MemberId(member.getId())))
+                        .createdBy(new CreatorId(new MemberId(member1.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(2)
                         .content("test-content-2")
-                        .createdBy(new CreatorId(new MemberId(member.getId())))
+                        .createdBy(new CreatorId(new MemberId(member2.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("different"))
                         .grade(3)
                         .content("test-content-3")
-                        .createdBy(new CreatorId(new MemberId(member.getId())))
+                        .createdBy(new CreatorId(new MemberId(member3.getId())))
                         .build()
         );
         showReviews.forEach(em::persist);
@@ -80,22 +89,26 @@ class ShowReviewDaoTest extends AbstractDataJpaTest {
     @Test
     void getList_LikeCountOrderDesc() {
         // given
-        Member member = Member.builder()
-                .nickname("test-nickname")
+        Member member1 = Member.builder()
+                .nickname("test-nickname-1")
                 .build();
-        em.persist(member);
+        em.persist(member1);
+        Member member2 = Member.builder()
+                .nickname("test-nickname-2")
+                .build();
+        em.persist(member2);
         List<ShowReview> showReviews = List.of(
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(1)
                         .content("test-content-1")
-                        .createdBy(new CreatorId(new MemberId(member.getId())))
+                        .createdBy(new CreatorId(new MemberId(member1.getId())))
                         .build(),
                 ShowReview.builder()
                         .showId(new ShowId("test-show-id"))
                         .grade(2)
                         .content("test-content-2")
-                        .createdBy(new CreatorId(new MemberId(member.getId())))
+                        .createdBy(new CreatorId(new MemberId(member2.getId())))
                         .build()
         );
         showReviews.forEach(em::persist);
