@@ -20,9 +20,15 @@ operation::showreview-get-list[snippets='http-request,request-headers,path-param
 
 
 [[showreview-get-my-list]]
-== 내가 쓴 글 (한 줄 리뷰)
+== 내가 쓴 글 (한 줄 리뷰) 목록 조회
 
 operation::showreview-get-my-list[snippets='http-request,request-headers,query-parameters,http-response,response-fields-content']
+
+
+[[showreview-get-my-review]]
+== 해당 공연 내가 쓴 글 조회
+
+operation::showreview-get-my-review[snippets='http-request,request-headers,path-parameters,http-response,response-fields']
 
 
 [[showreview-delete]]

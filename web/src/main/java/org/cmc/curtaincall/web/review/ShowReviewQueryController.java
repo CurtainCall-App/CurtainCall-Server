@@ -18,6 +18,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -45,6 +46,14 @@ public class ShowReviewQueryController {
             @LoginMemberId MemberId memberId
     ) {
         return new ListResult<>(showReviewDao.getMyList(pageable, new CreatorId(memberId)));
+    }
+
+    @GetMapping("/shows/{showId}/member")
+    public ShowReviewResponse getMyReview(
+            @PathVariable final ShowId showId,
+            @LoginMemberId final MemberId memberId
+    ) {
+        return showReviewDao.getMyReview(showId, new CreatorId(memberId));
     }
 
 }
