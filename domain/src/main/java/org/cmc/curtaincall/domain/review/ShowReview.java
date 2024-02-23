@@ -19,12 +19,12 @@ import java.util.stream.IntStream;
         indexes = {
                 @Index(name = "IX_show_review__created_by_created_at",
                         columnList = "created_by, created_at desc"),
-                @Index(name = "IX_show_review__show_created_by_created_at",
-                        columnList = "show_id, created_by, created_at desc"),
                 @Index(name = "IX_show_review__show_like_count_created_at",
                         columnList = "show_id, like_count desc, created_at desc"),
                 @Index(name = "IX_show_review__show_created_at",
-                        columnList = "show_id, created_at desc")
+                        columnList = "show_id, created_at desc"),
+                @Index(name = "IX_show_review__show_grade_created_at",
+                        columnList = "show_id, grade desc, created_at desc")
         },
         uniqueConstraints = {
                 @UniqueConstraint(name = "UK_show_review__show_created_by",

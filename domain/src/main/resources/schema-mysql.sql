@@ -216,14 +216,14 @@ create table show_review
 create index IX_show_review__created_by_created_at
     on show_review (created_by, created_at desc);
 
-create index IX_show_review__show_created_by_created_at
-    on show_review (show_id, created_by, created_at desc);
-
 create index IX_show_review__show_like_count_created_at
     on show_review (show_id, like_count desc, created_at desc);
 
 create index IX_show_review__show_created_at
     on show_review (show_id, created_at desc);
+
+create index IX_show_review__show_grade_created_at
+    on show_review (show_id, grade desc, created_at desc);
 
 alter table show_review
     add constraint UK_show_review__show_created_by unique (show_id, created_by);
