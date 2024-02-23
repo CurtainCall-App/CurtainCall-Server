@@ -6,6 +6,7 @@ import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
+import org.cmc.curtaincall.web.common.RestDocsAttribute;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -58,6 +59,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
+                        .param("sort", "createdAt,desc")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -68,7 +70,9 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                         ),
                         queryParameters(
                                 parameterWithName("page").description("페이지 번호"),
-                                parameterWithName("size").description("페이지 사이즈").optional()
+                                parameterWithName("size").description("페이지 사이즈").optional(),
+                                parameterWithName("sort").description("정렬 (\"createdAt,desc\", \"likeCount,desc\", \"grade,desc\")").optional()
+                                        .attributes(RestDocsAttribute.defaultValue("createdAt,desc"))
                         ),
                         pathParameters(
                                 parameterWithName("showId").description("공연 ID")
