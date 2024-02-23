@@ -152,7 +152,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
         given(showReviewDao.getMyReview(notNull(), notNull())).willReturn(reviewResponse);
 
         // expected
-        mockMvc.perform(get("/shows/{showId}/member", "PF220846")
+        mockMvc.perform(get("/shows/{showId}/member", "PF223355")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
