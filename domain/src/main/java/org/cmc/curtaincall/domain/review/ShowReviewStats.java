@@ -99,6 +99,10 @@ public class ShowReviewStats extends BaseTimeEntity implements Persistable<ShowI
     }
 
     private void calculateReviewGradeAvg() {
+        if (reviewCount == 0) {
+            reviewGradeAvg = 0D;
+            return;
+        }
         reviewGradeAvg = ((double) reviewGradeSum) / reviewCount;
     }
 

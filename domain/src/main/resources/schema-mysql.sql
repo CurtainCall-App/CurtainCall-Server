@@ -20,7 +20,7 @@ drop table if exists box_office;
 create table account
 (
     account_id       bigint       not null auto_increment,
-    member_id        bigint       not null,
+    member_id        bigint,
     username         varchar(255) not null,
     created_at       datetime(6)  not null,
     last_modified_at datetime(6)  not null,
