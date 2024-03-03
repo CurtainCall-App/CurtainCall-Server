@@ -79,7 +79,6 @@ public class CurtainCallJwtConfig {
             final AccountRepository accountRepository
     ) {
         return new CurtainCallJwtEncoderService(
-                accountRepository,
                 curtainCallJwtEncoder,
                 curtainCallJwtRefreshTokenEncoder,
                 properties.getAccessTokenValidity(),
