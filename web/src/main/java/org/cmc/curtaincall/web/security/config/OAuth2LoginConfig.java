@@ -83,21 +83,4 @@ public class OAuth2LoginConfig {
         return new JwtIssuerAuthenticationManagerResolver(trustedIssuers);
     }
 
-    static class OAuth2TokenLoginConfigurer<B extends HttpSecurityBuilder<B>>
-            extends AbstractAuthenticationFilterConfigurer<B, OAuth2TokenLoginConfigurer<B>, OAuth2TokenLoginAuthenticationFilter> {
-
-        @Override
-        public void init(final B http) throws Exception {
-//            final OAuth2TokenLoginAuthenticationFilter authFilter = new OAuth2TokenLoginAuthenticationFilter();
-//            authFilter.setSecurityContextHolderStrategy(getSecurityContextHolderStrategy());
-//            loginProcessingUrl(OAuth2TokenLoginAuthenticationFilter.FILTER_PROCESSES_URI);
-//            setAuthenticationFilter(authFilter);
-        }
-
-        @Override
-        protected RequestMatcher createLoginProcessingUrlMatcher(final String loginProcessingUrl) {
-            return new AntPathRequestMatcher(loginProcessingUrl);
-        }
-    }
-
 }
