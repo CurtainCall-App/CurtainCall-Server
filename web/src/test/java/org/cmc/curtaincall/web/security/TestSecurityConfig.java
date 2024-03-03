@@ -45,7 +45,7 @@ public class TestSecurityConfig {
                 )
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.GET, SecurityConfig.PERMITTED_GET_PATH).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login/oauth2/token/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login/oauth2/token/*", "/login/refresh").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(config -> config

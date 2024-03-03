@@ -46,7 +46,33 @@ class LoginDocsTest extends AbstractWebTest {
                         responseFields(
                                 fieldWithPath("memberId").optional().description("회원 ID. 회원가입 안되어 있을 경우 null"),
                                 fieldWithPath("accessToken").description("커튼콜 액세스 토큰. 소셜 로그인 토큰 X"),
-                                fieldWithPath("accessTokenExpiresAt").description("커튼콜 액세스 토큰 만료일시")
+                                fieldWithPath("accessTokenExpiresAt").description("커튼콜 액세스 토큰 만료일시"),
+                                fieldWithPath("refreshToken").description("커튼콜 리프레시 토큰. 소셜 로그인 토큰 X"),
+                                fieldWithPath("refreshTokenExpiresAt").description("커튼콜 리프레시 토큰 만료일시")
+                        )
+                ))
+        ;
+    }
+
+    @Test
+    void refreshToken() throws Exception {
+        // expected
+        mockMvc.perform(post("/login/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new TokenLoginRequest("REFRESH_TOKEN")))
+                )
+                .andDo(print())
+                .andDo(document("security-refresh-token",
+                        requestFields(
+                                fieldWithPath("token").description("커튼콜 리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("memberId").optional().description("회원 ID. 회원가입 안되어 있을 경우 null"),
+                                fieldWithPath("accessToken").description("커튼콜 액세스 토큰. 소셜 로그인 토큰 X"),
+                                fieldWithPath("accessTokenExpiresAt").description("커튼콜 액세스 토큰 만료일시"),
+                                fieldWithPath("refreshToken").description("커튼콜 리프레시 토큰. 소셜 로그인 토큰 X"),
+                                fieldWithPath("refreshTokenExpiresAt").description("커튼콜 리프레시 토큰 만료일시")
                         )
                 ))
         ;
@@ -59,7 +85,26 @@ class LoginDocsTest extends AbstractWebTest {
         public LoginResponse login(
                 @RequestBody final TokenLoginRequest request, @PathVariable final String provider
         ) {
-            return new LoginResponse(LOGIN_MEMBER_ID.getId(), "ACCESS_TOKEN", LocalDateTime.of(2024, 1, 14, 14, 41));
+            return new LoginResponse(
+                    LOGIN_MEMBER_ID.getId(),
+                    "ACCESS_TOKEN",
+                    LocalDateTime.of(2024, 1, 14, 14, 41),
+                    "REFRESH_TOKEN",
+                    LocalDateTime.of(2024, 2, 14, 14, 11)
+            );
+        }
+
+        @PostMapping("/login/refresh")
+        public LoginResponse refresh(
+                @RequestBody final TokenLoginRequest request
+        ) {
+            return new LoginResponse(
+                    LOGIN_MEMBER_ID.getId(),
+                    "ACCESS_TOKEN",
+                    LocalDateTime.of(2024, 1, 14, 14, 41),
+                    "REFRESH_TOKEN",
+                    LocalDateTime.of(2024, 2, 14, 14, 11)
+            );
         }
     }
 }

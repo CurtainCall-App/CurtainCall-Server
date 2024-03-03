@@ -23,6 +23,12 @@ operation::auth-login-page[snippets='http-request,path-parameters']
 operation::security-token-login[snippets='http-request,path-parameters,request-fields,http-response,response-fields']
 
 
+[[security-refresh-token]]
+== 커튼콜 리프레시 토큰
+
+operation::security-refresh-token[snippets='http-request,request-fields,http-response,response-fields']
+
+
 [[account-get-user-member]]
 == 로그인된 유저 회원 ID 조회
 
