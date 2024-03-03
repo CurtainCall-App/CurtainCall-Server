@@ -1,10 +1,7 @@
 package org.cmc.curtaincall.web.review;
 
 import lombok.RequiredArgsConstructor;
-import org.cmc.curtaincall.domain.core.AllowedSort;
 import org.cmc.curtaincall.domain.core.CreatorId;
-import org.cmc.curtaincall.domain.core.OrderParam;
-import org.cmc.curtaincall.domain.core.SortParam;
 import org.cmc.curtaincall.domain.member.MemberId;
 import org.cmc.curtaincall.domain.review.dao.ShowReviewDao;
 import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
@@ -18,7 +15,6 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,13 +26,9 @@ public class ShowReviewQueryController {
 
     @GetMapping("/shows/{showId}/reviews")
     public ListResult<ShowReviewResponse> getList(
-            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-            @AllowedSort({
-                    @SortParam(@OrderParam(property = "createdAt", direction = Sort.Direction.DESC)),
-                    @SortParam(@OrderParam(property = "likeCount", direction = Sort.Direction.DESC))
-            })
-            final Pageable pageable,
-            @PathVariable ShowId showId) {
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) final Pageable pageable,
+            @PathVariable ShowId showId
+    ) {
         return new ListResult<>(showReviewDao.getList(pageable, showId));
     }
 

@@ -52,6 +52,7 @@ public class ShowReviewDao {
                 .orderBy(
                         QuerydslHelper.filterNullOrderByArr(
                                 getLikeCountOrder(pageable),
+                                getGradeOrder(pageable),
                                 getCreatedAtOrder(pageable)
                         )
                 )
@@ -67,6 +68,15 @@ public class ShowReviewDao {
         }
         Order order = Order.valueOf(sortOrder.getDirection().name());
         return new OrderSpecifier<>(order, showReview.likeCount);
+    }
+
+    private OrderSpecifier<Integer> getGradeOrder(Pageable pageable) {
+        Sort.Order sortOrder = pageable.getSort().getOrderFor("grade");
+        if (sortOrder == null) {
+            return null;
+        }
+        Order order = Order.valueOf(sortOrder.getDirection().name());
+        return new OrderSpecifier<>(order, showReview.grade);
     }
 
     private OrderSpecifier<LocalDateTime> getCreatedAtOrder(Pageable pageable) {
