@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -46,8 +47,43 @@ public class CurtainCallJwtConfig {
     }
 
     @Bean
+    public OctetSequenceKey refreshTokenOctetSequenceKey(
+            final CurtainCallJwtProperties properties
+    ) throws JOSEException {
+        return new OctetSequenceKeyGenerator(512)
+                .keyID(properties.getSecret())
+                .algorithm(JWSAlgorithm.HS512)
+                .generate();
+    }
+
+    @Bean
+    public JwtEncoder curtainCallJwtRefreshTokenEncoder(
+            final OctetSequenceKey refreshTokenOctetSequenceKey
+    ) {
+        JWKSource<SecurityContext> secret = new ImmutableSecret<>(refreshTokenOctetSequenceKey.toSecretKey());
+        return new NimbusJwtEncoder(secret);
+    }
+
+    @Bean
+    public JwtDecoder curtainCallJwtRefreshTokenDecoder(final OctetSequenceKey refreshTokenOctetSequenceKey) {
+        return NimbusJwtDecoder.withSecretKey(refreshTokenOctetSequenceKey.toSecretKey())
+                .macAlgorithm(MacAlgorithm.HS512)
+                .build();
+    }
+
+    @Bean
     public CurtainCallJwtEncoderService curtainCallJwtEncoderService(
-            CurtainCallJwtProperties properties, JwtEncoder curtainCallJwtEncoder) {
-        return new CurtainCallJwtEncoderService(curtainCallJwtEncoder, properties.getAccessTokenValidity());
+            final CurtainCallJwtProperties properties,
+            final JwtEncoder curtainCallJwtEncoder,
+            final JwtEncoder curtainCallJwtRefreshTokenEncoder,
+            final AccountRepository accountRepository
+    ) {
+        return new CurtainCallJwtEncoderService(
+                accountRepository,
+                curtainCallJwtEncoder,
+                curtainCallJwtRefreshTokenEncoder,
+                properties.getAccessTokenValidity(),
+                properties.getRefreshTokenValidity()
+        );
     }
 }

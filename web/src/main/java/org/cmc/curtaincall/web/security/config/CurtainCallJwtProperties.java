@@ -13,4 +13,7 @@ public class CurtainCallJwtProperties {
 
     @NotNull
     private long accessTokenValidity;
+
+    @NotNull
+    private long refreshTokenValidity;
 }
