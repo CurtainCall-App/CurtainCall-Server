@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 import org.cmc.curtaincall.domain.account.exception.AccountAlreadySignupException;
 import org.cmc.curtaincall.domain.core.BaseTimeEntity;
 import org.cmc.curtaincall.domain.member.MemberId;
+import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "account",
@@ -46,6 +49,12 @@ public class Account extends BaseTimeEntity {
     )
     private MemberId memberId;
 
+    @Column(name = "refresh_token", length = 2000)
+    private String refreshToken;
+
+    @Column(name = "refresh_token_expires_at")
+    private LocalDateTime refreshTokenExpiresAt;
+
     @Builder
     public Account(final String username, final MemberId memberId) {
         this.username = username;
@@ -61,6 +70,20 @@ public class Account extends BaseTimeEntity {
             throw new AccountAlreadySignupException(getUsername());
         }
         this.memberId = memberId;
+    }
+
+    public void renewRefreshToken(final String refreshToken, final LocalDateTime expiresAt) {
+
+        Assert.notNull(refreshToken, "refreshToken 은 null 일 수 없습니다.");
+        Assert.notNull(expiresAt, "expiresAt 은 null 일 수 없습니다.");
+
+        this.refreshToken = refreshToken;
+        this.refreshTokenExpiresAt = expiresAt;
+    }
+
+    public void refreshTokenExpires() {
+        this.refreshToken = null;
+        this.refreshTokenExpiresAt = null;
     }
 
 }

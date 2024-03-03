@@ -19,10 +19,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class OAuth2TokenLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CurtainCallLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper;
 
@@ -39,14 +40,26 @@ public class OAuth2TokenLoginAuthenticationSuccessHandler implements Authenticat
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         final String username = authentication.getName();
+        final Jwt accessToken = jwtEncoderService.getAccessToken(username);
+        final Jwt refreshToken = jwtEncoderService.getRefreshToken(username);
+        final LocalDateTime accessTokenExpiresAt = LocalDateTime.ofInstant(
+                Objects.requireNonNull(accessToken.getExpiresAt()), ZoneId.systemDefault());
+        final LocalDateTime refreshTokenExpiresAt = LocalDateTime.ofInstant(
+                Objects.requireNonNull(refreshToken.getExpiresAt()), ZoneId.systemDefault());
         final Account account = accountRepository.findByUsername(username)
-                .orElseGet(() -> accountRepository.save(new Account(username)));
-        final Jwt jwt = jwtEncoderService.encode(username);
+                .orElseGet(() -> new Account(username));
+        account.renewRefreshToken(
+                refreshToken.getTokenValue(),
+                refreshTokenExpiresAt
+        );
         final LoginResponse loginResponse = new LoginResponse(
                 Optional.ofNullable(account.getMemberId()).map(MemberId::getId).orElse(null),
-                jwt.getTokenValue(),
-                LocalDateTime.ofInstant(jwt.getExpiresAt(), ZoneId.systemDefault())
+                accessToken.getTokenValue(),
+                accessTokenExpiresAt,
+                refreshToken.getTokenValue(),
+                refreshTokenExpiresAt
         );
+        accountRepository.save(account);
         objectMapper.writeValue(response.getWriter(), loginResponse);
     }
 }

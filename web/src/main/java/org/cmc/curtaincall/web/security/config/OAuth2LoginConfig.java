@@ -1,24 +1,18 @@
 package org.cmc.curtaincall.web.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.domain.account.repository.AccountRepository;
-import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
 import java.util.Map;
@@ -51,14 +45,10 @@ public class OAuth2LoginConfig {
     public OAuth2TokenLoginAuthenticationFilter oAuth2TokenLoginAuthenticationFilter(
             final JwtIssuerAuthenticationManagerResolver authenticationManagerResolver,
             final ClientRegistrationRepository clientRegistrationRepository,
-            final CurtainCallJwtEncoderService curtainCallJwtEncoderService,
-            final AccountRepository accountRepository,
+            final CurtainCallLoginAuthenticationSuccessHandler authenticationSuccessHandler,
             final OAuth2ClientProperties properties,
             final ObjectMapper objectMapper
     ) {
-        final OAuth2TokenLoginAuthenticationSuccessHandler authenticationSuccessHandler = new OAuth2TokenLoginAuthenticationSuccessHandler(
-                objectMapper, curtainCallJwtEncoderService, accountRepository
-        );
 
         final Map<String, String> issuerUriToProviderName = properties.getProvider().entrySet().stream()
                 .filter(entry -> entry.getValue().getIssuerUri() != null)
@@ -81,23 +71,6 @@ public class OAuth2LoginConfig {
                 .map(OAuth2ClientProperties.Provider::getIssuerUri)
                 .toList();
         return new JwtIssuerAuthenticationManagerResolver(trustedIssuers);
-    }
-
-    static class OAuth2TokenLoginConfigurer<B extends HttpSecurityBuilder<B>>
-            extends AbstractAuthenticationFilterConfigurer<B, OAuth2TokenLoginConfigurer<B>, OAuth2TokenLoginAuthenticationFilter> {
-
-        @Override
-        public void init(final B http) throws Exception {
-//            final OAuth2TokenLoginAuthenticationFilter authFilter = new OAuth2TokenLoginAuthenticationFilter();
-//            authFilter.setSecurityContextHolderStrategy(getSecurityContextHolderStrategy());
-//            loginProcessingUrl(OAuth2TokenLoginAuthenticationFilter.FILTER_PROCESSES_URI);
-//            setAuthenticationFilter(authFilter);
-        }
-
-        @Override
-        protected RequestMatcher createLoginProcessingUrlMatcher(final String loginProcessingUrl) {
-            return new AntPathRequestMatcher(loginProcessingUrl);
-        }
     }
 
 }

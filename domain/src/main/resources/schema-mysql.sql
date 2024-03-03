@@ -19,12 +19,14 @@ drop table if exists box_office;
 
 create table account
 (
-    account_id       bigint       not null auto_increment,
-    member_id        bigint,
-    username         varchar(255) not null,
-    created_at       datetime(6)  not null,
-    last_modified_at datetime(6)  not null,
-    use_yn           bit          not null,
+    account_id               bigint       not null auto_increment,
+    member_id                bigint,
+    username                 varchar(255) not null,
+    refresh_token            varchar(2000),
+    refresh_token_expires_at datetime(6),
+    created_at               datetime(6) not null,
+    last_modified_at         datetime(6) not null,
+    use_yn                   bit          not null,
     primary key (account_id)
 ) engine = InnoDB;
 
@@ -51,8 +53,8 @@ create table facility
     latitude         float(53)    not null,
     longitude        float(53)    not null,
     use_yn           bit          not null,
-    created_at       datetime(6)  not null,
-    last_modified_at datetime(6)  not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (facility_id)
 ) engine = InnoDB;
 
@@ -82,8 +84,8 @@ create table images
     stored_name      varchar(255) not null,
     url              varchar(255) not null,
     use_yn           bit          not null,
-    created_at       datetime(6)  not null,
-    last_modified_at datetime(6)  not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     created_by       bigint       not null,
     primary key (images_id)
 ) engine = InnoDB;
@@ -100,9 +102,9 @@ create table lost_item
     found_place_detail varchar(255) not null,
     particulars        varchar(255) not null,
     use_yn             bit          not null,
-    created_at         datetime(6)  not null,
+    created_at         datetime(6) not null,
     created_by         bigint       not null,
-    last_modified_at   datetime(6)  not null,
+    last_modified_at   datetime(6) not null,
     primary key (lost_item_id)
 ) engine = InnoDB;
 
@@ -151,20 +153,20 @@ create index IX_member_withdrawal__use_yn_created_at
 
 create table party
 (
-    party_id         bigint                              not null auto_increment,
-    title            varchar(255)                        not null,
-    content          varchar(2000)                       not null,
-    cur_member_num   integer                             not null,
-    max_member_num   integer                             not null,
+    party_id         bigint        not null auto_increment,
+    title            varchar(255)  not null,
+    content          varchar(2000) not null,
+    cur_member_num   integer       not null,
+    max_member_num   integer       not null,
     category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
-    closed           bit                                 not null,
+    closed           bit           not null,
     show_id          varchar(25),
     party_at         datetime(6),
-    use_yn           bit                                 not null,
-    created_at       datetime(6)                         not null,
-    created_by       bigint                              not null,
-    last_modified_at datetime(6)                         not null,
-    version          bigint                              not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    created_by       bigint        not null,
+    last_modified_at datetime(6) not null,
+    version          bigint        not null,
     primary key (party_id)
 ) engine = InnoDB;
 
@@ -182,10 +184,10 @@ create index IX_party__created_by_category_created_at
 
 create table party_member
 (
-    party_member_id bigint                           not null auto_increment,
-    party_id        bigint                           not null,
+    party_member_id bigint not null auto_increment,
+    party_id        bigint not null,
     role            enum ('RECRUITER','PARTICIPANT') not null,
-    member_id       bigint                           not null,
+    member_id       bigint not null,
     primary key (party_member_id)
 ) engine = InnoDB;
 
@@ -206,9 +208,9 @@ create table show_review
     content          varchar(255) not null,
     like_count       integer      not null,
     use_yn           bit          not null,
-    created_at       datetime(6)  not null,
+    created_at       datetime(6) not null,
     created_by       bigint       not null,
-    last_modified_at datetime(6)  not null,
+    last_modified_at datetime(6) not null,
     version          bigint       not null,
     primary key (show_review_id)
 ) engine = InnoDB;
@@ -243,18 +245,18 @@ alter table show_review_like
 
 create table show_review_stats
 (
-    show_id          varchar(25)                                 not null,
-    review_count     integer                                     not null,
-    review_grade_avg double                                      not null,
-    review_grade_sum bigint                                      not null,
-    genre            enum ('MUSICAL','PLAY')                     not null,
+    show_id          varchar(25)  not null,
+    review_count     integer      not null,
+    review_grade_avg double not null,
+    review_grade_sum bigint       not null,
+    genre            enum ('MUSICAL','PLAY') not null,
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
-    start_date       date                                        not null,
-    end_date         date                                        not null,
-    version          bigint                                      not null,
-    use_yn           boolean                                     not null,
-    created_at       timestamp(6)                                not null,
-    last_modified_at timestamp(6)                                not null,
+    start_date       date         not null,
+    end_date         date         not null,
+    version          bigint       not null,
+    use_yn           boolean      not null,
+    created_at       timestamp(6) not null,
+    last_modified_at timestamp(6) not null,
     primary key (show_id)
 ) engine = InnoDB;
 
@@ -268,30 +270,30 @@ create index IX_show_review_stats__genre_state_review_grade_avg
 
 create table shows
 (
-    show_id          varchar(25)                                 not null,
-    facility_id      varchar(25)                                 not null,
-    start_date       date                                        not null,
-    end_date         date                                        not null,
-    genre            enum ('MUSICAL','PLAY')                     not null,
-    openrun          varchar(25)                                 not null,
+    show_id          varchar(25)   not null,
+    facility_id      varchar(25)   not null,
+    start_date       date          not null,
+    end_date         date          not null,
+    genre            enum ('MUSICAL','PLAY') not null,
+    openrun          varchar(25)   not null,
     state            enum ('TO_PERFORM','PERFORMING','COMPLETE') not null,
-    story            varchar(4000)                               not null,
-    age              varchar(255)                                not null,
-    casts            varchar(255)                                not null,
-    crew             varchar(255)                                not null,
-    enterprise       varchar(255)                                not null,
-    name             varchar(255)                                not null,
-    poster           varchar(255)                                not null,
-    runtime          varchar(255)                                not null,
-    ticket_price     varchar(255)                                not null,
-    review_count     integer                                     not null,
-    review_grade_sum bigint                                      not null,
-    review_grade_avg double                                      not null,
-    kid_state        bit                                         not null,
-    min_ticket_price integer                                     not null,
-    use_yn           bit                                         not null,
-    created_at       datetime(6)                                 not null,
-    last_modified_at datetime(6)                                 not null,
+    story            varchar(4000) not null,
+    age              varchar(255)  not null,
+    casts            varchar(255)  not null,
+    crew             varchar(255)  not null,
+    enterprise       varchar(255)  not null,
+    name             varchar(255)  not null,
+    poster           varchar(255)  not null,
+    runtime          varchar(255)  not null,
+    ticket_price     varchar(255)  not null,
+    review_count     integer       not null,
+    review_grade_sum bigint        not null,
+    review_grade_avg double not null,
+    kid_state        bit           not null,
+    min_ticket_price integer       not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (show_id)
 ) engine = InnoDB;
 
@@ -322,9 +324,9 @@ create index IX_show__state_kid_state_genre_min_ticket_price
 
 create table show_time
 (
-    time        time(6)                                                                              not null,
+    time        time(6)     not null,
     day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY', 'HOL') not null,
-    show_id     varchar(25)                                                                          not null
+    show_id     varchar(25) not null
 ) engine = InnoDB;
 
 create index IX_show_time__show
@@ -366,8 +368,8 @@ create table notice
     title            varchar(255)  not null,
     content          varchar(4000) not null,
     use_yn           bit           not null,
-    created_at       datetime(6)   not null,
-    last_modified_at datetime(6)   not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (notice_id)
 ) engine = InnoDB;
 
@@ -377,30 +379,30 @@ create index IX_notice__created_at
 
 create table report
 (
-    report_id        bigint                                                                                                            not null auto_increment,
-    reported_id      bigint                                                                                                            not null,
-    type             enum ('PARTY', 'SHOW_REVIEW', 'LOST_ITEM')                                                                        not null,
+    report_id        bigint        not null auto_increment,
+    reported_id      bigint        not null,
+    type             enum ('PARTY', 'SHOW_REVIEW', 'LOST_ITEM') not null,
     reason           enum ('BAD_MANNERS','ETC','HARMFUL_TO_TEENAGER','HATE_SPEECH','ILLEGAL','PERSONAL_INFORMATION_DISCLOSURE','SPAM') not null,
-    content          varchar(1000)                                                                                                     not null,
-    use_yn           bit                                                                                                               not null,
-    created_at       datetime(6)                                                                                                       not null,
-    last_modified_at datetime(6)                                                                                                       not null,
-    created_by       bigint                                                                                                            not null,
+    content          varchar(1000) not null,
+    use_yn           bit           not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
+    created_by       bigint        not null,
     primary key (report_id)
 ) engine = InnoDB;
 
 
 create table box_office
 (
-    box_office_id    bigint                          not null auto_increment,
-    show_id          varchar(25)                     not null,
-    base_date        date                            not null,
-    type             enum ('DAY', 'WEEK', 'MONTH')   not null,
+    box_office_id    bigint      not null auto_increment,
+    show_id          varchar(25) not null,
+    base_date        date        not null,
+    type             enum ('DAY', 'WEEK', 'MONTH') not null,
     genre            enum ('ALL', 'PLAY', 'MUSICAL') not null,
-    rank_num         integer                         not null,
-    use_yn           bit                             not null,
-    created_at       datetime(6)                     not null,
-    last_modified_at datetime(6)                     not null,
+    rank_num         integer     not null,
+    use_yn           bit         not null,
+    created_at       datetime(6) not null,
+    last_modified_at datetime(6) not null,
     primary key (box_office_id)
 ) engine = InnoDB;
 
@@ -414,8 +416,8 @@ create table show_recommendation
     show_id                varchar(25)  not null,
     description            varchar(255) not null,
     use_yn                 bit          not null,
-    created_at             datetime(6)  not null,
-    last_modified_at       datetime(6)  not null,
+    created_at             datetime(6) not null,
+    last_modified_at       datetime(6) not null,
     primary key (show_recommendation_id)
 ) engine = InnoDB;
 
