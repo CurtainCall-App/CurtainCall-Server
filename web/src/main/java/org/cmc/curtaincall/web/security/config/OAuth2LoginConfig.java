@@ -1,8 +1,6 @@
 package org.cmc.curtaincall.web.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cmc.curtaincall.domain.account.repository.AccountRepository;
-import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -47,14 +45,10 @@ public class OAuth2LoginConfig {
     public OAuth2TokenLoginAuthenticationFilter oAuth2TokenLoginAuthenticationFilter(
             final JwtIssuerAuthenticationManagerResolver authenticationManagerResolver,
             final ClientRegistrationRepository clientRegistrationRepository,
-            final CurtainCallJwtEncoderService curtainCallJwtEncoderService,
-            final AccountRepository accountRepository,
+            final CurtainCallLoginAuthenticationSuccessHandler authenticationSuccessHandler,
             final OAuth2ClientProperties properties,
             final ObjectMapper objectMapper
     ) {
-        final CurtainCallLoginAuthenticationSuccessHandler authenticationSuccessHandler = new CurtainCallLoginAuthenticationSuccessHandler(
-                objectMapper, curtainCallJwtEncoderService, accountRepository
-        );
 
         final Map<String, String> issuerUriToProviderName = properties.getProvider().entrySet().stream()
                 .filter(entry -> entry.getValue().getIssuerUri() != null)

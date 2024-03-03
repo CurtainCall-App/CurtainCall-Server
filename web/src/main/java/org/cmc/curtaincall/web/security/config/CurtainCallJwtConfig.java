@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
@@ -7,6 +8,7 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -81,6 +83,17 @@ public class CurtainCallJwtConfig {
                 curtainCallJwtRefreshTokenEncoder,
                 properties.getAccessTokenValidity(),
                 properties.getRefreshTokenValidity()
+        );
+    }
+
+    @Bean
+    public CurtainCallLoginAuthenticationSuccessHandler curtainCallLoginAuthenticationSuccessHandler(
+            final ObjectMapper objectMapper,
+            final CurtainCallJwtEncoderService curtainCallJwtEncoderService,
+            final AccountRepository accountRepository
+    ) {
+        return new CurtainCallLoginAuthenticationSuccessHandler(
+                objectMapper, curtainCallJwtEncoderService, accountRepository
         );
     }
 }
