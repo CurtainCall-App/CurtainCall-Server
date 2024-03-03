@@ -7,7 +7,6 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.cmc.curtaincall.domain.account.repository.AccountRepository;
 import org.cmc.curtaincall.web.security.service.CurtainCallJwtEncoderService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -75,8 +74,7 @@ public class CurtainCallJwtConfig {
     public CurtainCallJwtEncoderService curtainCallJwtEncoderService(
             final CurtainCallJwtProperties properties,
             final JwtEncoder curtainCallJwtEncoder,
-            final JwtEncoder curtainCallJwtRefreshTokenEncoder,
-            final AccountRepository accountRepository
+            final JwtEncoder curtainCallJwtRefreshTokenEncoder
     ) {
         return new CurtainCallJwtEncoderService(
                 curtainCallJwtEncoder,
