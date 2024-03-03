@@ -1,5 +1,6 @@
 package org.cmc.curtaincall.web.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -35,8 +37,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity httpSecurity,
-            JwtDecoder curtainCallJwtDecoder
+            final HttpSecurity httpSecurity,
+            final JwtDecoder curtainCallJwtDecoder,
+            final CurtainCallRefreshTokenAuthenticationFilter curtainCallRefreshTokenAuthenticationFilter
     ) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
@@ -51,6 +54,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterAt(curtainCallRefreshTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.GET,
                                 PERMITTED_GET_PATH
@@ -66,5 +70,19 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers("/docs/**");
+    }
+
+    @Bean
+    public CurtainCallRefreshTokenAuthenticationFilter curtainCallRefreshTokenAuthenticationFilter(
+            final JwtDecoder curtainCallJwtRefreshTokenDecoder,
+            final ObjectMapper objectMapper,
+            final CurtainCallLoginAuthenticationSuccessHandler authenticationSuccessHandler
+    ) {
+        final CurtainCallRefreshTokenAuthenticationFilter authenticationFilter = new CurtainCallRefreshTokenAuthenticationFilter(
+                curtainCallJwtRefreshTokenDecoder,
+                objectMapper
+        );
+        authenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        return authenticationFilter;
     }
 }
