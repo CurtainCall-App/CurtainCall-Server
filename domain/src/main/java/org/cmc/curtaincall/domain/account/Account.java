@@ -74,7 +74,7 @@ public class Account extends BaseTimeEntity {
 
     public void renewRefreshToken(final String refreshToken, final LocalDateTime expiresAt) {
 
-        Assert.notNull(Account.this.refreshToken, "refreshToken 은 null 일 수 없습니다.");
+        Assert.notNull(refreshToken, "refreshToken 은 null 일 수 없습니다.");
         Assert.notNull(expiresAt, "expiresAt 은 null 일 수 없습니다.");
 
         this.refreshToken = refreshToken;

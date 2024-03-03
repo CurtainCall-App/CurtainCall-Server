@@ -35,7 +35,7 @@ public class CurtainCallJwtEncoderService {
         return jwtEncoder.encode(jwtEncoderParameters);
     }
 
-    private Jwt getAccessToken(final String username) {
+    public Jwt getAccessToken(final String username) {
         final JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
         final Instant issuedAt = Instant.now();
         final Instant expiresAt = issuedAt.plusMillis(accessTokenValidityInMillis);
@@ -50,7 +50,7 @@ public class CurtainCallJwtEncoderService {
         return jwtEncoder.encode(jwtEncoderParameters);
     }
 
-    private Jwt getRefreshToken(final String username) {
+    public Jwt getRefreshToken(final String username) {
         final JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS512).build();
         final Instant issuedAt = Instant.now();
         final Instant expiresAt = issuedAt.plusMillis(refreshTokenValidityInMillis);
