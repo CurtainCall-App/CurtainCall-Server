@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class OAuth2TokenLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CurtainCallLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper;
 

@@ -9,16 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +52,7 @@ public class OAuth2LoginConfig {
             final OAuth2ClientProperties properties,
             final ObjectMapper objectMapper
     ) {
-        final OAuth2TokenLoginAuthenticationSuccessHandler authenticationSuccessHandler = new OAuth2TokenLoginAuthenticationSuccessHandler(
+        final CurtainCallLoginAuthenticationSuccessHandler authenticationSuccessHandler = new CurtainCallLoginAuthenticationSuccessHandler(
                 objectMapper, curtainCallJwtEncoderService, accountRepository
         );
 
