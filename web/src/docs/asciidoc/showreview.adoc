@@ -16,7 +16,7 @@ operation::showreview-create[snippets='http-request,request-headers,http-respons
 [[showreview-get-list]]
 == 공연 리뷰 리스트 조회
 
-operation::showreview-get-list[snippets='http-request,request-headers,path-parameters,http-response,response-fields-content']
+operation::showreview-get-list[snippets='http-request,request-headers,path-parameters,query-parameters,http-response,response-fields-content']
 
 
 [[showreview-get-my-list]]
