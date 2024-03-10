@@ -18,6 +18,7 @@ public class LostItemResponse {
     private FacilityId facilityId;
     private String facilityName;
     private String title;
+    private String foundPlaceDetail;
     private LocalDate foundDate;
     @Nullable
     private LocalTime foundTime;
@@ -31,6 +32,7 @@ public class LostItemResponse {
             FacilityId facilityId,
             String facilityName,
             String title,
+            String foundPlaceDetail,
             LocalDate foundDate,
             @Nullable LocalTime foundTime,
             String imageUrl,
@@ -40,6 +42,7 @@ public class LostItemResponse {
         this.facilityId = facilityId;
         this.facilityName = facilityName;
         this.title = title;
+        this.foundPlaceDetail = foundPlaceDetail;
         this.foundDate = foundDate;
         this.foundTime = foundTime;
         this.imageUrl = imageUrl;
