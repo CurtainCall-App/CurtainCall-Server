@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 
 public record PartyListParam(
-        @Nullable LocalDate date
+        @Nullable LocalDate startDate,
+        @Nullable LocalDate endDate
 ) {
 }

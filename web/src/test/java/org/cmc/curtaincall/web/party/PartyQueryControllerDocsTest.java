@@ -70,7 +70,8 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "20")
-                        .param("date", LocalDate.of(2023, 4, 28).toString())
+                        .param("startDate", LocalDate.of(2023, 4, 28).toString())
+                        .param("endDate", LocalDate.of(2023, 4, 30).toString())
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -81,12 +82,14 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지"),
                                 parameterWithName("size").description("페이지 사이즈").optional(),
-                                parameterWithName("date").description("파티 날짜")
+                                parameterWithName("startDate").description("시작 일자").optional(),
+                                parameterWithName("endDate").description("종료 일자").optional()
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("파티 ID"),
                                 fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시").optional(),
@@ -148,6 +151,7 @@ class PartyQueryControllerDocsTest extends AbstractWebTest {
                                 beneathPath("content[]").withSubsectionId("content"),
                                 fieldWithPath("id").description("파티 ID"),
                                 fieldWithPath("title").description("제목"),
+                                fieldWithPath("content").description("내용"),
                                 fieldWithPath("curMemberNum").description("현재 참여 인원 수"),
                                 fieldWithPath("maxMemberNum").description("최대 참여 인원 수"),
                                 fieldWithPath("showAt").description("공연 일시").optional(),

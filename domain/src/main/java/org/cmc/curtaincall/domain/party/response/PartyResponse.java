@@ -18,6 +18,8 @@ public class PartyResponse {
 
     private String title;
 
+    private String content;
+
     private Integer curMemberNum;
 
     private Integer maxMemberNum;
@@ -54,6 +56,7 @@ public class PartyResponse {
     public PartyResponse(
             final Long id,
             final String title,
+            final String content,
             final Integer curMemberNum,
             final Integer maxMemberNum,
             final LocalDateTime createdAt,
@@ -69,6 +72,7 @@ public class PartyResponse {
     ) {
         this.id = id;
         this.title = title;
+        this.content = content;
         this.curMemberNum = curMemberNum;
         this.maxMemberNum = maxMemberNum;
         this.createdAt = createdAt;
