@@ -82,6 +82,7 @@ public class PartyDao {
                 .select(new QPartyResponse(
                         party.id,
                         party.title,
+                        party.content,
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
@@ -219,6 +220,7 @@ public class PartyDao {
                 .select(new QPartyResponse(
                         party.id,
                         party.title,
+                        party.content,
                         party.curMemberNum,
                         party.maxMemberNum,
                         party.createdAt,
