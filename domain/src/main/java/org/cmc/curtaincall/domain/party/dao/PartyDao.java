@@ -3,6 +3,7 @@ package org.cmc.curtaincall.domain.party.dao;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.common.QuerydslHelper;
@@ -28,7 +29,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -78,7 +78,7 @@ public class PartyDao {
     }
 
     public List<PartyResponse> getList(final Pageable pageable, final PartyListParam param) {
-        return query
+        final JPAQuery<PartyResponse> contentQuery = query
                 .select(new QPartyResponse(
                         party.id,
                         party.title,
@@ -101,24 +101,39 @@ public class PartyDao {
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(
-                        partyDateEq(param.date()),
+                        partyDateGoe(param.startDate()),
+                        partyDateLoe(param.endDate()),
                         party.useYn.isTrue()
-                )
-                .orderBy(QuerydslHelper.filterNullOrderByArr(
-                        getCreatedAtOrder(pageable)
-                ))
+                );
+
+        if (param.startDate() == null && param.endDate() == null) {
+            contentQuery
+                    .orderBy(QuerydslHelper.filterNullOrderByArr(
+                            getCreatedAtOrder(pageable)
+                    ));
+        }
+
+
+        return contentQuery
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Nullable
-    private BooleanExpression partyDateEq(@Nullable LocalDate date) {
-        if (date == null) {
-            return null;
-        }
-        return party.partyAt.goe(date.atStartOfDay())
-                .and(party.partyAt.loe(date.atTime(LocalTime.MAX)));
+    private BooleanExpression partyDateGoe(@Nullable final LocalDate date) {
+        return Optional.ofNullable(date)
+                .map(d -> date.atStartOfDay())
+                .map(party.partyAt::goe)
+                .orElse(null);
+    }
+
+    @Nullable
+    private BooleanExpression partyDateLoe(@Nullable final LocalDate date) {
+        return Optional.ofNullable(date)
+                .map(d -> date.plusDays(1).atStartOfDay())
+                .map(party.partyAt::loe)
+                .orElse(null);
     }
 
     public List<PartyRecruitmentResponse> getRecruitmentList(
