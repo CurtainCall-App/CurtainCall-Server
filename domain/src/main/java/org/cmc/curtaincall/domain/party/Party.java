@@ -22,9 +22,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "party",
         indexes = {
-                @Index(name = "IX_party__category_created_at", columnList = "created_at desc"),
-                @Index(name = "IX_party__show_category_created_at", columnList = "show_id, created_at desc"),
+                @Index(name = "IX_party__created_at", columnList = "created_at desc"),
                 @Index(name = "IX_party__created_by_created_at", columnList = "created_by, created_at desc"),
+                @Index(name = "IX_party__party_at", columnList = "party_at"),
         }
 )
 @Getter
