@@ -44,7 +44,7 @@ public class Party extends BaseEntity {
     @AttributeOverride(name = "id", column = @Column(name = "show_id"))
     private ShowId showId;
 
-    @Column(name = "party_at")
+    @Column(name = "party_at", nullable = false)
     private LocalDateTime partyAt;
 
     @Column(name = "title", nullable = false)
