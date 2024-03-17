@@ -2,8 +2,8 @@ package org.cmc.curtaincall.web.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.cmc.curtaincall.domain.account.dao.AccountDao;
+import org.cmc.curtaincall.domain.account.exception.AccountNotSignupException;
 import org.cmc.curtaincall.domain.member.MemberId;
-import org.cmc.curtaincall.web.security.config.LoginMemberId;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +34,8 @@ public class LoginMemberIdArgumentResolver implements HandlerMethodArgumentResol
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName)
                 .flatMap(accountDao::findMemberIdByUsername)
-                .orElse(null);
+                .orElseThrow(() -> new AccountNotSignupException(
+                        SecurityContextHolder.getContext().getAuthentication().getName())
+                );
     }
 }
