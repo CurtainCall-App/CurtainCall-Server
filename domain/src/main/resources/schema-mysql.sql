@@ -158,7 +158,6 @@ create table party
     content          varchar(2000) not null,
     cur_member_num   integer       not null,
     max_member_num   integer       not null,
-    category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
     closed           bit           not null,
     show_id          varchar(25),
     party_at         datetime(6),
