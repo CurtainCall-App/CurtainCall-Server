@@ -98,7 +98,7 @@ public class PartyDao {
                 ))
                 .from(party)
                 .join(member).on(party.createdBy.memberId.id.eq(member.id))
-                .join(member.image)
+                .leftJoin(member.image)
                 .join(show).on(party.showId.eq(show.id))
                 .join(facility).on(show.facility.id.eq(facility.id))
                 .where(

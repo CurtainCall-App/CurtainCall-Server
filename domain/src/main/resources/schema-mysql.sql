@@ -108,7 +108,7 @@ create table lost_item
     primary key (lost_item_id)
 ) engine = InnoDB;
 
-create index IX_lost_item__facility_found_date_found_time
+create index IX_lost_item__facility_created_at
     on lost_item (facility_id, created_at desc);
 
 create index IX_lost_item__facility_found_date_found_time
@@ -158,7 +158,6 @@ create table party
     content          varchar(2000) not null,
     cur_member_num   integer       not null,
     max_member_num   integer       not null,
-    category         enum ('ETC','FOOD_CAFE','WATCHING') not null,
     closed           bit           not null,
     show_id          varchar(25),
     party_at         datetime(6),
