@@ -18,7 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "lost_item",
         indexes = {
-                @Index(name = "IX_lost_item__facility",
+                @Index(name = "IX_lost_item__facility_created_at",
                         columnList = "facility_id, created_at desc"),
                 @Index(name = "IX_lost_item__facility_found_date_found_time",
                         columnList = "facility_id, found_date, found_time"),

@@ -108,7 +108,7 @@ create table lost_item
     primary key (lost_item_id)
 ) engine = InnoDB;
 
-create index IX_lost_item__facility_found_date_found_time
+create index IX_lost_item__facility_created_at
     on lost_item (facility_id, created_at desc);
 
 create index IX_lost_item__facility_found_date_found_time
