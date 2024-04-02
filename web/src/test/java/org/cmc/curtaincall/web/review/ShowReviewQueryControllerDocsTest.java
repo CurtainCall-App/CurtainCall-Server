@@ -4,6 +4,7 @@ import org.cmc.curtaincall.domain.core.CreatorId;
 import org.cmc.curtaincall.domain.review.dao.ShowReviewDao;
 import org.cmc.curtaincall.domain.review.response.ShowReviewMyResponse;
 import org.cmc.curtaincall.domain.review.response.ShowReviewResponse;
+import org.cmc.curtaincall.domain.show.ShowGenre;
 import org.cmc.curtaincall.domain.show.ShowId;
 import org.cmc.curtaincall.web.common.AbstractWebTest;
 import org.cmc.curtaincall.web.common.RestDocsAttribute;
@@ -100,6 +101,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                         .id(5L)
                         .showId(new ShowId("PF223355"))
                         .showName("잘자요, 엄마 [청주]")
+                        .genre(ShowGenre.PLAY)
                         .grade(4)
                         .content("좋아요")
                         .createdAt(LocalDateTime.of(2023, 8, 31, 3, 28))
@@ -131,6 +133,7 @@ class ShowReviewQueryControllerDocsTest extends AbstractWebTest {
                                 fieldWithPath("id").description("공연 리뷰 ID"),
                                 fieldWithPath("showId").description("공연 ID"),
                                 fieldWithPath("showName").description("공연 이름"),
+                                fieldWithPath("genre").description("공연 장르"),
                                 fieldWithPath("grade").description("평점"),
                                 fieldWithPath("content").description("리뷰 내용"),
                                 fieldWithPath("createdAt").description("생성일시"),

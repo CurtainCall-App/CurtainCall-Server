@@ -93,6 +93,7 @@ public class ShowReviewDao {
                         showReview.id,
                         showReview.showId,
                         show.name,
+                        show.genre,
                         showReview.grade,
                         showReview.content,
                         showReview.createdAt,
