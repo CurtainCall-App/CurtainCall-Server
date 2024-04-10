@@ -11,6 +11,7 @@ import org.cmc.curtaincall.domain.show.response.ShowCostEffectiveResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.cmc.curtaincall.domain.show.QShow.show;
@@ -33,7 +34,9 @@ public class ShowCostEffectiveDao {
         final Predicate[] predicates = {
                 show.state.eq(ShowState.PERFORMING),
                 show.kidState.isFalse(),
-                show.genre.eq(param.genre()),
+                Optional.ofNullable(param.genre())
+                        .map(show.genre::eq)
+                        .orElse(null),
                 show.minTicketPrice.lt(priceLessThan)
         };
         final long count = query.select(show.count())

@@ -78,8 +78,10 @@ class BoxOfficeControllerDocsTest extends AbstractWebTest {
                                 parameterWithName("type").description("일, 주, 월")
                                         .attributes(key("type").value(BoxOfficeType.class.getSimpleName())),
                                 parameterWithName("baseDate").description("기준일"),
-                                parameterWithName("genre").description("장르")
+                                parameterWithName("genre").description("장르, null이면 전체 조회")
+                                        .optional()
                                         .attributes(key("type").value(BoxOfficeGenre.class.getSimpleName()))
+                                        .attributes(key("defaultValue").value(null))
                         ),
                         responseFields(
                                 beneathPath("content[]").withSubsectionId("content"),
