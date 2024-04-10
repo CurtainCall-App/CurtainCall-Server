@@ -24,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,8 +55,7 @@ class KopisBoxOfficeServiceTest {
         showRepository = mock(ShowRepository.class);
         kopisBoxOfficeService = new KopisBoxOfficeService(
                 String.format("http://localhost:%s", mockWebServer.getPort()),
-                "test-service-key",
-                showRepository
+                "test-service-key"
         );
     }
 
@@ -104,11 +102,6 @@ class KopisBoxOfficeServiceTest {
 
         final BoxOfficeResponse boxOfficeResponse = result.get(0);
         assertThat(boxOfficeResponse.id()).isEqualTo(new ShowId("PF227565"));
-        assertThat(boxOfficeResponse.name()).isEqualTo("name");
-        assertThat(boxOfficeResponse.startDate()).isEqualTo(LocalDate.of(2023, 11, 9));
-        assertThat(boxOfficeResponse.endDate()).isEqualTo(LocalDate.of(2023, 11, 10));
-        assertThat(boxOfficeResponse.poster()).isEqualTo("poster");
-        assertThat(boxOfficeResponse.genre()).isEqualTo(ShowGenre.MUSICAL);
         assertThat(boxOfficeResponse.rank()).isEqualTo(4);
 
         final RecordedRequest recordedRequest = mockWebServer.takeRequest();
@@ -122,37 +115,4 @@ class KopisBoxOfficeServiceTest {
         );
     }
 
-    @Test
-    void getList_given_not_exists_show_then_skip() {
-        // given
-        mockWebServer.enqueue(new MockResponse()
-                .setBody("""
-                        <?xml version="1.0" encoding="UTF-8"?>
-                        <boxofs>
-                            <boxof>
-                                <prfplcnm>충무아트센터 대공연장</prfplcnm>
-                                <seatcnt>1250</seatcnt>
-                                <rnum>4</rnum>
-                                <poster>/upload/pfmPoster/PF_PF227565_231012_095437.gif</poster>
-                                <prfpd>2023.11.21~2024.02.25</prfpd>
-                                <mt20id>PF227565</mt20id>
-                                <prfnm>몬테크리스토</prfnm>
-                                <cate>뮤지컬</cate>
-                                <prfdtcnt>56</prfdtcnt>
-                                <area>서울</area>
-                            </boxof>
-                        </boxofs>
-                        """)
-                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE)
-        );
-        given(showRepository.findAllById(List.of(new ShowId("PF227565")))).willReturn(Collections.emptyList());
-
-        // when
-        final BoxOfficeRequest request = new BoxOfficeRequest(
-                BoxOfficeType.WEEK, LocalDate.of(2023, 11, 9), null);
-        final List<BoxOfficeResponse> result = kopisBoxOfficeService.getList(request);
-
-        // then
-        assertThat(result).isEmpty();
-    }
 }

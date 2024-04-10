@@ -39,4 +39,7 @@ public interface ShowRepository extends JpaRepository<Show, ShowId> {
 
     @Lock(LockModeType.OPTIMISTIC)
     Optional<Show> findWithLockById(ShowId id);
+
+    @EntityGraph(attributePaths = {"facility"})
+    List<Show> findAllWithFacilityByIdIn(List<ShowId> id);
 }

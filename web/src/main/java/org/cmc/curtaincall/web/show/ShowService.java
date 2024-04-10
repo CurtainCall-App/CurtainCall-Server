@@ -48,6 +48,10 @@ public class ShowService {
         ).stream().map(ShowResponse::of).toList();
     }
 
+    public List<ShowResponse> getList(final List<ShowId> showIds) {
+        return showRepository.findAllWithFacilityByIdIn(showIds).stream().map(ShowResponse::of).toList();
+    }
+
     public List<ShowResponse> search(final Pageable pageable, final String keyword) {
         return showRepository.findAllWithByNameStartsWithAndUseYnIsTrue(pageable, keyword)
                 .stream().map(ShowResponse::of).toList();

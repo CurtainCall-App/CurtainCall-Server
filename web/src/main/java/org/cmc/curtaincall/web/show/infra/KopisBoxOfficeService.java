@@ -2,9 +2,6 @@ package org.cmc.curtaincall.web.show.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cmc.curtaincall.domain.show.BoxOfficeGenre;
-import org.cmc.curtaincall.domain.show.Show;
-import org.cmc.curtaincall.domain.show.ShowId;
-import org.cmc.curtaincall.domain.show.repository.ShowRepository;
 import org.cmc.curtaincall.web.show.BoxOfficeService;
 import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
 import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
@@ -19,13 +16,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @CacheConfig(cacheNames = "boxOffices")
@@ -41,16 +35,13 @@ public class KopisBoxOfficeService implements BoxOfficeService {
 
     private final RestTemplate restTemplate;
 
-    public KopisBoxOfficeService(final String baseUrl, final String serviceKey, final ShowRepository showRepository) {
+    public KopisBoxOfficeService(final String baseUrl, final String serviceKey) {
         this.serviceKey = serviceKey;
         this.restTemplate = new RestTemplateBuilder()
                 .rootUri(baseUrl)
                 .setConnectTimeout(Duration.ofMillis(4000L))
                 .build();
-        this.showRepository = showRepository;
     }
-
-    private final ShowRepository showRepository;
 
     @Override
     @Cacheable(key = "#request")
@@ -58,24 +49,9 @@ public class KopisBoxOfficeService implements BoxOfficeService {
         final List<KopisBoxOfficeResponse> boxOfficeResponses = requestEntity(request).getContent().stream()
                 .filter(response -> handledGenreName.contains(response.getGenreName()))
                 .toList();
-        final List<ShowId> showIds = boxOfficeResponses.stream()
-                .map(KopisBoxOfficeResponse::getShowId)
-                .toList();
-        final Map<ShowId, Show> showIdToShow = showRepository.findAllById(showIds)
-                .stream()
-                .collect(Collectors.toMap(Show::getId, Function.identity()));
         return boxOfficeResponses.stream()
-                .filter(boxOffice -> showIdToShow.containsKey(boxOffice.getShowId()))
                 .map(boxOffice -> BoxOfficeResponse.builder()
                         .id(boxOffice.getShowId())
-                        .name(showIdToShow.get(boxOffice.getShowId()).getName())
-                        .startDate(showIdToShow.get(boxOffice.getShowId()).getStartDate())
-                        .endDate(showIdToShow.get(boxOffice.getShowId()).getEndDate())
-                        .facilityName(boxOffice.getFacilityName())
-                        .poster(showIdToShow.get(boxOffice.getShowId()).getPoster())
-                        .genre(showIdToShow.get(boxOffice.getShowId()).getGenre())
-                        .showTimes(new ArrayList<>(showIdToShow.get(boxOffice.getShowId()).getShowTimes()))
-                        .runtime(showIdToShow.get(boxOffice.getShowId()).getRuntime())
                         .rank(boxOffice.getRank())
                         .build()
                 ).toList();

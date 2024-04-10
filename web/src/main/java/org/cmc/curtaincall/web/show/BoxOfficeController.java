@@ -6,6 +6,8 @@ import org.cmc.curtaincall.web.show.request.BoxOfficeRequest;
 import org.cmc.curtaincall.web.show.response.BoxOfficeResponse;
 import org.cmc.curtaincall.web.common.response.ListResult;
 import org.cmc.curtaincall.web.common.response.With;
+import org.cmc.curtaincall.web.show.response.ShowRank;
+import org.cmc.curtaincall.web.show.response.ShowResponse;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsDto;
 import org.cmc.curtaincall.web.show.response.ShowReviewStatsResponse;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,8 +28,10 @@ public class BoxOfficeController {
 
     private final ShowReviewStatsQueryService showReviewStatsQueryService;
 
+    private final ShowService showService;
+
     @GetMapping("/box-office")
-    public ListResult<With<BoxOfficeResponse, ShowReviewStatsResponse>> getList(
+    public ListResult<With<With<ShowRank, ShowResponse>, ShowReviewStatsResponse>> getList(
             @ModelAttribute @Validated BoxOfficeRequest request
     ) {
         final List<BoxOfficeResponse> boxOfficeResponses = boxOfficeService.getList(request);
@@ -34,10 +39,17 @@ public class BoxOfficeController {
         final Map<ShowId, ShowReviewStatsResponse> showIdToStats = showReviewStatsQueryService.getList(showIds)
                 .stream()
                 .collect(Collectors.toMap(ShowReviewStatsDto::showId, ShowReviewStatsResponse::of));
+        final Map<ShowId, ShowResponse> showIdToShow = showService.getList(showIds)
+                .stream()
+                .collect(Collectors.toMap(ShowResponse::id, Function.identity()));
         return new ListResult<>(boxOfficeResponses.stream()
-                .map(show -> new With<>(
-                        show, showIdToStats.getOrDefault(show.id(), new ShowReviewStatsResponse(0, 0L, 0D)
-                ))).toList()
+                .filter(boxOffice -> showIdToShow.containsKey(boxOffice.id()))
+                .filter(boxOffice -> showIdToStats.containsKey(boxOffice.id()))
+                .map(boxOffice -> new With<>(new With<>(
+                        new ShowRank(boxOffice.rank()),
+                        showIdToShow.get(boxOffice.id())),
+                        showIdToStats.get(boxOffice.id())
+                )).toList()
         );
     }
 }
