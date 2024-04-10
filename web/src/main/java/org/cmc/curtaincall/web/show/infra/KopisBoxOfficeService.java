@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class KopisBoxOfficeService implements BoxOfficeService {
                         .facilityName(boxOffice.getFacilityName())
                         .poster(showIdToShow.get(boxOffice.getShowId()).getPoster())
                         .genre(showIdToShow.get(boxOffice.getShowId()).getGenre())
-                        .showTimes(showIdToShow.get(boxOffice.getShowId()).getShowTimes())
+                        .showTimes(new ArrayList<>(showIdToShow.get(boxOffice.getShowId()).getShowTimes()))
                         .runtime(showIdToShow.get(boxOffice.getShowId()).getRuntime())
                         .rank(boxOffice.getRank())
                         .build()
