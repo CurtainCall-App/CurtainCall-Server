@@ -56,4 +56,10 @@ public class PartyController {
         partyParticipationService.participate(partyId, memberId);
     }
 
+    @DeleteMapping("/member/parties/{partyId}")
+    public void cancelParticipation(
+            @PathVariable final PartyId partyId, @LoginMemberId final MemberId memberId) {
+        partyParticipationService.leave(partyId, memberId);
+    }
+
 }
