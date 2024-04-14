@@ -176,4 +176,24 @@ class PartyControllerDocsTest extends AbstractWebTest {
         then(partyParticipationService).should(times(1)).participate(new PartyId(10L), LOGIN_MEMBER_ID);
     }
 
+    @Test
+    void cancelParticipation_Docs() throws Exception {
+        // expected
+        mockMvc.perform(delete("/member/parties/{partyId}", 10)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ACCESS_TOKEN")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("party-cancel-participation",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 필요")
+                        ),
+                        pathParameters(
+                                parameterWithName("partyId").description("파티 ID")
+                        )
+                ));
+    }
+
 }
