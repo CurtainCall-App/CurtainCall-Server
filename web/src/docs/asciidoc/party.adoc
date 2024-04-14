@@ -53,6 +53,12 @@ operation::party-edit-party[snippets='http-request,request-headers,request-field
 operation::party-participate-party[snippets='http-request,request-headers,path-parameters,http-response']
 
 
+[[party-cancel-participation]]
+== 파티 참여 취소
+
+operation::party-cancel-participation[snippets='http-request,request-headers,path-parameters,http-response']
+
+
 [[party-get-participated]]
 == 파티 참여 여부
 
