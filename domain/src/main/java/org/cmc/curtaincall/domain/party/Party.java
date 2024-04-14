@@ -104,7 +104,7 @@ public class Party extends BaseEntity {
     }
 
     public void participate(final MemberId memberId) {
-        if (Boolean.TRUE.equals(closed) || !partyAt.isBefore(LocalDateTime.now())) {
+        if (Boolean.TRUE.equals(closed) || partyAt.isBefore(LocalDateTime.now())) {
             throw new PartyAlreadyClosedException(new PartyId(id));
         }
         if (isParticipated(memberId)) {
