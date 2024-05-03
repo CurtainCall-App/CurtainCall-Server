@@ -132,7 +132,7 @@ public class KopisService {
                     .startDate(object.get("prfpdfrom").trim())
                     .endDate(object.get("prfpdto").trim())
                     .poster(object.get("poster").trim())
-                    .facilityName(object.get("fcltynm").trim())
+                    .facilityName(object.getOrDefault("fcltynm", "").trim())
                     .openRun(object.get("openrun").trim())
                     .build();
             result.add(showResponse);
